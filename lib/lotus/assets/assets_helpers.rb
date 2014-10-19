@@ -17,6 +17,7 @@ module Lotus
         file   = 'application'
         base_path = "#{Assets.path}/stylesheets"
 
+        # TODO: Implement caching system (maybe via mtime timestamp?)
         unless File.exist?("#{base_path}/#{file}.css")
           main_template = Tilt.new("#{base_path}/#{file}.#{engine}")
 
@@ -34,6 +35,7 @@ module Lotus
         file   = 'application'
         base_path = "#{Assets.path}/javascripts"
 
+        # TODO: Implement caching system (maybe via mtime timestamp?)
         unless File.exist?("#{base_path}/#{file}.js")
           main_template = Tilt.new("#{base_path}/#{file}.#{engine}")
 

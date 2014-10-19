@@ -1,14 +1,19 @@
 require 'lotus/assets/version'
 require 'lotus/assets/assets_helpers'
 
-require 'lotus/utils/class_attribute'
-
 module Lotus
   module Assets
-    include Utils::ClassAttribute
-
     class << self
-      attr_accessor :path, :css_engine, :js_engine
+      attr_accessor :path
+      attr_writer :css_engine, :js_engine
+
+      def css_engine
+        @css_engine || 'scss'
+      end
+
+      def js_engine
+        @js_engine || 'coffee'
+      end
     end
   end
 end

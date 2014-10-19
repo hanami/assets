@@ -1,5 +1,6 @@
 require 'tilt/sass'
 require 'tilt/coffee'
+require 'tilt/less'
 
 module Lotus
   module Assets

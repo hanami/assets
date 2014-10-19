@@ -34,6 +34,8 @@ describe Lotus::Assets::AssetsHelpers do
     created.each do |file|
       system("rm #{file}")
     end
+
+    Lotus::Assets.clear_configuration!
   end
 
   it 'compiles a given scss file into the proper css file' do
@@ -73,5 +75,23 @@ describe Lotus::Assets::AssetsHelpers do
 
     javascript_include_tag.must_include 'script'
     javascript_include_tag.must_include 'javascripts/application.js'
+  end
+
+  it 'returns the compiled sass if to_file is disabled' do
+    stylesheet_engine 'scss'
+    stylesheet_path 'stylesheets'
+    stylesheet_file 'application'
+    to_file false
+
+    stylesheet_include_tag.must_include 'body {'
+  end
+
+  it 'returns the compiled coffescript if to_file is disabled' do
+    javascript_engine 'coffee'
+    javascript_path 'javascripts'
+    javascript_file 'application'
+    to_file false
+
+    javascript_include_tag.must_include 'alert'
   end
 end

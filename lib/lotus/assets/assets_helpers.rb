@@ -7,7 +7,8 @@ module Lotus
     module AssetsHelpers
       def stylesheet_include_tag
         # TODO: File should be passed in as parameter eg.: <%= stylesheet_include_tag 'application' %>
-        file   = 'application'
+        file = Assets.stylesheet_file
+
         base_path = "#{Assets.path}/#{Assets.stylesheet_path}"
 
         # TODO: Implement caching system (maybe via mtime timestamp?)
@@ -24,8 +25,9 @@ module Lotus
       end
 
       def javascript_include_tag
-        # TODO: File should be passed in as parameter eg.: <%= stylesheet_include_tag 'application' %>
-        file   = 'application'
+        # TODO: File should be passed in as parameter eg.: <%= javascript_include_tag 'application' %>
+        file = Assets.javascript_file
+
         base_path = "#{Assets.path}/#{Assets.javascript_path}"
 
         # TODO: Implement caching system (maybe via mtime timestamp?)

@@ -16,8 +16,9 @@ module Lotus
       end
 
       def stylesheet_include_tag
+        # TODO: File should be passed in as parameter eg.: <%= stylesheet_include_tag 'application' %>
         file   = 'application'
-        base_path = "#{Assets.path}/stylesheets"
+        base_path = "#{Assets.path}/#{Assets.stylesheet_path}"
 
         # TODO: Implement caching system (maybe via mtime timestamp?)
         unless File.exist?("#{base_path}/#{file}.css")
@@ -33,8 +34,9 @@ module Lotus
       end
 
       def javascript_include_tag
+        # TODO: File should be passed in as parameter eg.: <%= stylesheet_include_tag 'application' %>
         file   = 'application'
-        base_path = "#{Assets.path}/javascripts"
+        base_path = "#{Assets.path}/#{Assets.javascript_path}"
 
         # TODO: Implement caching system (maybe via mtime timestamp?)
         unless File.exist?("#{base_path}/#{file}.js")
@@ -49,6 +51,9 @@ module Lotus
         "<script src='/admin/javascripts/#{file}.js'></script>"
       end
 
+      # This module will extend the Lotus::View where you included Lotus::Assets::AssetsHelpers
+      # This means all methods defined under Lotus::Assets::AssetsHelpers::ClassMethods are available
+      # as class methods in the base class where Lotus::Assets::AssetsHelpers is included.
       module ClassMethods
         def css_engine(engine = nil)
           if engine
@@ -63,6 +68,22 @@ module Lotus
             Assets.js_engine = engine
           else
             Assets.js_engine
+          end
+        end
+
+        def stylesheet_path(path = nil)
+          if path
+            Assets.stylesheet_path = path
+          else
+            Assets.stylesheet_path
+          end
+        end
+
+        def javascript_path(path = nil)
+          if path
+            Assets.javascript_path = path
+          else
+            Assets.javascript_path
           end
         end
       end

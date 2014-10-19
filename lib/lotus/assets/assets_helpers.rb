@@ -11,17 +11,23 @@ module Lotus
 
         base_path = "#{Assets.path}/#{Assets.stylesheet_path}"
 
-        # TODO: Implement caching system (maybe via mtime timestamp?)
-        unless File.exist?("#{base_path}/#{file}.css")
-          main_template = Tilt.new("#{base_path}/#{file}.#{Assets.stylesheet_engine}")
+        if Assets.to_file
+          # TODO: Implement caching system (maybe via mtime timestamp?)
+          unless File.exist?("#{base_path}/#{file}.css")
+            template = Tilt.new("#{base_path}/#{file}.#{Assets.stylesheet_engine}")
 
-          main_file = File.new("#{base_path}/#{file}.css", 'w')
-          main_file.puts main_template.render
-          main_file.close
+            file = File.new("#{base_path}/#{file}.css", 'w')
+            file.puts template.render
+            file.close
+          end
+
+          # TODO: How to get proper base path? eg.: for lotus application mounted under /admin etc..
+          "<link rel='stylesheet' href='/admin/stylesheets/#{file}.css' media='all' />"
+        else
+          template = Tilt.new("#{base_path}/#{file}.#{Assets.stylesheet_engine}")
+
+          return template.render
         end
-
-        # TODO: How to get proper base path? eg.: for lotus application mounted under /admin etc..
-        "<link rel='stylesheet' href='/admin/stylesheets/#{file}.css' media='all' />"
       end
 
       def javascript_include_tag
@@ -30,17 +36,23 @@ module Lotus
 
         base_path = "#{Assets.path}/#{Assets.javascript_path}"
 
-        # TODO: Implement caching system (maybe via mtime timestamp?)
-        unless File.exist?("#{base_path}/#{file}.js")
-          main_template = Tilt.new("#{base_path}/#{file}.#{Assets.javascript_engine}")
+        if Assets.to_file
+          # TODO: Implement caching system (maybe via mtime timestamp?)
+          unless File.exist?("#{base_path}/#{file}.js")
+            template = Tilt.new("#{base_path}/#{file}.#{Assets.javascript_engine}")
 
-          main_file = File.new("#{base_path}/#{file}.js", 'w')
-          main_file.puts main_template.render
-          main_file.close
+            file = File.new("#{base_path}/#{file}.js", 'w')
+            file.puts template.render
+            file.close
+          end
+
+          # TODO: How to get proper base path? eg.: for lotus application mounted under /admin etc..
+          "<script src='/admin/javascripts/#{file}.js'></script>"
+        else
+          template = Tilt.new("#{base_path}/#{file}.#{Assets.javascript_engine}")
+
+          return template.render
         end
-
-        # TODO: How to get proper base path? eg.: for lotus application mounted under /admin etc..
-        "<script src='/admin/javascripts/#{file}.js'></script>"
       end
     end
   end

@@ -10,6 +10,8 @@ module Lotus
       attr_writer :stylesheet_engine, :stylesheet_path, :stylesheet_file
       attr_writer :javascript_engine, :javascript_path, :javascript_file
 
+      attr_writer :to_file
+
       def included(base)
         namespace_array = base.configuration.namespace.inspect.split('::')
         base_namespace = namespace_array[0].tr('"', '')
@@ -19,6 +21,12 @@ module Lotus
 
         base.extend(Dsl)
         base.include(AssetsHelpers)
+      end
+
+      def clear_configuration!
+        instance_variables.each do |ivar|
+          remove_instance_variable ivar
+        end
       end
 
       def stylesheet_engine
@@ -43,6 +51,14 @@ module Lotus
 
       def javascript_file
         @javascript_file || 'application'
+      end
+
+      def to_file
+        if @to_file.nil?
+          true
+        else
+          @to_file
+        end
       end
     end
   end

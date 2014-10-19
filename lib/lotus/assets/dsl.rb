@@ -58,6 +58,14 @@ module Lotus
           Assets.javascript_file
         end
       end
+
+      def to_file(boolean = nil)
+        unless boolean.nil?
+          Assets.to_file = boolean
+        else
+          Assets.to_file
+        end
+      end
     end
   end
 end

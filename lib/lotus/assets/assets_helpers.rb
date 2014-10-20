@@ -22,7 +22,7 @@ module Lotus
           end
 
           # TODO: How to get proper base path? eg.: for lotus application mounted under /admin etc..
-          "<link rel='stylesheet' href='/admin/stylesheets/#{file}.css' media='all' />"
+          "<link rel='stylesheet' href='#{Assets.path_prefix}/stylesheets/#{file}.css' media='all' />"
         else
           template = Tilt.new("#{base_path}/#{file}.#{Assets.stylesheet_engine}")
 
@@ -47,7 +47,7 @@ module Lotus
           end
 
           # TODO: How to get proper base path? eg.: for lotus application mounted under /admin etc..
-          "<script src='/admin/javascripts/#{file}.js'></script>"
+          "<script src='#{Assets.path_prefix}/javascripts/#{file}.js'></script>"
         else
           template = Tilt.new("#{base_path}/#{file}.#{Assets.javascript_engine}")
 

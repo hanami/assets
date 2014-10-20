@@ -10,7 +10,7 @@ module Lotus
       attr_writer :stylesheet_engine, :stylesheet_path, :stylesheet_file
       attr_writer :javascript_engine, :javascript_path, :javascript_file
 
-      attr_writer :to_file
+      attr_writer :to_file, :path_prefix
 
       def included(base)
         namespace_array = base.configuration.namespace.inspect.split('::')
@@ -59,6 +59,10 @@ module Lotus
         else
           @to_file
         end
+      end
+
+      def path_prefix
+        @path_prefix || ''
       end
     end
   end

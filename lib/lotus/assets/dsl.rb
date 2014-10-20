@@ -66,6 +66,14 @@ module Lotus
           Assets.to_file
         end
       end
+
+      def path_prefix(path = nil)
+        if path
+          Assets.path_prefix = path
+        else
+          Assets.path_prefix
+        end
+      end
     end
   end
 end

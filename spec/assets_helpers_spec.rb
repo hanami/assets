@@ -52,10 +52,12 @@ describe Lotus::Assets::AssetsHelpers do
     stylesheet_engine 'scss'
     stylesheet_path   'stylesheets'
     stylesheet_file   'application'
+    path_prefix       '/admin'
 
     stylesheet_include_tag.must_include 'link'
     stylesheet_include_tag.must_include "rel='stylesheet'"
     stylesheet_include_tag.must_include 'stylesheets/application.css'
+    stylesheet_include_tag.must_include '/admin'
   end
 
   it 'compiles a given coffee file into the proper js file' do
@@ -72,9 +74,11 @@ describe Lotus::Assets::AssetsHelpers do
     javascript_engine 'coffee'
     javascript_path   'javascripts'
     javascript_file   'application'
+    path_prefix       '/admin'
 
     javascript_include_tag.must_include 'script'
     javascript_include_tag.must_include 'javascripts/application.js'
+    javascript_include_tag.must_include '/admin'
   end
 
   it 'returns the compiled sass if to_file is disabled' do

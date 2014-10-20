@@ -33,6 +33,14 @@ describe Lotus::Assets::Dsl do
     Lotus::Assets.javascript_file.must_equal 'bootstrap'
   end
 
+  it 'should set the configured path_prefix' do
+    path_prefix '/admin'
+    Lotus::Assets.path_prefix.must_equal '/admin'
+
+    path_prefix '/backend'
+    Lotus::Assets.path_prefix.must_equal '/backend'
+  end
+
   it 'should set configured to_file option' do
     to_file true
     Lotus::Assets.to_file.must_equal true
@@ -52,5 +60,6 @@ describe Lotus::Assets::Dsl do
     Lotus::Assets.stylesheet_file.must_equal 'application'
 
     Lotus::Assets.to_file.must_equal true
+    Lotus::Assets.path_prefix.must_equal ''
   end
 end

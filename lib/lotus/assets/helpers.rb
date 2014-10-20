@@ -11,12 +11,12 @@ module Lotus
       def stylesheet(file_name = 'application')
         # TODO: REFACTOR
         base_path = "#{assets_path}/#{stylesheet_path}"
-        raise FolderNotFoundException unless Dir.exist?(base_path)
+        raise FolderNotFoundException, "Folder #{base_path} not found" unless Dir.exist?(base_path)
 
         compiled_file_path = "#{base_path}/#{file_name}.css"
 
         files_in_dir = Dir["#{base_path}/#{file_name}.*"]
-        raise NoFilesFoundException if files_in_dir.empty?
+        raise NoFilesFoundException, "File \"#{file_name}.*\" doesn't match any given file" if files_in_dir.empty?
 
         file_with_prefix = files_in_dir[0]
 
@@ -45,12 +45,12 @@ module Lotus
       def javascript(file_name = 'application')
         # TODO: REFACTOR
         base_path = "#{assets_path}/#{javascript_path}"
-        raise FolderNotFoundException unless Dir.exist?(base_path)
+        raise FolderNotFoundException, "Folder #{base_path} not found" unless Dir.exist?(base_path)
 
         compiled_file_path = "#{base_path}/#{file_name}.js"
 
         files_in_dir = Dir["#{base_path}/#{file_name}.*"]
-        raise NoFilesFoundException if files_in_dir.empty?
+        raise NoFilesFoundException, "File \"#{file_name}.*\" doesn't match any given file" if files_in_dir.empty?
 
         file_with_prefix = files_in_dir[0]
 

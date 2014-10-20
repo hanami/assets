@@ -22,11 +22,11 @@ Or install it yourself as:
 
 ### Standalone usage
 
-TODO: Write Standalone usage
+[Example](examples/standalone)
 
 ### Semi-standalone usage (with Lotus::View but not full-stack)
 
-TODO: Write Semi-standalone usage
+[Example](examples/semi-standalone)
 
 ### Full-stack usage
 

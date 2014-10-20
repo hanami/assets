@@ -4,7 +4,7 @@ class Minitest::Spec
   include Lotus::Assets::Dsl
 end
 
-describe Lotus::Assets::Dsl do
+describe Lotus::Assets::Configuration do
   after do
     Lotus::Assets.configuration.clear!
   end

@@ -11,6 +11,21 @@ module Lotus
     module Helpers
       include Dsl
 
+      def self.included(base)
+        ##
+        # Extremely nasty but it works for now
+        if base.respond_to?(:configuration)
+          namespace = base.configuration.namespace
+
+          if namespace.is_a?(String)
+            base_namespace = namespace.split("::")[0]
+            assets_config = Kernel.const_get(base_namespace)::Application.configuration.assets
+
+            Assets.configuration.assets_path(assets_config)
+          end
+        end
+      end
+
       def stylesheet(file_name = 'application')
         base_path = "#{assets_path}/#{stylesheet_path}"
         raise FolderNotFoundException unless Dir.exist?(base_path)
@@ -34,6 +49,7 @@ module Lotus
           end
 
           # TODO: How to get proper path_prefix? eg.: for lotus application mounted under /admin etc..
+          # Currently user has to set a custom path_prefix via Lotus::Assets.configure
           "<link rel='stylesheet' href='#{path_prefix}/#{stylesheet_path}/#{file_name}.css' media='all' />"
         else
           return template.render
@@ -63,6 +79,7 @@ module Lotus
           end
 
           # TODO: How to get proper path_prefix? eg.: for lotus application mounted under /admin etc..
+          # Currently user has to set a custom path_prefix via Lotus::Assets.configure
           "<script src='#{path_prefix}/#{javascript_path}/#{file_name}.js'></script>"
         else
           return template.render

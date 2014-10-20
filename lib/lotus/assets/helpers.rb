@@ -16,12 +16,15 @@ module Lotus
         raise FolderNotFoundException unless Dir.exist?(base_path)
 
         compiled_file_path = "#{base_path}/#{file_name}.css"
+
         files_in_dir = Dir["#{base_path}/#{file_name}.*"]
+        raise NoFilesFoundException if files_in_dir.empty?
 
-        files = files_in_dir - [compiled_file_path]
-        raise NoFilesFoundException if files.empty?
+        file_with_prefix = files_in_dir[0]
 
-        file_with_prefix = files[0]
+        if file_with_prefix === compiled_file_path
+          return "<link rel='stylesheet' href='#{path_prefix}/#{stylesheet_path}/#{file_name}.css' media='all' />"
+        end
 
         template = Tilt.new(file_with_prefix)
 
@@ -46,12 +49,15 @@ module Lotus
         raise FolderNotFoundException unless Dir.exist?(base_path)
 
         compiled_file_path = "#{base_path}/#{file_name}.js"
+
         files_in_dir = Dir["#{base_path}/#{file_name}.*"]
+        raise NoFilesFoundException if files_in_dir.empty?
 
-        files = files_in_dir - [compiled_file_path]
-        raise NoFilesFoundException if files.empty?
+        file_with_prefix = files_in_dir[0]
 
-        file_with_prefix = files[0]
+        if file_with_prefix == compiled_file_path
+          return "<script src='#{path_prefix}/#{javascript_path}/#{file_name}.js'></script>"
+        end
 
         template = Tilt.new(file_with_prefix)
 

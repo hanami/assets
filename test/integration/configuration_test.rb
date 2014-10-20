@@ -9,10 +9,10 @@ describe 'Configuration DSL to_file enabled' do
     Lotus::Assets.configure do
       assets_path "#{Lotus::Assets.root}/test/fixtures"
 
-      javascript_path "javascripts"
-      stylesheet_path "stylesheets"
+      javascript_path 'javascripts'
+      stylesheet_path 'stylesheets'
 
-      path_prefix "prefix/"
+      path_prefix 'prefix/'
 
       to_file true
     end
@@ -52,22 +52,40 @@ describe 'Configuration DSL to_file enabled' do
     end
 
     it 'should contain the path prefix' do
-      @stylesheet_tag.must_include "prefix/"
-      @javascript_tag.must_include "prefix/"
+      @stylesheet_tag.must_include 'prefix/'
+      @javascript_tag.must_include 'prefix/'
     end
 
     it 'should return the proper html tag' do
-      @stylesheet_tag.must_include "link"
+      @stylesheet_tag.must_include 'link'
       @stylesheet_tag.must_include "rel='stylesheet'"
-      @stylesheet_tag.must_include "href"
+      @stylesheet_tag.must_include 'href'
 
-      @javascript_tag.must_include "script"
-      @javascript_tag.must_include "src"
+      @javascript_tag.must_include 'script'
+      @javascript_tag.must_include 'src'
     end
 
     it 'should contain the javascript / stylesheet path' do
-      @stylesheet_tag.must_include "stylesheets"
-      @javascript_tag.must_include "javascripts"
+      @stylesheet_tag.must_include 'stylesheets'
+      @javascript_tag.must_include 'javascripts'
+    end
+  end
+
+  describe 'when including a compiled file' do
+    before do
+      @stylesheet_tag = stylesheet 'compiled'
+      @javascript_tag = javascript 'compiled'
+    end
+
+    it 'should include the already compiled file' do
+      @stylesheet_tag.must_include 'link'
+      @stylesheet_tag.must_include "rel='stylesheet'"
+      @stylesheet_tag.must_include 'href'
+      @stylesheet_tag.must_include 'compiled.css'
+
+      @javascript_tag.must_include 'script'
+      @javascript_tag.must_include 'src'
+      @javascript_tag.must_include 'compiled.js'
     end
   end
 end
@@ -77,10 +95,10 @@ describe 'Configuration DSL to_file disabled' do
     Lotus::Assets.configure do
       assets_path "#{Lotus::Assets.root}/test/fixtures"
 
-      javascript_path "javascripts"
-      stylesheet_path "stylesheets"
+      javascript_path 'javascripts'
+      stylesheet_path 'stylesheets'
 
-      path_prefix "prefix/"
+      path_prefix 'prefix/'
 
       to_file false
     end

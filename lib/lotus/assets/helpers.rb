@@ -9,8 +9,10 @@ module Lotus
     end
 
     module Helpers
+      include Dsl
+
       def stylesheet(file_name = 'application')
-        base_path = "#{Assets.configuration.assets_path}/#{Assets.configuration.stylesheet_path}"
+        base_path = "#{assets_path}/#{stylesheet_path}"
         raise FolderNotFoundException unless Dir.exist?(base_path)
 
         compiled_file_path = "#{base_path}/#{file_name}.css"
@@ -23,7 +25,7 @@ module Lotus
 
         template = Tilt.new(file_with_prefix)
 
-        if Assets.configuration.to_file
+        if to_file
           # TODO: Implement caching system (maybe via mtime timestamp?)
           unless File.exist?(compiled_file_path)
             file = File.new(compiled_file_path, 'w')
@@ -32,14 +34,14 @@ module Lotus
           end
 
           # TODO: How to get proper path_prefix? eg.: for lotus application mounted under /admin etc..
-          "<link rel='stylesheet' href='#{Assets.configuration.path_prefix}/#{Assets.configuration.stylesheet_path}/#{file_name}.css' media='all' />"
+          "<link rel='stylesheet' href='#{path_prefix}/#{stylesheet_path}/#{file_name}.css' media='all' />"
         else
           return template.render
         end
       end
 
       def javascript(file_name = 'application')
-        base_path = "#{Assets.configuration.assets_path}/#{Assets.configuration.javascript_path}"
+        base_path = "#{assets_path}/#{javascript_path}"
         raise FolderNotFoundException unless Dir.exist?(base_path)
 
         compiled_file_path = "#{base_path}/#{file_name}.js"
@@ -52,7 +54,7 @@ module Lotus
 
         template = Tilt.new(file_with_prefix)
 
-        if Assets.configuration.to_file
+        if to_file
           # TODO: Implement caching system (maybe via mtime timestamp?)
           unless File.exist?(compiled_file_path)
             file = File.new(compiled_file_path, 'w')
@@ -61,7 +63,7 @@ module Lotus
           end
 
           # TODO: How to get proper path_prefix? eg.: for lotus application mounted under /admin etc..
-          "<script src='#{Assets.configuration.path_prefix}/#{Assets.configuration.javascript_path}/#{file_name}.js'></script>"
+          "<script src='#{path_prefix}/#{javascript_path}/#{file_name}.js'></script>"
         else
           return template.render
         end

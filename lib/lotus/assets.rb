@@ -1,8 +1,8 @@
 require 'lotus/utils/class_attribute'
 
 require 'lotus/assets/version'
-require 'lotus/assets/helpers'
 require 'lotus/assets/dsl'
+require 'lotus/assets/helpers'
 require 'lotus/assets/configuration'
 
 module Lotus

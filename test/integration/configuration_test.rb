@@ -1,3 +1,6 @@
+##
+# TODO: Split up tests
+#
 require 'test_helper'
 
 class Minitest::Spec
@@ -86,6 +89,13 @@ describe 'Configuration DSL to_file enabled' do
       @javascript_tag.must_include 'script'
       @javascript_tag.must_include 'src'
       @javascript_tag.must_include 'compiled.js'
+    end
+  end
+
+  describe 'when including a nonexisting file' do
+    it 'should raise a NoFilesFoundException' do
+      lambda { stylesheet 'nonexisting' }.must_raise Lotus::Assets::NoFilesFoundException
+      lambda { javascript 'nonexisting' }.must_raise Lotus::Assets::NoFilesFoundException
     end
   end
 end

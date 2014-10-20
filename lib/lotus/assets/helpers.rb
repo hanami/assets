@@ -2,11 +2,8 @@ require 'tilt'
 
 module Lotus
   module Assets
-    class FolderNotFoundException < StandardError
-    end
-
-    class NoFilesFoundException < StandardError
-    end
+    FolderNotFoundException = Class.new(StandardError)
+    NoFilesFoundException   = Class.new(StandardError)
 
     module Helpers
       include Dsl

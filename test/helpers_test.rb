@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'test_helper'
 require 'tilt'
 
 class Minitest::Spec
@@ -8,7 +8,7 @@ end
 
 describe Lotus::Assets::Helpers do
   before do
-    assets_path "#{Lotus::Assets.root}/spec/fixtures"
+    assets_path "#{Lotus::Assets.root}/test/fixtures"
 
     @assets = []
     assets_dirs = Dir["#{assets_path}/*"]
@@ -20,7 +20,7 @@ describe Lotus::Assets::Helpers do
   end
 
   after do
-    assets_path "#{Lotus::Assets.root}/spec/fixtures"
+    assets_path "#{Lotus::Assets.root}/test/fixtures"
 
     after_assets = []
     assets_dirs = Dir["#{assets_path}/*"]

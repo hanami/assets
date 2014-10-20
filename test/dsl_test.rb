@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'test_helper'
 
 class Minitest::Spec
   include Lotus::Assets::Dsl

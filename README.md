@@ -20,7 +20,17 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Standalone usage
+
+TODO: Write Standalone usage
+
+### Semi-standalone usage (with Lotus::View but not full-stack)
+
+TODO: Write Semi-standalone usage
+
+### Full-stack usage
+
+TODO: Write Full-stack usage
 
 ## Contributing
 

@@ -39,63 +39,51 @@ describe Lotus::Assets::AssetsHelpers do
   end
 
   it 'compiles a given scss file into the proper css file' do
-    stylesheet_engine 'scss'
     stylesheet_path   'stylesheets'
-    stylesheet_file   'application'
 
-    stylesheet_include_tag
+    stylesheet
 
-    File.exist?("#{Lotus::Assets.path}/#{stylesheet_path}/#{stylesheet_file}.#{stylesheet_engine}").must_equal true
+    File.exist?("#{Lotus::Assets.path}/#{stylesheet_path}/application.css").must_equal true
   end
 
   it 'includes the proper stylesheet html tag' do
-    stylesheet_engine 'scss'
     stylesheet_path   'stylesheets'
-    stylesheet_file   'application'
     path_prefix       '/admin'
 
-    stylesheet_include_tag.must_include 'link'
-    stylesheet_include_tag.must_include "rel='stylesheet'"
-    stylesheet_include_tag.must_include 'stylesheets/application.css'
-    stylesheet_include_tag.must_include '/admin'
+    stylesheet.must_include 'link'
+    stylesheet.must_include "rel='stylesheet'"
+    stylesheet.must_include 'stylesheets/application.css'
+    stylesheet.must_include '/admin'
   end
 
   it 'compiles a given coffee file into the proper js file' do
-    javascript_engine 'coffee'
     javascript_path   'javascripts'
-    javascript_file   'application'
 
-    javascript_include_tag
+    javascript
 
-    File.exist?("#{Lotus::Assets.path}/#{javascript_path}/#{javascript_file}.#{javascript_engine}").must_equal true
+    File.exist?("#{Lotus::Assets.path}/#{javascript_path}/application.js").must_equal true
   end
 
   it 'includes the proper script html tag' do
-    javascript_engine 'coffee'
     javascript_path   'javascripts'
-    javascript_file   'application'
     path_prefix       '/admin'
 
-    javascript_include_tag.must_include 'script'
-    javascript_include_tag.must_include 'javascripts/application.js'
-    javascript_include_tag.must_include '/admin'
+    javascript.must_include 'script'
+    javascript.must_include 'javascripts/application.js'
+    javascript.must_include '/admin'
   end
 
   it 'returns the compiled sass if to_file is disabled' do
-    stylesheet_engine 'scss'
     stylesheet_path 'stylesheets'
-    stylesheet_file 'application'
     to_file false
 
-    stylesheet_include_tag.must_include 'body {'
+    stylesheet.must_include 'body {'
   end
 
   it 'returns the compiled coffescript if to_file is disabled' do
-    javascript_engine 'coffee'
     javascript_path 'javascripts'
-    javascript_file 'application'
     to_file false
 
-    javascript_include_tag.must_include 'alert'
+    javascript.must_include 'alert'
   end
 end

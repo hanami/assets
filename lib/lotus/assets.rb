@@ -7,9 +7,7 @@ module Lotus
     class << self
       attr_accessor :path
 
-      attr_writer :stylesheet_engine, :stylesheet_path, :stylesheet_file
-      attr_writer :javascript_engine, :javascript_path, :javascript_file
-
+      attr_writer :stylesheet_path, :javascript_path
       attr_writer :to_file, :path_prefix
 
       def included(base)
@@ -29,28 +27,12 @@ module Lotus
         end
       end
 
-      def stylesheet_engine
-        @stylesheet_engine || 'scss'
-      end
-
-      def javascript_engine
-        @javascript_engine || 'coffee'
-      end
-
       def stylesheet_path
         @stylesheet_path || 'stylesheets'
       end
 
       def javascript_path
         @javascript_path || 'javascripts'
-      end
-
-      def stylesheet_file
-        @stylesheet_file || 'application'
-      end
-
-      def javascript_file
-        @javascript_file || 'application'
       end
 
       def to_file

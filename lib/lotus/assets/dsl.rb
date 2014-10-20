@@ -1,8 +1,5 @@
 module Lotus
   module Assets
-    # This module will extend the Lotus::View where you included Lotus::Assets::AssetsHelpers
-    # This means all methods defined under Lotus::Assets::AssetsHelpers::ClassMethods are available
-    # as class methods in the base class where Lotus::Assets::AssetsHelpers is included.
     module Dsl
       def assets_path(path = nil)
         if path

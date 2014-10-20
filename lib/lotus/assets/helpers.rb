@@ -12,6 +12,7 @@ module Lotus
       include Dsl
 
       def stylesheet(file_name = 'application')
+        # TODO: REFACTOR
         base_path = "#{assets_path}/#{stylesheet_path}"
         raise FolderNotFoundException unless Dir.exist?(base_path)
 
@@ -45,6 +46,7 @@ module Lotus
       end
 
       def javascript(file_name = 'application')
+        # TODO: REFACTOR
         base_path = "#{assets_path}/#{javascript_path}"
         raise FolderNotFoundException unless Dir.exist?(base_path)
 

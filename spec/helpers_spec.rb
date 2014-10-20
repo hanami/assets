@@ -3,15 +3,15 @@ require 'tilt'
 
 class Minitest::Spec
   include Lotus::Assets::Dsl
-  include Lotus::Assets::AssetsHelpers
+  include Lotus::Assets::Helpers
 end
 
-describe Lotus::Assets::AssetsHelpers do
+describe Lotus::Assets::Helpers do
   before do
-    Lotus::Assets.assets_path = "#{Lotus::Assets.root}/spec/fixtures"
+    Lotus::Assets.configuration.assets_path = "#{Lotus::Assets.root}/spec/fixtures"
 
     @assets = []
-    assets_dirs = Dir["#{Lotus::Assets.assets_path}/*"]
+    assets_dirs = Dir["#{Lotus::Assets.configuration.assets_path}/*"]
     assets_dirs.each do |dir|
       @assets << Dir["#{dir}/*"]
     end
@@ -20,10 +20,10 @@ describe Lotus::Assets::AssetsHelpers do
   end
 
   after do
-    Lotus::Assets.assets_path = "#{Lotus::Assets.root}/spec/fixtures"
+    Lotus::Assets.configuration.assets_path = "#{Lotus::Assets.root}/spec/fixtures"
 
     after_assets = []
-    assets_dirs = Dir["#{Lotus::Assets.assets_path}/*"]
+    assets_dirs = Dir["#{Lotus::Assets.configuration.assets_path}/*"]
     assets_dirs.each do |dir|
       after_assets << Dir["#{dir}/*"]
     end
@@ -35,7 +35,7 @@ describe Lotus::Assets::AssetsHelpers do
       system("rm #{file}")
     end
 
-    Lotus::Assets.clear_configuration!
+    Lotus::Assets.configuration.clear!
   end
 
   it 'compiles a given scss file into the proper css file' do
@@ -43,7 +43,7 @@ describe Lotus::Assets::AssetsHelpers do
 
     stylesheet
 
-    File.exist?("#{Lotus::Assets.assets_path}/#{stylesheet_path}/application.css").must_equal true
+    File.exist?("#{Lotus::Assets.configuration.assets_path}/#{stylesheet_path}/application.css").must_equal true
   end
 
   it 'includes the proper stylesheet html tag' do
@@ -61,7 +61,7 @@ describe Lotus::Assets::AssetsHelpers do
 
     javascript
 
-    File.exist?("#{Lotus::Assets.assets_path}/#{javascript_path}/application.js").must_equal true
+    File.exist?("#{Lotus::Assets.configuration.assets_path}/#{javascript_path}/application.js").must_equal true
   end
 
   it 'includes the proper script html tag' do

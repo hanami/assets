@@ -6,41 +6,41 @@ module Lotus
     module Dsl
       def assets_path(path = nil)
         if path
-          Assets.assets_path = path
+          Assets.configuration.assets_path = path
         else
-          Assets.assets_path
+          Assets.configuration.assets_path
         end
       end
 
       def stylesheet_path(path = nil)
         if path
-          Assets.stylesheet_path = path
+          Assets.configuration.stylesheet_path = path
         else
-          Assets.stylesheet_path
+          Assets.configuration.stylesheet_path
         end
       end
 
       def javascript_path(path = nil)
         if path
-          Assets.javascript_path = path
+          Assets.configuration.javascript_path = path
         else
-          Assets.javascript_path
+          Assets.configuration.javascript_path
         end
       end
 
       def to_file(boolean = nil)
         unless boolean.nil?
-          Assets.to_file = boolean
+          Assets.configuration.to_file = boolean
         else
-          Assets.to_file
+          Assets.configuration.to_file
         end
       end
 
       def path_prefix(path = nil)
         if path
-          Assets.path_prefix = path
+          Assets.configuration.path_prefix = path
         else
-          Assets.path_prefix
+          Assets.configuration.path_prefix
         end
       end
     end

@@ -1,38 +1,54 @@
 module Lotus
   module Assets
     class Configuration
-      attr_writer :assets_path
-      attr_writer :stylesheet_path, :javascript_path
-      attr_writer :to_file, :path_prefix
-
       def clear!
         instance_variables.each do |ivar|
           remove_instance_variable ivar
         end
       end
 
-      def stylesheet_path
-        @stylesheet_path || 'stylesheets'
-      end
-
-      def javascript_path
-        @javascript_path || 'javascripts'
-      end
-
-      def to_file
-        if @to_file.nil?
-          true
+      def stylesheet_path(path = nil)
+        if path
+          @stylesheet_path = path
         else
-          @to_file
+          @stylesheet_path || 'stylesheets'
         end
       end
 
-      def path_prefix
-        @path_prefix || ''
+      def javascript_path(path = nil)
+        if path
+          @javascript_path = path
+        else
+          @javascript_path || 'javascripts'
+        end
       end
 
-      def assets_path
-        @assets_path || 'assets'
+      def to_file(boolean = nil)
+        unless boolean.nil?
+          @to_file = boolean
+        else
+          if @to_file.nil?
+            true
+          else
+            @to_file
+          end
+        end
+      end
+
+      def path_prefix(prefix = nil)
+        if prefix
+          @path_prefix = prefix
+        else
+          @path_prefix || ''
+        end
+      end
+
+      def assets_path(path = nil)
+        if path
+          @assets_path = path
+        else
+          @assets_path || 'assets'
+        end
       end
     end
   end

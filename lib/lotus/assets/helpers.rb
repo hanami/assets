@@ -11,21 +11,6 @@ module Lotus
     module Helpers
       include Dsl
 
-      def self.included(base)
-        ##
-        # Extremely nasty but it works for now
-        if base.respond_to?(:configuration)
-          namespace = base.configuration.namespace
-
-          if namespace.is_a?(String)
-            base_namespace = namespace.split("::")[0]
-            assets_config = Kernel.const_get(base_namespace)::Application.configuration.assets
-
-            Assets.configuration.assets_path(assets_config)
-          end
-        end
-      end
-
       def stylesheet(file_name = 'application')
         base_path = "#{assets_path}/#{stylesheet_path}"
         raise FolderNotFoundException unless Dir.exist?(base_path)

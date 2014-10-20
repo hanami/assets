@@ -2,14 +2,23 @@ require 'tilt'
 
 module Lotus
   module Assets
+    class FolderNotFoundException < StandardError
+    end
+
+    class NoFilesFoundException < StandardError
+    end
+
     module AssetsHelpers
       def stylesheet(file_name = 'application')
-        base_path = "#{Assets.path}/#{Assets.stylesheet_path}"
+        base_path = "#{Assets.assets_path}/#{Assets.stylesheet_path}"
+        raise FolderNotFoundException unless Dir.exist?(base_path)
 
         compiled_file_path = "#{base_path}/#{file_name}.css"
         files_in_dir = Dir["#{base_path}/#{file_name}.*"]
 
         files = files_in_dir - [compiled_file_path]
+        raise NoFilesFoundException if files.empty?
+
         file_with_prefix = files[0]
 
         template = Tilt.new(file_with_prefix)
@@ -30,12 +39,15 @@ module Lotus
       end
 
       def javascript(file_name = 'application')
-        base_path = "#{Assets.path}/#{Assets.javascript_path}"
+        base_path = "#{Assets.assets_path}/#{Assets.javascript_path}"
+        raise FolderNotFoundException unless Dir.exist?(base_path)
 
         compiled_file_path = "#{base_path}/#{file_name}.js"
         files_in_dir = Dir["#{base_path}/#{file_name}.*"]
 
         files = files_in_dir - [compiled_file_path]
+        raise NoFilesFoundException if files.empty?
+
         file_with_prefix = files[0]
 
         template = Tilt.new(file_with_prefix)

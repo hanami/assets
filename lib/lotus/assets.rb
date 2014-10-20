@@ -5,17 +5,16 @@ require 'lotus/assets/dsl'
 module Lotus
   module Assets
     class << self
-      attr_accessor :path
-
+      attr_writer :assets_path
       attr_writer :stylesheet_path, :javascript_path
       attr_writer :to_file, :path_prefix
 
       def included(base)
-        namespace_array = base.configuration.namespace.inspect.split('::')
-        base_namespace = namespace_array[0].tr('"', '')
+        # namespace_array = base.configuration.namespace.inspect.split('::')
+        # base_namespace = namespace_array[0].tr('"', '')
 
         # TODO: find a better way to access the current Lotus::Config::Assets object
-        self.path = Kernel.const_get(base_namespace)::Application.configuration.assets.to_s
+        # self.path = Kernel.const_get(base_namespace)::Application.configuration.assets.to_s
 
         base.extend(Dsl)
         base.include(AssetsHelpers)
@@ -45,6 +44,10 @@ module Lotus
 
       def path_prefix
         @path_prefix || ''
+      end
+
+      def assets_path
+        @assets_path || 'assets'
       end
     end
   end

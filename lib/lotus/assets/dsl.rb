@@ -4,6 +4,14 @@ module Lotus
     # This means all methods defined under Lotus::Assets::AssetsHelpers::ClassMethods are available
     # as class methods in the base class where Lotus::Assets::AssetsHelpers is included.
     module Dsl
+      def assets_path(path = nil)
+        if path
+          Assets.assets_path = path
+        else
+          Assets.assets_path
+        end
+      end
+
       def stylesheet_path(path = nil)
         if path
           Assets.stylesheet_path = path

@@ -8,10 +8,10 @@ end
 
 describe Lotus::Assets::AssetsHelpers do
   before do
-    Lotus::Assets.path = "#{Lotus::Assets.root}/spec/fixtures"
+    Lotus::Assets.assets_path = "#{Lotus::Assets.root}/spec/fixtures"
 
     @assets = []
-    assets_dirs = Dir["#{Lotus::Assets.path}/*"]
+    assets_dirs = Dir["#{Lotus::Assets.assets_path}/*"]
     assets_dirs.each do |dir|
       @assets << Dir["#{dir}/*"]
     end
@@ -20,10 +20,10 @@ describe Lotus::Assets::AssetsHelpers do
   end
 
   after do
-    Lotus::Assets.path = "#{Lotus::Assets.root}/spec/fixtures"
+    Lotus::Assets.assets_path = "#{Lotus::Assets.root}/spec/fixtures"
 
     after_assets = []
-    assets_dirs = Dir["#{Lotus::Assets.path}/*"]
+    assets_dirs = Dir["#{Lotus::Assets.assets_path}/*"]
     assets_dirs.each do |dir|
       after_assets << Dir["#{dir}/*"]
     end
@@ -43,7 +43,7 @@ describe Lotus::Assets::AssetsHelpers do
 
     stylesheet
 
-    File.exist?("#{Lotus::Assets.path}/#{stylesheet_path}/application.css").must_equal true
+    File.exist?("#{Lotus::Assets.assets_path}/#{stylesheet_path}/application.css").must_equal true
   end
 
   it 'includes the proper stylesheet html tag' do
@@ -61,7 +61,7 @@ describe Lotus::Assets::AssetsHelpers do
 
     javascript
 
-    File.exist?("#{Lotus::Assets.path}/#{javascript_path}/application.js").must_equal true
+    File.exist?("#{Lotus::Assets.assets_path}/#{javascript_path}/application.js").must_equal true
   end
 
   it 'includes the proper script html tag' do

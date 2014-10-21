@@ -20,10 +20,6 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'lotus-utils'
   spec.add_dependency 'tilt'
-  spec.add_dependency 'sass'
-  spec.add_dependency 'less'
-  spec.add_dependency 'coffee-script'
-  spec.add_dependency 'therubyracer'
 
   spec.add_development_dependency 'bundler',            '~> 1.7'
   spec.add_development_dependency 'rake',               '~> 10.3'

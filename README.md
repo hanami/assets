@@ -40,9 +40,13 @@ end
 This illustrates the whole configuration options with it's default values.
 
 ```assets_path``` - This is the real system path to your assets folder.
+
 ```stylesheet_path``` - This is the path from ```assets_path``` to your stylesheet folder
+
 ```javascript_path``` - This is the path from ```assets_path``` to your javascript folder
+
 ```path_prefix``` - The path_prefix will be used as prefix in the link and script href and src attribute
+
 ```to_file``` - If to_file is false the compiled css or js will be returned instead of a html link or script tag
 
 ### Standalone usage

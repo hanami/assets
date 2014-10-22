@@ -7,7 +7,9 @@ if ENV['COVERAGE']
     Coveralls::SimpleCov::Formatter
   ]
 
-  SimpleCov.start
+  SimpleCov.start do
+    add_filter '.gem/'
+  end
 end
 
 gem 'minitest'

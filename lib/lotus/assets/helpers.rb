@@ -3,7 +3,7 @@ require 'tilt'
 module Lotus
   module Assets
     FolderNotFoundException = Class.new(StandardError)
-    NoFilesFoundException   = Class.new(StandardError)
+    FilesNotFoundException   = Class.new(StandardError)
 
     module Helpers
       include Dsl
@@ -16,7 +16,7 @@ module Lotus
         compiled_file_path = "#{base_path}/#{file_name}.css"
 
         files_in_dir = Dir["#{base_path}/#{file_name}.*"]
-        raise NoFilesFoundException, "File \"#{file_name}.*\" doesn't match any given file" if files_in_dir.empty?
+        raise FilesNotFoundException, "File \"#{file_name}.*\" doesn't match any given file" if files_in_dir.empty?
 
         file_with_prefix = files_in_dir[0]
 

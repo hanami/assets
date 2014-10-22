@@ -53,9 +53,23 @@ describe 'when including a file' do
   end
 
   describe 'when nonexisting' do
-    it 'should raise a NoFilesFoundException' do
+    it 'should raise a FilesNotFoundException' do
       lambda { stylesheet 'nonexisting' }.must_raise Lotus::Assets::FilesNotFoundException
       lambda { javascript 'nonexisting' }.must_raise Lotus::Assets::FilesNotFoundException
+    end
+  end
+
+  describe 'when folder doesn\'t exist' do
+    before do
+      Lotus::Assets.configure do
+        stylesheet_path 'css'
+        javascript_path 'js'
+      end
+    end
+
+    it 'should raise a FolderNotFoundException' do
+      lambda { stylesheet 'application' }.must_raise Lotus::Assets::FolderNotFoundException
+      lambda { javascript 'application' }.must_raise Lotus::Assets::FolderNotFoundException
     end
   end
 end

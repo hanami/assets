@@ -1,6 +1,3 @@
-##
-# TODO: Split up tests
-#
 require 'test_helper'
 
 describe 'Configuration DSL' do

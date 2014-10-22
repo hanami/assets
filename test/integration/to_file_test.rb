@@ -1,48 +1,27 @@
-describe 'to_file disabled' do
-  before do
-    Lotus::Assets.configure do
-      assets_path "#{Lotus::Assets.root}/test/fixtures"
+require 'test_helper'
 
-      javascript_path 'javascripts'
-      stylesheet_path 'stylesheets'
 
-      path_prefix 'prefix/'
 
-      to_file false
-    end
-
-    @assets = []
-    assets_dirs = Dir["#{Lotus::Assets.configuration.assets_path}/*"]
-    assets_dirs.each do |dir|
-      @assets << Dir["#{dir}/*"]
-    end
-
-    @assets = @assets.flatten(1)
-  end
-
-  after do
-    assets_path "#{Lotus::Assets.root}/test/fixtures"
-
-    after_assets = []
-    assets_dirs = Dir["#{assets_path}/*"]
-    assets_dirs.each do |dir|
-      after_assets << Dir["#{dir}/*"]
-    end
-
-    after_assets = after_assets.flatten(1)
-
-    created = after_assets - @assets
-    created.each do |file|
-      system("rm #{file}")
-    end
-
-    Lotus::Assets.configuration.clear!
-  end
-
+describe 'to_file Option is disabled' do
   describe 'when including a file' do
     before do
+      Lotus::Assets.configure do
+        assets_path "#{Lotus::Assets.root}/test/fixtures"
+
+        javascript_path 'javascripts'
+        stylesheet_path 'stylesheets'
+
+        path_prefix 'prefix/'
+
+        to_file false
+      end
+
       @stylesheet = stylesheet 'application'
       @javascript = javascript 'application'
+    end
+
+    after do
+      Lotus::Assets.configuration.clear!
     end
 
     it 'should return the compiled css / js' do

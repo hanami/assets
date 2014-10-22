@@ -32,3 +32,14 @@ module Lotus
     end
   end
 end
+
+Lotus::Assets::ALLOWED_FIXTURES = [
+  "#{Lotus::Assets.root}/test/fixtures/stylesheets/application.scss",
+  "#{Lotus::Assets.root}/test/fixtures/stylesheets/compiled.css",
+  "#{Lotus::Assets.root}/test/fixtures/javascripts/application.coffee",
+  "#{Lotus::Assets.root}/test/fixtures/javascripts/compiled.js"
+]
+
+class Minitest::Spec
+  include Lotus::Assets::Helpers
+end

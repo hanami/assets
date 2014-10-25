@@ -1,4 +1,4 @@
-Copyright (c) 2014 Benny
+Copyright (c) 2014 Luca Guidi
 
 MIT License
 

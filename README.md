@@ -6,7 +6,9 @@ TODO: Write a gem description
 
 Add this line to your application's Gemfile:
 
-    gem 'lotus-assets'
+```ruby
+gem 'lotus-assets'
+```
 
 And then execute:
 
@@ -18,7 +20,46 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Configuration
+
+```ruby
+
+Lotus::Assets.configure do
+  assets_path 'assets'
+
+  stylesheet_path 'stylesheets'
+  javascript_path 'javascripts'
+
+  path_prefix ''
+
+  to_file true
+end
+
+```
+
+This illustrates the whole configuration options with it's default values.
+
+```assets_path``` - This is the real system path to your assets folder.
+
+```stylesheet_path``` - This is the path from ```assets_path``` to your stylesheet folder
+
+```javascript_path``` - This is the path from ```assets_path``` to your javascript folder
+
+```path_prefix``` - The path_prefix will be used as prefix in the link and script href and src attribute
+
+```to_file``` - If to_file is false the compiled css or js will be returned instead of a html link or script tag
+
+### Standalone usage
+
+[Example](examples/standalone)
+
+### Semi-standalone usage (with Lotus::View but not full-stack)
+
+[Example](examples/semi-standalone)
+
+### Full-stack usage
+
+TODO: Write Full-stack usage
 
 ## Contributing
 

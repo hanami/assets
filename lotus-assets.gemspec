@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Lotus::Assets::VERSION
   spec.authors       = ['Benny Klotz']
   spec.email         = ['r3qnbenni@gmail.com']
-  spec.summary       = 'Asset Pipeline for lotus'
-  spec.description   = 'Asset Pipeline for lotus'
+  spec.summary       = 'Assets management for lotus'
+  spec.description   = 'Assets management for lotus'
   spec.homepage      = ''
   spec.license       = 'MIT'
 

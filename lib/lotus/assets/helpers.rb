@@ -3,7 +3,7 @@ require 'tilt'
 module Lotus
   module Assets
     FolderNotFoundException = Class.new(StandardError)
-    FilesNotFoundException   = Class.new(StandardError)
+    FilesNotFoundException  = Class.new(StandardError)
 
     module Helpers
       include Dsl

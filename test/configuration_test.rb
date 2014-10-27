@@ -77,7 +77,7 @@ describe Lotus::Assets::Configuration do
     end
 
     it 'removes custom defined asset types' do
-      -> { @configuration.__send__(:asset, :cuztom) }.must_raise KeyError
+      -> { @configuration.__send__(:asset, :cuztom) }.must_raise Lotus::Assets::UnknownAssetType
     end
 
     it 'sets default value for predefined asset type' do
@@ -85,6 +85,37 @@ describe Lotus::Assets::Configuration do
       asset.tag.must_equal    %(<link href="%s" type="text/css" rel="stylesheet">)
       asset.source.must_equal %(/%s.css)
       asset.path.must_equal   %(assets)
+    end
+  end
+
+  describe '#asset_tag' do
+    it 'returns a relative url' do
+      result = @configuration.asset_tag(:javascript, 'signin')
+      result.must_equal %(<script src="/assets/signin.js" type="text/javascript"></script>)
+    end
+
+    it 'returns an absoulte url' do
+      result = @configuration.asset_tag(:javascript, 'https://code.jquery.com/jquery-2.1.1.min.js')
+      result.must_equal %(<script src="https://code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>)
+    end
+
+    it 'raises an error for unkown type' do
+      exception = -> { @configuration.asset_tag(:unkown, 'feature-c') }.must_raise(Lotus::Assets::UnknownAssetType)
+      exception.message.must_equal %(Unknown asset type: `unkown')
+    end
+
+    describe 'with custom defined type' do
+      before do
+        @configuration.define :custom do
+          tag    %(<link rel="text/x-custom src="%s">)
+          source %(/%s.custom)
+        end
+      end
+
+      it 'returns the asset tag' do
+        result = @configuration.asset_tag(:custom, 'feature-d')
+        result.must_equal %(<link rel="text/x-custom src="/assets/feature-d.custom">)
+      end
     end
   end
 end

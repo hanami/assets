@@ -7,7 +7,7 @@ module Lotus
         # FIXME test the behavior when sources is nil
         def self.render(type, *sources)
           sources.map do |source|
-            configuration.asset_path(type, source)
+            configuration.asset_tag(type, source)
           end.join(LINE_SEPARATOR)
         end
 

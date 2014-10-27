@@ -3,6 +3,12 @@ require 'lotus/assets/config/asset'
 
 module Lotus
   module Assets
+    class UnknownAssetType < ::StandardError
+      def initialize(type)
+        super("Unknown asset type: `#{ type }'")
+      end
+    end
+
     class Configuration
       PATH_SEPARATOR = '/'.freeze
       ASSETS         = ->{{
@@ -37,29 +43,29 @@ module Lotus
         end
       end
 
-      def asset_path(type, source)
+      def reset!
+        @definitions = ASSETS.call
+        @prefix      = nil
+      end
+
+      # @api private
+      def asset_tag(type, source)
         definition = asset(type)
 
-        source = if absolute_url?(source)
-          source
-        else
-          definition.source % [ prefix, definition.path, source ].compact.join(PATH_SEPARATOR)
+        unless absolute_url?(source)
+          source = definition.source % [ prefix, definition.path, source ].compact.join(PATH_SEPARATOR)
         end
 
         definition.tag % source
       end
 
+      private
       def asset(type)
-        @definitions.fetch(type)
+        @definitions.fetch(type) { raise UnknownAssetType.new(type) }
       end
 
       def absolute_url?(source)
         URI.regexp.match(source)
-      end
-
-      def reset!
-        @definitions = ASSETS.call
-        @prefix      = nil
       end
     end
   end

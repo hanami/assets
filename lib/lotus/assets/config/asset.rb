@@ -6,7 +6,7 @@ module Lotus
 
         def initialize(&blk)
           @path = DEFAULT_PATH
-          define(&blk)
+          define(&blk) if block_given?
         end
 
         def define(&blk)

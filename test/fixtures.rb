@@ -24,18 +24,18 @@ end
 
 class CustomAssetsPathView < View
   private
-  def _javascript_prefix
+  def javascript_prefix
     'custom-assets-path'
   end
 
-  def _stylesheet_prefix
+  def stylesheet_prefix
     'custom-assets-path-for-css'
   end
 end
 
 class CustomAssetsPrefix < View
   private
-  def _assets_prefix
+  def assets_prefix
     'prefix'
   end
 end

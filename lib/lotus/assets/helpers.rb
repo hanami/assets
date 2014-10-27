@@ -15,22 +15,22 @@ module Lotus
 
       private
       def javascript_path(file)
-        [ _assets_prefix, _javascript_prefix, file ].compact.join('/')
+        [ assets_prefix, javascript_prefix, file ].compact.join('/')
       end
 
       def stylesheet_path(file)
-        [ _assets_prefix, _stylesheet_prefix, file ].compact.join('/')
+        [ assets_prefix, stylesheet_prefix, file ].compact.join('/')
       end
 
-      def _javascript_prefix
+      def javascript_prefix
         'assets'
       end
 
-      def _stylesheet_prefix
+      def stylesheet_prefix
         'assets'
       end
 
-      def _assets_prefix
+      def assets_prefix
         nil
       end
     end

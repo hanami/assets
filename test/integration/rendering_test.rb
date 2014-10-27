@@ -42,4 +42,20 @@ describe 'Rendering test' do
       @result.must_include %(<link href="/prefix/assets/main.css" type="text/css" rel="stylesheet">)
     end
   end
+
+  describe 'with multiple assets' do
+    before do
+      @result = RenderMultipleAssets.new.render
+    end
+
+    it 'resolves javascript tags' do
+      @result.must_include %(<script src="/assets/feature-a.js" type="text/javascript"></script>)
+      @result.must_include %(<script src="/assets/feature-b.js" type="text/javascript"></script>)
+    end
+
+    it 'resolves stylesheets tag' do
+      @result.must_include %(<link href="/assets/grid.css" type="text/css" rel="stylesheet">)
+      @result.must_include %(<link href="/assets/main.css" type="text/css" rel="stylesheet">)
+    end
+  end
 end

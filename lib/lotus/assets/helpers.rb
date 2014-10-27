@@ -1,12 +1,16 @@
 module Lotus
   module Assets
     module Helpers
-      def javascript(file)
-        %(<script src="/#{ javascript_path(file) }.js" type="text/javascript"></script>)
+      def javascript(*files)
+        files.map do |file|
+          %(<script src="/#{ javascript_path(file) }.js" type="text/javascript"></script>)
+        end.join("\n")
       end
 
-      def stylesheet(file)
-        %(<link href="/#{ stylesheet_path(file) }.css" type="text/css" rel="stylesheet">)
+      def stylesheet(*files)
+        files.map do |file|
+          %(<link href="/#{ stylesheet_path(file) }.css" type="text/css" rel="stylesheet">)
+        end.join("\n")
       end
 
       private

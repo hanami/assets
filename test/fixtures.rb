@@ -39,3 +39,9 @@ class CustomAssetsPrefix < View
     'prefix'
   end
 end
+
+class RenderMultipleAssets < View
+  def self.template
+    __dir__ + '/fixtures/multi-template.erb'
+  end
+end

@@ -23,21 +23,9 @@ class DefaultView < View
 end
 
 class CustomAssetsPathView < View
-  private
-  def javascript_prefix
-    'custom-assets-path'
-  end
-
-  def stylesheet_prefix
-    'custom-assets-path-for-css'
-  end
 end
 
 class CustomAssetsPrefix < View
-  private
-  def assets_prefix
-    'prefix'
-  end
 end
 
 class RenderMultipleAssets < View

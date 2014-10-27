@@ -1,6 +1,10 @@
 require 'test_helper'
 
 describe 'Rendering test' do
+  before do
+    Lotus::Assets.configuration.reset!
+  end
+
   describe 'with defaults' do
     before do
       @result = DefaultView.new.render
@@ -17,6 +21,11 @@ describe 'Rendering test' do
 
   describe 'with custom assets path' do
     before do
+      Lotus::Assets.configure do
+        javascripts_path 'custom-assets-path'
+        stylesheets_path 'custom-assets-path-for-css'
+      end
+
       @result = CustomAssetsPathView.new.render
     end
 
@@ -31,6 +40,10 @@ describe 'Rendering test' do
 
   describe 'with custom assets prefix' do
     before do
+      Lotus::Assets.configure do
+        prefix 'prefix' # FIXME '/prefix'
+      end
+
       @result = CustomAssetsPrefix.new.render
     end
 

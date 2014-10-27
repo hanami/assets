@@ -1,8 +1,10 @@
 require 'erb'
 
-module Rendering
+class View
+  include Lotus::Assets::Helpers
+
   def self.template
-    raise NotImplementedError
+    __dir__ + '/fixtures/template.erb'
   end
 
   def initialize
@@ -14,23 +16,13 @@ module Rendering
   end
 end
 
-class DefaultView
-  include Lotus::Assets::Helpers
-  include Rendering
-
+class DefaultView < View
   def self.template
     __dir__ + '/fixtures/template.erb'
   end
 end
 
-class CustomAssetsPathView
-  include Lotus::Assets::Helpers
-  include Rendering
-
-  def self.template
-    __dir__ + '/fixtures/template.erb'
-  end
-
+class CustomAssetsPathView < View
   private
   def _javascript_prefix
     'custom-assets-path'
@@ -38,5 +30,12 @@ class CustomAssetsPathView
 
   def _stylesheet_prefix
     'custom-assets-path-for-css'
+  end
+end
+
+class CustomAssetsPrefix < View
+  private
+  def _assets_prefix
+    'prefix'
   end
 end

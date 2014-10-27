@@ -2,20 +2,32 @@ module Lotus
   module Assets
     module Helpers
       def javascript(file)
-        %(<script src="/#{ _javascript_prefix }/#{ file }.js" type="text/javascript"></script>)
+        %(<script src="/#{ javascript_path(file) }.js" type="text/javascript"></script>)
       end
 
       def stylesheet(file)
-        %(<link href="/#{ _stylesheet_prefix }/#{ file }.css" type="text/css" rel="stylesheet">)
+        %(<link href="/#{ stylesheet_path(file) }.css" type="text/css" rel="stylesheet">)
       end
 
       private
+      def javascript_path(file)
+        [ _assets_prefix, _javascript_prefix, file ].compact.join('/')
+      end
+
+      def stylesheet_path(file)
+        [ _assets_prefix, _stylesheet_prefix, file ].compact.join('/')
+      end
+
       def _javascript_prefix
         'assets'
       end
 
       def _stylesheet_prefix
         'assets'
+      end
+
+      def _assets_prefix
+        nil
       end
     end
   end

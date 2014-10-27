@@ -28,4 +28,18 @@ describe 'Rendering test' do
       @result.must_include %(<link href="/custom-assets-path-for-css/main.css" type="text/css" rel="stylesheet">)
     end
   end
+
+  describe 'with custom assets prefix' do
+    before do
+      @result = CustomAssetsPrefix.new.render
+    end
+
+    it 'resolves javascript tag under configured path' do
+      @result.must_include %(<script src="/prefix/assets/feature-a.js" type="text/javascript"></script>)
+    end
+
+    it 'resolves stylesheet tag under configured path' do
+      @result.must_include %(<link href="/prefix/assets/main.css" type="text/css" rel="stylesheet">)
+    end
+  end
 end

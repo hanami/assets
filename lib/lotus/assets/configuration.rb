@@ -10,7 +10,7 @@ module Lotus
 
     class Configuration
       PATH_SEPARATOR = '/'.freeze
-      ASSET_TYPES    = ->{{
+      ASSET_TYPES    = ->{Hash.new{|h,k| h[k] = Config::AssetType.new }.merge!({
         javascript: Config::AssetType.new {
           tag    %(<script src="%s" type="text/javascript"></script>)
           source %(/%s.js)
@@ -19,7 +19,7 @@ module Lotus
           tag    %(<link href="%s" type="text/css" rel="stylesheet">)
           source %(/%s.css)
         }
-      }}.freeze
+      })}.freeze
 
       def initialize
         reset!
@@ -34,12 +34,7 @@ module Lotus
       end
 
       def define(type, &blk)
-        # FIXME unify the semantic of access to @definitions
-        if @types[type]
-          @types[type].define(&blk)
-        else
-          @types[type] = Config::AssetType.new(&blk)
-        end
+        @types[type].define(&blk)
       end
 
       def reset!

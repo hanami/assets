@@ -1,21 +1,42 @@
 require 'erb'
 
-class View
-  @@template = __dir__ + '/fixtures/template.erb'
+module Rendering
+  def self.template
+    raise NotImplementedError
+  end
 
   def initialize
-    @template = File.read(@@template)
+    @template = File.read(self.class.template)
   end
 
   def render
     ERB.new(@template).result(binding)
   end
+end
 
-  def javascript(file)
-    %(<script src="/assets/#{ file }.js" type="text/javascript"></script>)
+class DefaultView
+  include Lotus::Assets::Helpers
+  include Rendering
+
+  def self.template
+    __dir__ + '/fixtures/template.erb'
+  end
+end
+
+class CustomAssetsPathView
+  include Lotus::Assets::Helpers
+  include Rendering
+
+  def self.template
+    __dir__ + '/fixtures/template.erb'
   end
 
-  def stylesheet(file)
-    %(<link href="/assets/#{ file }.css" type="text/css" rel="stylesheet">)
+  private
+  def _javascript_prefix
+    'custom-assets-path'
+  end
+
+  def _stylesheet_prefix
+    'custom-assets-path-for-css'
   end
 end

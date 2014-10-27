@@ -1,4 +1,4 @@
-require 'lotus/assets/config/asset'
+require 'lotus/assets/config/asset_type'
 
 module Lotus
   module Assets
@@ -10,12 +10,12 @@ module Lotus
 
     class Configuration
       PATH_SEPARATOR = '/'.freeze
-      ASSETS         = ->{{
-        javascript: Config::Asset.new {
+      ASSET_TYPES    = ->{{
+        javascript: Config::AssetType.new {
           tag    %(<script src="%s" type="text/javascript"></script>)
           source %(/%s.js)
         },
-        stylesheet: Config::Asset.new {
+        stylesheet: Config::AssetType.new {
           tag    %(<link href="%s" type="text/css" rel="stylesheet">)
           source %(/%s.css)
         }
@@ -35,21 +35,21 @@ module Lotus
 
       def define(type, &blk)
         # FIXME unify the semantic of access to @definitions
-        if @definitions[type]
-          @definitions[type].define(&blk)
+        if @types[type]
+          @types[type].define(&blk)
         else
-          @definitions[type] = Config::Asset.new(&blk)
+          @types[type] = Config::AssetType.new(&blk)
         end
       end
 
       def reset!
-        @definitions = ASSETS.call
-        @prefix      = nil
+        @types  = ASSET_TYPES.call
+        @prefix = nil
       end
 
       # @api private
       def asset(type)
-        @definitions.fetch(type) { raise UnknownAssetType.new(type) }
+        @types.fetch(type) { raise UnknownAssetType.new(type) }
       end
     end
   end

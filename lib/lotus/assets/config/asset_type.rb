@@ -1,7 +1,7 @@
 module Lotus
   module Assets
     module Config
-      class Asset
+      class AssetType
         DEFAULT_PATH = 'assets'.freeze
 
         def initialize(&blk)

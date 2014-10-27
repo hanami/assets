@@ -90,7 +90,7 @@ describe Lotus::Assets::Configuration do
 
   describe '#asset' do
     it 'returns an asset definition' do
-      @configuration.asset(:javascript).must_be_kind_of(Lotus::Assets::Config::Asset)
+      @configuration.asset(:javascript).must_be_kind_of(Lotus::Assets::Config::AssetType)
     end
 
     it 'raises error for unkown type' do

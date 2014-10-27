@@ -39,3 +39,4 @@ class AbsoluteUrlsView < View
     __dir__ + '/fixtures/absolute-urls-template.erb'
   end
 end
+

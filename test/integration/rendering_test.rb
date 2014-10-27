@@ -22,8 +22,13 @@ describe 'Rendering test' do
   describe 'with custom assets path' do
     before do
       Lotus::Assets.configure do
-        javascripts_path 'custom-assets-path'
-        stylesheets_path 'custom-assets-path-for-css'
+        define :javascript do
+          path 'custom-assets-path'
+        end
+
+        define :stylesheet do
+          path 'custom-assets-path-for-css'
+        end
       end
 
       @result = CustomAssetsPathView.new.render

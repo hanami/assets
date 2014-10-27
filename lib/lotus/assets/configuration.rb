@@ -1,4 +1,3 @@
-require 'uri'
 require 'lotus/assets/config/asset'
 
 module Lotus
@@ -49,23 +48,8 @@ module Lotus
       end
 
       # @api private
-      def asset_tag(type, source)
-        definition = asset(type)
-
-        unless absolute_url?(source)
-          source = definition.source % [ prefix, definition.path, source ].compact.join(PATH_SEPARATOR)
-        end
-
-        definition.tag % source
-      end
-
-      private
       def asset(type)
         @definitions.fetch(type) { raise UnknownAssetType.new(type) }
-      end
-
-      def absolute_url?(source)
-        URI.regexp.match(source)
       end
     end
   end

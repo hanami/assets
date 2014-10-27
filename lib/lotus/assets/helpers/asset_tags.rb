@@ -1,3 +1,5 @@
+require 'lotus/assets/helpers/asset_tag'
+
 module Lotus
   module Assets
     module Helpers
@@ -7,7 +9,7 @@ module Lotus
         # FIXME test the behavior when sources is nil
         def self.render(type, *sources)
           sources.map do |source|
-            configuration.asset_tag(type, source)
+            AssetTag.render(configuration, type, source)
           end.join(LINE_SEPARATOR)
         end
 

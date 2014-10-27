@@ -45,3 +45,9 @@ class RenderMultipleAssets < View
     __dir__ + '/fixtures/multi-template.erb'
   end
 end
+
+class AbsoluteUrlsView < View
+  def self.template
+    __dir__ + '/fixtures/absolute-urls-template.erb'
+  end
+end

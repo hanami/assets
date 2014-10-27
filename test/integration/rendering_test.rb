@@ -58,4 +58,18 @@ describe 'Rendering test' do
       @result.must_include %(<link href="/assets/main.css" type="text/css" rel="stylesheet">)
     end
   end
+
+  describe 'with absolute url' do
+    before do
+      @result = AbsoluteUrlsView.new.render
+    end
+
+    it 'resolves javascript tag' do
+      @result.must_include %(<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js" type="text/javascript"></script>)
+    end
+
+    it 'resolves stylesheets tag' do
+      @result.must_include %(<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" type="text/css" rel="stylesheet">)
+    end
+  end
 end

@@ -6,7 +6,6 @@ module Lotus
       class AssetTags
         LINE_SEPARATOR = "\n".freeze
 
-        # FIXME test the behavior when sources is nil
         def self.render(type, *sources)
           sources.map do |source|
             AssetTag.render(configuration, type, source)

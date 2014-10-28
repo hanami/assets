@@ -46,7 +46,78 @@ $ gem install lotus-assets
 
 ## Usage
 
-  TODO
+### Helpers
+
+The framework offers assets specific helpers to be used in templates.
+They resolve one or multiple sources into corresponding HTML tags.
+Those sources can be the name of the local asset or an absolute URL.
+
+Given the following template:
+
+```erb
+<!doctype HTML>
+<html>
+  <head>
+    <title>Assets example</title>
+    <%= stylesheet 'reset', 'grid', 'main' %>
+  </head>
+
+  <body>
+  <!-- ... -->
+  <%= javascript 'https://code.jquery.com/jquery-2.1.1.min.js', 'application' %>
+  <%= javascript 'modals' %>
+  </body>
+</html>
+```
+
+It will output this markup.
+
+```html
+<!doctype HTML>
+<html>
+  <head>
+    <title>Assets example</title>
+    <link href="/assets/reset.css" type="text/css" rel="stylesheet">
+    <link href="/assets/grid.css" type="text/css" rel="stylesheet">
+    <link href="/assets/main.css" type="text/css" rel="stylesheet">
+  </head>
+
+  <body>
+  <!-- ... -->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
+  <script src="/assets/application.js" type="text/javascript"></script>
+  <script src="/assets/modals.js" type="text/javascript"></script>
+  </body>
+</html>
+```
+
+Let's have a look at the corresponding Ruby code.
+In this example we use ERb, but remember that `Lotus::Assets` is compatible with
+all the rendering engines such as HAML, Slim, Mustache, etc..
+
+```ruby
+require 'erb'
+require 'lotus/assets'
+require 'lotus/assets/helpers'
+
+class View
+  include Lotus::Assets::Helpers
+
+  def initialize
+    @template = File.read('template.erb')
+    @engine   = ERB.new(@template)
+  end
+
+  def render
+    @engine.result(binding)
+  end
+end
+
+View.new.render # => HTML markup
+```
+
+For advanced configurations, please have a look at
+[`Lotus::Assets::Configuration`](https://github.com/lotus/assets/blob/master/lib/lotus/assets/configuration.rb).
 
 ## Versioning
 

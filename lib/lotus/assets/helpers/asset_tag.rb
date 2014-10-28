@@ -4,13 +4,12 @@ module Lotus
   module Assets
     module Helpers
       class AssetTag
-        PATH_SEPARATOR = '/'.freeze
-
         def self.render(configuration, type, source)
           definition = configuration.asset(type)
 
           unless absolute_url?(source)
-            source = definition.source % [ configuration.prefix, definition.path, source ].compact.join(PATH_SEPARATOR)
+            source = definition.source %
+              configuration.prefix.join(definition.path, source)
           end
 
           definition.tag % source

@@ -1,3 +1,4 @@
+require 'lotus/utils/path_prefix'
 require 'lotus/assets/config/asset_type'
 
 module Lotus
@@ -13,11 +14,11 @@ module Lotus
       ASSET_TYPES    = ->{Hash.new{|h,k| h[k] = Config::AssetType.new }.merge!({
         javascript: Config::AssetType.new {
           tag    %(<script src="%s" type="text/javascript"></script>)
-          source %(/%s.js)
+          source %(%s.js)
         },
         stylesheet: Config::AssetType.new {
           tag    %(<link href="%s" type="text/css" rel="stylesheet">)
-          source %(/%s.css)
+          source %(%s.css)
         }
       })}.freeze
 
@@ -29,7 +30,7 @@ module Lotus
         if value.nil?
           @prefix
         else
-          @prefix = value
+          @prefix = Utils::PathPrefix.new(value)
         end
       end
 
@@ -39,7 +40,7 @@ module Lotus
 
       def reset!
         @types  = ASSET_TYPES.call
-        @prefix = nil
+        @prefix = Utils::PathPrefix.new
       end
 
       # @api private

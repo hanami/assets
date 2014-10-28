@@ -46,7 +46,7 @@ describe 'Rendering test' do
   describe 'with custom assets prefix' do
     before do
       Lotus::Assets.configure do
-        prefix 'prefix' # FIXME '/prefix'
+        prefix '/prefix'
       end
 
       @result = CustomAssetsPrefix.new.render

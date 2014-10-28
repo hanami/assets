@@ -34,7 +34,7 @@ module Lotus
       end
 
       def define(type, &blk)
-        @types[type].define(&blk)
+        @types[type.to_sym].define(&blk)
       end
 
       def reset!

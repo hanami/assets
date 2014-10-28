@@ -29,6 +29,15 @@ describe Lotus::Assets::Configuration do
       asset.source.must_equal %(%s.custom)
     end
 
+    it 'accepts strings as name of the asset type' do
+      @configuration.define 'custom2' do
+        source %(%s.custom2)
+      end
+
+      asset = @configuration.asset(:custom2)
+      asset.source.must_equal %(%s.custom2)
+    end
+
     it 'allows to modify existing asset types' do
       @configuration.define :javascript do
         path 'dest-js'

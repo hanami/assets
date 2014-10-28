@@ -10,8 +10,7 @@ module Lotus
     end
 
     class Configuration
-      PATH_SEPARATOR = '/'.freeze
-      ASSET_TYPES    = ->{Hash.new{|h,k| h[k] = Config::AssetType.new }.merge!({
+      ASSET_TYPES = ->{Hash.new{|h,k| h[k] = Config::AssetType.new }.merge!({
         javascript: Config::AssetType.new {
           tag    %(<script src="%s" type="text/javascript"></script>)
           source %(%s.js)

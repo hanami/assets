@@ -5,22 +5,6 @@ describe Lotus::Assets::Configuration do
     @configuration = Lotus::Assets::Configuration.new
   end
 
-  describe 'defaults' do
-    it 'has a predefined type for javascript' do
-      asset = @configuration.__send__(:asset, :javascript)
-      asset.tag.must_equal    %(<script src="%s" type="text/javascript"></script>)
-      asset.source.must_equal %(%s.js)
-      asset.path.must_equal   %(assets)
-    end
-
-    it 'has a predefined type for stylesheet' do
-      asset = @configuration.__send__(:asset, :stylesheet)
-      asset.tag.must_equal    %(<link href="%s" type="text/css" rel="stylesheet">)
-      asset.source.must_equal %(%s.css)
-      asset.path.must_equal   %(assets)
-    end
-  end
-
   describe '#prefix' do
     it 'returns empty value default' do
       @configuration.prefix.must_be_kind_of(Lotus::Utils::PathPrefix)
@@ -40,7 +24,7 @@ describe Lotus::Assets::Configuration do
         source %(%s.custom)
       end
 
-      asset = @configuration.__send__(:asset, :custom)
+      asset = @configuration.asset(:custom)
       asset.tag.must_equal    %(<link rel="text/x-custom src="%s">)
       asset.source.must_equal %(%s.custom)
     end
@@ -50,7 +34,7 @@ describe Lotus::Assets::Configuration do
         path 'dest-js'
       end
 
-      asset = @configuration.__send__(:asset, :javascript)
+      asset = @configuration.asset(:javascript)
       asset.tag.must_equal    %(<script src="%s" type="text/javascript"></script>)
       asset.source.must_equal %(%s.js)
       asset.path.must_equal   %(dest-js)
@@ -79,14 +63,14 @@ describe Lotus::Assets::Configuration do
     end
 
     it 'removes custom defined asset types' do
-      -> { @configuration.__send__(:asset, :cuztom) }.must_raise Lotus::Assets::UnknownAssetType
+      -> { @configuration.asset(:cuztom) }.must_raise Lotus::Assets::UnknownAssetType
     end
 
     it 'sets default value for predefined asset type' do
-      asset = @configuration.__send__(:asset, :stylesheet)
+      asset = @configuration.asset(:stylesheet)
       asset.tag.must_equal    %(<link href="%s" type="text/css" rel="stylesheet">)
       asset.source.must_equal %(%s.css)
-      asset.path.must_equal   %(assets)
+      asset.path.must_equal   %(/assets)
     end
   end
 

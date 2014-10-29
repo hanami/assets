@@ -7,6 +7,12 @@ module Lotus
       end
     end
 
+    class UnknownAssetEngine < ::StandardError
+      def initialize(source)
+        super("No asset engine registered for `#{ ::File.basename(source) }'")
+      end
+    end
+
     # @api private
     class Compiler
       def self.compile(configuration, type, name)
@@ -28,11 +34,9 @@ module Lotus
         raise MissingAsset.new(@name + @definition.ext, @definition.sources) unless exist?
 
         if compile?
-          # TODO File::WRONLY|File::CREAT
-          # FIXME create custom exception in case of missing Tilt engine
-          destination.open('w') {|file| file.write(Tilt.new(source).render) }
+          compile!
         else
-          FileUtils.copy(source, destination)
+          copy!
         end
       end
 
@@ -66,6 +70,17 @@ module Lotus
 
       def compile?
         !source.match(/#{ @definition.ext }\z/)
+      end
+
+      def compile!
+        # TODO File::WRONLY|File::CREAT
+        destination.open('w') {|file| file.write(Tilt.new(source).render) }
+      rescue RuntimeError
+        raise UnknownAssetEngine.new(source)
+      end
+
+      def copy!
+        FileUtils.copy(source, destination)
       end
     end
   end

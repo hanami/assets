@@ -53,3 +53,9 @@ class MissingAssetSourceView < View
     __dir__ + '/fixtures/missing-asset-source.erb'
   end
 end
+
+class UnknownAssetEngineView < View
+  def self.template
+    __dir__ + '/fixtures/unknown-asset-engine.erb'
+  end
+end

@@ -1,7 +1,16 @@
-require "lotus/assets/version"
+require 'lotus/assets/version'
+require 'lotus/assets/configuration'
+require 'lotus/utils/class_attribute'
 
 module Lotus
   module Assets
-    # Your code goes here...
+    include Utils::ClassAttribute
+
+    class_attribute :configuration
+    self.configuration = Configuration.new
+
+    def self.configure(&blk)
+      configuration.instance_eval(&blk)
+    end
   end
 end

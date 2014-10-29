@@ -26,6 +26,14 @@ module Lotus
         reset!
       end
 
+      def compile(value = nil)
+        if value.nil?
+          @compile
+        else
+          @compile = value
+        end
+      end
+
       def prefix(value = nil)
         if value.nil?
           @prefix
@@ -50,8 +58,9 @@ module Lotus
       end
 
       def reset!
-        @types  = ASSET_TYPES.call
-        @prefix = Utils::PathPrefix.new
+        @types   = ASSET_TYPES.call
+        @prefix  = Utils::PathPrefix.new
+        @compile = false
       end
 
       # @api private

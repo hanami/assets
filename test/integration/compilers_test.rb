@@ -7,6 +7,7 @@ describe 'Compilers' do
     tmp.rmtree
 
     Lotus::Assets.configure do
+      compile     true
       destination tmp.join('public')
 
       define :javascript do

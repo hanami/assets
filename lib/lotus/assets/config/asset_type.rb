@@ -46,19 +46,6 @@ module Lotus
         end
 
         # @api private
-        def find(source)
-          source = "#{ source }.*"
-
-          # FIXME this is really unefficient
-          @load_paths.each do |load_path|
-            path = Pathname.glob(load_path.join(source)).first
-            return path.to_s unless path.nil?
-          end
-
-          nil
-        end
-
-        # @api private
         def relative_path(source)
           prefix.relative_join(source + ext)
         end

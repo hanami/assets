@@ -1,5 +1,5 @@
-require 'lotus/utils/load_paths'
 require 'lotus/utils/path_prefix'
+require 'lotus/assets/config/sources'
 
 module Lotus
   module Assets
@@ -7,11 +7,11 @@ module Lotus
       class AssetType
         DEFAULT_PREFIX = '/assets'.freeze
 
-        attr_reader :load_paths
+        attr_reader :sources
 
         def initialize(&blk)
-          @load_paths = Utils::LoadPaths.new
-          prefix        DEFAULT_PREFIX
+          @sources = Sources.new
+          prefix     DEFAULT_PREFIX
 
           define(&blk) if block_given?
         end

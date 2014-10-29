@@ -47,3 +47,9 @@ class CompilerView < View
     __dir__ + '/fixtures/compiler-template.erb'
   end
 end
+
+class MissingAssetSourceView < View
+  def self.template
+    __dir__ + '/fixtures/missing-asset-source.erb'
+  end
+end

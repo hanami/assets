@@ -11,7 +11,7 @@ describe 'Compilers' do
       destination tmp.join('public')
 
       define :javascript do
-        load_paths << [
+        sources << [
           "#{ root }/javascripts"
         ]
       end
@@ -38,5 +38,12 @@ describe 'Compilers' do
 
     compiled = @config.destination.join('assets/hello.js').read
     compiled.must_match %(alert("Hello, World!");)
+  end
+
+  it 'raises an error in case of missing source' do
+    sources   = @config.asset(:javascript).sources.map(&:to_s).join(', ')
+    exception = -> { MissingAssetSourceView.new.render }.must_raise(Lotus::Assets::MissingAsset)
+
+    exception.message.must_equal("Missing asset: `missing.js' (sources: #{ sources })")
   end
 end

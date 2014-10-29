@@ -1,5 +1,12 @@
 module Lotus
   module Assets
+    class MissingAsset < ::StandardError
+      def initialize(name, sources)
+        sources = sources.map(&:to_s).join(', ')
+        super("Missing asset: `#{ name }' (sources: #{ sources })")
+      end
+    end
+
     # @api private
     class Compiler
       def self.compile(configuration, type, name)
@@ -17,7 +24,8 @@ module Lotus
       end
 
       def compile
-        return unless exist?
+        # FIXME in initializer make: @name = name + @definition.ext
+        raise MissingAsset.new(@name + @definition.ext, @definition.sources) unless exist?
 
         if compile?
           # TODO File::WRONLY|File::CREAT
@@ -35,7 +43,7 @@ module Lotus
           name = "#{ @name }.*"
 
           # FIXME this is really unefficient
-          @definition.load_paths.each do |load_path|
+          @definition.sources.each do |load_path|
             path = Pathname.glob(load_path.join(name)).first
             return path.to_s unless path.nil?
           end

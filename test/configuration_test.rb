@@ -20,33 +20,33 @@ describe Lotus::Assets::Configuration do
   describe '#define' do
     it 'allows to define a custom asset type' do
       @configuration.define :custom do
-        tag    %(<link rel="text/x-custom src="%s">)
-        source %(%s.custom)
+        tag      %(<link rel="text/x-custom src="%s">)
+        filename %(%s.custom)
       end
 
       asset = @configuration.asset(:custom)
-      asset.tag.must_equal    %(<link rel="text/x-custom src="%s">)
-      asset.source.must_equal %(%s.custom)
+      asset.tag.must_equal      %(<link rel="text/x-custom src="%s">)
+      asset.filename.must_equal %(%s.custom)
     end
 
     it 'accepts strings as name of the asset type' do
       @configuration.define 'custom2' do
-        source %(%s.custom2)
+        filename %(%s.custom2)
       end
 
       asset = @configuration.asset(:custom2)
-      asset.source.must_equal %(%s.custom2)
+      asset.filename.must_equal %(%s.custom2)
     end
 
     it 'allows to modify existing asset types' do
       @configuration.define :javascript do
-        path 'dest-js'
+        prefix 'dest-js'
       end
 
       asset = @configuration.asset(:javascript)
-      asset.tag.must_equal    %(<script src="%s" type="text/javascript"></script>)
-      asset.source.must_equal %(%s.js)
-      asset.path.must_equal   %(dest-js)
+      asset.tag.must_equal      %(<script src="%s" type="text/javascript"></script>)
+      asset.filename.must_equal %(%s.js)
+      asset.prefix.must_equal   %(dest-js)
     end
   end
 
@@ -55,12 +55,12 @@ describe Lotus::Assets::Configuration do
       @configuration.prefix 'prfx'
 
       @configuration.define :stylesheet do
-        source %(%s.CSS)
+        filename %(%s.CSS)
       end
 
       @configuration.define :cuztom do
-        tag    %(<link rel="text/xy-custom src="%s">)
-        source %(%s.cstm)
+        tag      %(<link rel="text/xy-custom src="%s">)
+        filename %(%s.cstm)
       end
 
       @configuration.reset!
@@ -77,9 +77,9 @@ describe Lotus::Assets::Configuration do
 
     it 'sets default value for predefined asset type' do
       asset = @configuration.asset(:stylesheet)
-      asset.tag.must_equal    %(<link href="%s" type="text/css" rel="stylesheet">)
-      asset.source.must_equal %(%s.css)
-      asset.path.must_equal   %(/assets)
+      asset.tag.must_equal      %(<link href="%s" type="text/css" rel="stylesheet">)
+      asset.filename.must_equal %(%s.css)
+      asset.prefix.must_equal   %(/assets)
     end
   end
 

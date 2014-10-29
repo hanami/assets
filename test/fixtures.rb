@@ -40,3 +40,8 @@ class AbsoluteUrlsView < View
   end
 end
 
+class CoffeeScriptView < View
+  def self.template
+    __dir__ + '/fixtures/coffee-script.erb'
+  end
+end

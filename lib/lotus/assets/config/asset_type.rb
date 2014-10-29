@@ -1,23 +1,31 @@
+require 'lotus/utils/load_paths'
+require 'lotus/utils/path_prefix'
+
 module Lotus
   module Assets
     module Config
       class AssetType
-        DEFAULT_PATH = '/assets'.freeze
+        DEFAULT_PREFIX = '/assets'.freeze
+
+        attr_reader :load_paths
 
         def initialize(&blk)
-          @path = DEFAULT_PATH
+          @load_paths = Utils::LoadPaths.new
+          prefix        DEFAULT_PREFIX
+
           define(&blk) if block_given?
         end
 
+        # @api private
         def define(&blk)
           instance_eval(&blk)
         end
 
-        def path(value = nil)
+        def prefix(value = nil)
           if value.nil?
-            @path
+            @prefix
           else
-            @path = value
+            @prefix = Utils::PathPrefix.new(value)
           end
         end
 
@@ -29,12 +37,30 @@ module Lotus
           end
         end
 
-        def source(value = nil)
+        def filename(value = nil)
           if value.nil?
-            @source
+            @filename
           else
-            @source = value
+            @filename = value
           end
+        end
+
+        # @api private
+        def find(source)
+          source = "#{ source }.*"
+
+          # FIXME this is really unefficient
+          @load_paths.each do |load_path|
+            path = Pathname.glob(load_path.join(source)).first
+            return path.to_s unless path.nil?
+          end
+
+          nil
+        end
+
+        # @api private
+        def relative_path(source)
+          prefix.relative_join(filename % source)
         end
       end
     end

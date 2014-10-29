@@ -1,3 +1,4 @@
+require 'pathname'
 require 'lotus/utils/path_prefix'
 require 'lotus/assets/config/asset_type'
 
@@ -12,12 +13,12 @@ module Lotus
     class Configuration
       ASSET_TYPES = ->{Hash.new{|h,k| h[k] = Config::AssetType.new }.merge!({
         javascript: Config::AssetType.new {
-          tag    %(<script src="%s" type="text/javascript"></script>)
-          source %(%s.js)
+          tag      %(<script src="%s" type="text/javascript"></script>)
+          filename %(%s.js)
         },
         stylesheet: Config::AssetType.new {
-          tag    %(<link href="%s" type="text/css" rel="stylesheet">)
-          source %(%s.css)
+          tag      %(<link href="%s" type="text/css" rel="stylesheet">)
+          filename %(%s.css)
         }
       })}.freeze
 
@@ -35,6 +36,17 @@ module Lotus
 
       def define(type, &blk)
         @types[type.to_sym].define(&blk)
+      end
+
+      # FIXME review this
+      def destination(value = nil)
+        if value.nil?
+          @destination
+        else
+          @destination = Pathname.new(value)
+          @destination.mkpath
+          @destination = @destination.realpath
+        end
       end
 
       def reset!

@@ -23,11 +23,11 @@ describe 'Rendering test' do
     before do
       Lotus::Assets.configure do
         define :javascript do
-          path 'custom-assets-path'
+          prefix 'custom-assets-path'
         end
 
         define :stylesheet do
-          path 'custom-assets-path-for-css'
+          prefix '/custom-assets-path-for-css'
         end
       end
 

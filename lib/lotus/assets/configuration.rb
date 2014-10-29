@@ -13,12 +13,12 @@ module Lotus
     class Configuration
       ASSET_TYPES = ->{Hash.new{|h,k| h[k] = Config::AssetType.new }.merge!({
         javascript: Config::AssetType.new {
-          tag      %(<script src="%s" type="text/javascript"></script>)
-          filename %(%s.js)
+          tag %(<script src="%s" type="text/javascript"></script>)
+          ext %(.js)
         },
         stylesheet: Config::AssetType.new {
-          tag      %(<link href="%s" type="text/css" rel="stylesheet">)
-          filename %(%s.css)
+          tag %(<link href="%s" type="text/css" rel="stylesheet">)
+          ext %(.css)
         }
       })}.freeze
 

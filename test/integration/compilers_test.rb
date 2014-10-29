@@ -23,8 +23,16 @@ describe 'Compilers' do
     @config.reset!
   end
 
+  it 'copies javascript asset from source to destination' do
+    result = CompilerView.new.render
+    result.must_include %(<script src="/assets/greet.js" type="text/javascript"></script>)
+
+    compiled = @config.destination.join('assets/greet.js').read
+    compiled.must_match %(alert("Hello!");)
+  end
+
   it 'compiles coffeescript asset' do
-    result = CoffeeScriptView.new.render
+    result = CompilerView.new.render
     result.must_include %(<script src="/assets/hello.js" type="text/javascript"></script>)
 
     compiled = @config.destination.join('assets/hello.js').read

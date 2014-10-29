@@ -8,11 +8,13 @@ class View
   end
 
   def initialize
-    @template = File.read(self.class.template)
+    @engine = ERB.new(
+      File.read(self.class.template)
+    )
   end
 
   def render
-    ERB.new(@template).result(binding)
+    @engine.result(binding)
   end
 end
 
@@ -40,8 +42,8 @@ class AbsoluteUrlsView < View
   end
 end
 
-class CoffeeScriptView < View
+class CompilerView < View
   def self.template
-    __dir__ + '/fixtures/coffee-script.erb'
+    __dir__ + '/fixtures/compiler-template.erb'
   end
 end

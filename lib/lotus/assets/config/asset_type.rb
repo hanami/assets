@@ -37,11 +37,11 @@ module Lotus
           end
         end
 
-        def filename(value = nil)
+        def ext(value = nil)
           if value.nil?
-            @filename
+            @ext
           else
-            @filename = value
+            @ext = value
           end
         end
 
@@ -60,7 +60,7 @@ module Lotus
 
         # @api private
         def relative_path(source)
-          prefix.relative_join(filename % source)
+          prefix.relative_join(source + ext)
         end
       end
     end

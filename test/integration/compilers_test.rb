@@ -28,16 +28,18 @@ describe 'Compilers' do
     result = CompilerView.new.render
     result.must_include %(<script src="/assets/greet.js" type="text/javascript"></script>)
 
-    compiled = @config.destination.join('assets/greet.js').read
-    compiled.must_match %(alert("Hello!");)
+    target = @config.destination.join('assets/greet.js')
+    target.read.must_match %(alert("Hello!");)
+    target.stat.mode.to_s(8).must_equal('100644')
   end
 
   it 'compiles coffeescript asset' do
     result = CompilerView.new.render
     result.must_include %(<script src="/assets/hello.js" type="text/javascript"></script>)
 
-    compiled = @config.destination.join('assets/hello.js').read
-    compiled.must_match %(alert("Hello, World!");)
+    target = @config.destination.join('assets/hello.js')
+    target.read.must_match %(alert("Hello, World!");)
+    target.stat.mode.to_s(8).must_equal('100644')
   end
 
   it "won't compile/copy if the source hasn't changed" do

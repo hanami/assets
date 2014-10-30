@@ -15,10 +15,11 @@ module Lotus
 
     # @api private
     class Compiler
+      DEFAULT_PERMISSIONS = 0644
+
       def self.compile(configuration, type, name)
         return unless configuration.compile
 
-        require 'fileutils'
         require 'tilt'
         require 'lotus/assets/cache'
         new(configuration, type, name).compile
@@ -74,18 +75,23 @@ module Lotus
       end
 
       def compile!
-        # TODO File::WRONLY|File::CREAT
-        destination.open('w') {|file| file.write(Tilt.new(source).render) }
+        write { Tilt.new(source).render }
       rescue RuntimeError
         raise UnknownAssetEngine.new(source)
       end
 
       def copy!
-        FileUtils.copy(source, destination)
+        write { source.read }
       end
 
       def cache!
         cache.store(source)
+      end
+
+      def write
+        destination.open(File::WRONLY|File::CREAT, DEFAULT_PERMISSIONS) do |file|
+          file.write(yield)
+        end
       end
 
       def cache

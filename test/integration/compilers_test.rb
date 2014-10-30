@@ -4,7 +4,7 @@ describe 'Compilers' do
   before do
     root = __dir__ + '/../fixtures'
     tmp  = Pathname.new(__dir__ + '/../../tmp')
-    tmp.rmtree
+    tmp.rmtree if tmp.exist?
 
     Lotus::Assets.configure do
       compile     true

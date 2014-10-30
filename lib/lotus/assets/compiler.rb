@@ -20,29 +20,36 @@ module Lotus
 
         require 'fileutils'
         require 'tilt'
+        require 'lotus/assets/cache'
         new(configuration, type, name).compile
+      end
+
+      def self.cache
+        @@cache ||= Assets::Cache.new
       end
 
       def initialize(configuration, type, name)
         @configuration = configuration
         @definition    = @configuration.asset(type)
-        @name          = name
+        @name          = name + @definition.ext
       end
 
       def compile
-        # FIXME in initializer make: @name = name + @definition.ext
-        raise MissingAsset.new(@name + @definition.ext, @definition.sources) unless exist?
+        raise MissingAsset.new(@name, @definition.sources) unless exist?
+        return unless fresh?
 
         if compile?
           compile!
         else
           copy!
         end
+
+        cache!
       end
 
       private
       def source
-        @source ||= @definition.sources.find("#{ @name }#{ @definition.ext }")
+        @source ||= @definition.sources.find(@name)
       end
 
       def destination
@@ -55,6 +62,11 @@ module Lotus
 
       def exist?
         !source.nil?
+      end
+
+      def fresh?
+        !destination.exist? ||
+          cache.fresh?(source)
       end
 
       def compile?
@@ -70,6 +82,14 @@ module Lotus
 
       def copy!
         FileUtils.copy(source, destination)
+      end
+
+      def cache!
+        cache.store(source)
+      end
+
+      def cache
+        self.class.cache
       end
     end
   end

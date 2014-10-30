@@ -59,3 +59,9 @@ class UnknownAssetEngineView < View
     __dir__ + '/fixtures/unknown-asset-engine.erb'
   end
 end
+
+class UnchangedCompilerView < View
+  def self.template
+    __dir__ + '/fixtures/unchanged-asset.erb'
+  end
+end

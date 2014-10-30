@@ -40,6 +40,25 @@ describe 'Compilers' do
     compiled.must_match %(alert("Hello, World!");)
   end
 
+  it "won't compile/copy if the source hasn't changed" do
+    result = UnchangedCompilerView.new.render
+    result.must_include %(<script src="/assets/unchanged.js" type="text/javascript"></script>)
+
+    compiled    = @config.destination.join('assets/unchanged.js')
+    content     = compiled.read
+    modified_at = compiled.mtime
+
+    content.must_match %(alert("Still the same");)
+
+    sleep 1
+
+    UnchangedCompilerView.new.render
+    compiled = @config.destination.join('assets/unchanged.js')
+
+    compiled.read.must_match %(alert("Still the same");)
+    compiled.mtime.to_i.must_equal modified_at.to_i
+  end
+
   it 'raises an error in case of missing source' do
     sources   = @config.asset(:javascript).sources.map(&:to_s).join(', ')
     exception = -> { MissingAssetSourceView.new.render }.must_raise(Lotus::Assets::MissingAsset)

@@ -5,7 +5,8 @@ module Lotus
     module Config
       # Source directories for a specific asset type (eg. only javascripts)
       # @api private
-      # TODO The perf of this class are poor, consider to improve them
+      #
+      # TODO The perf of this class is poor, consider to improve it.
       class Sources < Utils::LoadPaths
         def map
           Array.new.tap do |result|

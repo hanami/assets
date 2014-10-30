@@ -46,8 +46,8 @@ module Lotus
         end
 
         # @api private
-        def relative_path(source)
-          prefix.relative_join(source + ext)
+        def relative_path(filename)
+          prefix.relative_join(filename)
         end
       end
     end

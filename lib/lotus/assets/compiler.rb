@@ -42,18 +42,7 @@ module Lotus
 
       private
       def source
-        @source ||= begin
-          # FIXME only load "#{ @name }#{ @definition.ext }.*"
-          name = "#{ @name }.*"
-
-          # FIXME this is really unefficient
-          @definition.sources.each do |load_path|
-            path = Pathname.glob(load_path.join(name)).first
-            return path.to_s unless path.nil?
-          end
-
-          nil
-        end
+        @source ||= @definition.sources.find("#{ @name }#{ @definition.ext }")
       end
 
       def destination
@@ -69,7 +58,7 @@ module Lotus
       end
 
       def compile?
-        !source.match(/#{ @definition.ext }\z/)
+        source.extname != @definition.ext
       end
 
       def compile!

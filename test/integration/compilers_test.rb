@@ -49,6 +49,6 @@ describe 'Compilers' do
 
   it 'raises an error in case of unknown compiler engine' do
     exception = -> { UnknownAssetEngineView.new.render }.must_raise(Lotus::Assets::UnknownAssetEngine)
-    exception.message.must_equal("No asset engine registered for `ouch.unknown'")
+    exception.message.must_equal("No asset engine registered for `ouch.js.unknown'")
   end
 end

@@ -132,6 +132,8 @@ Imagine to have your application's javascripts under `app/javascripts` and that
 those assets depends on a vendored version of jQuery.
 
 ```ruby
+require 'lotus/assets'
+
 Lotus::Assets.configure do
   compile true
 
@@ -180,14 +182,13 @@ Imagine to have `main.css.scss` under `app/stylesheet` and `reset.css` under
 `vendor/stylesheets`.
 
 **The extensions structure is important.**
-
 The first one is mandatory and it's used to understand which asset type we are
 handling: `.css` for stylesheets.
-
 The second one is optional and it's for a preprocessor: `.scss` for SASS.
 
 ```ruby
 require 'sass'
+require 'lotus/assets'
 
 Lotus::Assets.configure do
   compile true

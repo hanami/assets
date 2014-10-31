@@ -1,4 +1,6 @@
 require 'erb'
+require 'sass'
+require 'coffee_script'
 
 class View
   include Lotus::Assets::Helpers
@@ -63,5 +65,11 @@ end
 class UnchangedCompilerView < View
   def self.template
     __dir__ + '/fixtures/unchanged-asset.erb'
+  end
+end
+
+class CssCompilerView < View
+  def self.template
+    __dir__ + '/fixtures/compile-css.erb'
   end
 end

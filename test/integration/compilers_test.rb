@@ -15,6 +15,12 @@ describe 'Compilers' do
           "#{ root }/javascripts"
         ]
       end
+
+      define :stylesheet do
+        sources << [
+          "#{ root }/stylesheets"
+        ]
+      end
     end
 
     @config = Lotus::Assets.configuration
@@ -40,6 +46,22 @@ describe 'Compilers' do
     target = @config.destination.join('assets/hello.js')
     target.read.must_match %(alert("Hello, World!");)
     target.stat.mode.to_s(8).must_equal('100644')
+  end
+
+  it 'compiles sass asset' do
+    result = CssCompilerView.new.render
+    result.must_include %(<link href="/assets/compile-sass.css" type="text/css" rel="stylesheet">)
+
+    target = @config.destination.join('assets/compile-sass.css')
+    target.read.must_match %(body {\n  font: 100% Helvetica, sans-serif;\n  color: #333; }\n)
+  end
+
+  it 'compiles scss asset' do
+    result = CssCompilerView.new.render
+    result.must_include %(<link href="/assets/compile-scss.css" type="text/css" rel="stylesheet">)
+
+    target = @config.destination.join('assets/compile-scss.css')
+    target.read.must_match %(body {\n  font: 100% Helvetica, sans-serif;\n  color: #fff; }\n)
   end
 
   it "won't compile/copy if the source hasn't changed" do

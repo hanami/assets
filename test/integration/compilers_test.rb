@@ -64,14 +64,6 @@ describe 'Compilers' do
     target.read.must_match %(body {\n  font: 100% Helvetica, sans-serif;\n  color: #fff; }\n)
   end
 
-  it 'compiles less asset' do
-    result = CssCompilerView.new.render
-    result.must_include %(<link href="/assets/compile-less.css" type="text/css" rel="stylesheet">)
-
-    target = @config.destination.join('assets/compile-less.css')
-    target.read.must_match %(.box {\n  color: #fe33ac;\n  border-color: #fdcdea;\n}\n)
-  end
-
   it "won't compile/copy if the source hasn't changed" do
     result = UnchangedCompilerView.new.render
     result.must_include %(<script src="/assets/unchanged.js" type="text/javascript"></script>)

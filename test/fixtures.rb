@@ -1,6 +1,5 @@
 require 'erb'
 require 'sass'
-require 'less'
 require 'coffee_script'
 
 class View

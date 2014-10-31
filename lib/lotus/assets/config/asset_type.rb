@@ -7,13 +7,25 @@ module Lotus
       class AssetType
         DEFAULT_PREFIX = '/assets'.freeze
 
+        # @api private
         attr_reader :sources
 
-        def initialize(&blk)
-          @sources = Sources.new
+        # @api private
+        def initialize(root, &blk)
+          @sources = Sources.new(root)
           prefix     DEFAULT_PREFIX
 
           define(&blk) if block_given?
+        end
+
+        # @api private
+        def root=(value)
+          @sources.root = value
+        end
+
+        # @api private
+        def find(name)
+          @sources.find(name)
         end
 
         # @api private

@@ -50,7 +50,7 @@ module Lotus
 
       private
       def source
-        @source ||= @definition.sources.find(@name)
+        @source ||= @definition.find(@name)
       end
 
       def destination

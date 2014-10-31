@@ -11,13 +11,13 @@ module Lotus
     end
 
     class Configuration
-      DEFAULT_DESTINATION = '/public'.freeze
-      ASSET_TYPES = ->{Hash.new{|h,k| h[k] = Config::AssetType.new }.merge!({
-        javascript: Config::AssetType.new {
+      DEFAULT_DESTINATION = 'public'.freeze
+      ASSET_TYPES = ->(root){Hash.new{|h,k| h[k] = Config::AssetType.new(root) }.merge!({
+        javascript: Config::AssetType.new(root) {
           tag %(<script src="%s" type="text/javascript"></script>)
           ext %(.js)
         },
-        stylesheet: Config::AssetType.new {
+        stylesheet: Config::AssetType.new(root) {
           tag %(<link href="%s" type="text/css" rel="stylesheet">)
           ext %(.css)
         }
@@ -47,6 +47,15 @@ module Lotus
         @types[type.to_sym].define(&blk)
       end
 
+      def root(value = nil)
+        if value.nil?
+          @root
+        else
+          @root = Pathname.new(value).realpath
+          @types.each {|_,t| t.root = @root }
+        end
+      end
+
       def destination(value = nil)
         if value.nil?
           @destination
@@ -56,11 +65,12 @@ module Lotus
       end
 
       def reset!
-        @types   = ASSET_TYPES.call
+        @types   = ASSET_TYPES.call(root)
         @prefix  = Utils::PathPrefix.new
         @compile = false
 
-        destination(Dir.pwd + DEFAULT_DESTINATION)
+        root        Dir.pwd
+        destination root.join(DEFAULT_DESTINATION)
       end
 
       # @api private

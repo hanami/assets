@@ -2,23 +2,24 @@ require 'test_helper'
 
 describe 'Compilers' do
   before do
-    root = __dir__ + '/../fixtures'
-    tmp  = Pathname.new(__dir__ + '/../../tmp')
+    fixtures = __dir__ + '/../fixtures'
+    tmp      = Pathname.new(__dir__ + '/../../tmp')
     tmp.rmtree if tmp.exist?
 
     Lotus::Assets.configure do
       compile     true
+      root        fixtures
       destination tmp.join('public')
 
       define :javascript do
         sources << [
-          "#{ root }/javascripts"
+          'javascripts'
         ]
       end
 
       define :stylesheet do
         sources << [
-          "#{ root }/stylesheets"
+          Pathname.new(fixtures).join('stylesheets')
         ]
       end
     end

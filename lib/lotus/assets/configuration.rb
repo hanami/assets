@@ -11,6 +11,7 @@ module Lotus
     end
 
     class Configuration
+      DEFAULT_DESTINATION = '/public'.freeze
       ASSET_TYPES = ->{Hash.new{|h,k| h[k] = Config::AssetType.new }.merge!({
         javascript: Config::AssetType.new {
           tag %(<script src="%s" type="text/javascript"></script>)
@@ -46,14 +47,11 @@ module Lotus
         @types[type.to_sym].define(&blk)
       end
 
-      # FIXME review this
       def destination(value = nil)
         if value.nil?
           @destination
         else
-          @destination = Pathname.new(value)
-          @destination.mkpath
-          @destination = @destination.realpath
+          @destination = Pathname.new(value).tap {|p| p.mkpath }.realpath
         end
       end
 
@@ -61,6 +59,8 @@ module Lotus
         @types   = ASSET_TYPES.call
         @prefix  = Utils::PathPrefix.new
         @compile = false
+
+        destination(Dir.pwd + DEFAULT_DESTINATION)
       end
 
       # @api private

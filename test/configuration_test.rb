@@ -5,6 +5,11 @@ describe Lotus::Assets::Configuration do
     @configuration = Lotus::Assets::Configuration.new
   end
 
+  after do
+    @configuration.reset!
+    @configuration.destination.rmdir
+  end
+
   describe '#prefix' do
     it 'returns empty value default' do
       @configuration.prefix.must_be_kind_of(Lotus::Utils::PathPrefix)
@@ -50,9 +55,29 @@ describe Lotus::Assets::Configuration do
     end
   end
 
+  describe '#destination' do
+    it 'defaults to "public/" on current directory' do
+      expected = Pathname.new(Dir.pwd + '/public')
+      @configuration.destination.must_equal(expected)
+    end
+
+    it 'allows to set a custom location' do
+      dest = __dir__ + '/../tmp'
+      @configuration.destination(dest)
+      @configuration.destination.must_equal(Pathname.new(dest).realpath)
+    end
+
+    it 'autocreates the directory' do
+      dest = __dir__ + "/../tmp/#{ SecureRandom.uuid }"
+      @configuration.destination(dest)
+      Pathname.new(dest).must_be :exist?
+    end
+  end
+
   describe '#reset!' do
     before do
       @configuration.prefix 'prfx'
+      @configuration.destination(Dir.pwd + '/tmp')
 
       @configuration.define :stylesheet do
         ext %(.CSS)
@@ -64,6 +89,10 @@ describe Lotus::Assets::Configuration do
       end
 
       @configuration.reset!
+    end
+
+    it 'sets default value for destination' do
+      @configuration.destination.must_equal(Pathname.new(Dir.pwd + '/public'))
     end
 
     it 'sets default value for prefix' do

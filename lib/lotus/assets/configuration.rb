@@ -60,7 +60,7 @@ module Lotus
         if value.nil?
           @destination
         else
-          @destination = Pathname.new(value).tap {|p| p.mkpath }.realpath
+          @destination = Pathname.new(value)
         end
       end
 

@@ -7,7 +7,6 @@ describe Lotus::Assets::Configuration do
 
   after do
     @configuration.reset!
-    @configuration.destination.rmdir
   end
 
   describe '#prefix' do
@@ -64,13 +63,7 @@ describe Lotus::Assets::Configuration do
     it 'allows to set a custom location' do
       dest = __dir__ + '/../tmp'
       @configuration.destination(dest)
-      @configuration.destination.must_equal(Pathname.new(dest).realpath)
-    end
-
-    it 'autocreates the directory' do
-      dest = __dir__ + "/../tmp/#{ SecureRandom.uuid }"
-      @configuration.destination(dest)
-      Pathname.new(dest).must_be :exist?
+      @configuration.destination.must_equal(Pathname.new(dest))
     end
   end
 

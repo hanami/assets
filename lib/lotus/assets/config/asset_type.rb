@@ -1,23 +1,43 @@
+require 'lotus/utils/path_prefix'
+require 'lotus/assets/config/sources'
+
 module Lotus
   module Assets
     module Config
       class AssetType
-        DEFAULT_PATH = '/assets'.freeze
+        DEFAULT_PREFIX = '/assets'.freeze
 
-        def initialize(&blk)
-          @path = DEFAULT_PATH
+        # @api private
+        attr_reader :sources
+
+        # @api private
+        def initialize(root, &blk)
+          @sources = Sources.new(root)
+          prefix     DEFAULT_PREFIX
+
           define(&blk) if block_given?
         end
 
+        # @api private
+        def root=(value)
+          @sources.root = value
+        end
+
+        # @api private
+        def find(name)
+          @sources.find(name)
+        end
+
+        # @api private
         def define(&blk)
           instance_eval(&blk)
         end
 
-        def path(value = nil)
+        def prefix(value = nil)
           if value.nil?
-            @path
+            @prefix
           else
-            @path = value
+            @prefix = Utils::PathPrefix.new(value)
           end
         end
 
@@ -29,12 +49,17 @@ module Lotus
           end
         end
 
-        def source(value = nil)
+        def ext(value = nil)
           if value.nil?
-            @source
+            @ext
           else
-            @source = value
+            @ext = value
           end
+        end
+
+        # @api private
+        def relative_path(filename)
+          prefix.relative_join(filename)
         end
       end
     end

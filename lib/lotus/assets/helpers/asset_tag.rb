@@ -1,4 +1,5 @@
 require 'uri'
+require 'lotus/assets/compiler'
 
 module Lotus
   module Assets
@@ -6,13 +7,16 @@ module Lotus
       class AssetTag
         def self.render(configuration, type, source)
           definition = configuration.asset(type)
+          path       = source
 
           unless absolute_url?(source)
-            source = definition.source %
-              configuration.prefix.join(definition.path, source)
+            path = configuration.prefix.join(definition.prefix, source) +
+              definition.ext
+
+            Assets::Compiler.compile(configuration, type, source)
           end
 
-          definition.tag % source
+          definition.tag % path
         end
 
         private

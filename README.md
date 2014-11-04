@@ -119,6 +119,105 @@ View.new.render # => HTML markup
 For advanced configurations, please have a look at
 [`Lotus::Assets::Configuration`](https://github.com/lotus/assets/blob/master/lib/lotus/assets/configuration.rb).
 
+### Development mode
+
+`Lotus::Assets` can help you during the development process of your application.
+It can manage multiple source directories for each asset type or run a
+preprocessor for you.
+
+
+#### Sources
+
+Imagine to have your application's javascripts under `app/javascripts` and that
+those assets depends on a vendored version of jQuery.
+
+```ruby
+require 'lotus/assets'
+
+Lotus::Assets.configure do
+  compile true
+
+  define :javascript do
+    sources << [
+      'app/javascripts',
+      'vendor/jquery'
+    ]
+  end
+end
+```
+
+When from a template you do:
+
+```erb
+<%= javascript 'jquery', 'jquery-ui', 'login' %>
+```
+
+`Lotus::Assets` looks at the defined sources and **lazily copies** those files
+under `public/assets` (by default), before the markup is generated.
+
+Your destination directory will have the following structure.
+
+```shell
+% tree public
+public/
+└── assets
+    ├── jquery.js
+    ├── jquery-ui.js
+    └── login.js
+
+```
+
+**Please remember that sources are recursively looked up in order of declaration.**
+
+If in the example above we had a `jquery.js` under `app/javascripts/**/*.js`
+that file would be copied into the destination folder instead of the one under
+`vendor/jquery`. The reason is because we declared `app/javascripts` first.
+
+#### Preprocessors
+
+`Lotus::Assets` is able to run assets preprocessors and **lazily compile** them
+under `public/assets` (by default), before the markup is generated.
+
+Imagine to have `main.css.scss` under `app/stylesheet` and `reset.css` under
+`vendor/stylesheets`.
+
+**The extensions structure is important.**
+The first one is mandatory and it's used to understand which asset type we are
+handling: `.css` for stylesheets.
+The second one is optional and it's for a preprocessor: `.scss` for SASS.
+
+```ruby
+require 'sass'
+require 'lotus/assets'
+
+Lotus::Assets.configure do
+  compile true
+
+  define :stylesheet do
+    sources << [
+      'app/stylesheet',
+      'vendor/stylesheets'
+    ]
+  end
+end
+```
+
+When from a template you do:
+
+```erb
+<%= stylesheet 'reset', 'main' %>
+```
+
+Your destination directory will have the following structure.
+
+```shell
+% tree public
+public/
+└── assets
+    ├── reset.css
+    └── main.css
+```
+
 ## Versioning
 
 __Lotus::Assets__ uses [Semantic Versioning 2.0.0](http://semver.org)

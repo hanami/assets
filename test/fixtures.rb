@@ -1,4 +1,6 @@
 require 'erb'
+require 'sass'
+require 'coffee_script'
 
 class View
   include Lotus::Assets::Helpers
@@ -8,11 +10,13 @@ class View
   end
 
   def initialize
-    @template = File.read(self.class.template)
+    @engine = ERB.new(
+      File.read(self.class.template)
+    )
   end
 
   def render
-    ERB.new(@template).result(binding)
+    @engine.result(binding)
   end
 end
 
@@ -40,3 +44,32 @@ class AbsoluteUrlsView < View
   end
 end
 
+class CompilerView < View
+  def self.template
+    __dir__ + '/fixtures/compiler-template.erb'
+  end
+end
+
+class MissingAssetSourceView < View
+  def self.template
+    __dir__ + '/fixtures/missing-asset-source.erb'
+  end
+end
+
+class UnknownAssetEngineView < View
+  def self.template
+    __dir__ + '/fixtures/unknown-asset-engine.erb'
+  end
+end
+
+class UnchangedCompilerView < View
+  def self.template
+    __dir__ + '/fixtures/unchanged-asset.erb'
+  end
+end
+
+class CssCompilerView < View
+  def self.template
+    __dir__ + '/fixtures/compile-css.erb'
+  end
+end

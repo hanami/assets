@@ -9,8 +9,8 @@ describe 'Default asset types' do
     it 'has a predefined type' do
       asset = @configuration.asset(:javascript)
       asset.tag.must_equal    %(<script src="%s" type="text/javascript"></script>)
-      asset.source.must_equal %(%s.js)
-      asset.path.must_equal   %(/assets)
+      asset.ext.must_equal    %(.js)
+      asset.prefix.must_equal %(/assets)
     end
   end
 
@@ -18,8 +18,8 @@ describe 'Default asset types' do
     it 'has a predefined type' do
       asset = @configuration.asset(:stylesheet)
       asset.tag.must_equal    %(<link href="%s" type="text/css" rel="stylesheet">)
-      asset.source.must_equal %(%s.css)
-      asset.path.must_equal   %(/assets)
+      asset.ext.must_equal    %(.css)
+      asset.prefix.must_equal %(/assets)
     end
   end
 end

@@ -19,7 +19,10 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_runtime_dependency 'lotus-utils', '~> 0.3', '>= 0.3.1.dev'
+  spec.add_runtime_dependency 'tilt',        '~> 2.0', '>= 2.0.1'
 
-  spec.add_development_dependency 'bundler', '~> 1.6'
-  spec.add_development_dependency 'rake',    '~> 10'
+  spec.add_development_dependency 'bundler',       '~> 1.6'
+  spec.add_development_dependency 'rake',          '~> 10'
+  spec.add_development_dependency 'coffee-script', '~> 2.3'
+  spec.add_development_dependency 'sass',          '~> 3.4'
 end

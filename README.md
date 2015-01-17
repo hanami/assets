@@ -184,7 +184,7 @@ Imagine to have `main.css.scss` under `app/stylesheet` and `reset.css` under
 **The extensions structure is important.**
 The first one is mandatory and it's used to understand which asset type we are
 handling: `.css` for stylesheets.
-The second one is optional and it's for a preprocessor: `.scss` for SASS.
+The second one is optional and it's for a preprocessor: `.scss` for Sass.
 
 ```ruby
 require 'sass'

@@ -5,6 +5,10 @@ describe 'Rendering test' do
     Lotus::Assets.configuration.reset!
   end
 
+  after do
+    Lotus::Assets.configuration.reset!
+  end
+
   describe 'with defaults' do
     before do
       @result = DefaultView.new.render

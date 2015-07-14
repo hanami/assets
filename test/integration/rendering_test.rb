@@ -7,6 +7,7 @@ describe 'Rendering test' do
 
   after do
     Lotus::Assets.configuration.reset!
+    Thread.current[:__lotus_assets] = nil
   end
 
   describe 'with defaults' do
@@ -20,6 +21,12 @@ describe 'Rendering test' do
 
     it 'resolves stylesheet tag' do
       @result.must_include %(<link href="/assets/main.css" type="text/css" rel="stylesheet">)
+    end
+
+    it 'caches assets in thread local' do
+      assets = Thread.current[:__lotus_assets]
+      assets.must_include '/assets/main.css'
+      assets.must_include '/assets/feature-a.js'
     end
   end
 

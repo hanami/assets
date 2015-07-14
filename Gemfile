@@ -10,4 +10,4 @@ end
 gem 'simplecov', require: false
 gem 'coveralls', require: false
 
-gem 'lotus-utils', '>= 0.3.1.dev', github: 'lotus/utils'
+gem 'lotus-utils', '~> 0.5', github: 'lotus/utils', branch: '0.5.x'

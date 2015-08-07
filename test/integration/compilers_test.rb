@@ -1,4 +1,6 @@
 require 'test_helper'
+require 'tilt/sass'
+require 'tilt/coffee'
 
 describe 'Compilers' do
   before do

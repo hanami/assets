@@ -119,6 +119,29 @@ View.new.render # => HTML markup
 For advanced configurations, please have a look at
 [`Lotus::Assets::Configuration`](https://github.com/lotus/assets/blob/master/lib/lotus/assets/configuration.rb).
 
+### Lotus usage
+For usage on `lotus` follow the instructions:
+
+- In your `apps/web/application.rb` include `lotus-assets` files:
+```ruby
+require 'lotus/assets'
+require 'lotus/assets/helpers'
+```
+
+- In your `application_layout` just include the assets helpers
+```ruby
+module Web
+  module Views
+    class ApplicationLayout
+      include Admin::Layout
+      include Lotus::Assets::Helpers
+    end
+  end
+end
+```
+
+- After that you will be able to use `javascript` and `stylesheet` in your template.
+
 ### Development mode
 
 `Lotus::Assets` can help you during the development process of your application.
@@ -216,6 +239,15 @@ public/
 └── assets
     ├── reset.css
     └── main.css
+```
+
+## Running tests
+
+- Make sure you have one of [ExecJS](https://github.com/rails/execjs)
+supported runtime on your machine.
+
+```sh
+bundle exec rake test
 ```
 
 ## Versioning

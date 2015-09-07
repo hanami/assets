@@ -5,19 +5,20 @@ module Lotus
   module Assets
     module Helpers
       def javascript(*sources)
-        _asset_raw(AssetTags.render(:javascript, *sources))
+        _raw_asset(:javascript, *sources)
       end
 
       def stylesheet(*sources)
-        _asset_raw(AssetTags.render(:stylesheet, *sources))
+        _raw_asset(:stylesheet, *sources)
       end
 
       private
 
-      def _asset_raw(string)
-        ::Lotus::Utils::Escape::SafeString.new(string)
+      def _raw_asset(type, *sources)
+        ::Lotus::Utils::Escape::SafeString.new(
+          AssetTags.render(type, *sources)
+        )
       end
-
     end
   end
 end

@@ -29,19 +29,13 @@ __Lotus::Assets__ supports Ruby (MRI) 2+ and JRuby 1.7 (with 2.0 mode).
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'lotus-assets'
+gem 'lotus-assets', git: 'https://github.com/lotus/assets.git'
 ```
 
 And then execute:
 
 ```shell
 $ bundle
-```
-
-Or install it yourself as:
-
-```shell
-$ gem install lotus-assets
 ```
 
 ## Usage

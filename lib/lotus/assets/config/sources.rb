@@ -24,7 +24,7 @@ module Lotus
         end
 
         def find(filename)
-          matcher = %r{#{filename}}
+          matcher = %r{/(?!\.)#{filename}}
 
           files.each do |file|
             return file if matcher.match(file.to_s)

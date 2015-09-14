@@ -97,4 +97,8 @@ describe 'Compilers' do
     exception = -> { UnknownAssetEngineView.new.render }.must_raise(Lotus::Assets::UnknownAssetEngine)
     exception.message.must_equal("No asset engine registered for `ouch.js.unknown'")
   end
+
+  it 'ignores hidden files beginning with a dot (.)' do
+    proc { HiddenAssetCompilerView.new.render }.must_raise(Lotus::Assets::MissingAsset)
+  end
 end

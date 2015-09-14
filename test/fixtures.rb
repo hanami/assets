@@ -73,3 +73,9 @@ class CssCompilerView < View
     __dir__ + '/fixtures/compile-css.erb'
   end
 end
+
+class HiddenAssetCompilerView < View
+  def self.template
+    __dir__ + '/fixtures/hidden-asset.erb'
+  end
+end

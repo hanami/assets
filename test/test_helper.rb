@@ -19,5 +19,4 @@ end
 require 'minitest/autorun'
 $:.unshift 'lib'
 require 'lotus/assets'
-require 'lotus/assets/helpers'
 require 'fixtures'

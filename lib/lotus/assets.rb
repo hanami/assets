@@ -1,5 +1,6 @@
 require 'lotus/assets/version'
 require 'lotus/assets/configuration'
+require 'lotus/assets/helpers'
 require 'lotus/utils/class_attribute'
 
 module Lotus

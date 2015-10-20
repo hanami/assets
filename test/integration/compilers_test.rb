@@ -51,6 +51,33 @@ describe 'Compilers' do
     target.stat.mode.to_s(8).must_equal('100644')
   end
 
+  it 'compiles es6 asset' do
+    result = CompilerView.new.render
+    result.must_include %(<script src="/assets/person.js" type="text/javascript"></script>)
+
+    target = @config.destination.join('assets/person.js')
+    target.read.must_match %(function Person(firstName, lastName))
+    target.stat.mode.to_s(8).must_equal('100644')
+  end
+
+  it 'compiles babel asset' do
+    result = CompilerView.new.render
+    result.must_include %(<script src="/assets/country.js" type="text/javascript"></script>)
+
+    target = @config.destination.join('assets/country.js')
+    target.read.must_match %(function Country(name))
+    target.stat.mode.to_s(8).must_equal('100644')
+  end
+
+  it 'compiles jsx asset' do
+    result = CompilerView.new.render
+    result.must_include %(<script src="/assets/react-component.js" type="text/javascript"></script>)
+
+    target = @config.destination.join('assets/react-component.js')
+    target.read.must_match %(React.createElement(MyComponent, { someProperty: true });)
+    target.stat.mode.to_s(8).must_equal('100644')
+  end
+
   it 'compiles sass asset' do
     result = CssCompilerView.new.render
     result.must_include %(<link href="/assets/compile-sass.css" type="text/css" rel="stylesheet">)

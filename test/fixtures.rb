@@ -1,6 +1,7 @@
 require 'erb'
 require 'sass'
 require 'coffee_script'
+require 'lotus/assets/es6'
 
 class View
   include Lotus::Assets::Helpers

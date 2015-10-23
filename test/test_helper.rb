@@ -20,3 +20,7 @@ require 'minitest/autorun'
 $:.unshift 'lib'
 require 'lotus/assets'
 require 'fixtures'
+require 'pathname'
+
+TMP = Pathname.new(__dir__).join('..', 'tmp')
+TMP.mkpath

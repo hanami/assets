@@ -8,7 +8,7 @@ describe Lotus::Assets::Helpers do
 
   describe '#javascript' do
     before do
-      @javascript = View.new.javascript('feature-a')
+      @javascript = DefaultView.new.javascript('feature-a')
     end
 
     it 'returns an instance of SafeString' do
@@ -18,7 +18,7 @@ describe Lotus::Assets::Helpers do
 
   describe '#stylesheet' do
     before do
-      @stylesheet = View.new.stylesheet('main')
+      @stylesheet = DefaultView.new.stylesheet('main')
     end
 
     it 'returns an instance of SafeString' do

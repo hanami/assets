@@ -11,3 +11,4 @@ gem 'simplecov', require: false
 gem 'coveralls', require: false
 
 gem 'lotus-utils', '~> 0.6', github: 'lotus/utils', branch: '0.6.x'
+gem 'lotus-view',  '~> 0.5', github: 'lotus/view',  branch: '0.5.x'

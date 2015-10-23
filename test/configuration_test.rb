@@ -67,6 +67,17 @@ describe Lotus::Assets::Configuration do
     end
   end
 
+  describe '#asset' do
+    it 'returns an asset definition' do
+      @configuration.asset(:javascript).must_be_kind_of(Lotus::Assets::Config::AssetType)
+    end
+
+    it 'raises error for unkown type' do
+      exception = -> { @configuration.asset(:unkown) }.must_raise(Lotus::Assets::UnknownAssetType)
+      exception.message.must_equal %(Unknown asset type: `unkown')
+    end
+  end
+
   describe '#reset!' do
     before do
       @configuration.prefix 'prfx'
@@ -105,14 +116,61 @@ describe Lotus::Assets::Configuration do
     end
   end
 
-  describe '#asset' do
-    it 'returns an asset definition' do
-      @configuration.asset(:javascript).must_be_kind_of(Lotus::Assets::Config::AssetType)
+  describe '#duplicate' do
+    before do
+      @configuration.reset!
+      @configuration.compile     true
+      @configuration.prefix      '/foo'
+      @configuration.root        __dir__
+      @configuration.destination __dir__
+      @configuration.define(:movie) do
+        tag %(<movie>)
+        ext %(.mov)
+      end
+
+      @config = @configuration.duplicate
     end
 
-    it 'raises error for unkown type' do
-      exception = -> { @configuration.asset(:unkown) }.must_raise(Lotus::Assets::UnknownAssetType)
-      exception.message.must_equal %(Unknown asset type: `unkown')
+    it 'returns a copy of the configuration' do
+      @config.compile.must_equal      true
+      @config.prefix.must_equal      '/foo'
+      @config.root.must_equal        Pathname.new(__dir__)
+      @config.destination.must_equal Pathname.new(__dir__)
+      @config.__send__(:types).types.must_equal [:javascript, :stylesheet, :movie]
+    end
+
+    it "doesn't affect the original configuration" do
+      @config.compile     false
+      @config.prefix      '/bar'
+      @config.root        __dir__ + '/fixtures'
+      @config.destination __dir__ + '/fixtures'
+      @config.define(:javascript) do
+        sources << [
+          __dir__ + '/fixtures/javascripts'
+        ]
+      end
+
+      @config.define(:font) do
+        tag %(<font>)
+        ext %(.woff)
+      end
+
+      @config.compile.must_equal      false
+      @config.prefix.must_equal      '/bar'
+      @config.root.must_equal        Pathname.new(__dir__ + '/fixtures')
+      @config.destination.must_equal Pathname.new(__dir__ + '/fixtures')
+      @config.__send__(:types).types.must_equal [:javascript, :stylesheet, :movie, :font]
+      assert @config.asset(:javascript).sources == [__dir__ + '/fixtures/javascripts'],
+        "Expected javascripts to eq [#{ __dir__ + '/fixtures/javascripts' }], found: #{ @configuration.asset(:javascript).sources.inspect }"
+
+      @configuration.compile.must_equal      true
+      @configuration.prefix.must_equal      '/foo'
+      @configuration.root.must_equal        Pathname.new(__dir__)
+      @configuration.destination.must_equal Pathname.new(__dir__)
+      @configuration.__send__(:types).types.must_equal [:javascript, :stylesheet, :movie]
+
+      assert @configuration.asset(:javascript).sources == [],
+        "Expected javascripts to be empty, found: #{ @configuration.asset(:javascript).sources.inspect }"
     end
   end
 end

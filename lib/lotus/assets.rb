@@ -13,5 +13,26 @@ module Lotus
     def self.configure(&blk)
       configuration.instance_eval(&blk)
     end
+
+    def self.duplicate(mod, assets = 'Assets', &blk)
+      dupe.tap do |duplicated|
+        # mod.module_eval %{ module #{ assets }; end } if assets
+        # mod.module_eval %{ Assets = Lotus::Assets.dup unless defined?(#{ mod }::Assets) } unless assets.nil?
+
+        # duplicated.module_eval %{
+        #   configure do
+        #     action_module #{ mod }::Action
+        #   end
+        # }
+
+        duplicated.configure(&blk) if block_given?
+      end
+    end
+
+    def self.dupe
+      dup.tap do |duplicated|
+        duplicated.configuration = configuration.duplicate
+      end
+    end
   end
 end

@@ -1,27 +1,20 @@
 require 'pathname'
+require 'lotus/utils/string'
+require 'lotus/utils/class'
 require 'lotus/utils/path_prefix'
-require 'lotus/assets/config/asset_type'
+require 'lotus/assets/config/asset_types'
 
 module Lotus
   module Assets
-    class UnknownAssetType < ::StandardError
-      def initialize(type)
-        super("Unknown asset type: `#{ type }'")
-      end
-    end
-
     class Configuration
       DEFAULT_DESTINATION = 'public'.freeze
-      ASSET_TYPES = ->(root){Hash.new{|h,k| h[k] = Config::AssetType.new(root) }.merge!({
-        javascript: Config::AssetType.new(root) {
-          tag %(<script src="%s" type="text/javascript"></script>)
-          ext %(.js)
-        },
-        stylesheet: Config::AssetType.new(root) {
-          tag %(<link href="%s" type="text/css" rel="stylesheet">)
-          ext %(.css)
-        }
-      })}.freeze
+
+      def self.for(base)
+        # TODO this implementation is similar to Lotus::Controller::Configuration consider to extract it into Lotus::Utils
+        namespace = Utils::String.new(base).namespace
+        framework = Utils::Class.load_from_pattern!("(#{namespace}|Lotus)::Assets")
+        framework.configuration
+      end
 
       def initialize
         reset!
@@ -44,7 +37,7 @@ module Lotus
       end
 
       def define(type, &blk)
-        @types[type.to_sym].define(&blk)
+        @types.define(type, &blk)
       end
 
       def root(value = nil)
@@ -64,9 +57,19 @@ module Lotus
         end
       end
 
+      def duplicate
+        Configuration.new.tap do |c|
+          c.root        = root
+          c.prefix      = prefix
+          c.compile     = compile
+          c.types       = types.dup
+          c.destination = destination
+        end
+      end
+
       def reset!
-        @types   = ASSET_TYPES.call(root)
         @prefix  = Utils::PathPrefix.new
+        @types   = Config::AssetTypes.new(root, @prefix)
         @compile = false
 
         root        Dir.pwd
@@ -75,8 +78,15 @@ module Lotus
 
       # @api private
       def asset(type)
-        @types.fetch(type) { raise UnknownAssetType.new(type) }
+        @types.asset(type)
       end
+
+      protected
+      attr_writer :compile
+      attr_writer :prefix
+      attr_writer :root
+      attr_writer :destination
+      attr_accessor :types
     end
   end
 end

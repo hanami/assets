@@ -11,9 +11,19 @@ module Lotus
         attr_reader :sources
 
         # @api private
-        def initialize(root, &blk)
-          @sources = Sources.new(root)
-          prefix     DEFAULT_PREFIX
+        def initialize_copy(original)
+          @sources = original.sources.dup
+          @destination = original.destination.dup
+          @prefix  = original.prefix.dup
+          @tag     = original.tag.dup
+          @ext     = original.ext.dup
+        end
+
+        # @api private
+        def initialize(root, destination, &blk)
+          @sources     = Sources.new(root)
+          @destination = Utils::PathPrefix.new(destination)
+          prefix         DEFAULT_PREFIX
 
           define(&blk) if block_given?
         end
@@ -59,8 +69,16 @@ module Lotus
 
         # @api private
         def relative_path(filename)
-          prefix.relative_join(filename)
+          @destination.relative_join(filename)
         end
+
+        def url(configuration_prefix, source)
+          configuration_prefix.join(prefix, source) +
+            ext
+        end
+
+        protected
+        attr_reader :destination
       end
     end
   end

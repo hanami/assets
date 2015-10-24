@@ -24,13 +24,9 @@ module Lotus
         end
 
         def find(filename)
-          matcher = %r{/(?!\.)#{filename}}
-
-          files.each do |file|
-            return file if matcher.match(file.to_s)
-          end
-
-          nil
+          result = Dir.glob(map {|source| "#{ source }/**/#{ filename }*"}).first
+          result = Pathname.new(result) unless result.nil?
+          result
         end
 
         def empty?
@@ -38,10 +34,6 @@ module Lotus
         end
 
         private
-        def files
-          map(&:children).flatten
-        end
-
         def realpath(path)
           @root.join(path).realpath
         end

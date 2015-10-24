@@ -34,6 +34,15 @@ describe 'Compilers' do
     target.stat.mode.to_s(8).must_equal('100644')
   end
 
+  it 'copies asset from nested source to destination' do
+    result = CompilerView.new.render
+    result.must_include %(<script src="/assets/bootstrap.js" type="text/javascript"></script>)
+
+    target = @config.destination.join('bootstrap.js')
+    target.read.must_match %(// Bootstrap)
+    target.stat.mode.to_s(8).must_equal('100644')
+  end
+
   it 'compiles coffeescript asset' do
     result = CompilerView.new.render
     result.must_include %(<script src="/assets/hello.js" type="text/javascript"></script>)

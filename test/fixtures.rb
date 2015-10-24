@@ -123,7 +123,7 @@ module Web
   Assets = Lotus::Assets.duplicate(self) do
     root        __dir__ + '/fixtures/bookshelf/apps/web/assets'
     destination __dir__ + '/../tmp/bookshelf/public/assets'
-    prefix '/'
+    prefix  '/'
     compile true
 
     sources << [

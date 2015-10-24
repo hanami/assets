@@ -9,6 +9,7 @@ module Lotus
   module Assets
     class Configuration
       DEFAULT_DESTINATION = 'public'.freeze
+      DISCARDED_PREFIX    = '/'.freeze
 
       def self.for(base)
         # TODO this implementation is similar to Lotus::Controller::Configuration consider to extract it into Lotus::Utils
@@ -33,7 +34,7 @@ module Lotus
         if value.nil?
           @prefix
         else
-          @prefix = Utils::PathPrefix.new(value)
+          @prefix = Utils::PathPrefix.new(value) unless DISCARDED_PREFIX == value
         end
       end
 

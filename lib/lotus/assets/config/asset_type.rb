@@ -57,7 +57,7 @@ module Lotus
         end
 
         def url(configuration_prefix, source)
-          configuration_prefix.join(prefix, source) +
+          prefix.join(configuration_prefix, source) +
             ext
         end
 

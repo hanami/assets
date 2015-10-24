@@ -19,8 +19,8 @@ describe "Lotus::View integration" do
 
   it "renders assets from a nested path" do
     rendered = Admin::Views::Users::Index.render(format: :html)
-    rendered.must_include %(<script src="/admin/assets/zepto.js" type="text/javascript"></script>)
-    rendered.must_include %(<script src="/admin/assets/application.js" type="text/javascript"></script>)
+    rendered.must_include %(<script src="/assets/admin/zepto.js" type="text/javascript"></script>)
+    rendered.must_include %(<script src="/assets/admin/application.js" type="text/javascript"></script>)
 
     dest.join('assets', 'admin', 'zepto.js').must_be :exist?
     dest.join('assets', 'admin', 'application.js').must_be :exist?

@@ -64,11 +64,11 @@ describe 'Rendering test' do
     end
 
     it 'resolves javascript tag under configured path' do
-      @result.must_include %(<script src="/prefix/assets/feature-a.js" type="text/javascript"></script>)
+      @result.must_include %(<script src="/assets/prefix/feature-a.js" type="text/javascript"></script>)
     end
 
     it 'resolves stylesheet tag under configured path' do
-      @result.must_include %(<link href="/prefix/assets/main.css" type="text/css" rel="stylesheet">)
+      @result.must_include %(<link href="/assets/prefix/main.css" type="text/css" rel="stylesheet">)
     end
   end
 

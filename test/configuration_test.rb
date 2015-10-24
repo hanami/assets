@@ -41,6 +41,11 @@ describe Lotus::Assets::Configuration do
       @configuration.prefix            'application-prefix'
       @configuration.prefix.must_equal 'application-prefix'
     end
+
+    it 'ignores "/"' do
+      @configuration.prefix            '/'
+      @configuration.prefix.must_equal ''
+    end
   end
 
   describe '#define' do

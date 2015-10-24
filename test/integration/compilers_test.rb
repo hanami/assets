@@ -12,17 +12,10 @@ describe 'Compilers' do
       root        fixtures
       destination TMP.join('public/assets')
 
-      define :javascript do
-        sources << [
-          'javascripts'
-        ]
-      end
-
-      define :stylesheet do
-        sources << [
-          Pathname.new(fixtures).join('stylesheets')
-        ]
-      end
+      sources << [
+        'javascripts',
+        Pathname.new(fixtures).join('stylesheets')
+      ]
     end
 
     @config = Lotus::Assets.configuration
@@ -113,7 +106,7 @@ describe 'Compilers' do
   end
 
   it 'raises an error in case of missing source' do
-    sources   = @config.asset(:javascript).sources.map(&:to_s).join(', ')
+    sources   = @config.sources.map(&:to_s).join(', ')
     exception = -> { MissingAssetSourceView.new.render }.must_raise(Lotus::Assets::MissingAsset)
 
     exception.message.must_equal("Missing asset: `missing.js' (sources: #{ sources })")

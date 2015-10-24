@@ -36,7 +36,7 @@ module Lotus
       end
 
       def compile
-        raise MissingAsset.new(@name, @definition.sources) unless exist?
+        raise MissingAsset.new(@name, @configuration.sources) unless exist?
         return unless fresh?
 
         if compile?
@@ -50,7 +50,7 @@ module Lotus
 
       private
       def source
-        @source ||= @definition.find(@name)
+        @source ||= @configuration.find(@name)
       end
 
       def destination

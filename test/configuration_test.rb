@@ -9,6 +9,19 @@ describe Lotus::Assets::Configuration do
     @configuration.reset!
   end
 
+  describe '#sources' do
+    it "is empty by default" do
+      @configuration.sources.must_be_empty
+    end
+
+    it "allows to add paths" do
+      @configuration.sources << __dir__
+
+      assert @configuration.sources == [__dir__],
+        "Expected @configuration.sources to eq [#{ __dir__ }], got #{ @configuration.sources.inspect }"
+    end
+  end
+
   describe '#prefix' do
     it 'returns empty value default' do
       @configuration.prefix.must_be_kind_of(Lotus::Utils::PathPrefix)
@@ -123,6 +136,7 @@ describe Lotus::Assets::Configuration do
       @configuration.prefix      '/foo'
       @configuration.root        __dir__
       @configuration.destination __dir__
+      @configuration.sources << __dir__ + '/fixtures/javascripts'
       @configuration.define(:movie) do
         tag %(<movie>)
         ext %(.mov)
@@ -136,6 +150,8 @@ describe Lotus::Assets::Configuration do
       @config.prefix.must_equal      '/foo'
       @config.root.must_equal        Pathname.new(__dir__)
       @config.destination.must_equal Pathname.new(__dir__)
+      assert @config.sources == [__dir__ + '/fixtures/javascripts'],
+        "Expected #{ @config.sources } to eq [#{ __dir__ }/fixtures/javascripts'], found: #{ @config.sources.inspect }"
       @config.__send__(:types).types.must_equal [:javascript, :stylesheet, :movie]
     end
 
@@ -144,11 +160,7 @@ describe Lotus::Assets::Configuration do
       @config.prefix      '/bar'
       @config.root        __dir__ + '/fixtures'
       @config.destination __dir__ + '/fixtures'
-      @config.define(:javascript) do
-        sources << [
-          __dir__ + '/fixtures/javascripts'
-        ]
-      end
+      @config.sources <<  __dir__ + '/fixtures/stylesheets'
 
       @config.define(:font) do
         tag %(<font>)
@@ -159,18 +171,17 @@ describe Lotus::Assets::Configuration do
       @config.prefix.must_equal      '/bar'
       @config.root.must_equal        Pathname.new(__dir__ + '/fixtures')
       @config.destination.must_equal Pathname.new(__dir__ + '/fixtures')
+      assert @config.sources == [__dir__ + '/fixtures/javascripts', __dir__ + '/fixtures/stylesheets'],
+        "Expected @config.sources to eq [#{ __dir__ }/fixtures/javascripts', #{ __dir__ }/fixtures/stylesheets'], found: #{ @config.sources.inspect }"
       @config.__send__(:types).types.must_equal [:javascript, :stylesheet, :movie, :font]
-      assert @config.asset(:javascript).sources == [__dir__ + '/fixtures/javascripts'],
-        "Expected javascripts to eq [#{ __dir__ + '/fixtures/javascripts' }], found: #{ @configuration.asset(:javascript).sources.inspect }"
 
       @configuration.compile.must_equal      true
       @configuration.prefix.must_equal      '/foo'
       @configuration.root.must_equal        Pathname.new(__dir__)
       @configuration.destination.must_equal Pathname.new(__dir__)
       @configuration.__send__(:types).types.must_equal [:javascript, :stylesheet, :movie]
-
-      assert @configuration.asset(:javascript).sources == [],
-        "Expected javascripts to be empty, found: #{ @configuration.asset(:javascript).sources.inspect }"
+      assert @configuration.sources == [__dir__ + '/fixtures/javascripts'],
+        "Expected @config.sources to eq [#{ __dir__ }/fixtures/javascripts'], found: #{ @config.sources.inspect }"
     end
   end
 end

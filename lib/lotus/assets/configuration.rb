@@ -3,6 +3,7 @@ require 'lotus/utils/string'
 require 'lotus/utils/class'
 require 'lotus/utils/path_prefix'
 require 'lotus/assets/config/asset_types'
+require 'lotus/assets/config/sources'
 
 module Lotus
   module Assets
@@ -45,7 +46,7 @@ module Lotus
           @root
         else
           @root = Pathname.new(value).realpath
-          @types.each {|_,t| t.root = @root }
+          sources.root = @root
         end
       end
 
@@ -57,6 +58,15 @@ module Lotus
         end
       end
 
+      def sources
+        @sources ||= Lotus::Assets::Config::Sources.new(root)
+      end
+
+      # @api private
+      def find(file)
+        @sources.find(file)
+      end
+
       def duplicate
         Configuration.new.tap do |c|
           c.root        = root
@@ -64,12 +74,13 @@ module Lotus
           c.compile     = compile
           c.types       = types.dup
           c.destination = destination
+          c.sources     = sources.dup
         end
       end
 
       def reset!
         @prefix  = Utils::PathPrefix.new
-        @types   = Config::AssetTypes.new(root, @prefix)
+        @types   = Config::AssetTypes.new(@prefix)
         @compile = false
 
         root        Dir.pwd
@@ -86,6 +97,7 @@ module Lotus
       attr_writer :prefix
       attr_writer :root
       attr_writer :destination
+      attr_writer :sources
       attr_accessor :types
     end
   end

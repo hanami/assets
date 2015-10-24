@@ -126,12 +126,10 @@ module Web
     prefix '/'
     compile true
 
-    define :javascript do
-      sources << [
-        'javascripts',
-        '../vendor/assets/javascripts'
-      ]
-    end
+    sources << [
+      'javascripts',
+      '../vendor/assets/javascripts'
+    ]
   end
 
   module Views
@@ -164,11 +162,9 @@ module Admin
     prefix '/admin'
     compile true
 
-    define :javascript do
-      sources << [
-        'js'
-      ]
-    end
+    sources << [
+      'js'
+    ]
   end
 
   module Views

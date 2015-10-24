@@ -1,5 +1,4 @@
 require 'test_helper'
-require 'fileutils'
 
 describe "Lotus::View integration" do
   before do

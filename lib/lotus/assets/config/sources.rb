@@ -33,6 +33,10 @@ module Lotus
           nil
         end
 
+        def empty?
+          map.empty?
+        end
+
         private
         def files
           map(&:children).flatten

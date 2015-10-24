@@ -15,15 +15,14 @@ module Lotus
           @types = original.instance_variable_get(:@types).deep_dup
         end
 
-        def initialize(root, prefix)
-          @root   = root
+        def initialize(prefix)
           @prefix = prefix
           @types  = Utils::Hash.new({
-            javascript: Config::AssetType.new(@root, @prefix) {
+            javascript: Config::AssetType.new(@prefix) {
               tag %(<script src="%s" type="text/javascript"></script>)
               ext %(.js)
             },
-            stylesheet: Config::AssetType.new(@root, @prefix) {
+            stylesheet: Config::AssetType.new(@prefix) {
               tag %(<link href="%s" type="text/css" rel="stylesheet">)
               ext %(.css)
             }
@@ -35,7 +34,7 @@ module Lotus
         end
 
         def define(type, &blk)
-          @types[type.to_sym] ||= Config::AssetType.new(@root, @prefix)
+          @types[type.to_sym] ||= Config::AssetType.new(@prefix)
           @types[type.to_sym].define(&blk)
         end
 

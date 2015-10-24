@@ -20,6 +20,15 @@ describe Lotus::Assets::Configuration do
       assert @configuration.sources == [__dir__],
         "Expected @configuration.sources to eq [#{ __dir__ }], got #{ @configuration.sources.inspect }"
     end
+
+    it "removes duplicates and nil sources" do
+      @configuration.sources << __dir__
+      @configuration.sources << __dir__
+      @configuration.sources << nil
+
+      assert @configuration.sources == [__dir__],
+        "Expected @configuration.sources to eq [#{ __dir__ }], got #{ @configuration.sources.inspect }"
+    end
   end
 
   describe '#prefix' do

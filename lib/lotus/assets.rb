@@ -1,5 +1,6 @@
 require 'lotus/assets/version'
 require 'lotus/assets/configuration'
+require 'lotus/assets/config/global_sources'
 require 'lotus/assets/helpers'
 require 'lotus/utils/class_attribute'
 
@@ -14,6 +15,10 @@ module Lotus
       configuration.instance_eval(&blk)
     end
 
+    def self.sources
+      @@sources ||= Config::GlobalSources.new
+    end
+
     def self.duplicate(mod, assets = 'Assets', &blk)
       dupe.tap do |duplicated|
         # mod.module_eval %{ module #{ assets }; end } if assets
@@ -26,6 +31,7 @@ module Lotus
         # }
 
         duplicated.configure(&blk) if block_given?
+        duplicates << duplicated
       end
     end
 
@@ -33,6 +39,10 @@ module Lotus
       dup.tap do |duplicated|
         duplicated.configuration = configuration.duplicate
       end
+    end
+
+    def self.duplicates
+      @@duplicates ||= Array.new
     end
   end
 end

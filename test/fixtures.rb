@@ -179,3 +179,38 @@ module Admin
     end
   end
 end
+
+module Metrics
+  View   = Lotus::View.duplicate(self) do
+    root __dir__ + '/fixtures/bookshelf/apps/metrics/templates'
+    layout :application
+
+    prepare do
+      include Metrics::Assets::Helpers
+    end
+  end
+
+  Assets = Lotus::Assets.duplicate(self) do
+    root        __dir__ + '/fixtures/bookshelf/apps/metrics/assets'
+    destination __dir__ + '/../tmp/bookshelf/public/assets/metrics'
+
+    prefix '/metrics'
+    compile true
+
+    sources << [
+      'javascripts'
+    ]
+  end
+
+  module Views
+    class ApplicationLayout
+      include Metrics::Layout
+    end
+
+    module Dashboard
+      class Index
+        include Metrics::View
+      end
+    end
+  end
+end

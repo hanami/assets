@@ -29,10 +29,6 @@ module Lotus
           result
         end
 
-        def empty?
-          map.empty?
-        end
-
         private
         def realpath(path)
           @root.join(path).realpath

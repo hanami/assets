@@ -3,6 +3,7 @@ require 'lotus/assets/configuration'
 require 'lotus/assets/config/global_sources'
 require 'lotus/assets/helpers'
 require 'lotus/utils/class_attribute'
+require 'thread'
 
 module Lotus
   module Assets
@@ -42,7 +43,9 @@ module Lotus
     end
 
     def self.duplicates
-      @@duplicates ||= Array.new
+      Mutex.new.synchronize do
+        @@duplicates ||= Array.new
+      end
     end
   end
 end

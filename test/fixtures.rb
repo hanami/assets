@@ -121,14 +121,14 @@ module Web
   end
 
   Assets = Lotus::Assets.duplicate(self) do
-    root        __dir__ + '/fixtures/bookshelf/apps/web/assets'
+    root        __dir__ + '/fixtures/bookshelf/apps/web'
     destination __dir__ + '/../tmp/bookshelf/public/assets'
     prefix  '/'
     compile true
 
     sources << [
-      'javascripts',
-      '../vendor/assets/javascripts'
+      'assets',
+      'vendor/assets/javascripts'
     ]
   end
 
@@ -156,14 +156,14 @@ module Admin
   end
 
   Assets = Lotus::Assets.duplicate(self) do
-    root        __dir__ + '/fixtures/bookshelf/apps/admin/assets'
+    root        __dir__ + '/fixtures/bookshelf/apps/admin'
     destination __dir__ + '/../tmp/bookshelf/public/assets/admin'
 
     prefix '/admin'
     compile true
 
     sources << [
-      'js'
+      'assets'
     ]
   end
 
@@ -191,14 +191,14 @@ module Metrics
   end
 
   Assets = Lotus::Assets.duplicate(self) do
-    root        __dir__ + '/fixtures/bookshelf/apps/metrics/assets'
+    root        __dir__ + '/fixtures/bookshelf/apps/metrics'
     destination __dir__ + '/../tmp/bookshelf/public/assets/metrics'
 
     prefix '/metrics'
     compile true
 
     sources << [
-      'javascripts'
+      'assets'
     ]
   end
 

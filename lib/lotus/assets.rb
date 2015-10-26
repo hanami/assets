@@ -17,7 +17,9 @@ module Lotus
     end
 
     def self.sources
-      @@sources ||= Config::GlobalSources.new
+      synchronize do
+        @@sources ||= Config::GlobalSources.new
+      end
     end
 
     def self.duplicate(mod, assets = 'Assets', &blk)
@@ -43,9 +45,15 @@ module Lotus
     end
 
     def self.duplicates
-      Mutex.new.synchronize do
+      synchronize do
         @@duplicates ||= Array.new
       end
+    end
+
+    private
+
+    def self.synchronize(&blk)
+      Mutex.new.synchronize(&blk)
     end
   end
 end

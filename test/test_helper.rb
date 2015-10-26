@@ -45,16 +45,14 @@ end
 
 Lotus::Assets::Config::GlobalSources.class_eval do
   def clear
-    synchronize do
-      @paths.each do |path|
-        Lotus::Assets.configuration.sources.delete(path)
+    @paths.each do |path|
+      Lotus::Assets.configuration.sources.delete(path)
 
-        Lotus::Assets.duplicates.each do |duplicate|
-          duplicate.configuration.sources.delete(path)
-        end
+      Lotus::Assets.duplicates.each do |duplicate|
+        duplicate.configuration.sources.delete(path)
       end
-
-      super
     end
+
+    super
   end
 end

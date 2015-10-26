@@ -7,3 +7,4 @@ module Lotus
 end
 
 Lotus::Assets.sources << __dir__ + '/emberjs/dist'
+Lotus::Assets.sources << __dir__ + '/emberjs/source'

@@ -24,9 +24,13 @@ module Lotus
         end
 
         def find(filename)
-          result = Dir.glob(map {|source| "#{ source }/**/#{ filename }*"}).first
+          result = files(filename).first
           result = Pathname.new(result) unless result.nil?
           result
+        end
+
+        def files(name = nil)
+          Dir.glob(map {|source| "#{ source }/**/#{ name }*"})
         end
 
         private

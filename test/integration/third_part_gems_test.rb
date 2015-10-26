@@ -1,11 +1,10 @@
 require 'test_helper'
+require __dir__ + '/../fixtures/bookshelf/config/environment'
 
 describe "Third part gems integration" do
   before do
     dest.rmtree if dest.exist?
     dest.mkpath
-
-    require 'lotus/emberjs'
   end
 
   let(:dest) { TMP.join('bookshelf', 'public') }

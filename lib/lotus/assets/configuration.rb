@@ -63,6 +63,10 @@ module Lotus
         @sources ||= Lotus::Assets::Config::Sources.new(root)
       end
 
+      def files
+        sources.files
+      end
+
       # @api private
       def find(file)
         @sources.find(file)

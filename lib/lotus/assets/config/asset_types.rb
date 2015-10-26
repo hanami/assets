@@ -39,11 +39,24 @@ module Lotus
         end
 
         def asset(type)
-          @types.fetch(type) { raise UnknownAssetType.new(type) }
+          @types.fetch(type) do
+            extension_lookup(type) or
+              raise UnknownAssetType.new(type)
+          end
         end
 
         def types
           @types.keys
+        end
+
+        private
+
+        def extension_lookup(filename)
+          @types.values.each do |asset_type|
+            return asset_type if filename.match(/#{ asset_type.ext }/)
+          end
+
+          nil
         end
       end
     end

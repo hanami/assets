@@ -1,4 +1,5 @@
 require 'test_helper'
+require __dir__ + '/../fixtures/bookshelf/config/environment'
 
 describe "Lotus::View integration" do
   before do

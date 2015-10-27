@@ -5,6 +5,8 @@ describe "Third part gems integration" do
   before do
     dest.rmtree if dest.exist?
     dest.mkpath
+
+    load __dir__ + '/../fixtures/lotus-emberjs/lib/lotus/emberjs.rb'
   end
 
   let(:dest) { TMP.join('bookshelf', 'public') }

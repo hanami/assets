@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'digest'
 
 describe 'Precompile' do
   before do
@@ -14,12 +15,8 @@ describe 'Precompile' do
     end
 
     it "precompiles assets" do
-      success = system("bundle exec bin/lotus-assets --config=#{ __dir__ }/../fixtures/standalone/config/environment.rb")
-      success.must_equal true
-
-      assets.each do |asset|
-        dest.join(asset).must_be :exist?
-      end
+      assert_successful_command "#{ __dir__ }/../fixtures/standalone/config/environment.rb"
+      assert_successful_output(assets)
     end
   end
 
@@ -41,15 +38,32 @@ describe 'Precompile' do
     end
 
     it "precompiles assets" do
-      success = system("bundle exec bin/lotus-assets --config=#{ __dir__ }/../fixtures/bookshelf/config/environment.rb")
-      success.must_equal true
-      # load __dir__ + '/../fixtures/bookshelf/config/environment.rb'
-      # require 'lotus/assets/precompiler'
-      # Lotus::Assets::Precompiler.run
+      assert_successful_command "#{ __dir__ }/../fixtures/bookshelf/config/environment.rb"
+      assert_successful_output(assets)
+    end
+  end
 
-      assets.each do |asset|
-        dest.join(asset).must_be :exist?
-      end
+  private
+
+  def assert_successful_command(configuration_path)
+    assert system("bundle exec bin/lotus-assets --config=#{ configuration_path }"),
+      "Expected bin/lotus-assets to be successful"
+
+    # This is useful for debug
+    #
+    # load configuration_path
+    # Lotus::Assets.deploy
+  end
+
+  def assert_successful_output(expected)
+    expected.each do |asset|
+      result = dest.join(asset)
+      result.must_be :exist?
+
+      checksum      = Digest::MD5.file(result)
+      filename, ext = ::File.basename(asset, '.*'), ::File.extname(asset)
+      directory     = Pathname.new(::File.dirname(asset))
+      dest.join(directory, "#{ filename }-#{ checksum }#{ ext }").must_be :exist?
     end
   end
 end

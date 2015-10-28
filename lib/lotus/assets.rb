@@ -16,6 +16,14 @@ module Lotus
       configuration.instance_eval(&blk)
     end
 
+    def self.deploy
+      require 'lotus/assets/precompiler'
+      require 'lotus/assets/bundler'
+
+      Precompiler.new(configuration, duplicates).run
+      Bundler.new(configuration).run
+    end
+
     def self.sources
       synchronize do
         @@sources ||= Config::GlobalSources.new

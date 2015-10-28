@@ -1,1 +1,1 @@
-// Dashboard
+console.log("Dashboard");

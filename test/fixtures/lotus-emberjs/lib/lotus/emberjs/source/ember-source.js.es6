@@ -1,1 +1,1 @@
-// Ember Source
+console.log("Ember Source");

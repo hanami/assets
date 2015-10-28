@@ -17,7 +17,6 @@ config = Pathname.new(config)
 config.exist? or raise ArgumentError.new("Cannot find configuration file: #{ config }")
 
 require 'lotus/assets'
-require 'lotus/assets/precompiler'
 load config
 
-Lotus::Assets::Precompiler.run
+Lotus::Assets.deploy

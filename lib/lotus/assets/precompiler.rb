@@ -1,12 +1,9 @@
 module Lotus
   module Assets
     class Precompiler
-      def self.run
-        new.run
-      end
-
-      def initialize
-        @configuration = Lotus::Assets.configuration
+      def initialize(configuration, duplicates)
+        @configuration = configuration
+        @duplicates    = duplicates
       end
 
       def run
@@ -26,8 +23,8 @@ module Lotus
       private
 
       def applications
-        Lotus::Assets.duplicates.empty? ?
-          [Lotus::Assets] : Lotus::Assets.duplicates
+        @duplicates.empty? ?
+          [Lotus::Assets] : @duplicates
       end
 
       def basename(file)

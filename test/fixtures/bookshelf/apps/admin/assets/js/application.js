@@ -1,1 +1,1 @@
-// Admin application.js
+console.log("Admin application.js");

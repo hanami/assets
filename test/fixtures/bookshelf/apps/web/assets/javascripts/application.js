@@ -1,1 +1,1 @@
-// Web application.js
+console.log("Web application.js");

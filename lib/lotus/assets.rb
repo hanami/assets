@@ -14,6 +14,7 @@ module Lotus
 
     def self.configure(&blk)
       configuration.instance_eval(&blk)
+      self
     end
 
     def self.deploy
@@ -22,6 +23,10 @@ module Lotus
 
       Precompiler.new(configuration, duplicates).run
       Bundler.new(configuration).run
+    end
+
+    def self.load!
+      configuration.load!
     end
 
     def self.sources

@@ -1,4 +1,5 @@
 require 'pathname'
+require 'json'
 require 'lotus/utils/string'
 require 'lotus/utils/class'
 require 'lotus/utils/path_prefix'
@@ -19,6 +20,8 @@ module Lotus
         framework.configuration
       end
 
+      attr_reader :registry
+
       def initialize
         reset!
       end
@@ -28,6 +31,14 @@ module Lotus
           @compile
         else
           @compile = value
+        end
+      end
+
+      def digest(value = nil)
+        if value.nil?
+          @digest
+        else
+          @digest = value
         end
       end
 
@@ -58,6 +69,10 @@ module Lotus
         else
           @destination = Pathname.new(value)
         end
+      end
+
+      def public_path
+        destination.join('..').realpath.to_s
       end
 
       def manifest(value = nil)
@@ -106,6 +121,10 @@ module Lotus
         root        Dir.pwd
         destination root.join(DEFAULT_DESTINATION)
         manifest    DEFAULT_MANIFEST
+      end
+
+      def load!
+        @registry = JSON.load(manifest_path.read)
       end
 
       # @api private

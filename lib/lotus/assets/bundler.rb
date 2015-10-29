@@ -54,7 +54,7 @@ module Lotus
       end
 
       def store_manifest(asset, target)
-        @manifest[_convert_to_url(asset)] = _convert_to_url(target)
+        @manifest[_convert_to_url(::File.expand_path(asset))] = _convert_to_url(::File.expand_path(target))
       end
 
       def _compress(compressor, asset)
@@ -62,7 +62,7 @@ module Lotus
       end
 
       def _convert_to_url(path)
-        path.sub(destination.to_s, '').
+        path.sub(@configuration.public_path, '').
           gsub(File::SEPARATOR, '/')
       end
 

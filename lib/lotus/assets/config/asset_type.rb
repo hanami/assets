@@ -56,9 +56,10 @@ module Lotus
           @destination.relative_join(filename)
         end
 
-        def url(configuration_prefix, source)
-          prefix.join(configuration_prefix, source) +
-            ext
+        def url(configuration, source)
+          result = prefix.join(configuration.prefix, source) + ext
+          result = configuration.registry.fetch(result.to_s) if configuration.digest
+          result
         end
 
         protected

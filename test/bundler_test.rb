@@ -8,7 +8,7 @@ describe Lotus::Assets::Bundler do
     dest.rmtree if dest.exist?
     dest.mkpath
 
-    FileUtils.copy_entry(source, target)
+    FileUtils.copy_entry(source, dest)
     config.destination.must_equal(dest) # better safe than sorry ;-)
 
     Lotus::Assets::Bundler.new(config).run
@@ -20,8 +20,7 @@ describe Lotus::Assets::Bundler do
     end
   end
 
-  let(:dest)   { TMP.join('deploy', 'public') }
-  let(:target) { dest.join('assets') }
+  let(:dest)   { TMP.join('deploy', 'public', 'assets') }
   let(:source) { __dir__ + '/fixtures/deploy/public/assets' }
 
   it "compresses javascripts" do
@@ -62,7 +61,7 @@ describe Lotus::Assets::Bundler do
   private
 
   def assets(type)
-    Dir.glob("#{ target }/**/*.#{ type }").each_with_object({}) do |current, result|
+    Dir.glob("#{ dest }/**/*.#{ type }").each_with_object({}) do |current, result|
       next unless checksum(current)
       result[original_for(current)] = current
     end

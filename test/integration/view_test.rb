@@ -5,6 +5,13 @@ describe "Lotus::View integration" do
   before do
     dest.rmtree if dest.exist?
     dest.mkpath
+
+    frameworks = [Web::Assets, Admin::Assets]
+    frameworks.each do |framework|
+      framework.configure do
+        digest false
+      end
+    end
   end
 
   let(:dest) { TMP.join('bookshelf', 'public') }

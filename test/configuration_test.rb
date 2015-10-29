@@ -94,6 +94,29 @@ describe Lotus::Assets::Configuration do
     end
   end
 
+  describe '#manifest' do
+    it 'defaults to "assets.json"' do
+      @configuration.manifest.must_equal 'assets.json'
+    end
+
+    it 'allows to set a relative path' do
+      @configuration.manifest            'manifest.json'
+      @configuration.manifest.must_equal 'manifest.json'
+    end
+  end
+
+  describe '#manifest_path' do
+    it 'joins #manifest with #destination' do
+      expected = @configuration.destination.join(@configuration.manifest)
+      @configuration.manifest_path.must_equal expected
+    end
+
+    it 'returns absolute path, if #manifest is absolute path' do
+      @configuration.manifest expected = __dir__ + '/manifest.json'
+      @configuration.manifest_path.must_equal Pathname.new(expected)
+    end
+  end
+
   describe '#asset' do
     it 'returns an asset definition' do
       @configuration.asset(:javascript).must_be_kind_of(Lotus::Assets::Config::AssetType)
@@ -108,6 +131,7 @@ describe Lotus::Assets::Configuration do
   describe '#reset!' do
     before do
       @configuration.prefix 'prfx'
+      @configuration.manifest 'assets.json'
       @configuration.destination(Dir.pwd + '/tmp')
 
       @configuration.define :stylesheet do
@@ -131,6 +155,10 @@ describe Lotus::Assets::Configuration do
       @configuration.prefix.to_s.must_be_empty
     end
 
+    it 'sets default value for manifest' do
+      @configuration.manifest.must_equal('assets.json')
+    end
+
     it 'removes custom defined asset types' do
       -> { @configuration.asset(:cuztom) }.must_raise Lotus::Assets::UnknownAssetType
     end
@@ -148,6 +176,7 @@ describe Lotus::Assets::Configuration do
       @configuration.reset!
       @configuration.compile     true
       @configuration.prefix      '/foo'
+      @configuration.manifest    'm.json'
       @configuration.root        __dir__
       @configuration.destination __dir__
       @configuration.sources << __dir__ + '/fixtures/javascripts'
@@ -162,6 +191,7 @@ describe Lotus::Assets::Configuration do
     it 'returns a copy of the configuration' do
       @config.compile.must_equal      true
       @config.prefix.must_equal      '/foo'
+      @config.manifest.must_equal    'm.json'
       @config.root.must_equal        Pathname.new(__dir__)
       @config.destination.must_equal Pathname.new(__dir__)
       assert @config.sources == [__dir__ + '/fixtures/javascripts'],
@@ -172,6 +202,7 @@ describe Lotus::Assets::Configuration do
     it "doesn't affect the original configuration" do
       @config.compile     false
       @config.prefix      '/bar'
+      @config.manifest    'a.json'
       @config.root        __dir__ + '/fixtures'
       @config.destination __dir__ + '/fixtures'
       @config.sources <<  __dir__ + '/fixtures/stylesheets'
@@ -183,6 +214,7 @@ describe Lotus::Assets::Configuration do
 
       @config.compile.must_equal      false
       @config.prefix.must_equal      '/bar'
+      @config.manifest.must_equal    'a.json'
       @config.root.must_equal        Pathname.new(__dir__ + '/fixtures')
       @config.destination.must_equal Pathname.new(__dir__ + '/fixtures')
       assert @config.sources == [__dir__ + '/fixtures/javascripts', __dir__ + '/fixtures/stylesheets'],
@@ -191,6 +223,7 @@ describe Lotus::Assets::Configuration do
 
       @configuration.compile.must_equal      true
       @configuration.prefix.must_equal      '/foo'
+      @configuration.manifest.must_equal    'm.json'
       @configuration.root.must_equal        Pathname.new(__dir__)
       @configuration.destination.must_equal Pathname.new(__dir__)
       @configuration.__send__(:types).types.must_equal [:javascript, :stylesheet, :movie]

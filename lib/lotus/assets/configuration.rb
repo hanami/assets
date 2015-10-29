@@ -9,6 +9,7 @@ module Lotus
   module Assets
     class Configuration
       DEFAULT_DESTINATION = 'public'.freeze
+      DEFAULT_MANIFEST    = 'assets.json'.freeze
       DISCARDED_PREFIX    = '/'.freeze
 
       def self.for(base)
@@ -59,6 +60,19 @@ module Lotus
         end
       end
 
+      def manifest(value = nil)
+        if value.nil?
+          @manifest
+        else
+          @manifest = value.to_s
+        end
+      end
+
+      # @api private
+      def manifest_path
+        destination.join(manifest)
+      end
+
       def sources
         @sources ||= Lotus::Assets::Config::Sources.new(root)
       end
@@ -79,6 +93,7 @@ module Lotus
           c.compile     = compile
           c.types       = types.dup
           c.destination = destination
+          c.manifest    = manifest
           c.sources     = sources.dup
         end
       end
@@ -90,6 +105,7 @@ module Lotus
 
         root        Dir.pwd
         destination root.join(DEFAULT_DESTINATION)
+        manifest    DEFAULT_MANIFEST
       end
 
       # @api private
@@ -102,6 +118,7 @@ module Lotus
       attr_writer :prefix
       attr_writer :root
       attr_writer :destination
+      attr_writer :manifest
       attr_writer :sources
       attr_accessor :types
     end

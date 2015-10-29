@@ -1,13 +1,14 @@
 require 'test_helper'
 require 'lotus/assets/bundler'
 require 'etc'
+require 'json'
 
 describe Lotus::Assets::Bundler do
   before do
     dest.rmtree if dest.exist?
     dest.mkpath
 
-    FileUtils.copy_entry(source, dest)
+    FileUtils.copy_entry(source, target)
     config.destination.must_equal(dest) # better safe than sorry ;-)
 
     Lotus::Assets::Bundler.new(config).run
@@ -19,7 +20,8 @@ describe Lotus::Assets::Bundler do
     end
   end
 
-  let(:dest)   { TMP.join('deploy', 'public', 'assets') }
+  let(:dest)   { TMP.join('deploy', 'public') }
+  let(:target) { dest.join('assets') }
   let(:source) { __dir__ + '/fixtures/deploy/public/assets' }
 
   it "compresses javascripts" do
@@ -41,10 +43,26 @@ describe Lotus::Assets::Bundler do
     end
   end
 
+  it "generates manifest" do
+    manifest = dest.join('assets.json')
+    manifest.must_be :exist?
+
+    assert_owner(      manifest)
+    assert_permissions(manifest)
+
+    actual   = JSON.load(manifest.read)
+    expected = JSON.load(File.read(__dir__ + '/fixtures/deploy/assets.json'))
+
+    actual.size.must_equal expected.size
+    expected.each do |original, current|
+      actual[original].must_equal current
+    end
+  end
+
   private
 
   def assets(type)
-    Dir.glob("#{ dest }/**/*.#{ type }").each_with_object({}) do |current, result|
+    Dir.glob("#{ target }/**/*.#{ type }").each_with_object({}) do |current, result|
       next unless checksum(current)
       result[original_for(current)] = current
     end

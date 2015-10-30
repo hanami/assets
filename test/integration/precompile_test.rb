@@ -7,8 +7,10 @@ describe 'Precompile' do
     dest.mkpath
   end
 
+  let(:target) { dest.join('assets') }
+
   describe "standalone framework" do
-    let(:dest) { TMP.join('standalone', 'public', 'assets') }
+    let(:dest) { TMP.join('standalone', 'public') }
 
     let(:assets) do
       ['users.js']
@@ -21,10 +23,11 @@ describe 'Precompile' do
   end
 
   describe "duplicated frameworks" do
-    let(:dest) { TMP.join('bookshelf', 'public', 'assets') }
+    let(:dest) { TMP.join('bookshelf', 'public') }
 
     let(:assets) do
       ['jquery.js',
+       'bookshelf.jpg',
        'ember.js',              # this is a duplicate
        'ember-source.js',       # this is a duplicate
        'application.js',
@@ -57,13 +60,13 @@ describe 'Precompile' do
 
   def assert_successful_output(expected)
     expected.each do |asset|
-      result = dest.join(asset)
+      result = target.join(asset)
       result.must_be :exist?
 
       checksum      = Digest::MD5.file(result)
       filename, ext = ::File.basename(asset, '.*'), ::File.extname(asset)
       directory     = Pathname.new(::File.dirname(asset))
-      dest.join(directory, "#{ filename }-#{ checksum }#{ ext }").must_be :exist?
+      target.join(directory, "#{ filename }-#{ checksum }#{ ext }").must_be :exist?
     end
   end
 end

@@ -5,7 +5,7 @@ require 'lotus/assets/es6'
 require 'lotus/emberjs'
 
 Lotus::Assets.configure do
-  destination __dir__ + '/../../../../tmp/bookshelf/public/assets'
+  destination __dir__ + '/../../../../tmp/bookshelf/public'
 end
 
 unless defined?(Web)
@@ -21,6 +21,8 @@ unless defined?(Web)
 
     Assets = Lotus::Assets.duplicate(self) do
       root        __dir__ + '/../../../fixtures/bookshelf/apps/web'
+      destination __dir__ + '/../../../../tmp/bookshelf/public/assets'
+      manifest   '../assets.json'
       prefix  '/'
       compile true
 
@@ -54,7 +56,9 @@ unless defined?(Web)
     end
 
     Assets = Lotus::Assets.duplicate(self) do
-      root   __dir__ + '/../../../fixtures/bookshelf/apps/admin'
+      root        __dir__ + '/../../../fixtures/bookshelf/apps/admin'
+      destination __dir__ + '/../../../../tmp/bookshelf/public/assets'
+      manifest   '../assets.json'
       prefix '/admin'
       compile true
 
@@ -87,7 +91,9 @@ unless defined?(Web)
     end
 
     Assets = Lotus::Assets.duplicate(self) do
-      root   __dir__ + '/../../../fixtures/bookshelf/apps/metrics'
+      root        __dir__ + '/../../../fixtures/bookshelf/apps/metrics'
+      destination __dir__ + '/../../../../tmp/bookshelf/public/assets'
+      manifest   '../assets.json'
       prefix '/metrics'
       compile true
 

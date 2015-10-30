@@ -7,6 +7,11 @@ module Lotus
   module Assets
     class Bundler
       DEFAULT_PERMISSIONS = 0644
+      JAVASCRIPT_EXT      = '.js'.freeze
+      STYLESHEET_EXT      = '.css'.freeze
+      WILDCARD_EXT        = '.*'.freeze
+      URL_SEPARATOR       = '/'.freeze
+      URL_REPLACEMENT     = ''.freeze
 
       def initialize(configuration)
         @configuration = configuration
@@ -32,14 +37,14 @@ module Lotus
 
       def compress(asset)
         case File.extname(asset)
-        when ".js"  then _compress(YUI::JavaScriptCompressor.new(munge: true), asset)
-        when ".css" then _compress(YUI::CssCompressor.new, asset)
+        when JAVASCRIPT_EXT then _compress(YUI::JavaScriptCompressor.new(munge: true), asset)
+        when STYLESHEET_EXT then _compress(YUI::CssCompressor.new, asset)
         end
       end
 
       def checksum(asset)
         digest        = Digest::MD5.file(asset)
-        filename, ext = ::File.basename(asset, '.*'), ::File.extname(asset)
+        filename, ext = ::File.basename(asset, WILDCARD_EXT), ::File.extname(asset)
         directory     = ::File.dirname(asset)
         target        = [directory, "#{ filename }-#{ digest }#{ ext }"].join(::File::SEPARATOR)
 
@@ -62,8 +67,8 @@ module Lotus
       end
 
       def _convert_to_url(path)
-        path.sub(@configuration.public_path, '').
-          gsub(File::SEPARATOR, '/')
+        path.sub(destination.to_s, URL_REPLACEMENT).
+          gsub(File::SEPARATOR, URL_SEPARATOR)
       end
 
       def _write(path, content)

@@ -37,15 +37,6 @@ module Lotus
 
     def self.duplicate(mod, assets = 'Assets', &blk)
       dupe.tap do |duplicated|
-        # mod.module_eval %{ module #{ assets }; end } if assets
-        # mod.module_eval %{ Assets = Lotus::Assets.dup unless defined?(#{ mod }::Assets) } unless assets.nil?
-
-        # duplicated.module_eval %{
-        #   configure do
-        #     action_module #{ mod }::Action
-        #   end
-        # }
-
         duplicated.configure(&blk) if block_given?
         duplicates << duplicated
       end

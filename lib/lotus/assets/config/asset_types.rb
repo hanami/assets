@@ -3,12 +3,6 @@ require 'lotus/assets/config/asset_type'
 
 module Lotus
   module Assets
-    class UnknownAssetType < ::StandardError
-      def initialize(type)
-        super("Unknown asset type: `#{ type }'")
-      end
-    end
-
     module Config
       class AssetTypes
         def initialize_copy(original)
@@ -39,10 +33,7 @@ module Lotus
         end
 
         def asset(type)
-          @types.fetch(type) do
-            extension_lookup(type) or
-              raise UnknownAssetType.new(type)
-          end
+          @types.fetch(type) { extension_lookup(type) }
         end
 
         def types
@@ -56,7 +47,7 @@ module Lotus
             return asset_type if filename.match(/#{ asset_type.ext }/)
           end
 
-          nil
+          Config::AssetType.new(@prefix) { ext ::File.extname(filename.to_s) }
         end
       end
     end

@@ -67,12 +67,8 @@ module Lotus
         if value.nil?
           @destination
         else
-          @destination = Pathname.new(value)
+          @destination = Pathname.new(::File.expand_path(value))
         end
-      end
-
-      def public_path
-        destination.join('..').realpath.to_s
       end
 
       def manifest(value = nil)
@@ -124,7 +120,9 @@ module Lotus
       end
 
       def load!
-        @registry = JSON.load(manifest_path.read)
+        if digest && manifest_path.exist?
+          @registry = JSON.load(manifest_path.read)
+        end
       end
 
       # @api private

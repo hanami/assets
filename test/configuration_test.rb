@@ -90,7 +90,7 @@ describe Lotus::Assets::Configuration do
     it 'allows to set a custom location' do
       dest = __dir__ + '/../tmp'
       @configuration.destination(dest)
-      @configuration.destination.must_equal(Pathname.new(dest))
+      @configuration.destination.must_equal(Pathname.new(File.expand_path(dest)))
     end
   end
 
@@ -119,12 +119,15 @@ describe Lotus::Assets::Configuration do
 
   describe '#asset' do
     it 'returns an asset definition' do
-      @configuration.asset(:javascript).must_be_kind_of(Lotus::Assets::Config::AssetType)
+      asset_type = @configuration.asset(:javascript)
+      asset_type.must_be_kind_of(Lotus::Assets::Config::AssetType)
+      asset_type.ext.must_equal '.js'
     end
 
-    it 'raises error for unkown type' do
-      exception = -> { @configuration.asset(:unkown) }.must_raise(Lotus::Assets::UnknownAssetType)
-      exception.message.must_equal %(Unknown asset type: `unkown')
+    it 'returns anonymous asset type' do
+      asset_type = @configuration.asset('logo.png')
+      asset_type.must_be_kind_of(Lotus::Assets::Config::AssetType)
+      asset_type.ext.must_equal '.png'
     end
   end
 
@@ -160,7 +163,9 @@ describe Lotus::Assets::Configuration do
     end
 
     it 'removes custom defined asset types' do
-      -> { @configuration.asset(:cuztom) }.must_raise Lotus::Assets::UnknownAssetType
+      asset_type = @configuration.asset(:cuztom)
+      asset_type.must_be_kind_of(Lotus::Assets::Config::AssetType)
+      asset_type.ext.must_equal ""
     end
 
     it 'sets default value for predefined asset type' do

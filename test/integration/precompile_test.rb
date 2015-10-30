@@ -1,5 +1,6 @@
 require 'test_helper'
 require 'digest'
+require 'open3'
 
 describe 'Precompile' do
   before do
@@ -7,6 +8,7 @@ describe 'Precompile' do
     dest.mkpath
   end
 
+  let(:dest)   { TMP }
   let(:target) { dest.join('assets') }
 
   describe "standalone framework" do
@@ -46,6 +48,18 @@ describe 'Precompile' do
     end
   end
 
+  describe "when 'config' is omitted" do
+    it 'raises error and exit' do
+      assert_failing_command "", "You must specify a configuration file (ArgumentError)"
+    end
+  end
+
+  describe "when 'config' points to a non-existing file" do
+    it 'raises error and exit' do
+      assert_failing_command "--config=path/to/missing.rb", "Cannot find configuration file: path/to/missing.rb (ArgumentError)"
+    end
+  end
+
   private
 
   def assert_successful_command(configuration_path)
@@ -67,6 +81,14 @@ describe 'Precompile' do
       filename, ext = ::File.basename(asset, '.*'), ::File.extname(asset)
       directory     = Pathname.new(::File.dirname(asset))
       target.join(directory, "#{ filename }-#{ checksum }#{ ext }").must_be :exist?
+    end
+  end
+
+  def assert_failing_command(arguments, error)
+    cmd = "bundle exec bin/lotus-assets #{ arguments }"
+
+    Open3.popen3(cmd) do |_, _, stderr, _|
+      stderr.read.must_include error
     end
   end
 end

@@ -14,11 +14,14 @@ Assets management for Ruby web projects
 ## Contact
 
 * Home page: http://lotusrb.org
+* Community: http://lotusrb.org/community
+* Guides: http://lotusrb.org/guides
 * Mailing List: http://lotusrb.org/mailing-list
 * API Doc: http://rdoc.info/gems/lotus-assets
 * Bugs/Issues: https://github.com/lotus/assets/issues
 * Support: http://stackoverflow.com/questions/tagged/lotus-ruby
-* Chat: https://gitter.im/lotus/chat
+* Forum: https://discuss.lotusrb.org
+* Chat: http://chat.lotusrb.org
 
 ## Rubies
 
@@ -125,7 +128,6 @@ For usage on `lotus` follow the instructions:
 - In your `apps/web/application.rb` include `lotus-assets` files:
 ```ruby
 require 'lotus/assets'
-require 'lotus/assets/helpers'
 ```
 
 - In your `application_layout` just include the assets helpers
@@ -134,7 +136,7 @@ module Web
   module Views
     class ApplicationLayout
       include Admin::Layout
-      include Lotus::Assets::Helpers
+      include Web::Assets::Helpers
     end
   end
 end
@@ -148,10 +150,9 @@ end
 It can manage multiple source directories for each asset type or run a
 preprocessor for you.
 
-
 #### Sources
 
-Imagine to have your application's javascripts under `app/javascripts` and that
+Imagine to have your application's javascripts under `app/assets/javascripts` and that
 those assets depends on a vendored version of jQuery.
 
 ```ruby
@@ -160,12 +161,10 @@ require 'lotus/assets'
 Lotus::Assets.configure do
   compile true
 
-  define :javascript do
-    sources << [
-      'app/javascripts',
-      'vendor/jquery'
-    ]
-  end
+  sources << [
+    'app/assets',
+    'vendor/jquery'
+  ]
 end
 ```
 
@@ -192,16 +191,16 @@ public/
 
 **Please remember that sources are recursively looked up in order of declaration.**
 
-If in the example above we had a `jquery.js` under `app/javascripts/**/*.js`
+If in the example above we had a `jquery.js` under `app/assets/javascripts/**/*.js`
 that file would be copied into the destination folder instead of the one under
-`vendor/jquery`. The reason is because we declared `app/javascripts` first.
+`vendor/jquery`. The reason is because we declared `app/assets/javascripts` first.
 
 #### Preprocessors
 
 `Lotus::Assets` is able to run assets preprocessors and **lazily compile** them
 under `public/assets` (by default), before the markup is generated.
 
-Imagine to have `main.css.scss` under `app/stylesheet` and `reset.css` under
+Imagine to have `main.css.scss` under `app/assets/stylesheets` and `reset.css` under
 `vendor/stylesheets`.
 
 **The extensions structure is important.**
@@ -216,12 +215,10 @@ require 'lotus/assets'
 Lotus::Assets.configure do
   compile true
 
-  define :stylesheet do
-    sources << [
-      'app/stylesheet',
-      'vendor/stylesheets'
-    ]
-  end
+  sources << [
+    'assets',
+    'vendor/assets'
+  ]
 end
 ```
 
@@ -241,10 +238,132 @@ public/
     └── main.css
 ```
 
+### Preprocessors engines
+
+`Lotus::Assets` uses [Tilt](https://github.com/rtomayko/tilt) to provide support for the most common preprocessors, such as [Sass](http://sass-lang.com/) (including `sassc-ruby`), [Less](http://lesscss.org/), ES6, [JSX](https://jsx.github.io/), [CoffeScript](http://coffeescript.org), [Opal](http://opalrb.org), [Handlebars](http://handlebarsjs.com), [JBuilder](https://github.com/rails/jbuilder).
+
+In order to use one or more of them, be sure to include the corresponding gem into your `Gemfile` and require the library.
+
+#### EcmaScript 6
+
+We strongly suggest to use [EcmaScript 6](http://es6-features.org/) for your next project.
+It isn't fully [supported](https://kangax.github.io/compat-table/es6/) yet by browser vendors, but it's the future of JavaScript.
+
+As of today, you need to transpile ES6 code into something understandable by current browsers, which is ES5.
+For this purpose we support [Babel](https://babeljs.io). Make sure to require `'lotus/assets/es6'` to enable it.
+
+### Deployment
+
+`Lotus::Assets` ships with an executable (`lotus-assets`), which can be used to precompile assets and make them cacheable by browsers (via checksum suffix).
+
+Let's say we have an application that has main file that requires the entire code (`config/environment.rb`), a gem that brings Ember.js code, and the following sources:
+
+```shell
+% tree .
+├── apps
+│   ├── admin
+│   │   ├── assets
+│   │   │   └── js
+│   │   │       ├── application.js
+│   │   │       └── zepto.js
+# ...
+│   ├── metrics
+│   │   ├── assets
+│   │   │   └── javascripts
+│   │   │       └── dashboard.js
+# ...
+│   └── web
+│       ├── assets
+│       │   ├── images
+│       │   │   └── bookshelf.jpg
+│       │   └── javascripts
+│       │       └── application.js
+# ...
+│       └── vendor
+│           └── assets
+│               └── javascripts
+│                   └── jquery.js
+└── config
+    └── environment.rb
+```
+
+In order to deploy, we can run:
+
+```shell
+bundle exec lotus-assets --config=config/environment.rb
+```
+
+It will output:
+
+```shell
+tree public
+public
+├── assets
+│   ├── admin
+│   │   ├── application-28a6b886de2372ee3922fcaf3f78f2d8.js
+│   │   ├── application.js
+│   │   ├── ember-b2d6de1e99c79a0e52cf5c205aa2e07a.js
+│   │   ├── ember-source-e74117fc6ba74418b2601ffff9eb1568.js
+│   │   ├── ember-source.js
+│   │   ├── ember.js
+│   │   ├── zepto-ca736a378613d484138dec4e69be99b6.js
+│   │   └── zepto.js
+│   ├── application-d1829dc353b734e3adc24855693b70f9.js
+│   ├── application.js
+│   ├── bookshelf-237ecbedf745af5a477e380f0232039a.jpg
+│   ├── bookshelf.jpg
+│   ├── ember-b2d6de1e99c79a0e52cf5c205aa2e07a.js
+│   ├── ember-source-e74117fc6ba74418b2601ffff9eb1568.js
+│   ├── ember-source.js
+│   ├── ember.js
+│   ├── jquery-05277a4edea56b7f82a4c1442159e183.js
+│   ├── jquery.js
+│   └── metrics
+│       ├── dashboard-7766a63ececc63a7a629bfb0666e9c62.js
+│       ├── dashboard.js
+│       ├── ember-b2d6de1e99c79a0e52cf5c205aa2e07a.js
+│       ├── ember-source-e74117fc6ba74418b2601ffff9eb1568.js
+│       ├── ember-source.js
+│       └── ember.js
+└── assets.json
+```
+
+### Digest mode
+
+This is a mode that can be activated via the configuration and it's suitable for production environments.
+
+```ruby
+Lotus::Assets.configure do
+  digest true
+end
+```
+
+Once turned on, it will look at `public/assets.json`, and helpers such as `javascript` will return a relative URL that includes the digest of the asset.
+
+```erb
+<%= javascript 'application' %>
+```
+
+```html
+<script src="/assets/application-d1829dc353b734e3adc24855693b70f9.js" type="text/javascript"></script>
+```
+
+## Third party gems
+
+Developers can maintain gems that distribute assets for Lotus. For instance `lotus-ember` or `lotus-jquery`.
+
+As a gem developer, you must add one or more paths, where the assets are stored inside the gem.
+
+```ruby
+# lib/lotus/jquery.rb
+Lotus::Assets.sources << '/path/to/jquery'
+```
+
 ## Running tests
 
-- Make sure you have one of [ExecJS](https://github.com/rails/execjs)
+  * Make sure you have one of [ExecJS](https://github.com/rails/execjs)
 supported runtime on your machine.
+  * Java 1.4+
 
 ```sh
 bundle exec rake test

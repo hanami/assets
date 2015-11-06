@@ -2,12 +2,21 @@ require 'erb'
 require 'sass'
 require 'coffee_script'
 require 'lotus/assets/es6'
+require 'lotus/view'
+require 'tilt/erb'
 
-class View
-  include Lotus::Assets::Helpers
+module View
+  def self.included(base)
+    base.class_eval do
+      include Lotus::Assets::Helpers
+      extend  ClassMethods
+    end
+  end
 
-  def self.template
-    __dir__ + '/fixtures/template.erb'
+  module ClassMethods
+    def template
+      __dir__ + '/fixtures/template.erb'
+    end
   end
 
   def initialize
@@ -21,61 +30,81 @@ class View
   end
 end
 
-class DefaultView < View
+class DefaultView
+  include View
+
   def self.template
     __dir__ + '/fixtures/template.erb'
   end
 end
 
-class CustomAssetsPathView < View
+class CustomAssetsPathView
+  include View
 end
 
-class CustomAssetsPrefix < View
+class CustomAssetsPrefix
+  include View
 end
 
-class RenderMultipleAssets < View
+class RenderMultipleAssets
+  include View
+
   def self.template
     __dir__ + '/fixtures/multi-template.erb'
   end
 end
 
-class AbsoluteUrlsView < View
+class AbsoluteUrlsView
+  include View
+
   def self.template
     __dir__ + '/fixtures/absolute-urls-template.erb'
   end
 end
 
-class CompilerView < View
+class CompilerView
+  include View
+
   def self.template
     __dir__ + '/fixtures/compiler-template.erb'
   end
 end
 
-class MissingAssetSourceView < View
+class MissingAssetSourceView
+  include View
+
   def self.template
     __dir__ + '/fixtures/missing-asset-source.erb'
   end
 end
 
-class UnknownAssetEngineView < View
+class UnknownAssetEngineView
+  include View
+
   def self.template
     __dir__ + '/fixtures/unknown-asset-engine.erb'
   end
 end
 
-class UnchangedCompilerView < View
+class UnchangedCompilerView
+  include View
+
   def self.template
     __dir__ + '/fixtures/unchanged-asset.erb'
   end
 end
 
-class CssCompilerView < View
+class CssCompilerView
+  include View
+
   def self.template
     __dir__ + '/fixtures/compile-css.erb'
   end
 end
 
-class HiddenAssetCompilerView < View
+class HiddenAssetCompilerView
+  include View
+
   def self.template
     __dir__ + '/fixtures/hidden-asset.erb'
   end

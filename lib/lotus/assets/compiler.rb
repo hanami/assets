@@ -36,7 +36,7 @@ module Lotus
       end
 
       def compile
-        raise MissingAsset.new(@name, @definition.sources) unless exist?
+        raise MissingAsset.new(@name, @configuration.sources) unless exist?
         return unless fresh?
 
         if compile?
@@ -50,12 +50,14 @@ module Lotus
 
       private
       def source
-        @source ||= @definition.find(@name)
+        @source ||= @configuration.find(@name)
       end
 
+      # FIXME this has a really poor perf
+      # TODO Move this responsibility to @definition.relative_path
       def destination
         @destination ||= begin
-          @configuration.destination.join(@definition.relative_path(@name)).tap do |dest|
+          Pathname.new(Utils::PathPrefix.new(@configuration.destination).join(@configuration.prefix, @definition.relative_path(@name))).tap do |dest|
             dest.dirname.mkpath
           end
         end

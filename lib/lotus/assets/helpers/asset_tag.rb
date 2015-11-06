@@ -12,9 +12,7 @@ module Lotus
           path       = source
 
           unless absolute_url?(source)
-            path = configuration.prefix.join(definition.prefix, source) +
-              definition.ext
-
+            path = definition.url(configuration, source)
             Assets::Compiler.compile(configuration, type, source)
           end
 

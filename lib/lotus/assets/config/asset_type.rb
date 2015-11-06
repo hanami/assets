@@ -1,5 +1,4 @@
 require 'lotus/utils/path_prefix'
-require 'lotus/assets/config/sources'
 
 module Lotus
   module Assets
@@ -8,24 +7,19 @@ module Lotus
         DEFAULT_PREFIX = '/assets'.freeze
 
         # @api private
-        attr_reader :sources
+        def initialize_copy(original)
+          @destination = original.destination.dup
+          @prefix      = original.prefix.dup
+          @tag         = original.tag.dup
+          @ext         = original.ext.dup
+        end
 
         # @api private
-        def initialize(root, &blk)
-          @sources = Sources.new(root)
-          prefix     DEFAULT_PREFIX
+        def initialize(destination, &blk)
+          @destination = Utils::PathPrefix.new(destination)
+          prefix         DEFAULT_PREFIX
 
           define(&blk) if block_given?
-        end
-
-        # @api private
-        def root=(value)
-          @sources.root = value
-        end
-
-        # @api private
-        def find(name)
-          @sources.find(name)
         end
 
         # @api private
@@ -59,8 +53,17 @@ module Lotus
 
         # @api private
         def relative_path(filename)
-          prefix.relative_join(filename)
+          @destination.relative_join(filename)
         end
+
+        def url(configuration, source)
+          result = prefix.join(configuration.prefix, source) + ext
+          result = configuration.registry.fetch(result.to_s) if configuration.digest
+          result
+        end
+
+        protected
+        attr_reader :destination
       end
     end
   end

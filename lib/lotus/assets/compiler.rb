@@ -77,7 +77,7 @@ module Lotus
       end
 
       def compile!
-        write { Tilt.new(source).render }
+        write { Tilt.new(source, nil, load_paths: @configuration.sources.to_a).render }
       rescue RuntimeError
         raise UnknownAssetEngine.new(source)
       end

@@ -4,6 +4,7 @@ require 'tilt/coffee'
 
 describe 'Compilers' do
   before do
+    require 'lotus/compass'
     fixtures = __dir__ + '/../fixtures'
     TMP.rmtree if TMP.exist?
 
@@ -83,8 +84,10 @@ describe 'Compilers' do
     result = CssCompilerView.new.render
     result.must_include %(<link href="/assets/compile-sass.css" type="text/css" rel="stylesheet">)
 
-    target = @config.destination.join('compile-sass.css')
-    target.read.must_match %(body {\n  font: 100% Helvetica, sans-serif;\n  color: #333; }\n)
+    target  = @config.destination.join('compile-sass.css')
+    content = target.read
+    content.must_match %(body {\n  font: 100% Helvetica, sans-serif;\n  color: #333; }\n)
+    content.must_match %(p {\n  white-space: pre;)
   end
 
   it 'compiles scss asset' do

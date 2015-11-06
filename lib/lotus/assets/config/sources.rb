@@ -33,6 +33,10 @@ module Lotus
           Dir.glob(map {|source| "#{ source }/**/#{ name }*"})
         end
 
+        def to_a
+          map {|s| s }
+        end
+
         private
         def realpath(path)
           @root.join(path).realpath

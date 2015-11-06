@@ -1,6 +1,10 @@
-$font-stack:    Helvetica, sans-serif
-$primary-color: #333
+@import "compass"
+@import "modules/base"
+$font-stack: Helvetica, sans-serif
 
 body
   font: 100% $font-stack
   color: $primary-color
+
+p
+  +force-wrap

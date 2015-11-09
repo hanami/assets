@@ -135,7 +135,7 @@ require 'lotus/assets'
 module Web
   module Views
     class ApplicationLayout
-      include Admin::Layout
+      include Web::Layout
       include Web::Assets::Helpers
     end
   end

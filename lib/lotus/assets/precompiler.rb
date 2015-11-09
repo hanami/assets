@@ -12,9 +12,6 @@ module Lotus
           config.compile true
 
           config.files.each do |file|
-            file = Pathname.new(file)
-            next if file.directory?
-
             Compiler.compile(config, file.to_s, basename(file))
           end
         end

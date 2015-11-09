@@ -77,6 +77,15 @@ module Lotus
       end
 
       def compile!
+        # NOTE `:load_paths' is useful only for Sass engine, to make `@include' directive to work.
+        # For now we don't want to maintan a specialized Compiler version for Sass.
+        #
+        # If in the future other precompilers will need special treatment,
+        # we can consider to maintain several specialized versions in order to
+        # don't add a perf tax to all the other preprocessors who "just work".
+        #
+        # Example: if Less "just works", we can keep it in the general `Compiler',
+        # but have a `SassCompiler` if it requires more than `:load_paths'.
         write { Tilt.new(source, nil, load_paths: @configuration.sources.to_a).render }
       rescue RuntimeError
         raise UnknownAssetEngine.new(source)

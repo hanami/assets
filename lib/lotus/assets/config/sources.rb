@@ -30,7 +30,14 @@ module Lotus
         end
 
         def files(name = nil)
-          Dir.glob(map {|source| "#{ source }/**/#{ name }*"})
+          result = []
+
+          Dir.glob(map {|source| "#{ source }/**/#{ name }*"}).each do |file|
+            next if ::File.directory?(file) || ::File.basename(file).match(/\A\_/)
+            result << file
+          end
+
+          result
         end
 
         def to_a

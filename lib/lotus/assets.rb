@@ -35,7 +35,7 @@ module Lotus
       end
     end
 
-    def self.duplicate(mod, assets = 'Assets', &blk)
+    def self.duplicate(mod, &blk)
       dupe.tap do |duplicated|
         duplicated.configure(&blk) if block_given?
         duplicates << duplicated

@@ -19,6 +19,10 @@ module Lotus
             stylesheet: Config::AssetType.new(@prefix) {
               tag %(<link href="%s" type="text/css" rel="stylesheet">)
               ext %(.css)
+            },
+            image: Config::AssetType.new(@prefix) {
+              tag %(<img src="%s" alt="%s">)
+              ext %()
             }
           })
         end

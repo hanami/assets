@@ -23,10 +23,15 @@ describe 'Rendering test' do
       @result.must_include %(<link href="/assets/main.css" type="text/css" rel="stylesheet">)
     end
 
+    it 'resolves image tag' do
+      @result.must_include %(<img src="/assets/some-image.png" alt="Some Image">)
+    end
+
     it 'caches assets in thread local' do
       assets = Thread.current[:__lotus_assets]
       assets.must_include '/assets/main.css'
       assets.must_include '/assets/feature-a.js'
+      assets.must_include '/assets/some-image.png'
     end
   end
 

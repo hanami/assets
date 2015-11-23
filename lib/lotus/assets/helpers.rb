@@ -1,4 +1,5 @@
 require 'lotus/assets/helpers/asset_tags'
+require 'lotus/assets/helpers/image_tag'
 require 'lotus/utils/escape'
 
 module Lotus
@@ -20,6 +21,12 @@ module Lotus
 
       def stylesheet(*sources)
         _raw_asset(:stylesheet, *sources)
+      end
+
+      def image(source, alt: nil)
+        ::Lotus::Utils::Escape::SafeString.new(
+          ImageTag.render(self.class.assets_configuration, source, alt: alt)
+        )
       end
 
       private

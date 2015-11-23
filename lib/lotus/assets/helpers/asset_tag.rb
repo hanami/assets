@@ -17,7 +17,7 @@ module Lotus
           end
 
           cache(path)
-          definition.tag % path
+          definition.tag % [path, "Some Image"]
         end
 
         private

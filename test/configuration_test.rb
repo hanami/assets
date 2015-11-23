@@ -201,7 +201,7 @@ describe Lotus::Assets::Configuration do
       @config.destination.must_equal Pathname.new(__dir__)
       assert @config.sources == [__dir__ + '/fixtures/javascripts'],
         "Expected #{ @config.sources } to eq [#{ __dir__ }/fixtures/javascripts'], found: #{ @config.sources.inspect }"
-      @config.__send__(:types).types.must_equal [:javascript, :stylesheet, :movie]
+      @config.__send__(:types).types.must_equal [:javascript, :stylesheet, :image, :movie]
     end
 
     it "doesn't affect the original configuration" do
@@ -224,14 +224,14 @@ describe Lotus::Assets::Configuration do
       @config.destination.must_equal Pathname.new(__dir__ + '/fixtures')
       assert @config.sources == [__dir__ + '/fixtures/javascripts', __dir__ + '/fixtures/stylesheets'],
         "Expected @config.sources to eq [#{ __dir__ }/fixtures/javascripts', #{ __dir__ }/fixtures/stylesheets'], found: #{ @config.sources.inspect }"
-      @config.__send__(:types).types.must_equal [:javascript, :stylesheet, :movie, :font]
+      @config.__send__(:types).types.must_equal [:javascript, :stylesheet, :image, :movie, :font]
 
       @configuration.compile.must_equal      true
       @configuration.prefix.must_equal      '/foo'
       @configuration.manifest.must_equal    'm.json'
       @configuration.root.must_equal        Pathname.new(__dir__)
       @configuration.destination.must_equal Pathname.new(__dir__)
-      @configuration.__send__(:types).types.must_equal [:javascript, :stylesheet, :movie]
+      @configuration.__send__(:types).types.must_equal [:javascript, :stylesheet, :image, :movie]
       assert @configuration.sources == [__dir__ + '/fixtures/javascripts'],
         "Expected @config.sources to eq [#{ __dir__ }/fixtures/javascripts'], found: #{ @config.sources.inspect }"
     end

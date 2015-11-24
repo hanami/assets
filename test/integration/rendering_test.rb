@@ -31,7 +31,6 @@ describe 'Rendering test' do
       assets = Thread.current[:__lotus_assets]
       assets.must_include '/assets/main.css'
       assets.must_include '/assets/feature-a.js'
-      assets.must_include '/assets/some-image.png'
     end
   end
 

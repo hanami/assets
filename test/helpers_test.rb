@@ -28,7 +28,7 @@ describe Lotus::Assets::Helpers do
 
   describe '#image' do
     before do
-      @image = DefaultView.new.image('logo')
+      @image = DefaultView.new.image('logo', id: 'my-id', class: 'my-class')
     end
 
     it 'returns an instance of SafeString' do

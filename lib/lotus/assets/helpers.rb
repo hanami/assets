@@ -23,9 +23,9 @@ module Lotus
         _raw_asset(:stylesheet, *sources)
       end
 
-      def image(source, alt: nil)
+      def image(source, *html_options)
         ::Lotus::Utils::Escape::SafeString.new(
-          ImageTag.render(self.class.assets_configuration, source, alt: alt)
+          ImageTag.render(self.class.assets_configuration, source, *html_options)
         )
       end
 

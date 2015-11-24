@@ -19,6 +19,9 @@ module Lotus
             stylesheet: Config::AssetType.new(@prefix) {
               tag %(<link href="%s" type="text/css" rel="stylesheet">)
               ext %(.css)
+            },
+            image: Config::AssetType.new(@prefix) {
+              tag %(<img src="%s" alt="%s">)
             }
           })
         end
@@ -44,6 +47,7 @@ module Lotus
 
         def extension_lookup(filename)
           @types.values.each do |asset_type|
+            next if asset_type.ext.nil?
             return asset_type if filename.match(/#{ asset_type.ext }/)
           end
 

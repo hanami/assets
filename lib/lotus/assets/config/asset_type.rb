@@ -11,7 +11,7 @@ module Lotus
           @destination = original.destination.dup
           @prefix      = original.prefix.dup
           @tag         = original.tag.dup
-          @ext         = original.ext.dup
+          @ext         = original.ext.dup unless original.ext.nil?
         end
 
         # @api private
@@ -57,7 +57,7 @@ module Lotus
         end
 
         def url(configuration, source)
-          result = prefix.join(configuration.prefix, source) + ext
+          result = [prefix.join(configuration.prefix, source), ext].join
           result = configuration.registry.fetch(result.to_s) if configuration.digest
           result
         end

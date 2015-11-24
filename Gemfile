@@ -14,3 +14,11 @@ gem 'lotus-utils', '~> 0.6', github: 'lotus/utils', branch: '0.6.x'
 gem 'lotus-view',  '~> 0.5', github: 'lotus/view',  branch: '0.5.x'
 gem 'lotus-emberjs', path: 'test/fixtures/lotus-emberjs', require: false
 gem 'lotus-compass', path: 'test/fixtures/lotus-compass', require: false
+
+gem 'minitest-reporters', group: :test
+
+group :development do
+  gem 'guard'
+  gem 'guard-minitest'
+  gem 'pry'
+end

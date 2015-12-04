@@ -17,6 +17,10 @@ module Lotus
     class Compiler
       DEFAULT_PERMISSIONS = 0644
 
+      SASS_CACHE_LOCATION = Pathname(Lotus.respond_to?(:root) ?
+                                     Lotus.root : Dir.pwd).join('tmp', 'sass-cache')
+
+
       def self.compile(configuration, type, name)
         return unless configuration.compile
 
@@ -86,7 +90,12 @@ module Lotus
         #
         # Example: if Less "just works", we can keep it in the general `Compiler',
         # but have a `SassCompiler` if it requires more than `:load_paths'.
-        write { Tilt.new(source, nil, load_paths: @configuration.sources.to_a).render }
+        #
+        # NOTE: We need another option to pass for Sass: `:cache_location'.
+        #
+        # This is needed to don't create a `.sass-cache' directory at the root of the project,
+        # but to have it under `tmp/sass-cache'.
+        write { Tilt.new(source, nil, load_paths: @configuration.sources.to_a, cache_location: sass_cache_location).render }
       rescue RuntimeError
         raise UnknownAssetEngine.new(source)
       end
@@ -107,6 +116,10 @@ module Lotus
 
       def cache
         self.class.cache
+      end
+
+      def sass_cache_location
+        SASS_CACHE_LOCATION
       end
     end
   end

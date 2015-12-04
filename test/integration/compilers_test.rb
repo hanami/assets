@@ -80,6 +80,15 @@ describe 'Compilers' do
     target.stat.mode.to_s(8).must_equal('100644')
   end
 
+  it 'uses defined sass cache directory' do
+    directory = Pathname.new(Dir.pwd).join('tmp', 'sass-cache')
+    directory.rmtree if directory.exist?
+
+    CssCompilerView.new.render
+
+    directory.must_be :exist?
+  end
+
   it 'compiles sass asset' do
     result = CssCompilerView.new.render
     result.must_include %(<link href="/assets/compile-sass.css" type="text/css" rel="stylesheet">)

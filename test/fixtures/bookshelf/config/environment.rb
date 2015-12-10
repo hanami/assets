@@ -23,7 +23,7 @@ unless defined?(Web)
       root        __dir__ + '/../../../fixtures/bookshelf/apps/web'
       destination __dir__ + '/../../../../tmp/bookshelf/public/assets'
       manifest   '../assets.json'
-      prefix  '/'
+      prefix     '/assets'
       compile true
 
       sources << [
@@ -59,7 +59,7 @@ unless defined?(Web)
       root        __dir__ + '/../../../fixtures/bookshelf/apps/admin'
       destination __dir__ + '/../../../../tmp/bookshelf/public/assets'
       manifest   '../assets.json'
-      prefix '/admin'
+      prefix     '/assets/admin'
       compile true
 
       sources << [
@@ -94,7 +94,7 @@ unless defined?(Web)
       root        __dir__ + '/../../../fixtures/bookshelf/apps/metrics'
       destination __dir__ + '/../../../../tmp/bookshelf/public/assets'
       manifest   '../assets.json'
-      prefix '/metrics'
+      prefix     '/assets/metrics'
       compile true
 
       sources << [

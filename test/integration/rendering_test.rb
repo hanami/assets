@@ -23,41 +23,17 @@ describe 'Rendering test' do
       @result.must_include %(<link href="/assets/main.css" type="text/css" rel="stylesheet">)
     end
 
-    it 'caches assets in thread local' do
+    it 'stores assets in thread local' do
       assets = Thread.current[:__lotus_assets]
       assets.must_include '/assets/main.css'
       assets.must_include '/assets/feature-a.js'
     end
   end
 
-  describe 'with custom assets path' do
-    before do
-      Lotus::Assets.configure do
-        define :javascript do
-          prefix 'custom-assets-path'
-        end
-
-        define :stylesheet do
-          prefix '/custom-assets-path-for-css'
-        end
-      end
-
-      @result = CustomAssetsPathView.new.render
-    end
-
-    it 'resolves javascript tag under configured path' do
-      @result.must_include %(<script src="/custom-assets-path/feature-a.js" type="text/javascript"></script>)
-    end
-
-    it 'resolves stylesheet tag under configured path' do
-      @result.must_include %(<link href="/custom-assets-path-for-css/main.css" type="text/css" rel="stylesheet">)
-    end
-  end
-
   describe 'with custom assets prefix' do
     before do
       Lotus::Assets.configure do
-        prefix '/prefix'
+        prefix '/assets/prefix'
       end
 
       @result = CustomAssetsPrefix.new.render
@@ -99,6 +75,66 @@ describe 'Rendering test' do
 
     it 'resolves stylesheets tag' do
       @result.must_include %(<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" type="text/css" rel="stylesheet">)
+    end
+  end
+
+  describe 'with assets that need to be preprocessed' do
+    describe 'javascripts' do
+      before do
+        @result = CompilerView.new.render
+      end
+
+      it 'renders script tag for pure javascript source file' do
+        @result.must_include %(<script src="/assets/greet.js" type="text/javascript"></script>)
+      end
+
+      it 'renders script tag for pure javascript source file from nested path' do
+        @result.must_include %(<script src="/assets/bootstrap.js" type="text/javascript"></script>)
+      end
+
+      it 'renders script tag for coffeescript source file from nested path' do
+        @result.must_include %(<script src="/assets/hello.js" type="text/javascript"></script>)
+      end
+
+      it 'renders script tag for es6 source file from nested path' do
+        @result.must_include %(<script src="/assets/person.js" type="text/javascript"></script>)
+      end
+
+      it 'renders script tag for babel source file from nested path' do
+        @result.must_include %(<script src="/assets/country.js" type="text/javascript"></script>)
+      end
+
+      it 'renders script tag for jsx source file from nested path' do
+        @result.must_include %(<script src="/assets/react-component.js" type="text/javascript"></script>)
+      end
+    end
+
+    describe 'stylesheets' do
+      before do
+        @result = CssCompilerView.new.render
+      end
+
+      it 'renders link tag for sass source file' do
+        @result.must_include %(<link href="/assets/compile-sass.css" type="text/css" rel="stylesheet">)
+      end
+
+      it 'renders link tag for scss source file' do
+        @result.must_include %(<link href="/assets/compile-scss.css" type="text/css" rel="stylesheet">)
+      end
+    end
+
+    describe 'unknown engine' do
+      it "doesn't raise error but still render it" do
+        result = UnknownAssetEngineView.new.render
+        result.must_include %(<script src="/assets/ouch.js" type="text/javascript"></script>)
+      end
+    end
+  end
+
+  describe 'missing assets' do
+    it "doesn't raise error but still render it" do
+      result = MissingAssetSourceView.new.render
+      result.must_include %(<script src="/assets/missing.js" type="text/javascript"></script>)
     end
   end
 end

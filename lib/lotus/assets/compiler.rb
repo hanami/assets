@@ -61,7 +61,10 @@ module Lotus
       # TODO Move this responsibility to @definition.relative_path
       def destination
         @destination ||= begin
-          Pathname.new(Utils::PathPrefix.new(@configuration.destination).join(@configuration.prefix, @definition.relative_path(@name))).tap do |dest|
+          # FIXME We should distinguish between URI (path prefix) between file system paths.
+          prefix = @configuration.prefix.to_s.sub(Lotus::Assets::Configuration::DEFAULT_PREFIX, '')
+
+          Pathname.new(Utils::PathPrefix.new(@configuration.destination).join(prefix, @definition.relative_path(@name))).tap do |dest|
             dest.dirname.mkpath
           end
         end

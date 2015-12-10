@@ -3,7 +3,9 @@ require 'json'
 require 'lotus/utils/string'
 require 'lotus/utils/class'
 require 'lotus/utils/path_prefix'
+# FIXME remove
 require 'lotus/assets/config/asset_types'
+
 require 'lotus/assets/config/sources'
 
 module Lotus
@@ -11,7 +13,7 @@ module Lotus
     class Configuration
       DEFAULT_DESTINATION = 'public'.freeze
       DEFAULT_MANIFEST    = 'assets.json'.freeze
-      DISCARDED_PREFIX    = '/'.freeze
+      DEFAULT_PREFIX      = '/assets'.freeze
 
       def self.for(base)
         # TODO this implementation is similar to Lotus::Controller::Configuration consider to extract it into Lotus::Utils
@@ -46,12 +48,8 @@ module Lotus
         if value.nil?
           @prefix
         else
-          @prefix = Utils::PathPrefix.new(value) unless DISCARDED_PREFIX == value
+          @prefix = Utils::PathPrefix.new(value)
         end
-      end
-
-      def define(type, &blk)
-        @types.define(type, &blk)
       end
 
       def root(value = nil)
@@ -97,11 +95,19 @@ module Lotus
         @sources.find(file)
       end
 
+      # @api private
+      def asset_path(source)
+        result = prefix.join(source)
+        result = registry.fetch(result.to_s) if digest
+        result
+      end
+
       def duplicate
         Configuration.new.tap do |c|
           c.root        = root
           c.prefix      = prefix
           c.compile     = compile
+          # FIXME remove
           c.types       = types.dup
           c.destination = destination
           c.manifest    = manifest
@@ -110,7 +116,8 @@ module Lotus
       end
 
       def reset!
-        @prefix  = Utils::PathPrefix.new
+        @prefix  = Utils::PathPrefix.new(DEFAULT_PREFIX)
+        # FIXME remove
         @types   = Config::AssetTypes.new(@prefix)
         @compile = false
 
@@ -126,6 +133,7 @@ module Lotus
       end
 
       # @api private
+      # FIXME remove
       def asset(type)
         @types.asset(type)
       end
@@ -137,6 +145,7 @@ module Lotus
       attr_writer :destination
       attr_writer :manifest
       attr_writer :sources
+      # FIXME remove
       attr_accessor :types
     end
   end

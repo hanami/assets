@@ -10,7 +10,7 @@ module Lotus
         end
 
         def initialize(prefix)
-          @prefix = prefix
+          @prefix = ""
           @types  = Utils::Hash.new({
             javascript: Config::AssetType.new(@prefix) {
               tag %(<script src="%s" type="text/javascript"></script>)

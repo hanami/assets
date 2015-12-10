@@ -1,3 +1,5 @@
+require 'lotus/assets/compiler'
+
 module Lotus
   module Assets
     class Precompiler

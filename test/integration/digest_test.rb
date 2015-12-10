@@ -2,6 +2,7 @@ require 'test_helper'
 
 describe 'Digest mode' do
   before do
+    # FIXME delete this
     dest.rmtree if dest.exist?
     dest.mkpath
 
@@ -16,6 +17,7 @@ describe 'Digest mode' do
     end
   end
 
+  # FIXME delete this
   let(:dest) { TMP.join('bookshelf', 'public') }
 
   it "uses digest relative urls" do

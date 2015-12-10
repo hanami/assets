@@ -32,52 +32,14 @@ describe Lotus::Assets::Configuration do
   end
 
   describe '#prefix' do
-    it 'returns empty value default' do
+    it 'returns "/assets" value default' do
       @configuration.prefix.must_be_kind_of(Lotus::Utils::PathPrefix)
-      @configuration.prefix.to_s.must_be_empty
+      @configuration.prefix.must_equal "/assets"
     end
 
     it 'allows to set a value' do
       @configuration.prefix            'application-prefix'
       @configuration.prefix.must_equal 'application-prefix'
-    end
-
-    it 'ignores "/"' do
-      @configuration.prefix            '/'
-      @configuration.prefix.must_equal ''
-    end
-  end
-
-  describe '#define' do
-    it 'allows to define a custom asset type' do
-      @configuration.define :custom do
-        tag %(<link rel="text/x-custom src="%s">)
-        ext %(.custom)
-      end
-
-      asset = @configuration.asset(:custom)
-      asset.tag.must_equal %(<link rel="text/x-custom src="%s">)
-      asset.ext.must_equal %(.custom)
-    end
-
-    it 'accepts strings as name of the asset type' do
-      @configuration.define 'custom2' do
-        ext %(.custom2)
-      end
-
-      asset = @configuration.asset(:custom2)
-      asset.ext.must_equal %(.custom2)
-    end
-
-    it 'allows to modify existing asset types' do
-      @configuration.define :javascript do
-        prefix 'dest-js'
-      end
-
-      asset = @configuration.asset(:javascript)
-      asset.tag.must_equal    %(<script src="%s" type="text/javascript"></script>)
-      asset.ext.must_equal    %(.js)
-      asset.prefix.must_equal %(dest-js)
     end
   end
 
@@ -137,15 +99,6 @@ describe Lotus::Assets::Configuration do
       @configuration.manifest 'assets.json'
       @configuration.destination(Dir.pwd + '/tmp')
 
-      @configuration.define :stylesheet do
-        ext %(.CSS)
-      end
-
-      @configuration.define :cuztom do
-        tag %(<link rel="text/xy-custom src="%s">)
-        ext %(.cstm)
-      end
-
       @configuration.reset!
     end
 
@@ -155,7 +108,7 @@ describe Lotus::Assets::Configuration do
 
     it 'sets default value for prefix' do
       @configuration.prefix.must_be_kind_of(Lotus::Utils::PathPrefix)
-      @configuration.prefix.to_s.must_be_empty
+      @configuration.prefix.must_equal '/assets'
     end
 
     it 'sets default value for manifest' do
@@ -185,10 +138,6 @@ describe Lotus::Assets::Configuration do
       @configuration.root        __dir__
       @configuration.destination __dir__
       @configuration.sources << __dir__ + '/fixtures/javascripts'
-      @configuration.define(:movie) do
-        tag %(<movie>)
-        ext %(.mov)
-      end
 
       @config = @configuration.duplicate
     end
@@ -201,7 +150,6 @@ describe Lotus::Assets::Configuration do
       @config.destination.must_equal Pathname.new(__dir__)
       assert @config.sources == [__dir__ + '/fixtures/javascripts'],
         "Expected #{ @config.sources } to eq [#{ __dir__ }/fixtures/javascripts'], found: #{ @config.sources.inspect }"
-      @config.__send__(:types).types.must_equal [:javascript, :stylesheet, :movie]
     end
 
     it "doesn't affect the original configuration" do
@@ -212,11 +160,6 @@ describe Lotus::Assets::Configuration do
       @config.destination __dir__ + '/fixtures'
       @config.sources <<  __dir__ + '/fixtures/stylesheets'
 
-      @config.define(:font) do
-        tag %(<font>)
-        ext %(.woff)
-      end
-
       @config.compile.must_equal      false
       @config.prefix.must_equal      '/bar'
       @config.manifest.must_equal    'a.json'
@@ -224,14 +167,12 @@ describe Lotus::Assets::Configuration do
       @config.destination.must_equal Pathname.new(__dir__ + '/fixtures')
       assert @config.sources == [__dir__ + '/fixtures/javascripts', __dir__ + '/fixtures/stylesheets'],
         "Expected @config.sources to eq [#{ __dir__ }/fixtures/javascripts', #{ __dir__ }/fixtures/stylesheets'], found: #{ @config.sources.inspect }"
-      @config.__send__(:types).types.must_equal [:javascript, :stylesheet, :movie, :font]
 
       @configuration.compile.must_equal      true
       @configuration.prefix.must_equal      '/foo'
       @configuration.manifest.must_equal    'm.json'
       @configuration.root.must_equal        Pathname.new(__dir__)
       @configuration.destination.must_equal Pathname.new(__dir__)
-      @configuration.__send__(:types).types.must_equal [:javascript, :stylesheet, :movie]
       assert @configuration.sources == [__dir__ + '/fixtures/javascripts'],
         "Expected @config.sources to eq [#{ __dir__ }/fixtures/javascripts'], found: #{ @config.sources.inspect }"
     end

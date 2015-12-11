@@ -8,9 +8,9 @@ require 'lotus/assets/config/sources'
 module Lotus
   module Assets
     class Configuration
-      DEFAULT_DESTINATION = 'public'.freeze
-      DEFAULT_MANIFEST    = 'assets.json'.freeze
-      DEFAULT_PREFIX      = '/assets'.freeze
+      DEFAULT_PUBLIC_DIRECTORY = 'public'.freeze
+      DEFAULT_MANIFEST         = 'assets.json'.freeze
+      DEFAULT_PREFIX           = '/assets'.freeze
 
       def self.for(base)
         # TODO this implementation is similar to Lotus::Controller::Configuration consider to extract it into Lotus::Utils
@@ -58,11 +58,11 @@ module Lotus
         end
       end
 
-      def destination(value = nil)
+      def public_directory(value = nil)
         if value.nil?
-          @destination
+          @public_directory
         else
-          @destination = Pathname.new(::File.expand_path(value))
+          @public_directory = Pathname.new(::File.expand_path(value))
         end
       end
 
@@ -76,7 +76,7 @@ module Lotus
 
       # @api private
       def manifest_path
-        destination.join(manifest)
+        public_directory.join(manifest)
       end
 
       def sources
@@ -101,12 +101,12 @@ module Lotus
 
       def duplicate
         Configuration.new.tap do |c|
-          c.root        = root
-          c.prefix      = prefix
-          c.compile     = compile
-          c.destination = destination
-          c.manifest    = manifest
-          c.sources     = sources.dup
+          c.root             = root
+          c.prefix           = prefix
+          c.compile          = compile
+          c.public_directory = public_directory
+          c.manifest         = manifest
+          c.sources          = sources.dup
         end
       end
 
@@ -114,9 +114,9 @@ module Lotus
         @prefix  = Utils::PathPrefix.new(DEFAULT_PREFIX)
         @compile = false
 
-        root        Dir.pwd
-        destination root.join(DEFAULT_DESTINATION)
-        manifest    DEFAULT_MANIFEST
+        root             Dir.pwd
+        public_directory root.join(DEFAULT_PUBLIC_DIRECTORY)
+        manifest         DEFAULT_MANIFEST
       end
 
       def load!
@@ -129,7 +129,7 @@ module Lotus
       attr_writer :compile
       attr_writer :prefix
       attr_writer :root
-      attr_writer :destination
+      attr_writer :public_directory
       attr_writer :manifest
       attr_writer :sources
     end

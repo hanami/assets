@@ -81,7 +81,7 @@ module Lotus
       end
 
       def destination
-        @configuration.destination
+        @configuration.public_directory
       end
     end
   end

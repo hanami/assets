@@ -177,7 +177,7 @@ When from a template you do:
 `Lotus::Assets` looks at the defined sources and **lazily copies** those files
 under `public/assets` (by default), before the markup is generated.
 
-Your destination directory will have the following structure.
+Your public directory will have the following structure.
 
 ```shell
 % tree public
@@ -192,7 +192,7 @@ public/
 **Please remember that sources are recursively looked up in order of declaration.**
 
 If in the example above we had a `jquery.js` under `app/assets/javascripts/**/*.js`
-that file would be copied into the destination folder instead of the one under
+that file would be copied into the public directory instead of the one under
 `vendor/jquery`. The reason is because we declared `app/assets/javascripts` first.
 
 #### Preprocessors
@@ -228,7 +228,7 @@ When from a template you do:
 <%= stylesheet 'reset', 'main' %>
 ```
 
-Your destination directory will have the following structure.
+Your public directory will have the following structure.
 
 ```shell
 % tree public

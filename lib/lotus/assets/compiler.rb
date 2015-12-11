@@ -64,7 +64,7 @@ module Lotus
       # FIXME this has a really poor perf
       def destination
         @destination ||= begin
-          Pathname.new(Utils::PathPrefix.new(@configuration.destination).join(@configuration.prefix.to_s, basename)).tap do |dest|
+          Pathname.new(Utils::PathPrefix.new(@configuration.public_directory).join(@configuration.prefix.to_s, basename)).tap do |dest|
             dest.dirname.mkpath
           end
         end

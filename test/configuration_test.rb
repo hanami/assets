@@ -43,16 +43,16 @@ describe Lotus::Assets::Configuration do
     end
   end
 
-  describe '#destination' do
+  describe '#public_directory' do
     it 'defaults to "public/" on current directory' do
       expected = Pathname.new(Dir.pwd + '/public')
-      @configuration.destination.must_equal(expected)
+      @configuration.public_directory.must_equal(expected)
     end
 
     it 'allows to set a custom location' do
       dest = __dir__ + '/../tmp'
-      @configuration.destination(dest)
-      @configuration.destination.must_equal(Pathname.new(File.expand_path(dest)))
+      @configuration.public_directory(dest)
+      @configuration.public_directory.must_equal(Pathname.new(File.expand_path(dest)))
     end
   end
 
@@ -68,8 +68,8 @@ describe Lotus::Assets::Configuration do
   end
 
   describe '#manifest_path' do
-    it 'joins #manifest with #destination' do
-      expected = @configuration.destination.join(@configuration.manifest)
+    it 'joins #manifest with #public_directory' do
+      expected = @configuration.public_directory.join(@configuration.manifest)
       @configuration.manifest_path.must_equal expected
     end
 
@@ -83,13 +83,13 @@ describe Lotus::Assets::Configuration do
     before do
       @configuration.prefix 'prfx'
       @configuration.manifest 'assets.json'
-      @configuration.destination(Dir.pwd + '/tmp')
+      @configuration.public_directory(Dir.pwd + '/tmp')
 
       @configuration.reset!
     end
 
-    it 'sets default value for destination' do
-      @configuration.destination.must_equal(Pathname.new(Dir.pwd + '/public'))
+    it 'sets default value for public directory' do
+      @configuration.public_directory.must_equal(Pathname.new(Dir.pwd + '/public'))
     end
 
     it 'sets default value for prefix' do
@@ -105,47 +105,47 @@ describe Lotus::Assets::Configuration do
   describe '#duplicate' do
     before do
       @configuration.reset!
-      @configuration.compile     true
-      @configuration.prefix      '/foo'
-      @configuration.manifest    'm.json'
-      @configuration.root        __dir__
-      @configuration.destination __dir__
-      @configuration.sources << __dir__ + '/fixtures/javascripts'
+      @configuration.compile          true
+      @configuration.prefix           '/foo'
+      @configuration.manifest         'm.json'
+      @configuration.root             __dir__
+      @configuration.public_directory __dir__
+      @configuration.sources       << __dir__ + '/fixtures/javascripts'
 
       @config = @configuration.duplicate
     end
 
     it 'returns a copy of the configuration' do
-      @config.compile.must_equal      true
-      @config.prefix.must_equal      '/foo'
-      @config.manifest.must_equal    'm.json'
-      @config.root.must_equal        Pathname.new(__dir__)
-      @config.destination.must_equal Pathname.new(__dir__)
+      @config.compile.must_equal          true
+      @config.prefix.must_equal           '/foo'
+      @config.manifest.must_equal         'm.json'
+      @config.root.must_equal             Pathname.new(__dir__)
+      @config.public_directory.must_equal Pathname.new(__dir__)
       assert @config.sources == [__dir__ + '/fixtures/javascripts'],
         "Expected #{ @config.sources } to eq [#{ __dir__ }/fixtures/javascripts'], found: #{ @config.sources.inspect }"
     end
 
     it "doesn't affect the original configuration" do
-      @config.compile     false
-      @config.prefix      '/bar'
-      @config.manifest    'a.json'
-      @config.root        __dir__ + '/fixtures'
-      @config.destination __dir__ + '/fixtures'
+      @config.compile          false
+      @config.prefix           '/bar'
+      @config.manifest         'a.json'
+      @config.root             __dir__ + '/fixtures'
+      @config.public_directory __dir__ + '/fixtures'
       @config.sources <<  __dir__ + '/fixtures/stylesheets'
 
-      @config.compile.must_equal      false
-      @config.prefix.must_equal      '/bar'
-      @config.manifest.must_equal    'a.json'
-      @config.root.must_equal        Pathname.new(__dir__ + '/fixtures')
-      @config.destination.must_equal Pathname.new(__dir__ + '/fixtures')
+      @config.compile.must_equal          false
+      @config.prefix.must_equal           '/bar'
+      @config.manifest.must_equal         'a.json'
+      @config.root.must_equal             Pathname.new(__dir__ + '/fixtures')
+      @config.public_directory.must_equal Pathname.new(__dir__ + '/fixtures')
       assert @config.sources == [__dir__ + '/fixtures/javascripts', __dir__ + '/fixtures/stylesheets'],
         "Expected @config.sources to eq [#{ __dir__ }/fixtures/javascripts', #{ __dir__ }/fixtures/stylesheets'], found: #{ @config.sources.inspect }"
 
-      @configuration.compile.must_equal      true
-      @configuration.prefix.must_equal      '/foo'
-      @configuration.manifest.must_equal    'm.json'
-      @configuration.root.must_equal        Pathname.new(__dir__)
-      @configuration.destination.must_equal Pathname.new(__dir__)
+      @configuration.compile.must_equal          true
+      @configuration.prefix.must_equal           '/foo'
+      @configuration.manifest.must_equal         'm.json'
+      @configuration.root.must_equal             Pathname.new(__dir__)
+      @configuration.public_directory.must_equal Pathname.new(__dir__)
       assert @configuration.sources == [__dir__ + '/fixtures/javascripts'],
         "Expected @config.sources to eq [#{ __dir__ }/fixtures/javascripts'], found: #{ @config.sources.inspect }"
     end

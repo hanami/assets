@@ -9,14 +9,14 @@ describe Lotus::Assets::Bundler do
     dest.mkpath
 
     FileUtils.copy_entry(source, dest.join('assets'))
-    config.destination.must_equal(dest) # better safe than sorry ;-)
+    config.public_directory.must_equal(dest) # better safe than sorry ;-)
 
     Lotus::Assets::Bundler.new(config).run
   end
 
   let(:config) do
     Lotus::Assets::Configuration.new.tap do |c|
-      c.destination dest
+      c.public_directory dest
     end
   end
 

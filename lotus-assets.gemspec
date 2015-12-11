@@ -19,6 +19,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_runtime_dependency 'lotus-utils',    '~> 0.6'
+  spec.add_runtime_dependency 'lotus-helpers',  '~> 0.2', '>= 0.2.5'
   spec.add_runtime_dependency 'tilt',           '~> 2.0', '>= 2.0.1'
   spec.add_runtime_dependency 'yui-compressor', '~> 0.12'
 

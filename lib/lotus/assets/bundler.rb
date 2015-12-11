@@ -32,7 +32,7 @@ module Lotus
       private
 
       def assets
-        Dir.glob("#{ destination }/**/*")
+        Dir.glob("#{ destination }#{ ::File::SEPARATOR }**#{ ::File::SEPARATOR }*")
       end
 
       def compress(asset)
@@ -81,7 +81,7 @@ module Lotus
       end
 
       def destination
-        @configuration.destination
+        @configuration.public_directory
       end
     end
   end

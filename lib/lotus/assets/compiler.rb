@@ -17,26 +17,27 @@ module Lotus
     class Compiler
       DEFAULT_PERMISSIONS = 0644
 
+      COMPILE_PATTERN = '*.*.*'.freeze # Example hello.js.es6
+
       SASS_CACHE_LOCATION = Pathname(Lotus.respond_to?(:root) ?
                                      Lotus.root : Dir.pwd).join('tmp', 'sass-cache')
 
 
-      def self.compile(configuration, type, name)
+      def self.compile(configuration, name)
         return unless configuration.compile
 
         require 'tilt'
         require 'lotus/assets/cache'
-        new(configuration, type, name).compile
+        new(configuration, name).compile
       end
 
       def self.cache
         @@cache ||= Assets::Cache.new
       end
 
-      def initialize(configuration, type, name)
+      def initialize(configuration, name)
         @configuration = configuration
-        @definition    = @configuration.asset(type)
-        @name          = name + @definition.ext
+        @name          = Pathname.new(name)
       end
 
       def compile
@@ -54,21 +55,24 @@ module Lotus
 
       private
       def source
-        @source ||= @configuration.find(@name)
-      end
-
-      # FIXME this has a really poor perf
-      # TODO Move this responsibility to @definition.relative_path
-      def destination
-        @destination ||= begin
-          Pathname.new(Utils::PathPrefix.new(@configuration.destination).join(@configuration.prefix, @definition.relative_path(@name))).tap do |dest|
-            dest.dirname.mkpath
-          end
+        @source ||= begin
+          @name.absolute? ? @name :
+            @configuration.find(@name)
         end
       end
 
+      def destination
+        @destination ||= @configuration.destination_directory.join(basename)
+      end
+
+      def basename
+        result = ::File.basename(@name)
+        result.scan(/\A[[[:alnum:]][\-\_]]*\.[[\w]]*/).first || result
+      end
+
       def exist?
-        !source.nil?
+        !source.nil? &&
+          source.exist?
       end
 
       def fresh?
@@ -77,7 +81,7 @@ module Lotus
       end
 
       def compile?
-        source.extname != @definition.ext
+        ::File.fnmatch(COMPILE_PATTERN, source.to_s)
       end
 
       def compile!

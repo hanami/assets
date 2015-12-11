@@ -66,10 +66,10 @@ describe 'Precompile' do
     assert system("bundle exec bin/lotus-assets --config=#{ configuration_path }"),
       "Expected bin/lotus-assets to be successful"
 
-    # This is useful for debug
-    #
-    # load configuration_path
-    # Lotus::Assets.deploy
+     # This is useful for debug
+     #
+     # load configuration_path
+     # Lotus::Assets.deploy
   end
 
   def assert_successful_output(expected)

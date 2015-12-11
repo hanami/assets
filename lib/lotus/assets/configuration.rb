@@ -3,15 +3,15 @@ require 'json'
 require 'lotus/utils/string'
 require 'lotus/utils/class'
 require 'lotus/utils/path_prefix'
-require 'lotus/assets/config/asset_types'
 require 'lotus/assets/config/sources'
 
 module Lotus
   module Assets
     class Configuration
-      DEFAULT_DESTINATION = 'public'.freeze
-      DEFAULT_MANIFEST    = 'assets.json'.freeze
-      DISCARDED_PREFIX    = '/'.freeze
+      DEFAULT_PUBLIC_DIRECTORY = 'public'.freeze
+      DEFAULT_MANIFEST         = 'assets.json'.freeze
+      DEFAULT_PREFIX           = '/assets'.freeze
+      URL_SEPARATOR            = '/'.freeze
 
       def self.for(base)
         # TODO this implementation is similar to Lotus::Controller::Configuration consider to extract it into Lotus::Utils
@@ -46,12 +46,8 @@ module Lotus
         if value.nil?
           @prefix
         else
-          @prefix = Utils::PathPrefix.new(value) unless DISCARDED_PREFIX == value
+          @prefix = Utils::PathPrefix.new(value)
         end
-      end
-
-      def define(type, &blk)
-        @types.define(type, &blk)
       end
 
       def root(value = nil)
@@ -63,11 +59,19 @@ module Lotus
         end
       end
 
-      def destination(value = nil)
+      def public_directory(value = nil)
         if value.nil?
-          @destination
+          @public_directory
         else
-          @destination = Pathname.new(::File.expand_path(value))
+          @public_directory = Pathname.new(::File.expand_path(value))
+        end
+      end
+
+      def destination_directory
+        @destination_directory ||= begin
+          public_directory.join(*prefix.split(URL_SEPARATOR)).tap do |dest|
+            dest.mkpath
+          end
         end
       end
 
@@ -81,7 +85,7 @@ module Lotus
 
       # @api private
       def manifest_path
-        destination.join(manifest)
+        public_directory.join(manifest)
       end
 
       def sources
@@ -97,26 +101,32 @@ module Lotus
         @sources.find(file)
       end
 
+      # @api private
+      def asset_path(source)
+        result = prefix.join(source)
+        result = registry.fetch(result.to_s) if digest
+        result
+      end
+
       def duplicate
         Configuration.new.tap do |c|
-          c.root        = root
-          c.prefix      = prefix
-          c.compile     = compile
-          c.types       = types.dup
-          c.destination = destination
-          c.manifest    = manifest
-          c.sources     = sources.dup
+          c.root             = root
+          c.prefix           = prefix
+          c.compile          = compile
+          c.public_directory = public_directory
+          c.manifest         = manifest
+          c.sources          = sources.dup
         end
       end
 
       def reset!
-        @prefix  = Utils::PathPrefix.new
-        @types   = Config::AssetTypes.new(@prefix)
-        @compile = false
+        @prefix                = Utils::PathPrefix.new(DEFAULT_PREFIX)
+        @compile               = false
+        @destination_directory = nil
 
-        root        Dir.pwd
-        destination root.join(DEFAULT_DESTINATION)
-        manifest    DEFAULT_MANIFEST
+        root             Dir.pwd
+        public_directory root.join(DEFAULT_PUBLIC_DIRECTORY)
+        manifest         DEFAULT_MANIFEST
       end
 
       def load!
@@ -125,19 +135,13 @@ module Lotus
         end
       end
 
-      # @api private
-      def asset(type)
-        @types.asset(type)
-      end
-
       protected
       attr_writer :compile
       attr_writer :prefix
       attr_writer :root
-      attr_writer :destination
+      attr_writer :public_directory
       attr_writer :manifest
       attr_writer :sources
-      attr_accessor :types
     end
   end
 end

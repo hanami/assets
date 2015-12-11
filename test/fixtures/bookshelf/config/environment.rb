@@ -5,7 +5,7 @@ require 'lotus/assets/es6'
 require 'lotus/emberjs'
 
 Lotus::Assets.configure do
-  destination __dir__ + '/../../../../tmp/bookshelf/public'
+  public_directory __dir__ + '/../../../../tmp/bookshelf/public'
 end
 
 unless defined?(Web)
@@ -20,11 +20,11 @@ unless defined?(Web)
     end
 
     Assets = Lotus::Assets.duplicate(self) do
-      root        __dir__ + '/../../../fixtures/bookshelf/apps/web'
-      destination __dir__ + '/../../../../tmp/bookshelf/public/assets'
-      manifest   '../assets.json'
-      prefix  '/'
-      compile true
+      root             __dir__ + '/../../../fixtures/bookshelf/apps/web'
+      public_directory __dir__ + '/../../../../tmp/bookshelf/public'
+      manifest         'assets.json'
+      prefix           '/assets'
+      compile          true
 
       sources << [
         'assets',
@@ -56,11 +56,11 @@ unless defined?(Web)
     end
 
     Assets = Lotus::Assets.duplicate(self) do
-      root        __dir__ + '/../../../fixtures/bookshelf/apps/admin'
-      destination __dir__ + '/../../../../tmp/bookshelf/public/assets'
-      manifest   '../assets.json'
-      prefix '/admin'
-      compile true
+      root             __dir__ + '/../../../fixtures/bookshelf/apps/admin'
+      public_directory __dir__ + '/../../../../tmp/bookshelf/public'
+      manifest         'assets.json'
+      prefix           '/assets/admin'
+      compile          true
 
       sources << [
         'assets'
@@ -91,11 +91,11 @@ unless defined?(Web)
     end
 
     Assets = Lotus::Assets.duplicate(self) do
-      root        __dir__ + '/../../../fixtures/bookshelf/apps/metrics'
-      destination __dir__ + '/../../../../tmp/bookshelf/public/assets'
-      manifest   '../assets.json'
-      prefix '/metrics'
-      compile true
+      root             __dir__ + '/../../../fixtures/bookshelf/apps/metrics'
+      public_directory __dir__ + '/../../../../tmp/bookshelf/public'
+      manifest         'assets.json'
+      prefix           '/assets/metrics'
+      compile          true
 
       sources << [
         'assets'

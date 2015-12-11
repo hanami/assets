@@ -11,6 +11,7 @@ module Lotus
       DEFAULT_PUBLIC_DIRECTORY = 'public'.freeze
       DEFAULT_MANIFEST         = 'assets.json'.freeze
       DEFAULT_PREFIX           = '/assets'.freeze
+      URL_SEPARATOR            = '/'.freeze
 
       def self.for(base)
         # TODO this implementation is similar to Lotus::Controller::Configuration consider to extract it into Lotus::Utils
@@ -66,6 +67,14 @@ module Lotus
         end
       end
 
+      def destination_directory
+        @destination_directory ||= begin
+          public_directory.join(*prefix.split(URL_SEPARATOR)).tap do |dest|
+            dest.mkpath
+          end
+        end
+      end
+
       def manifest(value = nil)
         if value.nil?
           @manifest
@@ -111,8 +120,9 @@ module Lotus
       end
 
       def reset!
-        @prefix  = Utils::PathPrefix.new(DEFAULT_PREFIX)
-        @compile = false
+        @prefix                = Utils::PathPrefix.new(DEFAULT_PREFIX)
+        @compile               = false
+        @destination_directory = nil
 
         root             Dir.pwd
         public_directory root.join(DEFAULT_PUBLIC_DIRECTORY)

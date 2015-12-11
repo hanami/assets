@@ -25,12 +25,6 @@ module Lotus
         @duplicates.empty? ?
           [Lotus::Assets] : @duplicates
       end
-
-      def basename(file)
-        File.basename(
-          file.to_s.sub(/\.(.*)\z/, '')
-        )
-      end
     end
   end
 end

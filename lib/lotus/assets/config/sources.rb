@@ -32,7 +32,7 @@ module Lotus
         def files(name = nil)
           result = []
 
-          Dir.glob(map {|source| "#{ source }/**/#{ name }*"}).each do |file|
+          Dir.glob(map {|source| "#{ source }#{ ::File::SEPARATOR }**#{ ::File::SEPARATOR }#{ name }*"}).each do |file|
             next if ::File.directory?(file) || ::File.basename(file).match(/\A\_/)
             result << file
           end

@@ -31,13 +31,16 @@ describe 'Precompile' do
       ['jquery.js',
        'bookshelf.jpg',
        'ember.js',              # this is a duplicate
+       'ember.min.js',          # this is a duplicate
        'ember-source.js',       # this is a duplicate
        'application.js',
        'admin/ember.js',        # this is a duplicate
+       'admin/ember.min.js',    # this is a duplicate
        'admin/ember-source.js', # this is a duplicate
        'admin/zepto.js',
        'admin/application.js',
        'metrics/ember.js',
+       'metrics/ember.min.js',
        'metrics/ember-source.js',
        'metrics/dashboard.js']
     end

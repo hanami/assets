@@ -19,6 +19,8 @@ module Lotus
 
       COMPILE_PATTERN = '*.*.*'.freeze # Example hello.js.es6
 
+      EXTENSIONS = {'.js' => true, '.css' => true}.freeze
+
       SASS_CACHE_LOCATION = Pathname(Lotus.respond_to?(:root) ?
                                      Lotus.root : Dir.pwd).join('tmp', 'sass-cache')
 
@@ -67,7 +69,12 @@ module Lotus
 
       def basename
         result = ::File.basename(@name)
-        result.scan(/\A[[[:alnum:]][\-\_]]*\.[[\w]]*/).first || result
+
+        if compile?
+          result.scan(/\A[[[:alnum:]][\-\_]]*\.[[\w]]*/).first || result
+        else
+          result
+        end
       end
 
       def exist?
@@ -81,7 +88,8 @@ module Lotus
       end
 
       def compile?
-        ::File.fnmatch(COMPILE_PATTERN, source.to_s)
+        @compile ||= ::File.fnmatch(COMPILE_PATTERN, source.to_s) &&
+          !EXTENSIONS[::File.extname(source.to_s)]
       end
 
       def compile!

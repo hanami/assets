@@ -3,10 +3,6 @@ require __dir__ + '/../fixtures/bookshelf/config/environment'
 
 describe "Lotus::View integration" do
   before do
-    # FIXME delete this
-    dest.rmtree if dest.exist?
-    dest.mkpath
-
     frameworks = [Web::Assets, Admin::Assets]
     frameworks.each do |framework|
       framework.configure do
@@ -14,9 +10,6 @@ describe "Lotus::View integration" do
       end
     end
   end
-
-  # FIXME delete this
-  let(:dest) { TMP.join('bookshelf', 'public') }
 
   it "renders assets from the root path" do
     rendered = Web::Views::Books::Show.render(format: :html)

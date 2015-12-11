@@ -4,7 +4,7 @@ require 'lotus/view'
 
 Lotus::Assets.configure do
   root        __dir__ + '/..'
-  destination __dir__ + '/../../../../tmp/standalone/public/assets'
+  destination __dir__ + '/../../../../tmp/standalone/public'
   prefix  '/assets'
 
   sources << [

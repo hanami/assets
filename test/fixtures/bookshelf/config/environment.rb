@@ -21,8 +21,8 @@ unless defined?(Web)
 
     Assets = Lotus::Assets.duplicate(self) do
       root        __dir__ + '/../../../fixtures/bookshelf/apps/web'
-      destination __dir__ + '/../../../../tmp/bookshelf/public/assets'
-      manifest   '../assets.json'
+      destination __dir__ + '/../../../../tmp/bookshelf/public'
+      manifest   'assets.json'
       prefix     '/assets'
       compile true
 
@@ -57,8 +57,8 @@ unless defined?(Web)
 
     Assets = Lotus::Assets.duplicate(self) do
       root        __dir__ + '/../../../fixtures/bookshelf/apps/admin'
-      destination __dir__ + '/../../../../tmp/bookshelf/public/assets'
-      manifest   '../assets.json'
+      destination __dir__ + '/../../../../tmp/bookshelf/public'
+      manifest   'assets.json'
       prefix     '/assets/admin'
       compile true
 
@@ -92,8 +92,8 @@ unless defined?(Web)
 
     Assets = Lotus::Assets.duplicate(self) do
       root        __dir__ + '/../../../fixtures/bookshelf/apps/metrics'
-      destination __dir__ + '/../../../../tmp/bookshelf/public/assets'
-      manifest   '../assets.json'
+      destination __dir__ + '/../../../../tmp/bookshelf/public'
+      manifest   'assets.json'
       prefix     '/assets/metrics'
       compile true
 

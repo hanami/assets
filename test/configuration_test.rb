@@ -79,20 +79,6 @@ describe Lotus::Assets::Configuration do
     end
   end
 
-  describe '#asset' do
-    it 'returns an asset definition' do
-      asset_type = @configuration.asset(:javascript)
-      asset_type.must_be_kind_of(Lotus::Assets::Config::AssetType)
-      asset_type.ext.must_equal '.js'
-    end
-
-    it 'returns anonymous asset type' do
-      asset_type = @configuration.asset('logo.png')
-      asset_type.must_be_kind_of(Lotus::Assets::Config::AssetType)
-      asset_type.ext.must_equal '.png'
-    end
-  end
-
   describe '#reset!' do
     before do
       @configuration.prefix 'prfx'
@@ -113,19 +99,6 @@ describe Lotus::Assets::Configuration do
 
     it 'sets default value for manifest' do
       @configuration.manifest.must_equal('assets.json')
-    end
-
-    it 'removes custom defined asset types' do
-      asset_type = @configuration.asset(:cuztom)
-      asset_type.must_be_kind_of(Lotus::Assets::Config::AssetType)
-      asset_type.ext.must_equal ""
-    end
-
-    it 'sets default value for predefined asset type' do
-      asset = @configuration.asset(:stylesheet)
-      asset.tag.must_equal    %(<link href="%s" type="text/css" rel="stylesheet">)
-      asset.ext.must_equal    %(.css)
-      asset.prefix.must_equal %(/assets)
     end
   end
 

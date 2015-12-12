@@ -121,6 +121,7 @@ module Lotus
       end
 
       def write
+        destination.dirname.mkpath
         destination.open(File::WRONLY|File::CREAT, DEFAULT_PERMISSIONS) do |file|
           file.write(yield)
         end

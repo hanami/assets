@@ -68,11 +68,7 @@ module Lotus
       end
 
       def destination_directory
-        @destination_directory ||= begin
-          public_directory.join(*prefix.split(URL_SEPARATOR)).tap do |dest|
-            dest.mkpath
-          end
-        end
+        @destination_directory ||= public_directory.join(*prefix.split(URL_SEPARATOR))
       end
 
       def manifest(value = nil)

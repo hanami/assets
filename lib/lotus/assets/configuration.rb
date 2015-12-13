@@ -3,11 +3,30 @@ require 'json'
 require 'lotus/utils/string'
 require 'lotus/utils/class'
 require 'lotus/utils/path_prefix'
+require 'lotus/utils/basic_object'
 require 'lotus/assets/config/sources'
 
 module Lotus
   module Assets
+    class MissingManifestError < ::StandardError
+      def initialize(path)
+        super("Can't read manifest: #{ path }")
+      end
+    end
+
     class Configuration
+      class NullDigestManifest < Utils::BasicObject
+        def initialize(configuration)
+          @configuration = configuration
+        end
+
+        def method_missing(*)
+          ::Kernel.raise(
+            ::Lotus::Assets::MissingManifestError.new(@configuration.manifest_path)
+          )
+        end
+      end
+
       DEFAULT_PUBLIC_DIRECTORY = 'public'.freeze
       DEFAULT_MANIFEST         = 'assets.json'.freeze
       DEFAULT_PREFIX           = '/assets'.freeze
@@ -20,7 +39,7 @@ module Lotus
         framework.configuration
       end
 
-      attr_reader :registry
+      attr_reader :digest_manifest
 
       def initialize
         reset!
@@ -100,7 +119,7 @@ module Lotus
       # @api private
       def asset_path(source)
         result = prefix.join(source)
-        result = registry.fetch(result.to_s) if digest
+        result = digest_manifest.fetch(result.to_s) if digest
         result
       end
 
@@ -119,6 +138,7 @@ module Lotus
         @prefix                = Utils::PathPrefix.new(DEFAULT_PREFIX)
         @compile               = false
         @destination_directory = nil
+        @digest_manifest       = NullDigestManifest.new(self)
 
         root             Dir.pwd
         public_directory root.join(DEFAULT_PUBLIC_DIRECTORY)
@@ -127,7 +147,7 @@ module Lotus
 
       def load!
         if digest && manifest_path.exist?
-          @registry = JSON.load(manifest_path.read)
+          @digest_manifest = JSON.load(manifest_path.read)
         end
       end
 

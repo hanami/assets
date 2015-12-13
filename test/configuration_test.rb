@@ -79,11 +79,47 @@ describe Lotus::Assets::Configuration do
     end
   end
 
+  describe '#asset_path' do
+    it 'returns given path with #prefix' do
+      actual = @configuration.asset_path('application.js')
+      actual.must_equal '/assets/application.js'
+    end
+
+    describe 'digest mode' do
+      before do
+        @configuration.digest true
+      end
+
+      after do
+        @configuration.reset!
+      end
+
+      describe 'with digest manifest' do
+        before do
+          @configuration.instance_variable_set(:@digest_manifest, {'/assets/application.js' => '/assets/application-abc123.js'})
+        end
+
+        it 'returns asset with digest' do
+          actual = @configuration.asset_path('application.js')
+          actual.must_equal '/assets/application-abc123.js'
+        end
+      end
+
+      describe 'with missing digest manifest' do
+        it 'returns asset with digest' do
+          exception = -> { @configuration.asset_path('application.js') }.must_raise Lotus::Assets::MissingManifestError
+          exception.message.must_equal "Can't read manifest: #{ @configuration.manifest_path }"
+        end
+      end
+    end
+  end
+
   describe '#reset!' do
     before do
       @configuration.prefix 'prfx'
       @configuration.manifest 'assets.json'
       @configuration.public_directory(Dir.pwd + '/tmp')
+      @configuration.instance_variable_set(:@digest_manifest, {})
 
       @configuration.reset!
     end
@@ -99,6 +135,11 @@ describe Lotus::Assets::Configuration do
 
     it 'sets default value for manifest' do
       @configuration.manifest.must_equal('assets.json')
+    end
+
+    it 'sets default value fore digest manifest' do
+      assert @configuration.digest_manifest.class == Lotus::Assets::Configuration::NullDigestManifest,
+        "Expected @configuration.digest_manifest to be instance of Lotus::Assets::Configuration::NullDigestManifest"
     end
   end
 

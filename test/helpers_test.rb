@@ -94,5 +94,22 @@ describe Lotus::Assets::Helpers do
       -> {view.video(content: true)}.must_raise ArgumentError
     end
   end
+
+  describe "#asset_path" do
+    it "returns relative URL for given asset name" do
+      result = view.asset_path('application.js')
+      result.must_equal '/assets/application.js'
+    end
+
+    it "returns absolute URL if the argument is an absolute URL" do
+      result = view.asset_path('http://assets.lotusrb.org/assets/application.css')
+      result.must_equal 'http://assets.lotusrb.org/assets/application.css'
+    end
+
+    it "adds source to HTTP/2 PUSH PROMISE list" do
+      view.asset_path('dashboard.js')
+      Thread.current[:__lotus_assets].must_include '/assets/application.js'
+    end
+  end
 end
 

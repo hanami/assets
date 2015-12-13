@@ -27,10 +27,19 @@ module Lotus
         end
       end
 
+      DEFAULT_SCHEME           = 'http'.freeze
+      DEFAULT_HOST             = 'localhost'.freeze
+      DEFAULT_PORT             = '2300'.freeze
       DEFAULT_PUBLIC_DIRECTORY = 'public'.freeze
       DEFAULT_MANIFEST         = 'assets.json'.freeze
       DEFAULT_PREFIX           = '/assets'.freeze
       URL_SEPARATOR            = '/'.freeze
+
+      HTTP_SCHEME              = 'http'.freeze
+      HTTP_PORT                = '80'.freeze
+
+      HTTPS_SCHEME             = 'https'.freeze
+      HTTPS_PORT               = '443'.freeze
 
       def self.for(base)
         # TODO this implementation is similar to Lotus::Controller::Configuration consider to extract it into Lotus::Utils
@@ -58,6 +67,30 @@ module Lotus
           @digest
         else
           @digest = value
+        end
+      end
+
+      def scheme(value = nil)
+        if value.nil?
+          @scheme
+        else
+          @scheme = value
+        end
+      end
+
+      def host(value = nil)
+        if value.nil?
+          @host
+        else
+          @host = value
+        end
+      end
+
+      def port(value = nil)
+        if value.nil?
+          @port
+        else
+          @port = value.to_s
         end
       end
 
@@ -123,9 +156,16 @@ module Lotus
         result
       end
 
+      def asset_url(source)
+        "#{ @base_url }#{ asset_path(source) }"
+      end
+
       def duplicate
         Configuration.new.tap do |c|
           c.root             = root
+          c.scheme           = scheme
+          c.host             = host
+          c.port             = port
           c.prefix           = prefix
           c.compile          = compile
           c.public_directory = public_directory
@@ -135,6 +175,10 @@ module Lotus
       end
 
       def reset!
+        @scheme                = DEFAULT_SCHEME
+        @host                  = DEFAULT_HOST
+        @port                  = DEFAULT_PORT
+
         @prefix                = Utils::PathPrefix.new(DEFAULT_PREFIX)
         @compile               = false
         @destination_directory = nil
@@ -149,15 +193,27 @@ module Lotus
         if digest && manifest_path.exist?
           @digest_manifest = JSON.load(manifest_path.read)
         end
+
+        @base_url = URI::Generic.build(scheme: scheme, host: host, port: url_port).to_s
       end
 
       protected
       attr_writer :compile
+      attr_writer :scheme
+      attr_writer :host
+      attr_writer :port
       attr_writer :prefix
       attr_writer :root
       attr_writer :public_directory
       attr_writer :manifest
       attr_writer :sources
+
+      private
+
+      def url_port
+        ( (scheme == HTTP_SCHEME  && port == HTTP_PORT  ) ||
+          (scheme == HTTPS_SCHEME && port == HTTPS_PORT ) ) ? nil : port.to_i
+      end
     end
   end
 end

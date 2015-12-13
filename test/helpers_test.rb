@@ -108,7 +108,32 @@ describe Lotus::Assets::Helpers do
 
     it "adds source to HTTP/2 PUSH PROMISE list" do
       view.asset_path('dashboard.js')
-      Thread.current[:__lotus_assets].must_include '/assets/application.js'
+      Thread.current[:__lotus_assets].must_include '/assets/dashboard.js'
+    end
+  end
+
+  describe "#asset_url" do
+    before do
+      view.class.assets_configuration.load!
+    end
+
+    after do
+      view.class.assets_configuration.reset!
+    end
+
+    it "returns absolute URL for given asset name" do
+      result = view.asset_url('application.js')
+      result.must_equal('http://localhost:2300/assets/application.js')
+    end
+
+    it "returns absolute URL if the argument is an absolute URL" do
+      result = view.asset_url('http://assets.lotusrb.org/assets/application.css')
+      result.must_equal 'http://assets.lotusrb.org/assets/application.css'
+    end
+
+    it "adds source to HTTP/2 PUSH PROMISE list" do
+      view.asset_url('metrics.js')
+      Thread.current[:__lotus_assets].must_include 'http://localhost:2300/assets/metrics.js'
     end
   end
 end

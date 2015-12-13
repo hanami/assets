@@ -159,10 +159,11 @@ module Lotus
       end
 
       def asset_path(source)
-        _push_promise(
-          _absolute_url?(source) ?
-            source : _relative_path(source)
-        )
+        _asset_url(source) { _relative_url(source) }
+      end
+
+      def asset_url(source)
+        _asset_url(source) { _absolute_url(source) }
       end
 
       private
@@ -175,6 +176,13 @@ module Lotus
         )
       end
 
+      def _asset_url(source)
+        _push_promise(
+          _absolute_url?(source) ?
+            source : yield
+        )
+      end
+
       def _typed_asset_path(source, ext)
         source = "#{ source }#{ ext }" unless source.match(/#{ Regexp.escape(ext) }\z/)
         asset_path(source)
@@ -184,8 +192,12 @@ module Lotus
         URI.regexp.match(source)
       end
 
-      def _relative_path(source)
+      def _relative_url(source)
         self.class.assets_configuration.asset_path(source)
+      end
+
+      def _absolute_url(source)
+        self.class.assets_configuration.asset_url(source)
       end
 
       def _push_promise(url)

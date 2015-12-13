@@ -109,3 +109,9 @@ class HiddenAssetCompilerView
     __dir__ + '/fixtures/hidden-asset.erb'
   end
 end
+
+class ImageHelperView
+  include Lotus::View
+  include Lotus::Assets::Helpers
+end
+

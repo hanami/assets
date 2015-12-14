@@ -9,6 +9,17 @@ describe Lotus::Assets::Configuration do
     @configuration.reset!
   end
 
+  describe '#cdn' do
+    it "is false by default" do
+      @configuration.cdn.must_equal false
+    end
+
+    it 'allows to set a value' do
+      @configuration.cdn            true
+      @configuration.cdn.must_equal true
+    end
+  end
+
   describe '#sources' do
     it "is empty by default" do
       @configuration.sources.must_be_empty
@@ -118,18 +129,23 @@ describe Lotus::Assets::Configuration do
   end
 
   describe '#asset_path' do
+    after do
+      @configuration.reset!
+    end
+
     it 'returns relative url for given source' do
       actual = @configuration.asset_path('application.js')
       actual.must_equal '/assets/application.js'
     end
 
+    it 'returns String instance' do
+      actual = @configuration.asset_path('application.js')
+      actual.must_be_kind_of ::String
+    end
+
     describe 'digest mode' do
       before do
         @configuration.digest true
-      end
-
-      after do
-        @configuration.reset!
       end
 
       describe 'with digest manifest' do
@@ -141,6 +157,22 @@ describe Lotus::Assets::Configuration do
           actual = @configuration.asset_path('application.js')
           actual.must_equal '/assets/application-abc123.js'
         end
+
+        describe 'cdn mode' do
+          before do
+            @configuration.scheme 'https'
+            @configuration.host   'bookshelf.cdn-example.org'
+            @configuration.port   '443'
+            @configuration.cdn    true
+
+            @configuration.load!
+          end
+
+          it 'returns absolute url' do
+            actual = @configuration.asset_path('application.js')
+            actual.must_equal 'https://bookshelf.cdn-example.org/assets/application-abc123.js'
+          end
+        end
       end
 
       describe 'with missing digest manifest' do
@@ -148,6 +180,22 @@ describe Lotus::Assets::Configuration do
           exception = -> { @configuration.asset_path('application.js') }.must_raise Lotus::Assets::MissingManifestError
           exception.message.must_equal "Can't read manifest: #{ @configuration.manifest_path }"
         end
+      end
+    end
+
+    describe 'cdn mode' do
+      before do
+        @configuration.scheme 'https'
+        @configuration.host   'bookshelf.cdn-example.org'
+        @configuration.port   '443'
+        @configuration.cdn    true
+
+        @configuration.load!
+      end
+
+      it 'returns absolute url' do
+        actual = @configuration.asset_path('application.js')
+        actual.must_equal 'https://bookshelf.cdn-example.org/assets/application.js'
       end
     end
   end
@@ -327,6 +375,7 @@ describe Lotus::Assets::Configuration do
   describe '#duplicate' do
     before do
       @configuration.reset!
+      @configuration.cdn              true
       @configuration.compile          true
       @configuration.scheme           'ftp'
       @configuration.host             'lotusrb.org'
@@ -341,6 +390,7 @@ describe Lotus::Assets::Configuration do
     end
 
     it 'returns a copy of the configuration' do
+      @config.cdn.must_equal              true
       @config.compile.must_equal          true
       @config.scheme.must_equal           'ftp'
       @config.host.must_equal             'lotusrb.org'
@@ -354,6 +404,7 @@ describe Lotus::Assets::Configuration do
     end
 
     it "doesn't affect the original configuration" do
+      @config.cdn              false
       @config.compile          false
       @config.scheme           'mailto'
       @config.host             'example.org'
@@ -364,6 +415,7 @@ describe Lotus::Assets::Configuration do
       @config.public_directory __dir__ + '/fixtures'
       @config.sources <<  __dir__ + '/fixtures/stylesheets'
 
+      @config.cdn.must_equal              false
       @config.compile.must_equal          false
       @config.scheme.must_equal           'mailto'
       @config.host.must_equal             'example.org'
@@ -375,6 +427,7 @@ describe Lotus::Assets::Configuration do
       assert @config.sources == [__dir__ + '/fixtures/javascripts', __dir__ + '/fixtures/stylesheets'],
         "Expected @config.sources to eq [#{ __dir__ }/fixtures/javascripts', #{ __dir__ }/fixtures/stylesheets'], found: #{ @config.sources.inspect }"
 
+      @configuration.cdn.must_equal              true
       @configuration.compile.must_equal          true
       @configuration.scheme.must_equal           'ftp'
       @configuration.host.must_equal             'lotusrb.org'

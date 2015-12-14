@@ -70,6 +70,14 @@ module Lotus
         end
       end
 
+      def cdn(value = nil)
+        if value.nil?
+          @cdn
+        else
+          @cdn = !!value
+        end
+      end
+
       def scheme(value = nil)
         if value.nil?
           @scheme
@@ -151,13 +159,14 @@ module Lotus
 
       # @api private
       def asset_path(source)
-        result = prefix.join(source)
-        result = digest_manifest.fetch(result.to_s) if digest
-        result
+        cdn ?
+          asset_url(source) :
+          compile_path(source)
       end
 
+      # @api private
       def asset_url(source)
-        "#{ @base_url }#{ asset_path(source) }"
+        "#{ @base_url }#{ compile_path(source) }"
       end
 
       def duplicate
@@ -167,6 +176,7 @@ module Lotus
           c.host             = host
           c.port             = port
           c.prefix           = prefix
+          c.cdn              = cdn
           c.compile          = compile
           c.public_directory = public_directory
           c.manifest         = manifest
@@ -180,6 +190,7 @@ module Lotus
         @port                  = DEFAULT_PORT
 
         @prefix                = Utils::PathPrefix.new(DEFAULT_PREFIX)
+        @cdn                   = false
         @compile               = false
         @destination_directory = nil
         @digest_manifest       = NullDigestManifest.new(self)
@@ -198,6 +209,7 @@ module Lotus
       end
 
       protected
+      attr_writer :cdn
       attr_writer :compile
       attr_writer :scheme
       attr_writer :host
@@ -210,6 +222,14 @@ module Lotus
 
       private
 
+      # @api private
+      def compile_path(source)
+        result = prefix.join(source)
+        result = digest_manifest.fetch(result.to_s) if digest
+        result.to_s
+      end
+
+      # @api private
       def url_port
         ( (scheme == HTTP_SCHEME  && port == HTTP_PORT  ) ||
           (scheme == HTTPS_SCHEME && port == HTTPS_PORT ) ) ? nil : port.to_i

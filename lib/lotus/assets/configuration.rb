@@ -3,15 +3,43 @@ require 'json'
 require 'lotus/utils/string'
 require 'lotus/utils/class'
 require 'lotus/utils/path_prefix'
+require 'lotus/utils/basic_object'
 require 'lotus/assets/config/sources'
 
 module Lotus
   module Assets
+    class MissingManifestError < ::StandardError
+      def initialize(path)
+        super("Can't read manifest: #{ path }")
+      end
+    end
+
     class Configuration
+      class NullDigestManifest < Utils::BasicObject
+        def initialize(configuration)
+          @configuration = configuration
+        end
+
+        def method_missing(*)
+          ::Kernel.raise(
+            ::Lotus::Assets::MissingManifestError.new(@configuration.manifest_path)
+          )
+        end
+      end
+
+      DEFAULT_SCHEME           = 'http'.freeze
+      DEFAULT_HOST             = 'localhost'.freeze
+      DEFAULT_PORT             = '2300'.freeze
       DEFAULT_PUBLIC_DIRECTORY = 'public'.freeze
       DEFAULT_MANIFEST         = 'assets.json'.freeze
       DEFAULT_PREFIX           = '/assets'.freeze
       URL_SEPARATOR            = '/'.freeze
+
+      HTTP_SCHEME              = 'http'.freeze
+      HTTP_PORT                = '80'.freeze
+
+      HTTPS_SCHEME             = 'https'.freeze
+      HTTPS_PORT               = '443'.freeze
 
       def self.for(base)
         # TODO this implementation is similar to Lotus::Controller::Configuration consider to extract it into Lotus::Utils
@@ -20,7 +48,7 @@ module Lotus
         framework.configuration
       end
 
-      attr_reader :registry
+      attr_reader :digest_manifest
 
       def initialize
         reset!
@@ -39,6 +67,38 @@ module Lotus
           @digest
         else
           @digest = value
+        end
+      end
+
+      def cdn(value = nil)
+        if value.nil?
+          @cdn
+        else
+          @cdn = !!value
+        end
+      end
+
+      def scheme(value = nil)
+        if value.nil?
+          @scheme
+        else
+          @scheme = value
+        end
+      end
+
+      def host(value = nil)
+        if value.nil?
+          @host
+        else
+          @host = value
+        end
+      end
+
+      def port(value = nil)
+        if value.nil?
+          @port
+        else
+          @port = value.to_s
         end
       end
 
@@ -99,15 +159,24 @@ module Lotus
 
       # @api private
       def asset_path(source)
-        result = prefix.join(source)
-        result = registry.fetch(result.to_s) if digest
-        result
+        cdn ?
+          asset_url(source) :
+          compile_path(source)
+      end
+
+      # @api private
+      def asset_url(source)
+        "#{ @base_url }#{ compile_path(source) }"
       end
 
       def duplicate
         Configuration.new.tap do |c|
           c.root             = root
+          c.scheme           = scheme
+          c.host             = host
+          c.port             = port
           c.prefix           = prefix
+          c.cdn              = cdn
           c.compile          = compile
           c.public_directory = public_directory
           c.manifest         = manifest
@@ -116,9 +185,15 @@ module Lotus
       end
 
       def reset!
+        @scheme                = DEFAULT_SCHEME
+        @host                  = DEFAULT_HOST
+        @port                  = DEFAULT_PORT
+
         @prefix                = Utils::PathPrefix.new(DEFAULT_PREFIX)
+        @cdn                   = false
         @compile               = false
         @destination_directory = nil
+        @digest_manifest       = NullDigestManifest.new(self)
 
         root             Dir.pwd
         public_directory root.join(DEFAULT_PUBLIC_DIRECTORY)
@@ -127,17 +202,38 @@ module Lotus
 
       def load!
         if digest && manifest_path.exist?
-          @registry = JSON.load(manifest_path.read)
+          @digest_manifest = JSON.load(manifest_path.read)
         end
+
+        @base_url = URI::Generic.build(scheme: scheme, host: host, port: url_port).to_s
       end
 
       protected
+      attr_writer :cdn
       attr_writer :compile
+      attr_writer :scheme
+      attr_writer :host
+      attr_writer :port
       attr_writer :prefix
       attr_writer :root
       attr_writer :public_directory
       attr_writer :manifest
       attr_writer :sources
+
+      private
+
+      # @api private
+      def compile_path(source)
+        result = prefix.join(source)
+        result = digest_manifest.fetch(result.to_s) if digest
+        result.to_s
+      end
+
+      # @api private
+      def url_port
+        ( (scheme == HTTP_SCHEME  && port == HTTP_PORT  ) ||
+          (scheme == HTTPS_SCHEME && port == HTTPS_PORT ) ) ? nil : port.to_i
+      end
     end
   end
 end

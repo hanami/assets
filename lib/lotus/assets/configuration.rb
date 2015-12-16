@@ -8,7 +8,7 @@ require 'lotus/assets/config/sources'
 
 module Lotus
   module Assets
-    class MissingManifestError < ::StandardError
+    class MissingManifestError < Error
       def initialize(path)
         super("Can't read manifest: #{ path }")
       end

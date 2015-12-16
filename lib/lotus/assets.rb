@@ -2,15 +2,23 @@ require 'thread'
 require 'lotus/utils/class_attribute'
 
 module Lotus
-  require 'lotus/assets/version'
-  require 'lotus/assets/configuration'
-  require 'lotus/assets/config/global_sources'
-  require 'lotus/assets/helpers'
-
   # Assets management for Ruby web applications
   #
   # @since x.x.x
   module Assets
+    # Base error for Lotus::Assets
+    #
+    # All the errors defined in this framework MUST inherit from it.
+    #
+    # @since x.x.x
+    class Error < ::StandardError
+    end
+
+    require 'lotus/assets/version'
+    require 'lotus/assets/configuration'
+    require 'lotus/assets/config/global_sources'
+    require 'lotus/assets/helpers'
+
     include Utils::ClassAttribute
 
     # Configuration

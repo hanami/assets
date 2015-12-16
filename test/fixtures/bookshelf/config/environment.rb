@@ -42,6 +42,12 @@ unless defined?(Web)
           include Web::View
         end
       end
+
+      module Users
+        class Show
+          include Web::View
+        end
+      end
     end
   end
 

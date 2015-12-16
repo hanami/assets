@@ -4,29 +4,12 @@ require 'lotus/utils/string'
 require 'lotus/utils/class'
 require 'lotus/utils/path_prefix'
 require 'lotus/utils/basic_object'
+require 'lotus/assets/config/manifest'
 require 'lotus/assets/config/sources'
 
 module Lotus
   module Assets
-    class MissingManifestError < Error
-      def initialize(path)
-        super("Can't read manifest: #{ path }")
-      end
-    end
-
     class Configuration
-      class NullDigestManifest < Utils::BasicObject
-        def initialize(configuration)
-          @configuration = configuration
-        end
-
-        def method_missing(*)
-          ::Kernel.raise(
-            ::Lotus::Assets::MissingManifestError.new(@configuration.manifest_path)
-          )
-        end
-      end
-
       DEFAULT_SCHEME           = 'http'.freeze
       DEFAULT_HOST             = 'localhost'.freeze
       DEFAULT_PORT             = '2300'.freeze
@@ -193,7 +176,7 @@ module Lotus
         @cdn                   = false
         @compile               = false
         @destination_directory = nil
-        @digest_manifest       = NullDigestManifest.new(self)
+        @digest_manifest       = Config::NullDigestManifest.new(self)
 
         root             Dir.pwd
         public_directory root.join(DEFAULT_PUBLIC_DIRECTORY)
@@ -202,7 +185,10 @@ module Lotus
 
       def load!
         if digest && manifest_path.exist?
-          @digest_manifest = JSON.load(manifest_path.read)
+          @digest_manifest = Config::Manifest.new(
+            JSON.load(manifest_path.read),
+            manifest_path
+          )
         end
 
         @base_url = URI::Generic.build(scheme: scheme, host: host, port: url_port).to_s
@@ -225,7 +211,7 @@ module Lotus
       # @api private
       def compile_path(source)
         result = prefix.join(source)
-        result = digest_manifest.fetch(result.to_s) if digest
+        result = digest_manifest.resolve(result) if digest
         result.to_s
       end
 

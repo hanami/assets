@@ -1,13 +1,13 @@
 module Lotus
   module Assets
-    class MissingAsset < ::StandardError
+    class MissingAsset < Error
       def initialize(name, sources)
         sources = sources.map(&:to_s).join(', ')
         super("Missing asset: `#{ name }' (sources: #{ sources })")
       end
     end
 
-    class UnknownAssetEngine < ::StandardError
+    class UnknownAssetEngine < Error
       def initialize(source)
         super("No asset engine registered for `#{ ::File.basename(source) }'")
       end

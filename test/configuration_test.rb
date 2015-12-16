@@ -150,7 +150,8 @@ describe Lotus::Assets::Configuration do
 
       describe 'with digest manifest' do
         before do
-          @configuration.instance_variable_set(:@digest_manifest, {'/assets/application.js' => '/assets/application-abc123.js'})
+          manifest = Lotus::Assets::Config::Manifest.new({'/assets/application.js' => '/assets/application-abc123.js'}, [])
+          @configuration.instance_variable_set(:@digest_manifest, manifest)
         end
 
         it 'returns asset with digest' do
@@ -309,8 +310,10 @@ describe Lotus::Assets::Configuration do
 
       describe 'with digest manifest' do
         before do
+          manifest = Lotus::Assets::Config::Manifest.new({'/assets/application.js' => '/assets/application-abc123.js'}, [])
+
           @configuration.load!
-          @configuration.instance_variable_set(:@digest_manifest, {'/assets/application.js' => '/assets/application-abc123.js'})
+          @configuration.instance_variable_set(:@digest_manifest, manifest)
         end
 
         it 'returns asset with digest' do
@@ -367,7 +370,7 @@ describe Lotus::Assets::Configuration do
     end
 
     it 'sets default value fore digest manifest' do
-      assert @configuration.digest_manifest.class == Lotus::Assets::Configuration::NullDigestManifest,
+      assert @configuration.digest_manifest.class == Lotus::Assets::Config::NullDigestManifest,
         "Expected @configuration.digest_manifest to be instance of Lotus::Assets::Configuration::NullDigestManifest"
     end
   end

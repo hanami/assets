@@ -22,6 +22,17 @@ describe 'Precompile' do
       assert_successful_command "#{ __dir__ }/../fixtures/standalone/config/environment.rb"
       assert_successful_output(assets)
     end
+
+    describe "when already precompiled " do
+      it "cleans up the destination directory before to precompile" do
+        2.times do
+          assert_successful_command "#{ __dir__ }/../fixtures/standalone/config/environment.rb"
+        end
+
+        duplicated_manifests = Dir[dest.join('assets-*.json').to_s]
+        duplicated_manifests.count.must_equal 0
+      end
+    end
   end
 
   describe "duplicated frameworks" do
@@ -48,6 +59,17 @@ describe 'Precompile' do
     it "precompiles assets" do
       assert_successful_command "#{ __dir__ }/../fixtures/bookshelf/config/environment.rb"
       assert_successful_output(assets)
+    end
+
+    describe "when already precompiled " do
+      it "cleans up the destination directory before to precompile" do
+        2.times do
+          assert_successful_command "#{ __dir__ }/../fixtures/bookshelf/config/environment.rb"
+        end
+
+        duplicated_manifests = Dir[dest.join('assets-*.json').to_s]
+        duplicated_manifests.count.must_equal 0
+      end
     end
   end
 

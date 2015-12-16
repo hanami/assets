@@ -9,6 +9,18 @@ module Lotus
       end
 
       def run
+        clear_public_directory
+        precompile
+      end
+
+      private
+
+      def clear_public_directory
+        public_directory = Lotus::Assets.configuration.public_directory
+        public_directory.rmtree if public_directory.exist?
+      end
+
+      def precompile
         applications.each do |duplicate|
           config = duplicate.configuration
           config.compile true
@@ -18,8 +30,6 @@ module Lotus
           end
         end
       end
-
-      private
 
       def applications
         @duplicates.empty? ?

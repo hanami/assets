@@ -6,25 +6,58 @@ require 'lotus/utils/escape'
 
 module Lotus
   module Assets
+    # HTML assets helpers
+    #
+    # @since x.x.x
+    #
+    # @see http://www.rubydoc.info/gems/lotus-helpers/Lotus/Helpers/HtmlHelper
     module Helpers
+      # @since x.x.x
+      # @api private
       NEW_LINE_SEPARATOR = "\n".freeze
 
-      WILDCARD_EXT = '.*'.freeze
+      # @since x.x.x
+      # @api private
+      WILDCARD_EXT   = '.*'.freeze
 
+      # @since x.x.x
+      # @api private
       JAVASCRIPT_EXT = '.js'.freeze
+
+      # @since x.x.x
+      # @api private
       STYLESHEET_EXT = '.css'.freeze
 
+      # @since x.x.x
+      # @api private
       JAVASCRIPT_MIME_TYPE = 'text/javascript'.freeze
+
+      # @since x.x.x
+      # @api private
       STYLESHEET_MIME_TYPE = 'text/css'.freeze
+
+      # @since x.x.x
+      # @api private
       FAVICON_MIME_TYPE    = 'image/x-icon'.freeze
 
+      # @since x.x.x
+      # @api private
       STYLESHEET_REL  = 'stylesheet'.freeze
+
+      # @since x.x.x
+      # @api private
       FAVICON_REL     = 'shortcut icon'.freeze
 
+      # @since x.x.x
+      # @api private
       DEFAULT_FAVICON = 'favicon.ico'.freeze
 
       include Lotus::Helpers::HtmlHelper
 
+      # Inject helpers into the given class
+      #
+      # @since x.x.x
+      # @api private
       def self.included(base)
         conf = ::Lotus::Assets::Configuration.for(base)
         base.class_eval do
@@ -35,39 +68,191 @@ module Lotus
         end
       end
 
+      # Generate <tt>script</tt> tag for given source(s)
+      #
+      # It accepts one or more strings representing the name of the asset, if it
+      # comes from the application or third party gems. It also accepts strings
+      # representing absolute URLs in case of public CDN (eg. jQuery CDN).
+      #
+      # If the "digest mode" is on, <tt>src</tt> is the digest version of the
+      # relative URL.
+      #
+      # If the "CDN mode" is on, the <tt>src</tt> is an absolute URL of the
+      # application CDN.
+      #
+      # @param sources [Array<String>] one or more assets by name or absolute URL
+      #
+      # @return [Lotus::Utils::Escape::SafeString] the markup
+      #
+      # @raise [Lotus::Assets::MissingDigestAssetError] if digest mode is on and
+      #   at least one of the given sources is missing
+      #
+      # @since x.x.x
+      #
+      # @see Lotus::Assets::Configuration#digest
+      # @see Lotus::Assets::Configuration#cdn
+      # @see Lotus::Assets::Helpers#asset_path
+      #
+      # @example Single Asset
+      #
+      #   <%= javascript 'application' %>
+      #
+      #   # <script src="/assets/application.js" type="text/javascript"></script>
+      #
+      # @example Multiple Assets
+      #
+      #   <%= javascript 'application', 'dashboard' %>
+      #
+      #   # <script src="/assets/application.js" type="text/javascript"></script>
+      #   # <script src="/assets/dashboard.js" type="text/javascript"></script>
+      #
+      # @example Absolute URL
+      #
+      #   <%= javascript 'https://code.jquery.com/jquery-2.1.4.min.js' %>
+      #
+      #   # <script src="https://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
+      #
+      # @example Digest Mode
+      #
+      #   <%= javascript 'application' %>
+      #
+      #   # <script src="/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js" type="text/javascript"></script>
+      #
+      # @example CDN Mode
+      #
+      #   <%= javascript 'application' %>
+      #
+      #   # <script src="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js" type="text/javascript"></script>
       def javascript(*sources)
         _safe_tags(*sources) do |source|
           html.script(src: _typed_asset_path(source, JAVASCRIPT_EXT), type: JAVASCRIPT_MIME_TYPE).to_s
         end
       end
 
+      # Generate <tt>link</tt> tag for given source(s)
+      #
+      # It accepts one or more strings representing the name of the asset, if it
+      # comes from the application or third party gems. It also accepts strings
+      # representing absolute URLs in case of public CDN (eg. Bootstrap CDN).
+      #
+      # If the "digest mode" is on, <tt>href</tt> is the digest version of the
+      # relative URL.
+      #
+      # If the "CDN mode" is on, the <tt>href</tt> is an absolute URL of the
+      # application CDN.
+      #
+      # @param sources [Array<String>] one or more assets by name or absolute URL
+      #
+      # @return [Lotus::Utils::Escape::SafeString] the markup
+      #
+      # @raise [Lotus::Assets::MissingDigestAssetError] if digest mode is on and
+      #   at least one of the given sources is missing
+      #
+      # @since x.x.x
+      #
+      # @see Lotus::Assets::Configuration#digest
+      # @see Lotus::Assets::Configuration#cdn
+      # @see Lotus::Assets::Helpers#asset_path
+      #
+      # @example Single Asset
+      #
+      #   <%= stylesheet 'application' %>
+      #
+      #   # <link href="/assets/application.css" type="text/css" rel="stylesheet">
+      #
+      # @example Multiple Assets
+      #
+      #   <%= stylesheet 'application', 'dashboard' %>
+      #
+      #   # <link href="/assets/application.css" type="text/css" rel="stylesheet">
+      #   # <link href="/assets/dashboard.css" type="text/css" rel="stylesheet">
+      #
+      # @example Absolute URL
+      #
+      #   <%= stylesheet 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css' %>
+      #
+      #   # <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+      #
+      # @example Digest Mode
+      #
+      #   <%= stylesheet 'application' %>
+      #
+      #   # <link href="/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.css" type="text/css" rel="stylesheet">
+      #
+      # @example CDN Mode
+      #
+      #   <%= stylesheet 'application' %>
+      #
+      #   # <link href="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.css" type="text/css" rel="stylesheet">
       def stylesheet(*sources)
         _safe_tags(*sources) do |source|
           html.link(href: _typed_asset_path(source, STYLESHEET_EXT), type: STYLESHEET_MIME_TYPE, rel: STYLESHEET_REL).to_s
         end
       end
 
-      # Creates a img tag. Takes the asset path as the first parameter.
-      # Alt attribute is auto-calculated as the titleized path of the asset.
-      # Any other parameter will be output as an attribute of the img tag.
+      # Generate <tt>img</tt> tag for given source
+      #
+      # It accepts one string representing the name of the asset, if it comes
+      # from the application or third party gems. It also accepts string
+      # representing absolute URLs in case of public CDN (eg. Bootstrap CDN).
+      #
+      # <tt>alt</tt> Attribute is auto generated from <tt>src</tt>.
+      # You can specify a different value, by passing the <tt>:src</tt> option.
+      #
+      # If the "digest mode" is on, <tt>src</tt> is the digest version of the
+      # relative URL.
+      #
+      # If the "CDN mode" is on, the <tt>src</tt> is an absolute URL of the
+      # application CDN.
+      #
+      # @param sources [String] asset name or absolute URL
+      #
+      # @return [Lotus::Utils::Helpers::HtmlBuilder] the builder
+      #
+      # @raise [Lotus::Assets::MissingDigestAssetError] if digest mode is on and
+      #   at least one of the given sources is missing
       #
       # @since x.x.x
-      # @api public
       #
-      # @example Usage in view.
+      # @see Lotus::Assets::Configuration#digest
+      # @see Lotus::Assets::Configuration#cdn
+      # @see Lotus::Assets::Helpers#asset_path
       #
-      #   module Web::Views::Home
-      #     include Lotus::View
+      # @example Basic Usage
       #
-      #     def avatar(user)
-      #       image("user_#{user.id}_avatar", id: user.id, class: 'user-avatar')
-      #     end
-      #   end
+      #   <%= image 'logo.png' %>
       #
-      #   This method will output:
-      #   => <img src='/assets/user_1_avatar' alt='User 1 avatar' id='1' class='user-avatar'>
+      #   # <img src="/assets/logo.png" alt="Logo">
       #
+      # @example Custom alt Attribute
       #
+      #   <%= image 'logo.png', alt: 'Application Logo' %>
+      #
+      #   # <img src="/assets/logo.png" alt="Application Logo">
+      #
+      # @example Custom HTML Attributes
+      #
+      #   <%= image 'logo.png', id: 'logo', class: 'image' %>
+      #
+      #   # <img src="/assets/logo.png" alt="Logo" id="logo" class="image">
+      #
+      # @example Absolute URL
+      #
+      #   <%= image 'https://example-cdn.com/images/logo.png' %>
+      #
+      #   # <img src="https://example-cdn.com/images/logo.png" alt="Logo">
+      #
+      # @example Digest Mode
+      #
+      #   <%= image 'logo.png' %>
+      #
+      #   # <img src="/assets/logo-28a6b886de2372ee3922fcaf3f78f2d8.png" alt="Logo">
+      #
+      # @example CDN Mode
+      #
+      #   <%= image 'logo.png' %>
+      #
+      #   # <img src="https://assets.bookshelf.org/assets/logo-28a6b886de2372ee3922fcaf3f78f2d8.png" alt="Logo">
       def image(source, options = {})
         options[:src] = asset_path(source)
         options[:alt] ||= Utils::String.new(::File.basename(source, WILDCARD_EXT)).titleize

@@ -13,18 +13,42 @@ module Lotus
       end
     end
 
+    # Assets compiler
+    #
+    # It compiles assets that needs to be preprocessed (eg. Sass or ES6) into
+    # the destination directory.
+    #
+    # Vanilla javascripts or stylesheets are just copied over.
+    #
+    # @since x.x.x
     # @api private
     class Compiler
+      # @since x.x.x
+      # @api private
       DEFAULT_PERMISSIONS = 0644
 
+      # @since x.x.x
+      # @api private
       COMPILE_PATTERN = '*.*.*'.freeze # Example hello.js.es6
 
+      # @since x.x.x
+      # @api private
       EXTENSIONS = {'.js' => true, '.css' => true}.freeze
 
+      # @since x.x.x
+      # @api private
       SASS_CACHE_LOCATION = Pathname(Lotus.respond_to?(:root) ?
                                      Lotus.root : Dir.pwd).join('tmp', 'sass-cache')
 
-
+      # Compile the given asset
+      #
+      # @param configuration [Lotus::Assets::Configuration] the application
+      #   configuration associated with the given asset
+      #
+      # @param name [String] the asset path
+      #
+      # @since x.x.x
+      # @api private
       def self.compile(configuration, name)
         return unless configuration.compile
 
@@ -33,15 +57,39 @@ module Lotus
         new(configuration, name).compile
       end
 
+      # Assets cache
+      #
+      # @since x.x.x
+      # @api private
+      #
+      # @see Lotus::Assets::Cache
       def self.cache
         @@cache ||= Assets::Cache.new
       end
 
+      # Return a new instance
+      #
+      # @param configuration [Lotus::Assets::Configuration] the application
+      #   configuration associated with the given asset
+      #
+      # @param name [String] the asset path
+      #
+      # @return [Lotus::Assets::Compiler] a new instance
+      #
+      # @since x.x.x
+      # @api private
       def initialize(configuration, name)
         @configuration = configuration
         @name          = Pathname.new(name)
       end
 
+      # Compile the asset
+      #
+      # @raise [Lotus::Assets::MissingAsset] if the asset can't be found in
+      #   sources
+      #
+      # @since x.x.x
+      # @api private
       def compile
         raise MissingAsset.new(@name, @configuration.sources) unless exist?
         return unless fresh?
@@ -56,6 +104,9 @@ module Lotus
       end
 
       private
+
+      # @since x.x.x
+      # @api private
       def source
         @source ||= begin
           @name.absolute? ? @name :
@@ -63,10 +114,14 @@ module Lotus
         end
       end
 
+      # @since x.x.x
+      # @api private
       def destination
         @destination ||= @configuration.destination_directory.join(basename)
       end
 
+      # @since x.x.x
+      # @api private
       def basename
         result = ::File.basename(@name)
 
@@ -77,21 +132,29 @@ module Lotus
         end
       end
 
+      # @since x.x.x
+      # @api private
       def exist?
         !source.nil? &&
           source.exist?
       end
 
+      # @since x.x.x
+      # @api private
       def fresh?
         !destination.exist? ||
           cache.fresh?(source)
       end
 
+      # @since x.x.x
+      # @api private
       def compile?
         @compile ||= ::File.fnmatch(COMPILE_PATTERN, source.to_s) &&
           !EXTENSIONS[::File.extname(source.to_s)]
       end
 
+      # @since x.x.x
+      # @api private
       def compile!
         # NOTE `:load_paths' is useful only for Sass engine, to make `@include' directive to work.
         # For now we don't want to maintan a specialized Compiler version for Sass.
@@ -112,14 +175,20 @@ module Lotus
         raise UnknownAssetEngine.new(source)
       end
 
+      # @since x.x.x
+      # @api private
       def copy!
         write { source.read }
       end
 
+      # @since x.x.x
+      # @api private
       def cache!
         cache.store(source)
       end
 
+      # @since x.x.x
+      # @api private
       def write
         destination.dirname.mkpath
         destination.open(File::WRONLY|File::CREAT, DEFAULT_PERMISSIONS) do |file|
@@ -127,10 +196,14 @@ module Lotus
         end
       end
 
+      # @since x.x.x
+      # @api private
       def cache
         self.class.cache
       end
 
+      # @since x.x.x
+      # @api private
       def sass_cache_location
         SASS_CACHE_LOCATION
       end

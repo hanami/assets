@@ -1,4 +1,6 @@
 # Babel support is in Tilt (master), but not released yet.
+#
+# Require this file ONLY if you need to transpile ES6 assets.
 begin
   require 'tilt'
   require 'tilt/template'

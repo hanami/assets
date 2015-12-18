@@ -25,7 +25,7 @@ Assets management for Ruby web projects
 
 ## Rubies
 
-__Lotus::Assets__ supports Ruby (MRI) 2+ and JRuby 1.7 (with 2.0 mode).
+__Lotus::Assets__ supports Ruby (MRI) 2+
 
 ## Installation
 
@@ -122,27 +122,18 @@ View.new.render # => HTML markup
 For advanced configurations, please have a look at
 [`Lotus::Assets::Configuration`](https://github.com/lotus/assets/blob/master/lib/lotus/assets/configuration.rb).
 
-### Lotus usage
-For usage on `lotus` follow the instructions:
+### Available Helpers
 
-- In your `apps/web/application.rb` include `lotus-assets` files:
-```ruby
-require 'lotus/assets'
-```
+This gems ships with the following helpers:
 
-- In your `application_layout` just include the assets helpers
-```ruby
-module Web
-  module Views
-    class ApplicationLayout
-      include Web::Layout
-      include Web::Assets::Helpers
-    end
-  end
-end
-```
-
-- After that you will be able to use `javascript` and `stylesheet` in your template.
+  * `javascript`
+  * `stylesheet`
+  * `favicon`
+  * `image`
+  * `video`
+  * `audio`
+  * `asset_path`
+  * `asset_url`
 
 ### Development mode
 
@@ -328,7 +319,7 @@ public
 └── assets.json
 ```
 
-### Digest mode
+### Digest Mode
 
 This is a mode that can be activated via the configuration and it's suitable for production environments.
 
@@ -338,7 +329,7 @@ Lotus::Assets.configure do
 end
 ```
 
-Once turned on, it will look at `public/assets.json`, and helpers such as `javascript` will return a relative URL that includes the digest of the asset.
+Once turned on, it will look at `/public/assets.json`, and helpers such as `javascript` will return a relative URL that includes the digest of the asset.
 
 ```erb
 <%= javascript 'application' %>
@@ -346,6 +337,29 @@ Once turned on, it will look at `public/assets.json`, and helpers such as `javas
 
 ```html
 <script src="/assets/application-d1829dc353b734e3adc24855693b70f9.js" type="text/javascript"></script>
+```
+
+### CDN Mode
+
+A Lotus project can serve assets via CDN.
+
+```ruby
+Lotus::Assets.configure do
+  scheme 'https'
+  host   '123.cloudfront.net'
+  port   443
+  cdn    true
+end
+```
+
+Since now on, helpers will return the CDN absolute URL for the asset.
+
+```erb
+<%= javascript 'application' %>
+```
+
+```html
+<script src="https://123.cloudfront.net/assets/application-d1829dc353b734e3adc24855693b70f9.js" type="text/javascript"></script>
 ```
 
 ## Third party gems

@@ -25,7 +25,7 @@ describe 'Digest mode' do
   end
 
   it "raises error when referencing missing asset" do
-    exception = -> { Web::Views::Users::Show.render(format: :html) }.must_raise(Lotus::Assets::MissingAssetError)
+    exception = -> { Web::Views::Users::Show.render(format: :html) }.must_raise(Lotus::Assets::MissingDigestAssetError)
     exception.message.must_equal "Can't find asset `/assets/missing.js' in manifest (#{ Lotus::Assets.configuration.manifest_path })"
   end
 end

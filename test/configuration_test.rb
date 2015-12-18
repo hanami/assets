@@ -150,7 +150,7 @@ describe Lotus::Assets::Configuration do
 
       describe 'with digest manifest' do
         before do
-          manifest = Lotus::Assets::Config::Manifest.new({'/assets/application.js' => '/assets/application-abc123.js'}, [])
+          manifest = Lotus::Assets::Config::DigestManifest.new({'/assets/application.js' => '/assets/application-abc123.js'}, [])
           @configuration.instance_variable_set(:@digest_manifest, manifest)
         end
 
@@ -178,7 +178,7 @@ describe Lotus::Assets::Configuration do
 
       describe 'with missing digest manifest' do
         it 'returns asset with digest' do
-          exception = -> { @configuration.asset_path('application.js') }.must_raise Lotus::Assets::MissingManifestError
+          exception = -> { @configuration.asset_path('application.js') }.must_raise Lotus::Assets::MissingDigestManifestError
           exception.message.must_equal "Can't read manifest: #{ @configuration.manifest_path }"
         end
       end
@@ -310,7 +310,7 @@ describe Lotus::Assets::Configuration do
 
       describe 'with digest manifest' do
         before do
-          manifest = Lotus::Assets::Config::Manifest.new({'/assets/application.js' => '/assets/application-abc123.js'}, [])
+          manifest = Lotus::Assets::Config::DigestManifest.new({'/assets/application.js' => '/assets/application-abc123.js'}, [])
 
           @configuration.load!
           @configuration.instance_variable_set(:@digest_manifest, manifest)
@@ -324,7 +324,7 @@ describe Lotus::Assets::Configuration do
 
       describe 'with missing digest manifest' do
         it 'returns asset with digest' do
-          exception = -> { @configuration.asset_url('application.js') }.must_raise Lotus::Assets::MissingManifestError
+          exception = -> { @configuration.asset_url('application.js') }.must_raise Lotus::Assets::MissingDigestManifestError
           exception.message.must_equal "Can't read manifest: #{ @configuration.manifest_path }"
         end
       end

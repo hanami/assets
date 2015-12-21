@@ -5,6 +5,7 @@ Assets management for Ruby web applications
 ### Added
 - [deepj & Michael Deol] Added `Lotus::Assets::Helpers#favicon`
 - [Leigh Halliday] Added `Lotus::Assets::Helpers#video`
+- [Kleber Correia] Added `Lotus::Assets::Helpers#audio`
 - [Gonzalo Rodríguez-Baltanás Díaz] Added `Lotus::Assets::Helpers#image`
 - [Luca Guidi] Added `Lotus::Assets::Helpers#javascript` and `#stylesheet`
 - [Luca Guidi] Added `Lotus::Assets::Helpers#asset_path` and `#asset_url`

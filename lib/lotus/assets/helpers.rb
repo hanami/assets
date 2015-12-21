@@ -438,18 +438,7 @@ module Lotus
       #
       #   # <video src="https://assets.bookshelf.org/assets/movie-28a6b886de2372ee3922fcaf3f78f2d8.mp4"></video>
       def video(src = nil, options = {}, &blk)
-        options ||= {}
-
-        if src.respond_to?(:to_hash)
-          options = src.to_hash
-        elsif src
-          options[:src] = asset_path(src)
-        end
-
-        if !options[:src] && !block_given?
-          raise ArgumentError.new('You should provide a source via `src` option or with a `source` HTML tag')
-        end
-
+        options = _source_options(src, options, &blk)
         html.video(blk, options)
       end
 
@@ -567,18 +556,7 @@ module Lotus
       #
       #   # <audio src="https://assets.bookshelf.org/assets/song-28a6b886de2372ee3922fcaf3f78f2d8.ogg"></audio>
       def audio(src = nil, options = {}, &blk)
-        options ||= {}
-
-        if src.respond_to?(:to_hash)
-          options = src.to_hash
-        elsif src
-          options[:src] = asset_path(src)
-        end
-
-        if !options[:src] && !block_given?
-          raise ArgumentError.new('You should provide a source via `src` option or with a `source` HTML tag')
-        end
-
+        options = _source_options(src, options, &blk)
         html.audio(blk, options)
       end
 
@@ -720,6 +698,24 @@ module Lotus
       # @api private
       def _absolute_url(source)
         self.class.assets_configuration.asset_url(source)
+      end
+
+      # @since x.x.x
+      # @api private
+      def _source_options(src, options, &blk)
+        options ||= {}
+
+        if src.respond_to?(:to_hash)
+          options = src.to_hash
+        elsif src
+          options[:src] = asset_path(src)
+        end
+
+        if !options[:src] && !block_given?
+          raise ArgumentError.new('You should provide a source via `src` option or with a `source` HTML tag')
+        end
+
+        options
       end
 
       # @since x.x.x

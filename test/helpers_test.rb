@@ -179,6 +179,71 @@ describe Lotus::Assets::Helpers do
     end
   end
 
+
+  describe "#audio" do
+    it 'returns an instance of HtmlBuilder' do
+      actual = view.audio('song.ogg')
+      actual.must_be_instance_of ::Lotus::Helpers::HtmlHelper::HtmlBuilder
+    end
+
+    it 'renders <audio> tag' do
+      actual = view.audio('song.ogg').to_s
+      actual.must_equal %(<audio src="/assets/song.ogg"></audio>)
+    end
+
+    it 'renders with html attributes' do
+      actual = view.audio('song.ogg', autoplay: true, controls: true).to_s
+      actual.must_equal %(<audio autoplay="autoplay" controls="controls" src="/assets/song.ogg"></audio>)
+    end
+
+    it 'renders with fallback content' do
+      actual = view.audio('song.ogg') do
+        "Your browser does not support the audio tag"
+      end.to_s
+
+      actual.must_equal %(<audio src="/assets/song.ogg">\nYour browser does not support the audio tag\n</audio>)
+    end
+
+    it 'renders with tracks' do
+      actual = view.audio('song.ogg') do
+        track kind: 'captions', src: view.asset_path('song.pt-BR.vtt'), srclang: 'pt-BR', label: 'Portuguese'
+      end.to_s
+
+      actual.must_equal %(<audio src="/assets/song.ogg">\n<track kind="captions" src="/assets/song.pt-BR.vtt" srclang="pt-BR" label="Portuguese">\n</audio>)
+    end
+
+    it 'renders with sources' do
+      actual = view.audio do
+        text "Your browser does not support the audio tag"
+        source src: view.asset_path('song.ogg'), type: 'audio/ogg'
+        source src: view.asset_path('song.wav'), type: 'audio/wav'
+      end.to_s
+
+      actual.must_equal %(<audio>\nYour browser does not support the audio tag\n<source src="/assets/song.ogg" type="audio/ogg">\n<source src="/assets/song.wav" type="audio/wav">\n</audio>)
+    end
+
+    it 'raises an exception when no arguments' do
+      exception = -> { view.audio() }.must_raise ArgumentError
+      exception.message.must_equal "You should provide a source via `src` option or with a `source` HTML tag"
+    end
+
+    it 'raises an exception when no src and no block' do
+      exception = -> { view.audio(controls: true) }.must_raise ArgumentError
+      exception.message.must_equal "You should provide a source via `src` option or with a `source` HTML tag"
+    end
+
+    describe 'cdn mode' do
+      before do
+        activate_cdn_mode!
+      end
+
+      it 'returns absolute url for src attribute' do
+        actual = view.audio('song.ogg').to_s
+        actual.must_equal %(<audio src="#{ cdn_url }/assets/song.ogg"></audio>)
+      end
+    end
+  end
+
   describe "#asset_path" do
     it "returns relative URL for given asset name" do
       result = view.asset_path('application.js')

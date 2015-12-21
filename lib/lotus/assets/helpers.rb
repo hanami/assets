@@ -453,6 +453,135 @@ module Lotus
         html.video(blk, options)
       end
 
+      # Generate <tt>audio</tt> tag for given source
+      #
+      # It accepts one string representing the name of the asset, if it comes
+      # from the application or third party gems. It also accepts string
+      # representing absolute URLs in case of public CDN (eg. Bootstrap CDN).
+      #
+      # Alternatively, it accepts a block that allows to specify one or more
+      # sources via the <tt>source</tt> tag.
+      #
+      # If the "digest mode" is on, <tt>src</tt> is the digest version of the
+      # relative URL.
+      #
+      # If the "CDN mode" is on, the <tt>src</tt> is an absolute URL of the
+      # application CDN.
+      #
+      # @param sources [String] asset name or absolute URL
+      #
+      # @return [Lotus::Utils::Helpers::HtmlBuilder] the builder
+      #
+      # @raise [Lotus::Assets::MissingDigestAssetError] if digest mode is on and
+      #   the image is missing from the manifest
+      #
+      # @raise [ArgumentError] if source isn't specified both as argument or
+      #   tag inside the given block
+      #
+      # @since x.x.x
+      #
+      # @see Lotus::Assets::Configuration#digest
+      # @see Lotus::Assets::Configuration#cdn
+      # @see Lotus::Assets::Helpers#asset_path
+      #
+      # @example Basic Usage
+      #
+      #   <%= audio 'song.ogg' %>
+      #
+      #   # <audio src="/assets/song.ogg"></audio>
+      #
+      # @example Absolute URL
+      #
+      #   <%= audio 'https://example-cdn.com/assets/song.ogg' %>
+      #
+      #   # <audio src="https://example-cdn.com/assets/song.ogg"></audio>
+      #
+      # @example Custom HTML Attributes
+      #
+      #   <%= audio('song.ogg', autoplay: true, controls: true) %>
+      #
+      #   # <audio src="/assets/song.ogg" autoplay="autoplay" controls="controls"></audio>
+      #
+      # @example Fallback Content
+      #
+      #   <%=
+      #     audio('song.ogg') do
+      #       "Your browser does not support the audio tag"
+      #     end
+      #   %>
+      #
+      #   # <audio src="/assets/song.ogg">
+      #   #  Your browser does not support the audio tag
+      #   # </audio>
+      #
+      # @example Tracks
+      #
+      #   <%=
+      #     audio('song.ogg') do
+      #       track(kind: 'captions', src:  asset_path('song.pt-BR.vtt'),
+      #             srclang: 'pt-BR', label: 'Portuguese')
+      #     end
+      #   %>
+      #
+      #   # <audio src="/assets/song.ogg">
+      #   #   <track kind="captions" src="/assets/song.pt-BR.vtt" srclang="pt-BR" label="Portuguese">
+      #   # </audio>
+      #
+      # @example Sources
+      #
+      #   <%=
+      #     audio do
+      #       text "Your browser does not support the audio tag"
+      #       source(src: asset_path('song.ogg'), type: 'audio/ogg')
+      #       source(src: asset_path('song.wav'), type: 'auido/wav')
+      #     end
+      #   %>
+      #
+      #   # <audio>
+      #   #   Your browser does not support the audio tag
+      #   #   <source src="/assets/song.ogg" type="audio/ogg">
+      #   #   <source src="/assets/song.wav" type="auido/wav">
+      #   # </audio>
+      #
+      # @example Without Any Argument
+      #
+      #   <%= audio %>
+      #
+      #   # ArgumentError
+      #
+      # @example Without src And Without Block
+      #
+      #   <%= audio(controls: true) %>
+      #
+      #   # ArgumentError
+      #
+      # @example Digest Mode
+      #
+      #   <%= audio 'song.ogg' %>
+      #
+      #   # <audio src="/assets/song-28a6b886de2372ee3922fcaf3f78f2d8.ogg"></audio>
+      #
+      # @example CDN Mode
+      #
+      #   <%= audio 'song.ogg' %>
+      #
+      #   # <audio src="https://assets.bookshelf.org/assets/song-28a6b886de2372ee3922fcaf3f78f2d8.ogg"></audio>
+      def audio(src = nil, options = {}, &blk)
+        options ||= {}
+
+        if src.respond_to?(:to_hash)
+          options = src.to_hash
+        elsif src
+          options[:src] = asset_path(src)
+        end
+
+        if !options[:src] && !block_given?
+          raise ArgumentError.new('You should provide a source via `src` option or with a `source` HTML tag')
+        end
+
+        html.audio(blk, options)
+      end
+
       # It generates the relative URL for the given source.
       #
       # It can be the name of the asset, coming from the sources or third party

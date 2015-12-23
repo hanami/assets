@@ -54,6 +54,7 @@ module Lotus
 
         require 'tilt'
         require 'lotus/assets/cache'
+        require 'lotus/assets/rendering_context'
         new(configuration, name).compile
       end
 
@@ -79,8 +80,9 @@ module Lotus
       # @since x.x.x
       # @api private
       def initialize(configuration, name)
-        @configuration = configuration
-        @name          = Pathname.new(name)
+        @configuration     = configuration
+        @name              = Pathname.new(name)
+        @rendering_context = Lotus::Assets::RenderingContext.new(@configuration)
       end
 
       # Compile the asset
@@ -170,7 +172,7 @@ module Lotus
         #
         # This is needed to don't create a `.sass-cache' directory at the root of the project,
         # but to have it under `tmp/sass-cache'.
-        write { Tilt.new(source, nil, load_paths: @configuration.sources.to_a, cache_location: sass_cache_location).render }
+        write { Tilt.new(source, nil, load_paths: @configuration.sources.to_a, cache_location: sass_cache_location).render(@rendering_context) }
       rescue RuntimeError
         raise UnknownAssetEngine.new(source)
       end

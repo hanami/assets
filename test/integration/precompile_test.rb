@@ -15,7 +15,8 @@ describe 'Precompile' do
     let(:dest) { TMP.join('standalone', 'public') }
 
     let(:assets) do
-      ['users.js']
+      ['users.js',
+       'application.css']
     end
 
     it "precompiles assets" do
@@ -45,20 +46,36 @@ describe 'Precompile' do
        'ember.min.js',          # this is a duplicate
        'ember-source.js',       # this is a duplicate
        'application.js',
+       'application.css',
        'admin/ember.js',        # this is a duplicate
        'admin/ember.min.js',    # this is a duplicate
        'admin/ember-source.js', # this is a duplicate
        'admin/zepto.js',
        'admin/application.js',
+       'admin/application.css',
        'metrics/ember.js',
        'metrics/ember.min.js',
        'metrics/ember-source.js',
+       'metrics/application.css',
        'metrics/dashboard.js']
     end
 
     it "precompiles assets" do
       assert_successful_command "#{ __dir__ }/../fixtures/bookshelf/config/environment.rb"
       assert_successful_output(assets)
+    end
+
+    it "uses correct rendering context for assets" do
+      assert_successful_command "#{ __dir__ }/../fixtures/bookshelf/config/environment.rb"
+
+      web_application_stylesheet     = dest.join('assets', 'application.css')
+      web_application_stylesheet.read.must_include %(/assets/bookshelf.jpg)
+
+      admin_application_stylesheet   = dest.join('assets', 'admin', 'application.css')
+      admin_application_stylesheet.read.must_include %(/assets/admin/logo.png)
+
+      metrics_application_stylesheet = dest.join('assets', 'metrics', 'application.css')
+      metrics_application_stylesheet.read.must_include %(/assets/metrics/logo.png)
     end
 
     describe "when already precompiled " do

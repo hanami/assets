@@ -3,7 +3,6 @@ require 'json'
 require 'lotus/utils/string'
 require 'lotus/utils/class'
 require 'lotus/utils/path_prefix'
-require 'lotus/utils/basic_object'
 require 'lotus/assets/config/manifest'
 require 'lotus/assets/config/sources'
 

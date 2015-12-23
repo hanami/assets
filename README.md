@@ -188,8 +188,7 @@ that file would be copied into the public directory instead of the one under
 
 #### Preprocessors
 
-`Lotus::Assets` is able to run assets preprocessors and **lazily compile** them
-under `public/assets` (by default), before the markup is generated.
+`Lotus::Assets` is able to run assets preprocessors and **lazily compile** them under `public/assets` (by default).
 
 Imagine to have `main.css.scss` under `app/assets/stylesheets` and `reset.css` under
 `vendor/stylesheets`.
@@ -229,7 +228,7 @@ public/
     └── main.css
 ```
 
-### Preprocessors engines
+### Preprocessors Engines
 
 `Lotus::Assets` uses [Tilt](https://github.com/rtomayko/tilt) to provide support for the most common preprocessors, such as [Sass](http://sass-lang.com/) (including `sassc-ruby`), [Less](http://lesscss.org/), ES6, [JSX](https://jsx.github.io/), [CoffeScript](http://coffeescript.org), [Opal](http://opalrb.org), [Handlebars](http://handlebarsjs.com), [JBuilder](https://github.com/rails/jbuilder).
 

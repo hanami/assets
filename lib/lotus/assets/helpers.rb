@@ -691,13 +691,13 @@ module Lotus
       # @since x.x.x
       # @api private
       def _relative_url(source)
-        self.class.assets_configuration.asset_path(source)
+        _configuration.asset_path(source)
       end
 
       # @since x.x.x
       # @api private
       def _absolute_url(source)
-        self.class.assets_configuration.asset_url(source)
+        _configuration.asset_url(source)
       end
 
       # @since x.x.x
@@ -727,6 +727,12 @@ module Lotus
         end
 
         url
+      end
+
+      # @since x.x.x
+      # @api private
+      def _configuration
+        self.class.assets_configuration
       end
     end
   end

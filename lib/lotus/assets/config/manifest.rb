@@ -1,3 +1,5 @@
+require 'lotus/utils/basic_object'
+
 module Lotus
   module Assets
     # This error is raised when the application starts but can't be load the

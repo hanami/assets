@@ -10,8 +10,6 @@ describe Lotus::Assets::Bundler do
 
     FileUtils.copy_entry(source, dest.join('assets'))
     config.public_directory.must_equal(dest) # better safe than sorry ;-)
-
-    Lotus::Assets::Bundler.new(config).run
   end
 
   let(:config) do
@@ -24,18 +22,24 @@ describe Lotus::Assets::Bundler do
   let(:source) { __dir__ + '/fixtures/deploy/public/assets' }
 
   it "compresses javascripts" do
+    run!
+
     assets(:js).each do |original, current|
       assert_valid_compressed_asset(original, current)
     end
   end
 
   it "compresses stylesheets" do
+    run!
+
     assets(:css).each do |original, current|
       assert_valid_compressed_asset(original, current)
     end
   end
 
   it "copies other assets" do
+    run!
+
     assets(:png).each do |original, current|
       assert_same_asset(original, current)
       assert_valid_asset(         current)
@@ -43,6 +47,8 @@ describe Lotus::Assets::Bundler do
   end
 
   it "generates manifest" do
+    run!
+
     manifest = dest.join('assets.json')
     manifest.must_be :exist?
 
@@ -58,7 +64,20 @@ describe Lotus::Assets::Bundler do
     end
   end
 
+  it "ensures intermediate directories to be created" do
+    dest.rmtree if dest.exist?
+
+    run!
+
+    manifest = dest.join('assets.json')
+    manifest.must_be :exist?
+  end
+
   private
+
+  def run!
+    Lotus::Assets::Bundler.new(config).run
+  end
 
   def assets(type)
     Dir.glob("#{ dest }/**/*.#{ type }").each_with_object({}) do |current, result|

@@ -129,7 +129,9 @@ module Lotus
       # @since x.x.x
       # @api private
       def _write(path, content)
+        Pathname.new(path).dirname.mkpath
         ::File.write(path, content)
+
         _set_permissions(path)
       end
 

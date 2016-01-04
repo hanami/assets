@@ -9,6 +9,9 @@ module Lotus
           when :yui
             require 'lotus/assets/compressors/yui_javascript'
             YuiJavascript.new
+          when :uglifier
+            require 'lotus/assets/compressors/uglifier_javascript'
+            UglifierJavascript.new
           else
             super
           end

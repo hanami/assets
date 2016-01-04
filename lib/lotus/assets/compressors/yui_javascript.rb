@@ -1,3 +1,4 @@
+require 'lotus/assets/compressors/javascript'
 require 'yui/compressor'
 
 module Lotus

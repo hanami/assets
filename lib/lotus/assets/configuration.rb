@@ -145,6 +145,7 @@ module Lotus
       # The following symbols are accepted:
       #
       #   * <tt>:yui</tt> - YUI-Compressor, it depends on <tt>yui-compressor</tt> gem and requires Java 1.4+
+      #   * <tt>:uglifier</tt> - UglifyJS, it depends on <tt>uglifier</tt> gem and requires Node.js
       #
       # @param value [Symbol,#compress] the compressor
       #
@@ -152,6 +153,9 @@ module Lotus
       #
       # @see http://yui.github.io/yuicompressor
       # @see https://rubygems.org/gems/yui-compressor
+      #
+      # @see http://lisperator.net/uglifyjs
+      # @see https://rubygems.org/gems/uglifier
       #
       # @example YUI Compressor
       #   require 'lotus/assets'

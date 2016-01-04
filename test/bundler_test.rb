@@ -15,6 +15,8 @@ describe Lotus::Assets::Bundler do
   let(:config) do
     Lotus::Assets::Configuration.new.tap do |c|
       c.public_directory dest
+      c.javascript_compressor :yui
+      c.stylesheet_compressor :yui
     end
   end
 

@@ -115,3 +115,12 @@ class ImageHelperView
   include Lotus::Assets::Helpers
 end
 
+class CustomJavascriptCompressor
+  def compress(file)
+  end
+end
+
+class CustomStylesheetCompressor
+  def compress(file)
+  end
+end

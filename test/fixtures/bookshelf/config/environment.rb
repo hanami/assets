@@ -6,6 +6,9 @@ require 'lotus/emberjs'
 
 Lotus::Assets.configure do
   public_directory __dir__ + '/../../../../tmp/bookshelf/public'
+
+  javascript_compressor :yui
+  stylesheet_compressor :yui
 end
 
 unless defined?(Web)

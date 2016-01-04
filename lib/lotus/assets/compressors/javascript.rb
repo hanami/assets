@@ -12,6 +12,9 @@ module Lotus
           when :uglifier
             require 'lotus/assets/compressors/uglifier_javascript'
             UglifierJavascript.new
+          when :closure
+            require 'lotus/assets/compressors/closure_javascript'
+            ClosureJavascript.new
           else
             super
           end

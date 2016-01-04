@@ -73,6 +73,16 @@ describe Lotus::Assets::Bundler do
     manifest.must_be :exist?
   end
 
+  describe "in case of error" do
+    let(:dest)   { TMP.join('broken', 'public') }
+    let(:source) { __dir__ + '/fixtures/broken/public/assets' }
+
+    it "prints the name of the asset that caused the problem" do
+      _, err = capture_subprocess_io { run! }
+      err.must_match "Skipping compression of:"
+    end
+  end
+
   private
 
   def run!

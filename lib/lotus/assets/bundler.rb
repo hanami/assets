@@ -117,6 +117,8 @@ module Lotus
       # @api private
       def _compress(compressor, asset)
         _write(asset, compressor.compress(::File.read(asset)))
+      rescue => e
+        warn "Skipping compression of: `#{ asset }'\n\nReason: #{ e }"
       end
 
       # @since x.x.x

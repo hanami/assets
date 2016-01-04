@@ -33,7 +33,7 @@ module Lotus
 
       # @since x.x.x
       # @api private
-      EXTENSIONS = {'.js' => true, '.css' => true}.freeze
+      EXTENSIONS = {'.js' => true, '.css' => true, '.map' => true}.freeze
 
       # @since x.x.x
       # @api private

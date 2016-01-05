@@ -14,9 +14,9 @@ describe Lotus::Assets::Bundler do
     config.public_directory.must_equal(dest) # better safe than sorry ;-)
   end
 
-  [:yui, :uglifier, :closure, :sass].each do |compressor|
+  [nil, :yui, :uglifier, :closure, :sass].each do |compressor|
 
-    describe "#{ compressor }" do
+    describe "#{ compressor || "NullCompressor" }" do
       let(:config) do
         Lotus::Assets::Configuration.new.tap do |c|
           c.public_directory dest
@@ -63,7 +63,7 @@ describe Lotus::Assets::Bundler do
         assert_permissions(manifest)
 
         actual   = JSON.load(manifest.read)
-        expected = JSON.load(File.read(__dir__ + "/fixtures/deploy/assets-#{ compressor }.json"))
+        expected = JSON.load(File.read(__dir__ + "/fixtures/deploy/assets-#{ compressor || "null" }.json"))
 
         actual.size.must_equal expected.size
         expected.each do |original, current|

@@ -1,3 +1,4 @@
+require 'lotus/assets/compressors/stylesheet'
 require 'yui/compressor'
 
 module Lotus
@@ -5,7 +6,11 @@ module Lotus
     module Compressors
       class YuiStylesheet < Stylesheet
         def initialize
-          @compressor = YUI::JavaScriptCompressor.new
+          @compressor = YUI::CssCompressor.new
+        end
+
+        def compress(file)
+          compressor.compress(read(file))
         end
       end
     end

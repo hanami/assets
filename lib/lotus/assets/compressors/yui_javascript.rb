@@ -8,6 +8,10 @@ module Lotus
         def initialize
           @compressor = YUI::JavaScriptCompressor.new(munge: true)
         end
+
+        def compress(file)
+          compressor.compress(read(file))
+        end
       end
     end
   end

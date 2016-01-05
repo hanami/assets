@@ -11,12 +11,17 @@ module Lotus
             value
           end
         end
+
         def compress(file)
           compressor.compress(file)
         end
 
         protected
         attr_reader :compressor
+
+        def read(file)
+          ::File.read(file)
+        end
       end
     end
   end

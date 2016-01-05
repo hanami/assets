@@ -10,7 +10,9 @@ module Lotus
         end
 
         def compress(file)
-          compressor.compile(file)
+          compressor.compile(
+            read(file)
+          )
         end
       end
     end

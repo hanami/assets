@@ -82,9 +82,8 @@ module Lotus
       # @api private
       def compress(asset)
         case File.extname(asset)
-        # when JAVASCRIPT_EXT then _compress(YUI::JavaScriptCompressor.new(munge: true), asset)
-        when JAVASCRIPT_EXT then _compress(@configuration.js_compressor, asset)
-        when STYLESHEET_EXT then _compress(YUI::CssCompressor.new, asset)
+        when JAVASCRIPT_EXT then _compress(@configuration.js_compressor,  asset)
+        when STYLESHEET_EXT then _compress(@configuration.css_compressor, asset)
         end
       end
 
@@ -117,7 +116,7 @@ module Lotus
       # @since x.x.x
       # @api private
       def _compress(compressor, asset)
-        _write(asset, compressor.compress(::File.read(asset)))
+        _write(asset, compressor.compress(asset))
       rescue => e
         warn "Skipping compression of: `#{ asset }'\nReason: #{ e }\n\t#{ e.backtrace.join("\n\t") }\n\n"
       end

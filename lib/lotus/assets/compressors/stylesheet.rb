@@ -9,6 +9,9 @@ module Lotus
           when :yui
             require 'lotus/assets/compressors/yui_stylesheet'
             YuiStylesheet.new
+          when :sass
+            require 'lotus/assets/compressors/sass_stylesheet'
+            SassStylesheet.new
           else
             super
           end

@@ -195,6 +195,7 @@ module Lotus
       # The following symbols are accepted:
       #
       #   * <tt>:yui</tt> - YUI-Compressor, it depends on <tt>yui-compressor</tt> gem and requires Java 1.4+
+      #   * <tt>:sass</tt> - Sass, it depends on <tt>sass</tt> gem
       #
       # @param value [Symbol,#compress] the compressor
       #

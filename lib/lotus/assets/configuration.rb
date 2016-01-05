@@ -144,6 +144,7 @@ module Lotus
       #
       # The following symbols are accepted:
       #
+      #   * <tt>:builtin</tt> - Ruby based implementation of jsmin. It doesn't require any external gem.
       #   * <tt>:yui</tt> - YUI Compressor, it depends on <tt>yui-compressor</tt> gem and it requires Java 1.4+
       #   * <tt>:uglifier</tt> - UglifyJS, it depends on <tt>uglifier</tt> gem and it requires Node.js
       #   * <tt>:closure</tt> - Google Closure Compiler, it depends on <tt>closure-compiler</tt> gem and it requires Java
@@ -194,6 +195,7 @@ module Lotus
       #
       # The following symbols are accepted:
       #
+      #   * <tt>:builtin</tt> - Ruby based compressor. It doesn't require any external gem. It's not efficient.
       #   * <tt>:yui</tt> - YUI-Compressor, it depends on <tt>yui-compressor</tt> gem and requires Java 1.4+
       #   * <tt>:sass</tt> - Sass, it depends on <tt>sass</tt> gem
       #

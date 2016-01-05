@@ -14,7 +14,7 @@ describe Lotus::Assets::Bundler do
     config.public_directory.must_equal(dest) # better safe than sorry ;-)
   end
 
-  [nil, :yui, :uglifier, :closure, :sass].each do |compressor|
+  [nil, :builtin, :yui, :uglifier, :closure, :sass].each do |compressor|
 
     describe "#{ compressor || "NullCompressor" }" do
       let(:config) do
@@ -182,7 +182,7 @@ describe Lotus::Assets::Bundler do
 
   def _javascript_compressor(compressor)
     case compressor
-    when :yui, :uglifier, :closure
+    when :builtin, :yui, :uglifier, :closure
       compressor
     else
       nil
@@ -191,7 +191,7 @@ describe Lotus::Assets::Bundler do
 
   def _stylesheet_compressor(compressor)
     case compressor
-    when :yui, :sass
+    when :builtin, :yui, :sass
       compressor
     else
       nil

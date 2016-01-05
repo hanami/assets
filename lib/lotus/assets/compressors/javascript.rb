@@ -3,21 +3,17 @@ require 'lotus/assets/compressors/abstract'
 module Lotus
   module Assets
     module Compressors
+      # Base class for JavaScript compressors
+      #
+      # @since x.x.x
+      # @api private
       class Javascript < Abstract
-        def self.for(value)
-          case value
-          when :yui
-            require 'lotus/assets/compressors/yui_javascript'
-            YuiJavascript.new
-          when :uglifier
-            require 'lotus/assets/compressors/uglifier_javascript'
-            UglifierJavascript.new
-          when :closure
-            require 'lotus/assets/compressors/closure_javascript'
-            ClosureJavascript.new
-          else
-            super
-          end
+        # @since x.x.x
+        # @api private
+        #
+        # @see Lotus::Assets::Compressors::Abstract#for
+        def self.for(engine_name)
+          super
         end
       end
     end

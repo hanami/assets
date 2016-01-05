@@ -204,6 +204,9 @@ module Lotus
       # @see http://yui.github.io/yuicompressor
       # @see https://rubygems.org/gems/yui-compressor
       #
+      # @see http://sass-lang.com
+      # @see https://rubygems.org/gems/sass
+      #
       # @example YUI Compressor
       #   require 'lotus/assets'
       #

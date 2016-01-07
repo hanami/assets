@@ -7,7 +7,7 @@ module Lotus
     # This is expecially useful in development mode, where we want to compile
     # only the assets that were changed from last browser refresh.
     #
-    # @since x.x.x
+    # @since 0.1.0
     # @api private
     class Cache
       # Return a new instance
@@ -24,7 +24,7 @@ module Lotus
       #
       # @return [TrueClass,FalseClass] the result of the check
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def fresh?(file)
         @mutex.synchronize do
@@ -38,7 +38,7 @@ module Lotus
       #
       # @return [TrueClass,FalseClass] the result of the check
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def store(file)
         @mutex.synchronize do
@@ -48,7 +48,7 @@ module Lotus
 
       private
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def mtime(file)
         file.mtime.utc.to_i

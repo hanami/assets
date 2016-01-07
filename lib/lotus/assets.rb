@@ -4,13 +4,13 @@ require 'lotus/utils/class_attribute'
 module Lotus
   # Assets management for Ruby web applications
   #
-  # @since x.x.x
+  # @since 0.1.0
   module Assets
     # Base error for Lotus::Assets
     #
     # All the errors defined in this framework MUST inherit from it.
     #
-    # @since x.x.x
+    # @since 0.1.0
     class Error < ::StandardError
     end
 
@@ -23,7 +23,7 @@ module Lotus
 
     # Configuration
     #
-    # @since x.x.x
+    # @since 0.1.0
     # @api private
     class_attribute :configuration
     self.configuration = Configuration.new
@@ -34,7 +34,7 @@ module Lotus
     #
     # @return self
     #
-    # @since x.x.x
+    # @since 0.1.0
     #
     # @see Lotus::Assets::Configuration
     def self.configure(&blk)
@@ -44,7 +44,7 @@ module Lotus
 
     # Prepare assets for deploys
     #
-    # @since x.x.x
+    # @since 0.1.0
     def self.deploy
       require 'lotus/assets/precompiler'
       require 'lotus/assets/bundler'
@@ -57,7 +57,7 @@ module Lotus
     #
     # This MUST be used in production mode
     #
-    # @since x.x.x
+    # @since 0.1.0
     #
     # @example Direct Invocation
     #   require 'lotus/assets'
@@ -84,7 +84,7 @@ module Lotus
     #
     # @return [Lotus::Assets::Config::GlobalSources]
     #
-    # @since x.x.x
+    # @since 0.1.0
     #
     # @example Ember.js Integration
     #   # lib/lotus/emberjs.rb (third party gem)
@@ -104,7 +104,7 @@ module Lotus
     #
     # @return [Module] a copy of Lotus::Assets
     #
-    # @since x.x.x
+    # @since 0.1.0
     #
     # @see Lotus::Assets#dupe
     # @see Lotus::Assets::Configuration
@@ -124,7 +124,7 @@ module Lotus
     #
     # @return [Module] a copy of Lotus::Assets
     #
-    # @since x.x.x
+    # @since 0.1.0
     # @api private
     def self.dupe
       dup.tap do |duplicated|
@@ -136,7 +136,7 @@ module Lotus
     #
     # @return [Array] a collection of duplicated frameworks
     #
-    # @since x.x.x
+    # @since 0.1.0
     # @api private
     #
     # @see Lotus::Assets#duplicate
@@ -149,7 +149,7 @@ module Lotus
 
     private
 
-    # @since x.x.x
+    # @since 0.1.0
     # @api private
     def self.synchronize(&blk)
       Mutex.new.synchronize(&blk)

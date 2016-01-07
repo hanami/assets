@@ -8,13 +8,13 @@ module Lotus
       #
       # It depends on <tt>uglifier</tt> gem
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       #
       # @see http://lisperator.net/uglifyjs
       # @see https://rubygems.org/gems/uglifier
       class UglifierJavascript < Javascript
-        # @since x.x.x
+        # @since 0.1.0
         # @api private
         def initialize
           @compressor = Uglifier.new

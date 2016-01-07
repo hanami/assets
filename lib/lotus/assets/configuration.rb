@@ -11,49 +11,49 @@ module Lotus
   module Assets
     # Framework configuration
     #
-    # @since x.x.x
+    # @since 0.1.0
     class Configuration
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       DEFAULT_SCHEME           = 'http'.freeze
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       DEFAULT_HOST             = 'localhost'.freeze
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       DEFAULT_PORT             = '2300'.freeze
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       DEFAULT_PUBLIC_DIRECTORY = 'public'.freeze
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       DEFAULT_MANIFEST         = 'assets.json'.freeze
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       DEFAULT_PREFIX           = '/assets'.freeze
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       URL_SEPARATOR            = '/'.freeze
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       HTTP_SCHEME              = 'http'.freeze
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       HTTP_PORT                = '80'.freeze
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       HTTPS_SCHEME             = 'https'.freeze
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       HTTPS_PORT               = '443'.freeze
 
@@ -69,7 +69,7 @@ module Lotus
       # @return [Lotus::Assets::Configuration] the configuration associated
       #   to the given class.
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def self.for(base)
         # TODO this implementation is similar to Lotus::Controller::Configuration consider to extract it into Lotus::Utils
@@ -78,7 +78,7 @@ module Lotus
         framework.configuration
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       attr_reader :digest_manifest
 
@@ -86,7 +86,7 @@ module Lotus
       #
       # @return [Lotus::Assets::Configuration] a new instance
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def initialize
         reset!
@@ -97,7 +97,7 @@ module Lotus
       # Determine if compile assets from sources to destination.
       # Usually this is turned off in production mode.
       #
-      # @since x.x.x
+      # @since 0.1.0
       def compile(value = nil)
         if value.nil?
           @compile
@@ -111,7 +111,7 @@ module Lotus
       # Determine if the helpers should generate the digest path for an asset.
       # Usually this is turned on in production mode.
       #
-      # @since x.x.x
+      # @since 0.1.0
       def digest(value = nil)
         if value.nil?
           @digest
@@ -125,7 +125,7 @@ module Lotus
       # Determine if the helpers should always generate absolute URL.
       # This is useful in production mode.
       #
-      # @since x.x.x
+      # @since 0.1.0
       def cdn(value = nil)
         if value.nil?
           @cdn
@@ -151,7 +151,7 @@ module Lotus
       #
       # @param value [Symbol,#compress] the compressor
       #
-      # @since x.x.x
+      # @since 0.1.0
       #
       # @see http://yui.github.io/yuicompressor
       # @see https://rubygems.org/gems/yui-compressor
@@ -201,7 +201,7 @@ module Lotus
       #
       # @param value [Symbol,#compress] the compressor
       #
-      # @since x.x.x
+      # @since 0.1.0
       #
       # @see http://yui.github.io/yuicompressor
       # @see https://rubygems.org/gems/yui-compressor
@@ -236,7 +236,7 @@ module Lotus
       #
       # This is used to generate absolute URL from helpers.
       #
-      # @since x.x.x
+      # @since 0.1.0
       def scheme(value = nil)
         if value.nil?
           @scheme
@@ -249,7 +249,7 @@ module Lotus
       #
       # This is used to generate absolute URL from helpers.
       #
-      # @since x.x.x
+      # @since 0.1.0
       def host(value = nil)
         if value.nil?
           @host
@@ -262,7 +262,7 @@ module Lotus
       #
       # This is used to generate absolute URL from helpers.
       #
-      # @since x.x.x
+      # @since 0.1.0
       def port(value = nil)
         if value.nil?
           @port
@@ -275,7 +275,7 @@ module Lotus
       #
       # This is used to generate absolute or relative URL from helpers.
       #
-      # @since x.x.x
+      # @since 0.1.0
       def prefix(value = nil)
         if value.nil?
           @prefix
@@ -286,7 +286,7 @@ module Lotus
 
       # Sources root
       #
-      # @since x.x.x
+      # @since 0.1.0
       def root(value = nil)
         if value.nil?
           @root
@@ -298,7 +298,7 @@ module Lotus
 
       # Application public directory
       #
-      # @since x.x.x
+      # @since 0.1.0
       def public_directory(value = nil)
         if value.nil?
           @public_directory
@@ -311,7 +311,7 @@ module Lotus
       #
       # It's the combination of <tt>public_directory</tt> and <tt>prefix</tt>.
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def destination_directory
         @destination_directory ||= public_directory.join(*prefix.split(URL_SEPARATOR))
@@ -319,7 +319,7 @@ module Lotus
 
       # Manifest path from public directory
       #
-      # @since x.x.x
+      # @since 0.1.0
       def manifest(value = nil)
         if value.nil?
           @manifest
@@ -330,7 +330,7 @@ module Lotus
 
       # Absolute manifest path
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def manifest_path
         public_directory.join(manifest)
@@ -338,7 +338,7 @@ module Lotus
 
       # Application's assets sources
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def sources
         @sources ||= Lotus::Assets::Config::Sources.new(root)
@@ -346,7 +346,7 @@ module Lotus
 
       # Application's assets
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def files
         sources.files
@@ -354,7 +354,7 @@ module Lotus
 
       # Find a file from sources
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def find(file)
         @sources.find(file)
@@ -362,7 +362,7 @@ module Lotus
 
       # Relative URL
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def asset_path(source)
         cdn ?
@@ -372,7 +372,7 @@ module Lotus
 
       # Absolute URL
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def asset_url(source)
         "#{ @base_url }#{ compile_path(source) }"
@@ -385,7 +385,7 @@ module Lotus
       # @raise [Lotus::Assets::Compressors::UnknownCompressorError] when the
       #   given name refers to an unknown compressor engine
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       #
       # @see Lotus::Assets::Configuration#javascript_compressor
@@ -402,7 +402,7 @@ module Lotus
       # @raise [Lotus::Assets::Compressors::UnknownCompressorError] when the
       #   given name refers to an unknown compressor engine
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       #
       # @see Lotus::Assets::Configuration#stylesheet_compressor
@@ -412,7 +412,7 @@ module Lotus
         Lotus::Assets::Compressors::Stylesheet.for(stylesheet_compressor)
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def duplicate
         Configuration.new.tap do |c|
@@ -431,7 +431,7 @@ module Lotus
         end
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def reset!
         @scheme                = DEFAULT_SCHEME
@@ -456,7 +456,7 @@ module Lotus
       #
       # This MUST be executed before to accept the first HTTP request
       #
-      # @since x.x.x
+      # @since 0.1.0
       def load!
         if digest && manifest_path.exist?
           @digest_manifest = Config::DigestManifest.new(
@@ -470,57 +470,57 @@ module Lotus
 
       protected
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       attr_writer :cdn
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       attr_writer :compile
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       attr_writer :scheme
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       attr_writer :host
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       attr_writer :port
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       attr_writer :prefix
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       attr_writer :root
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       attr_writer :public_directory
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       attr_writer :manifest
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       attr_writer :sources
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       attr_writer :javascript_compressor
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       attr_writer :stylesheet_compressor
 
       private
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def compile_path(source)
         result = prefix.join(source)
@@ -528,7 +528,7 @@ module Lotus
         result.to_s
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def url_port
         ( (scheme == HTTP_SCHEME  && port == HTTP_PORT  ) ||

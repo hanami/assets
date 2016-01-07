@@ -5,7 +5,7 @@ module Lotus
     module Compressors
       # Base class for stylesheet compressors
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       class Stylesheet < Abstract
         # Factory for Stylesheet compressors.
@@ -21,7 +21,7 @@ module Lotus
         # @raise [Lotus::Assets::Compressors::UnknownCompressorError] when the
         #   given name refers to an unknown compressor engine
         #
-        # @since x.x.x
+        # @since 0.1.0
         # @api private
         #
         # @see Lotus::Assets::Compressors::Abstract#for

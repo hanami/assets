@@ -11,10 +11,10 @@ module Lotus
       # @see https://developers.google.com/closure/compiler
       # @see https://rubygems.org/gems/closure-compiler
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       class ClosureJavascript < Javascript
-        # @since x.x.x
+        # @since 0.1.0
         # @api private
         def initialize
           @compressor = Closure::Compiler.new

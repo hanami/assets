@@ -3,7 +3,7 @@ module Lotus
     # This error is raised when the application starts but can't be load the
     # digest manifest.
     #
-    # @since x.x.x
+    # @since 0.1.0
     # @api private
     class MissingDigestManifestError < Error
       def initialize(path)
@@ -14,7 +14,7 @@ module Lotus
     # This error is raised when an asset is referenced from the DOM, but it's
     # not present in the digest manifest
     #
-    # @since x.x.x
+    # @since 0.1.0
     # @api private
     class MissingDigestAssetError < Error
       def initialize(asset, manifest_path)
@@ -24,7 +24,7 @@ module Lotus
 
     # Configuration settings
     #
-    # @since x.x.x
+    # @since 0.1.0
     # @api private
     module Config
       # Default value for configuration's digest manifest.
@@ -38,7 +38,7 @@ module Lotus
       # still referenced by the configuration and all the method invocations
       # will raise a <tt>Lotus::Assets::MissingDigestManifestError</tt>.
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       #
       # @see Lotus::Assets::Configuration#manifest
@@ -51,7 +51,7 @@ module Lotus
         #
         # @return [Lotus::Assets::Config::NullDigestManifest] a new instance
         #
-        # @since x.x.x
+        # @since 0.1.0
         # @api private
         def initialize(configuration)
           @configuration = configuration
@@ -59,7 +59,7 @@ module Lotus
 
         # @raise [Lotus::Assets::MissingDigestManifestError]
         #
-        # @since x.x.x
+        # @since 0.1.0
         # @api private
         def method_missing(*)
           ::Kernel.raise(
@@ -70,7 +70,7 @@ module Lotus
 
       # Digest manifest
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       class DigestManifest
         # Return a new instance
@@ -80,7 +80,7 @@ module Lotus
         #
         # @return [Lotus::Assets::Config::Manifest] a new instance
         #
-        # @since x.x.x
+        # @since 0.1.0
         # @api private
         #
         # @see Lotus::Assets::Configuration#manifest

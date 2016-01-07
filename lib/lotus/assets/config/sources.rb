@@ -4,12 +4,12 @@ module Lotus
   module Assets
     # Configuration settings
     #
-    # @since x.x.x
+    # @since 0.1.0
     # @api private
     module Config
       # Source directories for a specific application
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       #
       # @see Lotus::Assets.duplicate
@@ -17,18 +17,18 @@ module Lotus
       #
       # TODO The perf of this class is poor, consider to improve it.
       class Sources < Utils::LoadPaths
-        # @since x.x.x
+        # @since 0.1.0
         # @api private
         attr_writer :root
 
-        # @since x.x.x
+        # @since 0.1.0
         # @api private
         def initialize(root)
           super()
           @root = root
         end
 
-        # @since x.x.x
+        # @since 0.1.0
         # @api private
         def map
           Array.new.tap do |result|
@@ -38,7 +38,7 @@ module Lotus
           end
         end
 
-        # @since x.x.x
+        # @since 0.1.0
         # @api private
         def find(filename)
           result = files(filename).first
@@ -46,7 +46,7 @@ module Lotus
           result
         end
 
-        # @since x.x.x
+        # @since 0.1.0
         # @api private
         def files(name = nil)
           result = []
@@ -59,14 +59,14 @@ module Lotus
           result
         end
 
-        # @since x.x.x
+        # @since 0.1.0
         # @api private
         def to_a
           map {|s| s }
         end
 
         private
-        # @since x.x.x
+        # @since 0.1.0
         # @api private
         def realpath(path)
           @root.join(path).realpath

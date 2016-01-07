@@ -8,14 +8,14 @@ module Lotus
       #
       # It's raised when trying to load an unknown compressor.
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       #
       # @see Lotus::Assets::Configuration#javascript_compressor
       # @see Lotus::Assets::Configuration#stylesheet_compressor
       # @see Lotus::Assets::Compressors::Abstract#for
       class UnknownCompressorError < Error
-        # @since x.x.x
+        # @since 0.1.0
         # @api private
         def initialize(type, engine_name)
           super("Unknown #{ type } compressor: :#{ engine_name }")
@@ -26,7 +26,7 @@ module Lotus
       #
       # Don't use this class directly, but please use subclasses instead.
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       class Abstract
         # Compress the given asset
@@ -35,7 +35,7 @@ module Lotus
         #
         # @return [String] the compressed asset
         #
-        # @since x.x.x
+        # @since 0.1.0
         # @api private
         def compress(filename)
           compressor.compress(
@@ -44,7 +44,7 @@ module Lotus
         end
 
         protected
-        # @since x.x.x
+        # @since 0.1.0
         # @api private
         attr_reader :compressor
 
@@ -54,7 +54,7 @@ module Lotus
         #
         # @return [String] the contents of asset
         #
-        # @since x.x.x
+        # @since 0.1.0
         # @api private
         def read(filename)
           ::File.read(filename)
@@ -77,7 +77,7 @@ module Lotus
         # @raise [Lotus::Assets::Compressors::UnknownCompressorError] when the
         #   given name refers to an unknown compressor engine
         #
-        # @since x.x.x
+        # @since 0.1.0
         # @api private
         def self.for(engine_name)
           case engine_name
@@ -99,7 +99,7 @@ module Lotus
         # @return [Lotus::Assets::Compress::Abstract] returns a concrete
         #   implementation of a compressor
         #
-        # @since x.x.x
+        # @since 0.1.0
         # @api private
         def self.load_engine(type, engine_name)
           type = Utils::String.new(type).demodulize

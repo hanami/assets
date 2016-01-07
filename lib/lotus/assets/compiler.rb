@@ -20,22 +20,22 @@ module Lotus
     #
     # Vanilla javascripts or stylesheets are just copied over.
     #
-    # @since x.x.x
+    # @since 0.1.0
     # @api private
     class Compiler
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       DEFAULT_PERMISSIONS = 0644
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       COMPILE_PATTERN = '*.*.*'.freeze # Example hello.js.es6
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       EXTENSIONS = {'.js' => true, '.css' => true}.freeze
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       SASS_CACHE_LOCATION = Pathname(Lotus.respond_to?(:root) ?
                                      Lotus.root : Dir.pwd).join('tmp', 'sass-cache')
@@ -47,7 +47,7 @@ module Lotus
       #
       # @param name [String] the asset path
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def self.compile(configuration, name)
         return unless configuration.compile
@@ -59,7 +59,7 @@ module Lotus
 
       # Assets cache
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       #
       # @see Lotus::Assets::Cache
@@ -76,7 +76,7 @@ module Lotus
       #
       # @return [Lotus::Assets::Compiler] a new instance
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def initialize(configuration, name)
         @configuration = configuration
@@ -88,7 +88,7 @@ module Lotus
       # @raise [Lotus::Assets::MissingAsset] if the asset can't be found in
       #   sources
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def compile
         raise MissingAsset.new(@name, @configuration.sources) unless exist?
@@ -105,7 +105,7 @@ module Lotus
 
       private
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def source
         @source ||= begin
@@ -114,13 +114,13 @@ module Lotus
         end
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def destination
         @destination ||= @configuration.destination_directory.join(basename)
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def basename
         result = ::File.basename(@name)
@@ -132,28 +132,28 @@ module Lotus
         end
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def exist?
         !source.nil? &&
           source.exist?
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def fresh?
         !destination.exist? ||
           cache.fresh?(source)
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def compile?
         @compile ||= ::File.fnmatch(COMPILE_PATTERN, source.to_s) &&
           !EXTENSIONS[::File.extname(source.to_s)]
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def compile!
         # NOTE `:load_paths' is useful only for Sass engine, to make `@include' directive to work.
@@ -175,19 +175,19 @@ module Lotus
         raise UnknownAssetEngine.new(source)
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def copy!
         write { source.read }
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def cache!
         cache.store(source)
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def write
         destination.dirname.mkpath
@@ -196,13 +196,13 @@ module Lotus
         end
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def cache
         self.class.cache
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def sass_cache_location
         SASS_CACHE_LOCATION

@@ -6,30 +6,30 @@ module Lotus
   module Assets
     # Bundle assets from a single application.
     #
-    # @since x.x.x
+    # @since 0.1.0
     # @api private
     class Bundler
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       DEFAULT_PERMISSIONS = 0644
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       JAVASCRIPT_EXT      = '.js'.freeze
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       STYLESHEET_EXT      = '.css'.freeze
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       WILDCARD_EXT        = '.*'.freeze
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       URL_SEPARATOR       = '/'.freeze
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       URL_REPLACEMENT     = ''.freeze
 
@@ -42,7 +42,7 @@ module Lotus
       #
       # @return [Lotus::Assets::Bundler] a new instance
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def initialize(configuration, duplicates)
         @manifest       = Hash.new
@@ -79,13 +79,13 @@ module Lotus
 
       private
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def assets
         Dir.glob("#{ public_directory }#{ ::File::SEPARATOR }**#{ ::File::SEPARATOR }*")
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def compress(asset)
         case File.extname(asset)
@@ -94,7 +94,7 @@ module Lotus
         end
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def checksum(asset)
         digest        = Digest::MD5.file(asset)
@@ -108,25 +108,25 @@ module Lotus
         store_manifest(asset, target)
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def generate_manifest
         _write(@configuration.manifest_path, JSON.dump(@manifest))
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def store_manifest(asset, target)
         @manifest[_convert_to_url(::File.expand_path(asset))] = _convert_to_url(::File.expand_path(target))
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def compressor(type, asset)
         _configuration_for(asset).__send__(:"#{ type }_compressor")
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def _compress(compressor, asset)
         _write(asset, compressor.compress(asset))
@@ -134,14 +134,14 @@ module Lotus
         warn "Skipping compression of: `#{ asset }'\nReason: #{ e }\n\t#{ e.backtrace.join("\n\t") }\n\n"
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def _convert_to_url(path)
         path.sub(public_directory.to_s, URL_REPLACEMENT).
           gsub(File::SEPARATOR, URL_SEPARATOR)
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def _write(path, content)
         Pathname.new(path).dirname.mkpath
@@ -150,7 +150,7 @@ module Lotus
         _set_permissions(path)
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def _set_permissions(path)
         ::File.chmod(DEFAULT_PERMISSIONS, path)
@@ -163,7 +163,7 @@ module Lotus
           @configuration
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def public_directory
         @configuration.public_directory

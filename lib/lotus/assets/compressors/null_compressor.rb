@@ -5,10 +5,10 @@ module Lotus
     module Compressors
       # No-op, it returns the asset contents without to compress them.
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       class NullCompressor < Abstract
-        # @since x.x.x
+        # @since 0.1.0
         # @api private
         def compress(filename)
           read(filename)

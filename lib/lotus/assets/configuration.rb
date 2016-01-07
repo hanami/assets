@@ -195,7 +195,7 @@ module Lotus
       #
       # The following symbols are accepted:
       #
-      #   * <tt>:builtin</tt> - Ruby based compressor. It doesn't require any external gem. It's not efficient.
+      #   * <tt>:builtin</tt> - Ruby based compressor. It doesn't require any external gem. It's fast, but not an efficient compressor.
       #   * <tt>:yui</tt> - YUI-Compressor, it depends on <tt>yui-compressor</tt> gem and requires Java 1.4+
       #   * <tt>:sass</tt> - Sass, it depends on <tt>sass</tt> gem
       #

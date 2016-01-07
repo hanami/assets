@@ -20,7 +20,7 @@ module Lotus
         LINE_BREAKS_REPLACEMENT          = "}\n".freeze
         LAST_BREAK_REPLACEMENT           = "".freeze
         INSIDE_LEFT_BRACKET_REPLACEMENT  = " {".freeze
-        INSIDE_RIGHT_BRACKET_REPLACEMENT = " {".freeze
+        INSIDE_RIGHT_BRACKET_REPLACEMENT = "}".freeze
 
         def compress(filename)
           result = read(filename)

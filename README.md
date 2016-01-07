@@ -241,7 +241,7 @@ We strongly suggest to use [EcmaScript 6](http://es6-features.org/) for your nex
 It isn't fully [supported](https://kangax.github.io/compat-table/es6/) yet by browser vendors, but it's the future of JavaScript.
 
 As of today, you need to transpile ES6 code into something understandable by current browsers, which is ES5.
-For this purpose we support [Babel](https://babeljs.io). Make sure to require `'lotus/assets/es6'` to enable it.
+For this purpose we support [Babel](https://babeljs.io).
 
 ### Deployment
 
@@ -317,6 +317,57 @@ public
 │       ├── ember-source.js
 │       └── ember.js
 └── assets.json
+```
+
+#### Compressors
+
+Minification is a process that shrink file size in production, by removing unnecessary spaces and characters.
+The goal of this step, is to have lighter assets to be served faster to the browsers.
+
+Lotus supports JavaScript and stylesheets minifiers.
+
+Because this framework relies on external gems for minification, this feature is **turned off by default**.
+
+To do so we need to specify which gem we want to use and add it to our `Gemfile`.
+
+##### JavaScript Compressors
+
+Lotus can use the following compressors (aka minifiers) for JavaScript.
+
+  * `:builtin` - Ruby based implementation of jsmin. It doesn't require any external gem.
+  * `:yui` - [YUI Compressor](http://yui.github.io/yuicompressor), it depends on [`yui-compressor`](https://rubygems.org/gems/yui-compressor) gem and iπt requires Java 1.4+
+  * `:uglifier` - [UglifyJS](http://lisperator.net/uglifyjs), it depends on [`uglifier`](https://rubygems.org/gems/uglifier) gem and it requires Node.js
+  * `:closure` - [Google Closure Compiler](https://developers.google.com/closure/compiler), it depends on [`closure-compiler`](https://rubygems.org/gems/closure-compiler) gem and it requires Java
+
+```ruby
+Lotus::Assets.configure do
+  javascript_compressor :uglifier
+end
+```
+
+##### Stylesheet Compressors
+
+Lotus can use the following compressors (aka minifiers) for Stylesheet.
+
+  * `:builtin` - Ruby based compressor. It doesn't require any external gem. It's fast, but not an efficient compressor.
+  * `:yui` - [YUI Compressor](http://yui.github.io/yuicompressor), it depends on [`yui-compressor`](https://rubygems.org/gems/yui-compressor) gem and iπt requires Java 1.4+
+  * `:sass` - [Sass](http://sass-lang.com/), it depends on [`sass`](https://rubygems.org/gems/sass) gem
+
+```ruby
+Lotus::Assets.configure do
+  stylesheet_compressor :sass
+end
+```
+
+##### Custom Compressors
+
+We can specify our own minifiers:
+
+```ruby
+Lotus::Assets.configure do
+  javascript_compressor MyJavascriptCompressor.new
+  stylesheet_compressor MyStylesheetCompressor.new
+end
 ```
 
 ### Digest Mode

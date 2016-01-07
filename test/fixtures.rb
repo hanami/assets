@@ -1,9 +1,9 @@
 require 'erb'
 require 'sass'
 require 'coffee_script'
-require 'lotus/assets/es6'
 require 'lotus/view'
 require 'tilt/erb'
+require 'tilt/babel'
 
 module View
   def self.included(base)
@@ -115,3 +115,12 @@ class ImageHelperView
   include Lotus::Assets::Helpers
 end
 
+class CustomJavascriptCompressor
+  def compress(file)
+  end
+end
+
+class CustomStylesheetCompressor
+  def compress(file)
+  end
+end

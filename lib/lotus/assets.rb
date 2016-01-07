@@ -50,7 +50,7 @@ module Lotus
       require 'lotus/assets/bundler'
 
       Precompiler.new(configuration, duplicates).run
-      Bundler.new(configuration).run
+      Bundler.new(configuration,     duplicates).run
     end
 
     # Preload the framework

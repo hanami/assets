@@ -98,7 +98,7 @@ describe Lotus::Assets::Bundler do
   private
 
   def run!
-    Lotus::Assets::Bundler.new(config).run
+    Lotus::Assets::Bundler.new(config, []).run
   end
 
   def assets(type)

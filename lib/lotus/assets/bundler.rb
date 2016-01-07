@@ -37,13 +37,21 @@ module Lotus
       #
       # @param configuration [Lotus::Assets::Configuration] a single application configuration
       #
+      # @param duplicates [Array<Lotus::Assets>] the duplicated frameworks
+      #   (one for each application)
+      #
       # @return [Lotus::Assets::Bundler] a new instance
       #
       # @since x.x.x
       # @api private
-      def initialize(configuration)
-        @configuration = configuration
-        @manifest      = Hash.new
+      def initialize(configuration, duplicates)
+        @manifest       = Hash.new
+        @configuration  = configuration
+        @configurations = if duplicates.empty?
+                            [@configuration]
+                          else
+                            duplicates.map(&:configuration)
+                          end
       end
 
       # Start the process.
@@ -81,8 +89,8 @@ module Lotus
       # @api private
       def compress(asset)
         case File.extname(asset)
-        when JAVASCRIPT_EXT then _compress(@configuration.js_compressor,  asset)
-        when STYLESHEET_EXT then _compress(@configuration.css_compressor, asset)
+        when JAVASCRIPT_EXT then _compress(compressor(:js, asset),  asset)
+        when STYLESHEET_EXT then _compress(compressor(:css, asset), asset)
         end
       end
 
@@ -114,6 +122,12 @@ module Lotus
 
       # @since x.x.x
       # @api private
+      def compressor(type, asset)
+        _configuration_for(asset).__send__(:"#{ type }_compressor")
+      end
+
+      # @since x.x.x
+      # @api private
       def _compress(compressor, asset)
         _write(asset, compressor.compress(asset))
       rescue => e
@@ -140,6 +154,13 @@ module Lotus
       # @api private
       def _set_permissions(path)
         ::File.chmod(DEFAULT_PERMISSIONS, path)
+      end
+
+      def _configuration_for(asset)
+        url = _convert_to_url(asset)
+
+        @configurations.find {|config| url.start_with?(config.prefix) } ||
+          @configuration
       end
 
       # @since x.x.x

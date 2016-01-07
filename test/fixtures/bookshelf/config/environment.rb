@@ -12,48 +12,6 @@ Lotus::Assets.configure do
 end
 
 unless defined?(Web)
-  module Web
-    View   = Lotus::View.duplicate(self) do
-      root __dir__ + '/../../../fixtures/bookshelf/apps/web/templates'
-      layout :application
-
-      prepare do
-        include Web::Assets::Helpers
-      end
-    end
-
-    Assets = Lotus::Assets.duplicate(self) do
-      root             __dir__ + '/../../../fixtures/bookshelf/apps/web'
-      public_directory __dir__ + '/../../../../tmp/bookshelf/public'
-      manifest         'assets.json'
-      prefix           '/assets'
-      compile          true
-
-      sources << [
-        'assets',
-        'vendor/assets/javascripts'
-      ]
-    end
-
-    module Views
-      class ApplicationLayout
-        include Web::Layout
-      end
-
-      module Books
-        class Show
-          include Web::View
-        end
-      end
-
-      module Users
-        class Show
-          include Web::View
-        end
-      end
-    end
-  end
-
   module Admin
     View   = Lotus::View.duplicate(self) do
       root __dir__ + '/../../../fixtures/bookshelf/apps/admin/templates'
@@ -119,6 +77,48 @@ unless defined?(Web)
       module Dashboard
         class Index
           include Metrics::View
+        end
+      end
+    end
+  end
+
+  module Web
+    View   = Lotus::View.duplicate(self) do
+      root __dir__ + '/../../../fixtures/bookshelf/apps/web/templates'
+      layout :application
+
+      prepare do
+        include Web::Assets::Helpers
+      end
+    end
+
+    Assets = Lotus::Assets.duplicate(self) do
+      root             __dir__ + '/../../../fixtures/bookshelf/apps/web'
+      public_directory __dir__ + '/../../../../tmp/bookshelf/public'
+      manifest         'assets.json'
+      prefix           '/assets'
+      compile          true
+
+      sources << [
+        'assets',
+        'vendor/assets/javascripts'
+      ]
+    end
+
+    module Views
+      class ApplicationLayout
+        include Web::Layout
+      end
+
+      module Books
+        class Show
+          include Web::View
+        end
+      end
+
+      module Users
+        class Show
+          include Web::View
         end
       end
     end

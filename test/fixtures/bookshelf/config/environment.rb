@@ -1,8 +1,8 @@
 require 'rubygems'
 require 'bundler/setup'
 require 'lotus/view'
-require 'lotus/assets/es6'
 require 'lotus/emberjs'
+require 'tilt/babel'
 
 Lotus::Assets.configure do
   public_directory __dir__ + '/../../../../tmp/bookshelf/public'

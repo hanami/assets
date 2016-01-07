@@ -1,9 +1,9 @@
 require 'erb'
 require 'sass'
 require 'coffee_script'
-require 'lotus/assets/es6'
 require 'lotus/view'
 require 'tilt/erb'
+require 'tilt/babel'
 
 module View
   def self.included(base)

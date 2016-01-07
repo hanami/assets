@@ -1,8 +1,10 @@
 # Lotus::Assets
 Assets management for Ruby web applications
 
-## v0.1.0 - (unreleased)
+## v0.1.0 - 2016-01-12
 ### Added
+- [Luca Guidi] Configurable assets compressors
+- [Luca Guidi] Builtin JavaScript and stylesheet compressors
 - [deepj & Michael Deol] Added `Lotus::Assets::Helpers#favicon`
 - [Leigh Halliday] Added `Lotus::Assets::Helpers#video`
 - [Kleber Correia] Added `Lotus::Assets::Helpers#audio`

@@ -10,18 +10,37 @@ module Lotus
       #
       # Copyright (c) 2006-2008 Scott Becker
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       #
       # @see https://github.com/sbecker/asset_packager
       class BuiltinStylesheet < Stylesheet
+        # @since 0.1.0
+        # @api private
         SPACE_REPLACEMENT                = " ".freeze
+
+        # @since 0.1.0
+        # @api private
         COMMENTS_REPLACEMENT             = "".freeze
+
+        # @since 0.1.0
+        # @api private
         LINE_BREAKS_REPLACEMENT          = "}\n".freeze
+
+        # @since 0.1.0
+        # @api private
         LAST_BREAK_REPLACEMENT           = "".freeze
+
+        # @since 0.1.0
+        # @api private
         INSIDE_LEFT_BRACKET_REPLACEMENT  = " {".freeze
+
+        # @since 0.1.0
+        # @api private
         INSIDE_RIGHT_BRACKET_REPLACEMENT = "}".freeze
 
+        # @since 0.1.0
+        # @api private
         def compress(filename)
           result = read(filename)
           result.gsub!(/\s+/,            SPACE_REPLACEMENT)                # collapse space

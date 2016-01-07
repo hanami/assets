@@ -14,7 +14,7 @@ module Lotus
       #
       # Copyright (c) 2008-2012 Ryan Grove
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       #
       # @see https://github.com/sbecker/asset_packager
@@ -23,6 +23,8 @@ module Lotus
           @compressor = JSMin
         end
 
+        # @since 0.1.0
+        # @api private
         def compress(filename)
           compressor.minify(
             read(filename)

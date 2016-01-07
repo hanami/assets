@@ -10,47 +10,47 @@ module Lotus
     #
     # Include this helper in a view
     #
-    # @since x.x.x
+    # @since 0.1.0
     #
     # @see http://www.rubydoc.info/gems/lotus-helpers/Lotus/Helpers/HtmlHelper
     module Helpers
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       NEW_LINE_SEPARATOR = "\n".freeze
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       WILDCARD_EXT   = '.*'.freeze
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       JAVASCRIPT_EXT = '.js'.freeze
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       STYLESHEET_EXT = '.css'.freeze
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       JAVASCRIPT_MIME_TYPE = 'text/javascript'.freeze
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       STYLESHEET_MIME_TYPE = 'text/css'.freeze
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       FAVICON_MIME_TYPE    = 'image/x-icon'.freeze
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       STYLESHEET_REL  = 'stylesheet'.freeze
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       FAVICON_REL     = 'shortcut icon'.freeze
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       DEFAULT_FAVICON = 'favicon.ico'.freeze
 
@@ -58,7 +58,7 @@ module Lotus
 
       # Inject helpers into the given class
       #
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def self.included(base)
         conf = ::Lotus::Assets::Configuration.for(base)
@@ -89,7 +89,7 @@ module Lotus
       # @raise [Lotus::Assets::MissingDigestAssetError] if digest mode is on and
       #   at least one of the given sources is missing from the manifest
       #
-      # @since x.x.x
+      # @since 0.1.0
       #
       # @see Lotus::Assets::Configuration#digest
       # @see Lotus::Assets::Configuration#cdn
@@ -150,7 +150,7 @@ module Lotus
       # @raise [Lotus::Assets::MissingDigestAssetError] if digest mode is on and
       #   at least one of the given sources is missing from the manifest
       #
-      # @since x.x.x
+      # @since 0.1.0
       #
       # @see Lotus::Assets::Configuration#digest
       # @see Lotus::Assets::Configuration#cdn
@@ -207,14 +207,14 @@ module Lotus
       # If the "CDN mode" is on, the <tt>src</tt> is an absolute URL of the
       # application CDN.
       #
-      # @param sources [String] asset name or absolute URL
+      # @param source [String] asset name or absolute URL
       #
       # @return [Lotus::Utils::Helpers::HtmlBuilder] the builder
       #
       # @raise [Lotus::Assets::MissingDigestAssetError] if digest mode is on and
       #   the image is missing from the manifest
       #
-      # @since x.x.x
+      # @since 0.1.0
       #
       # @see Lotus::Assets::Configuration#digest
       # @see Lotus::Assets::Configuration#cdn
@@ -274,14 +274,14 @@ module Lotus
       # If the "CDN mode" is on, the <tt>href</tt> is an absolute URL of the
       # application CDN.
       #
-      # @param sources [String] asset name
+      # @param source [String] asset name
       #
       # @return [Lotus::Utils::Helpers::HtmlBuilder] the builder
       #
       # @raise [Lotus::Assets::MissingDigestAssetError] if digest mode is on and
       #   the favicon is missing from the manifest
       #
-      # @since x.x.x
+      # @since 0.1.0
       #
       # @see Lotus::Assets::Configuration#digest
       # @see Lotus::Assets::Configuration#cdn
@@ -339,7 +339,7 @@ module Lotus
       # If the "CDN mode" is on, the <tt>src</tt> is an absolute URL of the
       # application CDN.
       #
-      # @param sources [String] asset name or absolute URL
+      # @param source [String] asset name or absolute URL
       #
       # @return [Lotus::Utils::Helpers::HtmlBuilder] the builder
       #
@@ -349,7 +349,7 @@ module Lotus
       # @raise [ArgumentError] if source isn't specified both as argument or
       #   tag inside the given block
       #
-      # @since x.x.x
+      # @since 0.1.0
       #
       # @see Lotus::Assets::Configuration#digest
       # @see Lotus::Assets::Configuration#cdn
@@ -437,8 +437,8 @@ module Lotus
       #   <%= video 'movie.mp4' %>
       #
       #   # <video src="https://assets.bookshelf.org/assets/movie-28a6b886de2372ee3922fcaf3f78f2d8.mp4"></video>
-      def video(src = nil, options = {}, &blk)
-        options = _source_options(src, options, &blk)
+      def video(source = nil, options = {}, &blk)
+        options = _source_options(source, options, &blk)
         html.video(blk, options)
       end
 
@@ -457,7 +457,7 @@ module Lotus
       # If the "CDN mode" is on, the <tt>src</tt> is an absolute URL of the
       # application CDN.
       #
-      # @param sources [String] asset name or absolute URL
+      # @param source [String] asset name or absolute URL
       #
       # @return [Lotus::Utils::Helpers::HtmlBuilder] the builder
       #
@@ -467,7 +467,7 @@ module Lotus
       # @raise [ArgumentError] if source isn't specified both as argument or
       #   tag inside the given block
       #
-      # @since x.x.x
+      # @since 0.1.0
       #
       # @see Lotus::Assets::Configuration#digest
       # @see Lotus::Assets::Configuration#cdn
@@ -555,8 +555,8 @@ module Lotus
       #   <%= audio 'song.ogg' %>
       #
       #   # <audio src="https://assets.bookshelf.org/assets/song-28a6b886de2372ee3922fcaf3f78f2d8.ogg"></audio>
-      def audio(src = nil, options = {}, &blk)
-        options = _source_options(src, options, &blk)
+      def audio(source = nil, options = {}, &blk)
+        options = _source_options(source, options, &blk)
         html.audio(blk, options)
       end
 
@@ -578,7 +578,7 @@ module Lotus
       # @raise [Lotus::Assets::MissingDigestAssetError] if digest mode is on and
       #   the asset is missing from the manifest
       #
-      # @since x.x.x
+      # @since 0.1.0
       #
       # @example Basic Usage
       #
@@ -625,7 +625,7 @@ module Lotus
       # @raise [Lotus::Assets::MissingDigestAssetError] if digest mode is on and
       #   the asset is missing from the manifest
       #
-      # @since x.x.x
+      # @since 0.1.0
       #
       # @example Basic Usage
       #
@@ -656,7 +656,7 @@ module Lotus
 
       private
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def _safe_tags(*sources)
         ::Lotus::Utils::Escape::SafeString.new(
@@ -666,7 +666,7 @@ module Lotus
         )
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def _asset_url(source)
         _push_promise(
@@ -675,32 +675,32 @@ module Lotus
         )
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def _typed_asset_path(source, ext)
         source = "#{ source }#{ ext }" unless source.match(/#{ Regexp.escape(ext) }\z/)
         asset_path(source)
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def _absolute_url?(source)
         URI.regexp.match(source)
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def _relative_url(source)
         self.class.assets_configuration.asset_path(source)
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def _absolute_url(source)
         self.class.assets_configuration.asset_url(source)
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def _source_options(src, options, &blk)
         options ||= {}
@@ -718,7 +718,7 @@ module Lotus
         options
       end
 
-      # @since x.x.x
+      # @since 0.1.0
       # @api private
       def _push_promise(url)
         Mutex.new.synchronize do

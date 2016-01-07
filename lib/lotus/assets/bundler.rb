@@ -1,7 +1,6 @@
 require 'digest'
 require 'fileutils'
 require 'json'
-require 'yui/compressor'
 
 module Lotus
   module Assets

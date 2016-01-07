@@ -1,4 +1,6 @@
 require 'test_helper'
+require 'lotus/assets/compressors/javascript'
+require 'lotus/assets/compressors/stylesheet'
 
 describe Lotus::Assets::Configuration do
   before do
@@ -7,6 +9,90 @@ describe Lotus::Assets::Configuration do
 
   after do
     @configuration.reset!
+  end
+
+  describe '#javascript_compressor' do
+    describe "default" do
+      it "is nil by default" do
+        @configuration.javascript_compressor.must_be_nil
+      end
+
+      it "returns NullCompressor for internal usage" do
+        @configuration.js_compressor.must_be_kind_of Lotus::Assets::Compressors::NullCompressor
+      end
+    end
+
+    describe "when :yui" do
+      before do
+        @configuration.javascript_compressor :yui
+      end
+
+      it "returns value before to load configuration" do
+        @configuration.javascript_compressor.must_equal :yui
+      end
+
+      it "is instance of Lotus::Assets::Compressors::YuiJavascriptCompressor" do
+        @configuration.js_compressor.must_be_kind_of Lotus::Assets::Compressors::YuiJavascript
+      end
+    end
+
+    describe "when object" do
+      before do
+        @configuration.javascript_compressor compressor
+      end
+
+      let(:compressor) { CustomJavascriptCompressor.new }
+
+      it "returns value before to load configuration" do
+        @configuration.javascript_compressor.must_equal compressor
+      end
+
+      it "returns value after loading" do
+        @configuration.js_compressor.must_equal compressor
+      end
+    end
+  end
+
+  describe '#stylesheet_compressor' do
+    describe "default" do
+      it "is nil by default" do
+        @configuration.stylesheet_compressor.must_be_nil
+      end
+
+      it "returns NullCompressor when loaded" do
+        @configuration.css_compressor.must_be_kind_of Lotus::Assets::Compressors::NullCompressor
+      end
+    end
+
+    describe "when :yui" do
+      before do
+        @configuration.stylesheet_compressor :yui
+      end
+
+      it "returns value before to load configuration" do
+        @configuration.stylesheet_compressor.must_equal :yui
+      end
+
+      it "is instance of Lotus::Assets::Compressors::YuiStylesheetCompressor" do
+        @configuration.css_compressor.must_be_kind_of Lotus::Assets::Compressors::YuiStylesheet
+      end
+    end
+
+    describe "when object" do
+      before do
+        @configuration.stylesheet_compressor compressor
+      end
+
+      let(:compressor) { CustomStylesheetCompressor.new }
+
+      it "returns value before to load configuration" do
+        @configuration.css_compressor.must_equal compressor
+      end
+
+      it "returns value after loading" do
+        @configuration.css_compressor.must_equal compressor
+      end
+    end
   end
 
   describe '#cdn' do
@@ -337,6 +423,8 @@ describe Lotus::Assets::Configuration do
       @configuration.host   'example.com'
       @configuration.port   '443'
       @configuration.prefix 'prfx'
+      @configuration.javascript_compressor :yui
+      @configuration.stylesheet_compressor :yui
       @configuration.manifest 'assets.json'
       @configuration.public_directory(Dir.pwd + '/tmp')
       @configuration.instance_variable_set(:@digest_manifest, {})
@@ -365,6 +453,14 @@ describe Lotus::Assets::Configuration do
       @configuration.prefix.must_equal '/assets'
     end
 
+    it 'sets default value for javascript_compressor' do
+      @configuration.javascript_compressor.must_be_nil
+    end
+
+    it 'sets default value for stylesheet_compressor' do
+      @configuration.stylesheet_compressor.must_be_nil
+    end
+
     it 'sets default value for manifest' do
       @configuration.manifest.must_equal('assets.json')
     end
@@ -378,67 +474,77 @@ describe Lotus::Assets::Configuration do
   describe '#duplicate' do
     before do
       @configuration.reset!
-      @configuration.cdn              true
-      @configuration.compile          true
-      @configuration.scheme           'ftp'
-      @configuration.host             'lotusrb.org'
-      @configuration.port             '8080'
-      @configuration.prefix           '/foo'
-      @configuration.manifest         'm.json'
-      @configuration.root             __dir__
-      @configuration.public_directory __dir__
-      @configuration.sources       << __dir__ + '/fixtures/javascripts'
+      @configuration.cdn                   true
+      @configuration.compile               true
+      @configuration.scheme                'ftp'
+      @configuration.host                  'lotusrb.org'
+      @configuration.port                  '8080'
+      @configuration.prefix                '/foo'
+      @configuration.manifest              'm.json'
+      @configuration.javascript_compressor :yui
+      @configuration.stylesheet_compressor :yui
+      @configuration.root                  __dir__
+      @configuration.public_directory      __dir__
+      @configuration.sources            << __dir__ + '/fixtures/javascripts'
 
       @config = @configuration.duplicate
     end
 
     it 'returns a copy of the configuration' do
-      @config.cdn.must_equal              true
-      @config.compile.must_equal          true
-      @config.scheme.must_equal           'ftp'
-      @config.host.must_equal             'lotusrb.org'
-      @config.port.must_equal             '8080'
-      @config.prefix.must_equal           '/foo'
-      @config.manifest.must_equal         'm.json'
-      @config.root.must_equal             Pathname.new(__dir__)
-      @config.public_directory.must_equal Pathname.new(__dir__)
+      @config.cdn.must_equal                   true
+      @config.compile.must_equal               true
+      @config.scheme.must_equal                'ftp'
+      @config.host.must_equal                  'lotusrb.org'
+      @config.port.must_equal                  '8080'
+      @config.prefix.must_equal                '/foo'
+      @config.manifest.must_equal              'm.json'
+      @config.javascript_compressor.must_equal :yui
+      @config.stylesheet_compressor.must_equal :yui
+      @config.root.must_equal                  Pathname.new(__dir__)
+      @config.public_directory.must_equal      Pathname.new(__dir__)
       assert @config.sources == [__dir__ + '/fixtures/javascripts'],
         "Expected #{ @config.sources } to eq [#{ __dir__ }/fixtures/javascripts'], found: #{ @config.sources.inspect }"
     end
 
     it "doesn't affect the original configuration" do
-      @config.cdn              false
-      @config.compile          false
-      @config.scheme           'mailto'
-      @config.host             'example.org'
-      @config.port             '9091'
-      @config.prefix           '/bar'
-      @config.manifest         'a.json'
-      @config.root             __dir__ + '/fixtures'
-      @config.public_directory __dir__ + '/fixtures'
-      @config.sources <<  __dir__ + '/fixtures/stylesheets'
+      @config.cdn                   false
+      @config.compile               false
+      @config.scheme                'mailto'
+      @config.host                  'example.org'
+      @config.port                  '9091'
+      @config.prefix                '/bar'
+      @config.manifest              'a.json'
+      @config.javascript_compressor :uglify
+      @config.stylesheet_compressor :uglify
+      @config.root                  __dir__ + '/fixtures'
+      @config.public_directory      __dir__ + '/fixtures'
+      @config.sources << __dir__ + '/fixtures/stylesheets'
 
-      @config.cdn.must_equal              false
-      @config.compile.must_equal          false
-      @config.scheme.must_equal           'mailto'
-      @config.host.must_equal             'example.org'
-      @config.port.must_equal             '9091'
-      @config.prefix.must_equal           '/bar'
-      @config.manifest.must_equal         'a.json'
-      @config.root.must_equal             Pathname.new(__dir__ + '/fixtures')
-      @config.public_directory.must_equal Pathname.new(__dir__ + '/fixtures')
+      @config.cdn.must_equal                   false
+      @config.compile.must_equal               false
+      @config.scheme.must_equal                'mailto'
+      @config.host.must_equal                  'example.org'
+      @config.port.must_equal                  '9091'
+      @config.prefix.must_equal                '/bar'
+      @config.manifest.must_equal              'a.json'
+      @config.javascript_compressor.must_equal :uglify
+      @config.stylesheet_compressor.must_equal :uglify
+      @config.root.must_equal                  Pathname.new(__dir__ + '/fixtures')
+      @config.public_directory.must_equal      Pathname.new(__dir__ + '/fixtures')
       assert @config.sources == [__dir__ + '/fixtures/javascripts', __dir__ + '/fixtures/stylesheets'],
         "Expected @config.sources to eq [#{ __dir__ }/fixtures/javascripts', #{ __dir__ }/fixtures/stylesheets'], found: #{ @config.sources.inspect }"
 
-      @configuration.cdn.must_equal              true
-      @configuration.compile.must_equal          true
-      @configuration.scheme.must_equal           'ftp'
-      @configuration.host.must_equal             'lotusrb.org'
-      @configuration.port.must_equal             '8080'
-      @configuration.prefix.must_equal           '/foo'
-      @configuration.manifest.must_equal         'm.json'
-      @configuration.root.must_equal             Pathname.new(__dir__)
-      @configuration.public_directory.must_equal Pathname.new(__dir__)
+      @configuration.cdn.must_equal                   true
+      @configuration.compile.must_equal               true
+      @configuration.scheme.must_equal                'ftp'
+      @configuration.host.must_equal                  'lotusrb.org'
+      @configuration.port.must_equal                  '8080'
+      @configuration.prefix.must_equal                '/foo'
+      @configuration.manifest.must_equal              'm.json'
+      @configuration.javascript_compressor.must_equal :yui
+      @configuration.stylesheet_compressor.must_equal :yui
+      @configuration.root.must_equal                  Pathname.new(__dir__)
+      @configuration.public_directory.must_equal      Pathname.new(__dir__)
       assert @configuration.sources == [__dir__ + '/fixtures/javascripts'],
         "Expected @config.sources to eq [#{ __dir__ }/fixtures/javascripts'], found: #{ @config.sources.inspect }"
     end

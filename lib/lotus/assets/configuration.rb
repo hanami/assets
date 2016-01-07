@@ -134,6 +134,104 @@ module Lotus
         end
       end
 
+      # JavaScript compressor
+      #
+      # Determine which compressor to use for JavaScript files during deploy.
+      #
+      # By default it's <tt>nil</tt>, that means it doesn't compress JavaScripts at deploy time.
+      #
+      # It accepts a <tt>Symbol</tt> or an object that respond to <tt>#compress(file)</tt>.
+      #
+      # The following symbols are accepted:
+      #
+      #   * <tt>:builtin</tt> - Ruby based implementation of jsmin. It doesn't require any external gem.
+      #   * <tt>:yui</tt> - YUI Compressor, it depends on <tt>yui-compressor</tt> gem and it requires Java 1.4+
+      #   * <tt>:uglifier</tt> - UglifyJS, it depends on <tt>uglifier</tt> gem and it requires Node.js
+      #   * <tt>:closure</tt> - Google Closure Compiler, it depends on <tt>closure-compiler</tt> gem and it requires Java
+      #
+      # @param value [Symbol,#compress] the compressor
+      #
+      # @since x.x.x
+      #
+      # @see http://yui.github.io/yuicompressor
+      # @see https://rubygems.org/gems/yui-compressor
+      #
+      # @see http://lisperator.net/uglifyjs
+      # @see https://rubygems.org/gems/uglifier
+      #
+      # @see https://developers.google.com/closure/compiler
+      # @see https://rubygems.org/gems/closure-compiler
+      #
+      # @example YUI Compressor
+      #   require 'lotus/assets'
+      #
+      #   Lotus::Assets.configure do
+      #     # ...
+      #     javascript_compressor :yui
+      #   end.load!
+      #
+      # @example Custom Compressor
+      #   require 'lotus/assets'
+      #
+      #   Lotus::Assets.configure do
+      #     # ...
+      #     javascript_compressor MyCustomJavascriptCompressor.new
+      #   end.load!
+      def javascript_compressor(value = nil)
+        if value.nil?
+          @javascript_compressor
+        else
+          @javascript_compressor = value
+        end
+      end
+
+      # Stylesheet compressor
+      #
+      # Determine which compressor to use for Stylesheet files during deploy.
+      #
+      # By default it's <tt>nil</tt>, that means it doesn't compress Stylesheets at deploy time.
+      #
+      # It accepts a <tt>Symbol</tt> or an object that respond to <tt>#compress(file)</tt>.
+      #
+      # The following symbols are accepted:
+      #
+      #   * <tt>:builtin</tt> - Ruby based compressor. It doesn't require any external gem. It's fast, but not an efficient compressor.
+      #   * <tt>:yui</tt> - YUI-Compressor, it depends on <tt>yui-compressor</tt> gem and requires Java 1.4+
+      #   * <tt>:sass</tt> - Sass, it depends on <tt>sass</tt> gem
+      #
+      # @param value [Symbol,#compress] the compressor
+      #
+      # @since x.x.x
+      #
+      # @see http://yui.github.io/yuicompressor
+      # @see https://rubygems.org/gems/yui-compressor
+      #
+      # @see http://sass-lang.com
+      # @see https://rubygems.org/gems/sass
+      #
+      # @example YUI Compressor
+      #   require 'lotus/assets'
+      #
+      #   Lotus::Assets.configure do
+      #     # ...
+      #     stylesheet_compressor :yui
+      #   end.load!
+      #
+      # @example Custom Compressor
+      #   require 'lotus/assets'
+      #
+      #   Lotus::Assets.configure do
+      #     # ...
+      #     stylesheet_compressor MyCustomStylesheetCompressor.new
+      #   end.load!
+      def stylesheet_compressor(value = nil)
+        if value.nil?
+          @stylesheet_compressor
+        else
+          @stylesheet_compressor = value
+        end
+      end
+
       # URL scheme for the application
       #
       # This is used to generate absolute URL from helpers.
@@ -280,20 +378,56 @@ module Lotus
         "#{ @base_url }#{ compile_path(source) }"
       end
 
+      # Load Javascript compressor
+      #
+      # @return [Lotus::Assets::Compressors::Javascript] a compressor
+      #
+      # @raise [Lotus::Assets::Compressors::UnknownCompressorError] when the
+      #   given name refers to an unknown compressor engine
+      #
+      # @since x.x.x
+      # @api private
+      #
+      # @see Lotus::Assets::Configuration#javascript_compressor
+      # @see Lotus::Assets::Compressors::Javascript#for
+      def js_compressor
+        require 'lotus/assets/compressors/javascript'
+        Lotus::Assets::Compressors::Javascript.for(javascript_compressor)
+      end
+
+      # Load Stylesheet compressor
+      #
+      # @return [Lotus::Assets::Compressors::Stylesheet] a compressor
+      #
+      # @raise [Lotus::Assets::Compressors::UnknownCompressorError] when the
+      #   given name refers to an unknown compressor engine
+      #
+      # @since x.x.x
+      # @api private
+      #
+      # @see Lotus::Assets::Configuration#stylesheet_compressor
+      # @see Lotus::Assets::Compressors::Stylesheet#for
+      def css_compressor
+        require 'lotus/assets/compressors/stylesheet'
+        Lotus::Assets::Compressors::Stylesheet.for(stylesheet_compressor)
+      end
+
       # @since x.x.x
       # @api private
       def duplicate
         Configuration.new.tap do |c|
-          c.root             = root
-          c.scheme           = scheme
-          c.host             = host
-          c.port             = port
-          c.prefix           = prefix
-          c.cdn              = cdn
-          c.compile          = compile
-          c.public_directory = public_directory
-          c.manifest         = manifest
-          c.sources          = sources.dup
+          c.root                  = root
+          c.scheme                = scheme
+          c.host                  = host
+          c.port                  = port
+          c.prefix                = prefix
+          c.cdn                   = cdn
+          c.compile               = compile
+          c.public_directory      = public_directory
+          c.manifest              = manifest
+          c.sources               = sources.dup
+          c.javascript_compressor = javascript_compressor
+          c.stylesheet_compressor = stylesheet_compressor
         end
       end
 
@@ -309,6 +443,9 @@ module Lotus
         @compile               = false
         @destination_directory = nil
         @digest_manifest       = Config::NullDigestManifest.new(self)
+
+        @javascript_compressor = nil
+        @stylesheet_compressor = nil
 
         root             Dir.pwd
         public_directory root.join(DEFAULT_PUBLIC_DIRECTORY)
@@ -372,6 +509,14 @@ module Lotus
       # @since x.x.x
       # @api private
       attr_writer :sources
+
+      # @since x.x.x
+      # @api private
+      attr_writer :javascript_compressor
+
+      # @since x.x.x
+      # @api private
+      attr_writer :stylesheet_compressor
 
       private
 

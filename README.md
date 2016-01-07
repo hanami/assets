@@ -319,6 +319,57 @@ public
 └── assets.json
 ```
 
+#### Compressors
+
+Minification is a process that shrink file size in production, by removing unnecessary spaces and characters.
+The goal of this step, is to have lighter assets to be served faster to the browsers.
+
+Lotus supports JavaScript and stylesheets minifiers.
+
+Because this framework relies on external gems for minification, this feature is **turned off by default**.
+
+To do so we need to specify which gem we want to use and add it to our `Gemfile`.
+
+##### JavaScript Compressors
+
+Lotus can use the following compressors (aka minifiers) for JavaScript.
+
+  * `:builtin` - Ruby based implementation of jsmin. It doesn't require any external gem.
+  * `:yui` - [YUI Compressor](http://yui.github.io/yuicompressor), it depends on [`yui-compressor`](https://rubygems.org/gems/yui-compressor) gem and iπt requires Java 1.4+
+  * `:uglifier` - [UglifyJS](http://lisperator.net/uglifyjs), it depends on [`uglifier`](https://rubygems.org/gems/uglifier) gem and it requires Node.js
+  * `:closure` - [Google Closure Compiler](https://developers.google.com/closure/compiler), it depends on [`closure-compiler`](https://rubygems.org/gems/closure-compiler) gem and it requires Java
+
+```ruby
+Lotus::Assets.configure do
+  javascript_compressor :uglifier
+end
+```
+
+##### Stylesheet Compressors
+
+Lotus can use the following compressors (aka minifiers) for Stylesheet.
+
+  * `:builtin` - Ruby based compressor. It doesn't require any external gem. It's fast, but not an efficient compressor.
+  * `:yui` - [YUI Compressor](http://yui.github.io/yuicompressor), it depends on [`yui-compressor`](https://rubygems.org/gems/yui-compressor) gem and iπt requires Java 1.4+
+  * `:sass` - [Sass](http://sass-lang.com/), it depends on [`sass`](https://rubygems.org/gems/sass) gem
+
+```ruby
+Lotus::Assets.configure do
+  stylesheet_compressor :sass
+end
+```
+
+##### Custom Compressors
+
+We can specify our own minifiers:
+
+```ruby
+Lotus::Assets.configure do
+  javascript_compressor MyJavascriptCompressor.new
+  stylesheet_compressor MyStylesheetCompressor.new
+end
+```
+
 ### Digest Mode
 
 This is a mode that can be activated via the configuration and it's suitable for production environments.

@@ -1,5 +1,7 @@
 require 'test_helper'
 require 'lotus/assets/bundler'
+require 'lotus/assets/compressors/javascript'
+require 'lotus/assets/compressors/stylesheet'
 require 'etc'
 require 'json'
 
@@ -12,76 +14,86 @@ describe Lotus::Assets::Bundler do
     config.public_directory.must_equal(dest) # better safe than sorry ;-)
   end
 
-  let(:config) do
-    Lotus::Assets::Configuration.new.tap do |c|
-      c.public_directory dest
+  [nil, :builtin, :yui, :uglifier, :closure, :sass].each do |compressor|
+
+    describe "#{ compressor || "NullCompressor" }" do
+      let(:config) do
+        Lotus::Assets::Configuration.new.tap do |c|
+          c.public_directory dest
+          c.javascript_compressor _javascript_compressor(compressor)
+          c.stylesheet_compressor _stylesheet_compressor(compressor)
+        end
+      end
+
+      let(:dest)   { TMP.join('deploy', 'public') }
+      let(:source) { __dir__ + '/fixtures/deploy/public/assets' }
+
+      it "compresses javascripts" do
+        run!
+
+        assets(:js).each do |original, current|
+          assert_valid_compressed_asset(compressor, original, current)
+        end
+      end
+
+      it "compresses stylesheets" do
+        run!
+
+        assets(:css).each do |original, current|
+          assert_valid_compressed_asset(compressor, original, current)
+        end
+      end
+
+      it "copies other assets" do
+        run!
+
+        assets(:png).each do |original, current|
+          assert_same_asset(original, current)
+          assert_valid_asset(         current)
+        end
+      end
+
+      it "generates manifest" do
+        run!
+
+        manifest = dest.join('assets.json')
+        manifest.must_be :exist?
+
+        assert_owner(      manifest)
+        assert_permissions(manifest)
+
+        actual   = JSON.load(manifest.read)
+        expected = JSON.load(File.read(__dir__ + "/fixtures/deploy/assets-#{ compressor || "null" }.json"))
+
+        actual.size.must_equal expected.size
+        expected.each do |original, current|
+          actual[original].must_equal current
+        end
+      end
+
+      it "ensures intermediate directories to be created" do
+        dest.rmtree if dest.exist?
+
+        run!
+
+        manifest = dest.join('assets.json')
+        manifest.must_be :exist?
+      end
+
+      if compressor == :yui
+        describe "in case of error" do
+          let(:dest)   { TMP.join('broken', 'public') }
+          let(:source) { __dir__ + '/fixtures/broken/public/assets' }
+
+          it "prints the name of the asset that caused the problem" do
+            _, err = capture_subprocess_io { run! }
+            err.must_match "Skipping compression of:"
+          end
+        end
+      end
     end
-  end
 
-  let(:dest)   { TMP.join('deploy', 'public') }
-  let(:source) { __dir__ + '/fixtures/deploy/public/assets' }
-
-  it "compresses javascripts" do
-    run!
-
-    assets(:js).each do |original, current|
-      assert_valid_compressed_asset(original, current)
-    end
-  end
-
-  it "compresses stylesheets" do
-    run!
-
-    assets(:css).each do |original, current|
-      assert_valid_compressed_asset(original, current)
-    end
-  end
-
-  it "copies other assets" do
-    run!
-
-    assets(:png).each do |original, current|
-      assert_same_asset(original, current)
-      assert_valid_asset(         current)
-    end
-  end
-
-  it "generates manifest" do
-    run!
-
-    manifest = dest.join('assets.json')
-    manifest.must_be :exist?
-
-    assert_owner(      manifest)
-    assert_permissions(manifest)
-
-    actual   = JSON.load(manifest.read)
-    expected = JSON.load(File.read(__dir__ + '/fixtures/deploy/assets.json'))
-
-    actual.size.must_equal expected.size
-    expected.each do |original, current|
-      actual[original].must_equal current
-    end
-  end
-
-  it "ensures intermediate directories to be created" do
-    dest.rmtree if dest.exist?
-
-    run!
-
-    manifest = dest.join('assets.json')
-    manifest.must_be :exist?
-  end
-
-  describe "in case of error" do
-    let(:dest)   { TMP.join('broken', 'public') }
-    let(:source) { __dir__ + '/fixtures/broken/public/assets' }
-
-    it "prints the name of the asset that caused the problem" do
-      _, err = capture_subprocess_io { run! }
-      err.must_match "Skipping compression of:"
-    end
-  end
+  end # compressor
 
   private
 
@@ -101,9 +113,9 @@ describe Lotus::Assets::Bundler do
     Dir.glob("#{ source }/**/#{ filename }").first
   end
 
-  def assert_valid_compressed_asset(original, current)
-    assert_compressed(original, current)
-    assert_valid_asset(         current)
+  def assert_valid_compressed_asset(compressor, original, current)
+    assert_compressed(compressor, original, current)
+    assert_valid_asset(                     current)
   end
 
   def assert_valid_asset(current)
@@ -112,22 +124,22 @@ describe Lotus::Assets::Bundler do
     assert_permissions(current)
   end
 
-  def assert_compressed(original, current)
+  def assert_compressed(compressor, original, current)
     original_size = ::File.size(original)
     current_size  = ::File.size(current)
 
-    assert current_size < original_size,
-      "Expected #{ current } (#{ current_size }b) to be smaller than #{ original } (#{ original_size }b)"
+    assert current_size <= original_size,
+      "Expected #{ current } (#{ current_size }b) to be smaller or equal than #{ original } (#{ original_size }b)"
 
-    compressed = compress(original)
-    actual     = ::File.read(current)
+    # compressed = compress(compressor, original)
+    # actual     = ::File.read(current)
 
     # remove this line in case YUI-Compressor won't be used for production code anymore.
-    actual.must_equal(compressed)
+    # actual.must_equal(compressed)
 
-    delta = -100.0 + (( actual.size * 100 ) / compressed.size.to_f)
-    assert delta < 20,
-      "Expected algorithm to have a 20% maximum of degradation, if compared with YUI-Compressor, got: #{ delta }"
+    # delta = -100.0 + (( actual.size * 100 ) / compressed.size.to_f)
+    # assert delta < 20,
+    #   "Expected algorithm to have a 20% maximum of degradation, if compared with YUI-Compressor, got: #{ delta }"
   end
 
   def assert_checksum(file)
@@ -159,10 +171,30 @@ describe Lotus::Assets::Bundler do
     file.scan(/[\w]{32}/).first
   end
 
-  def compress(file)
+  def compress(compressor, file)
     case File.extname(file)
-    when ".js"  then YUI::JavaScriptCompressor.new(munge: true)
-    when ".css" then YUI::CssCompressor.new
+    when ".js"  then Lotus::Assets::Compressors::Javascript.for(compressor)
+    when ".css" then Lotus::Assets::Compressors::Stylesheet.for(compressor)
+    # when ".js"  then YUI::JavaScriptCompressor.new(munge: true)
+    # when ".css" then YUI::CssCompressor.new
     end.compress(::File.read(file))
+  end
+
+  def _javascript_compressor(compressor)
+    case compressor
+    when :builtin, :yui, :uglifier, :closure
+      compressor
+    else
+      nil
+    end
+  end
+
+  def _stylesheet_compressor(compressor)
+    case compressor
+    when :builtin, :yui, :sass
+      compressor
+    else
+      nil
+    end
   end
 end

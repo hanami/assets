@@ -13,5 +13,6 @@ gem 'lotus-utils',   '~> 0.6', github: 'lotus/utils',   branch: '0.6.x'
 gem 'lotus-helpers', '~> 0.2', github: 'lotus/helpers', branch: '0.2.x'
 gem 'lotus-view',    '~> 0.5', github: 'lotus/view',    branch: '0.5.x'
 
-gem 'lotus-emberjs', path: 'test/fixtures/lotus-emberjs', require: false
-gem 'lotus-compass', path: 'test/fixtures/lotus-compass', require: false
+gem 'lotus-emberjs',        path: 'test/fixtures/lotus-emberjs',        require: false
+gem 'lotus-compass',        path: 'test/fixtures/lotus-compass',        require: false
+gem 'lotus-foo-compressor', path: 'test/fixtures/lotus-foo-compressor', require: false

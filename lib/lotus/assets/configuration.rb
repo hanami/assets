@@ -378,11 +378,35 @@ module Lotus
         "#{ @base_url }#{ compile_path(source) }"
       end
 
+      # Load Javascript compressor
+      #
+      # @return [Lotus::Assets::Compressors::Javascript] a compressor
+      #
+      # @raise [Lotus::Assets::Compressors::UnknownCompressorError] when the
+      #   given name refers to an unknown compressor engine
+      #
+      # @since x.x.x
+      # @api private
+      #
+      # @see Lotus::Assets::Configuration#javascript_compressor
+      # @see Lotus::Assets::Compressors::Javascript#for
       def js_compressor
         require 'lotus/assets/compressors/javascript'
         Lotus::Assets::Compressors::Javascript.for(javascript_compressor)
       end
 
+      # Load Stylesheet compressor
+      #
+      # @return [Lotus::Assets::Compressors::Stylesheet] a compressor
+      #
+      # @raise [Lotus::Assets::Compressors::UnknownCompressorError] when the
+      #   given name refers to an unknown compressor engine
+      #
+      # @since x.x.x
+      # @api private
+      #
+      # @see Lotus::Assets::Configuration#stylesheet_compressor
+      # @see Lotus::Assets::Compressors::Stylesheet#for
       def css_compressor
         require 'lotus/assets/compressors/stylesheet'
         Lotus::Assets::Compressors::Stylesheet.for(stylesheet_compressor)

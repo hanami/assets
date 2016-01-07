@@ -4,6 +4,24 @@ require 'lotus/utils/class'
 module Lotus
   module Assets
     module Compressors
+      # Unknown compressor error
+      #
+      # It's raised when trying to load an unknown compressor.
+      #
+      # @since x.x.x
+      # @api private
+      #
+      # @see Lotus::Assets::Configuration#javascript_compressor
+      # @see Lotus::Assets::Configuration#stylesheet_compressor
+      # @see Lotus::Assets::Compressors::Abstract#for
+      class UnknownCompressorError < Error
+        # @since x.x.x
+        # @api private
+        def initialize(type, engine_name)
+          super("Unknown #{ type } compressor: :#{ engine_name }")
+        end
+      end
+
       # Abstract base class for compressors.
       #
       # Don't use this class directly, but please use subclasses instead.
@@ -53,8 +71,11 @@ module Lotus
         # @param engine_name [Symbol,String,NilClass,#compress] the name of the
         #   engine to load or an instance of an engine
         #
-        # @return [Lotus::Assets::Compress::Abstract] returns a concrete
+        # @return [Lotus::Assets::Compressors::Abstract] returns a concrete
         #   implementation of a compressor
+        #
+        # @raise [Lotus::Assets::Compressors::UnknownCompressorError] when the
+        #   given name refers to an unknown compressor engine
         #
         # @since x.x.x
         # @api private
@@ -85,6 +106,8 @@ module Lotus
 
           require "lotus/assets/compressors/#{ engine_name }_#{ type.underscore }"
           Utils::Class.load!("#{ Utils::String.new(engine_name).classify }#{ type }", Lotus::Assets::Compressors).new
+        rescue LoadError
+          raise UnknownCompressorError.new(type, engine_name)
         end
 
         class << self

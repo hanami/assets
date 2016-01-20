@@ -88,13 +88,13 @@ describe 'Precompile' do
   private
 
   def assert_successful_command(configuration_path)
-    assert system("bundle exec bin/lotus-assets --config=#{ configuration_path }"),
-      "Expected bin/lotus-assets to be successful"
+    assert system("bundle exec bin/hanami-assets --config=#{ configuration_path }"),
+      "Expected bin/hanami-assets to be successful"
 
      # This is useful for debug
      #
      # load configuration_path
-     # Lotus::Assets.deploy
+     # Hanami::Assets.deploy
   end
 
   def assert_successful_output(expected)
@@ -110,7 +110,7 @@ describe 'Precompile' do
   end
 
   def assert_failing_command(arguments, error)
-    cmd = "bundle exec bin/lotus-assets #{ arguments }"
+    cmd = "bundle exec bin/hanami-assets #{ arguments }"
 
     Open3.popen3(cmd) do |_, _, stderr, _|
       stderr.read.must_include error

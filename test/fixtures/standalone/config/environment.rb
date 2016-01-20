@@ -1,8 +1,8 @@
 require 'rubygems'
 require 'bundler/setup'
-require 'lotus/view'
+require 'hanami/view'
 
-Lotus::Assets.configure do
+Hanami::Assets.configure do
   root             __dir__ + '/..'
   public_directory __dir__ + '/../../../../tmp/standalone/public'
   prefix           '/assets'

@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require 'pathname'
+
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: hanami-assets --config=path/to/config.rb"
+
+  opts.on("-c", "--config FILE", "Path to config") do |c|
+    options[:config] = c
+  end
+end.parse!
+
+config = options.fetch(:config) { raise ArgumentError.new("You must specify a configuration file") }
+config = Pathname.new(config)
+config.exist? or raise ArgumentError.new("Cannot find configuration file: #{ config }")
+
+require 'hanami/assets'
+load config
+
+Hanami::Assets.deploy

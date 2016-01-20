@@ -1,8 +1,8 @@
 require 'test_helper'
-require 'lotus/assets/compressors/builtin_stylesheet'
+require 'hanami/assets/compressors/builtin_stylesheet'
 
-describe Lotus::Assets::Compressors::BuiltinStylesheet do
-  let(:compressor) { Lotus::Assets::Compressors::BuiltinStylesheet.new }
+describe Hanami::Assets::Compressors::BuiltinStylesheet do
+  let(:compressor) { Hanami::Assets::Compressors::BuiltinStylesheet.new }
 
   describe '#compress' do
     it 'compresses given file' do

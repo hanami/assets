@@ -1,10 +1,10 @@
 require 'test_helper'
-require 'lotus/assets/compressors/javascript'
-require 'lotus/assets/compressors/stylesheet'
+require 'hanami/assets/compressors/javascript'
+require 'hanami/assets/compressors/stylesheet'
 
-describe Lotus::Assets::Configuration do
+describe Hanami::Assets::Configuration do
   before do
-    @configuration = Lotus::Assets::Configuration.new
+    @configuration = Hanami::Assets::Configuration.new
   end
 
   after do
@@ -18,7 +18,7 @@ describe Lotus::Assets::Configuration do
       end
 
       it "returns NullCompressor for internal usage" do
-        @configuration.js_compressor.must_be_kind_of Lotus::Assets::Compressors::NullCompressor
+        @configuration.js_compressor.must_be_kind_of Hanami::Assets::Compressors::NullCompressor
       end
     end
 
@@ -31,8 +31,8 @@ describe Lotus::Assets::Configuration do
         @configuration.javascript_compressor.must_equal :yui
       end
 
-      it "is instance of Lotus::Assets::Compressors::YuiJavascriptCompressor" do
-        @configuration.js_compressor.must_be_kind_of Lotus::Assets::Compressors::YuiJavascript
+      it "is instance of Hanami::Assets::Compressors::YuiJavascriptCompressor" do
+        @configuration.js_compressor.must_be_kind_of Hanami::Assets::Compressors::YuiJavascript
       end
     end
 
@@ -60,7 +60,7 @@ describe Lotus::Assets::Configuration do
       end
 
       it "returns NullCompressor when loaded" do
-        @configuration.css_compressor.must_be_kind_of Lotus::Assets::Compressors::NullCompressor
+        @configuration.css_compressor.must_be_kind_of Hanami::Assets::Compressors::NullCompressor
       end
     end
 
@@ -73,8 +73,8 @@ describe Lotus::Assets::Configuration do
         @configuration.stylesheet_compressor.must_equal :yui
       end
 
-      it "is instance of Lotus::Assets::Compressors::YuiStylesheetCompressor" do
-        @configuration.css_compressor.must_be_kind_of Lotus::Assets::Compressors::YuiStylesheet
+      it "is instance of Hanami::Assets::Compressors::YuiStylesheetCompressor" do
+        @configuration.css_compressor.must_be_kind_of Hanami::Assets::Compressors::YuiStylesheet
       end
     end
 
@@ -145,8 +145,8 @@ describe Lotus::Assets::Configuration do
     end
 
     it 'allows to set a value' do
-      @configuration.host            'lotusrb.org'
-      @configuration.host.must_equal 'lotusrb.org'
+      @configuration.host            'hanamirb.org'
+      @configuration.host.must_equal 'hanamirb.org'
     end
   end
 
@@ -168,7 +168,7 @@ describe Lotus::Assets::Configuration do
 
   describe '#prefix' do
     it 'returns "/assets" value default' do
-      @configuration.prefix.must_be_kind_of(Lotus::Utils::PathPrefix)
+      @configuration.prefix.must_be_kind_of(Hanami::Utils::PathPrefix)
       @configuration.prefix.must_equal "/assets"
     end
 
@@ -236,7 +236,7 @@ describe Lotus::Assets::Configuration do
 
       describe 'with digest manifest' do
         before do
-          manifest = Lotus::Assets::Config::DigestManifest.new({'/assets/application.js' => '/assets/application-abc123.js'}, [])
+          manifest = Hanami::Assets::Config::DigestManifest.new({'/assets/application.js' => '/assets/application-abc123.js'}, [])
           @configuration.instance_variable_set(:@digest_manifest, manifest)
         end
 
@@ -264,7 +264,7 @@ describe Lotus::Assets::Configuration do
 
       describe 'with missing digest manifest' do
         it 'returns asset with digest' do
-          exception = -> { @configuration.asset_path('application.js') }.must_raise Lotus::Assets::MissingDigestManifestError
+          exception = -> { @configuration.asset_path('application.js') }.must_raise Hanami::Assets::MissingDigestManifestError
           exception.message.must_equal "Can't read manifest: #{ @configuration.manifest_path }"
         end
       end
@@ -306,14 +306,14 @@ describe Lotus::Assets::Configuration do
     describe 'production mode' do
       before do
         @configuration.scheme 'https'
-        @configuration.host   'lotusrb.org'
+        @configuration.host   'hanamirb.org'
         @configuration.port   443
         @configuration.load!
       end
 
       it 'returns absolute url for given source' do
         actual = @configuration.asset_url('application.js')
-        actual.must_equal 'https://lotusrb.org/assets/application.js'
+        actual.must_equal 'https://hanamirb.org/assets/application.js'
       end
     end
 
@@ -396,7 +396,7 @@ describe Lotus::Assets::Configuration do
 
       describe 'with digest manifest' do
         before do
-          manifest = Lotus::Assets::Config::DigestManifest.new({'/assets/application.js' => '/assets/application-abc123.js'}, [])
+          manifest = Hanami::Assets::Config::DigestManifest.new({'/assets/application.js' => '/assets/application-abc123.js'}, [])
 
           @configuration.load!
           @configuration.instance_variable_set(:@digest_manifest, manifest)
@@ -410,7 +410,7 @@ describe Lotus::Assets::Configuration do
 
       describe 'with missing digest manifest' do
         it 'returns asset with digest' do
-          exception = -> { @configuration.asset_url('application.js') }.must_raise Lotus::Assets::MissingDigestManifestError
+          exception = -> { @configuration.asset_url('application.js') }.must_raise Hanami::Assets::MissingDigestManifestError
           exception.message.must_equal "Can't read manifest: #{ @configuration.manifest_path }"
         end
       end
@@ -449,7 +449,7 @@ describe Lotus::Assets::Configuration do
     end
 
     it 'sets default value for prefix' do
-      @configuration.prefix.must_be_kind_of(Lotus::Utils::PathPrefix)
+      @configuration.prefix.must_be_kind_of(Hanami::Utils::PathPrefix)
       @configuration.prefix.must_equal '/assets'
     end
 
@@ -466,8 +466,8 @@ describe Lotus::Assets::Configuration do
     end
 
     it 'sets default value fore digest manifest' do
-      assert @configuration.digest_manifest.class == Lotus::Assets::Config::NullDigestManifest,
-        "Expected @configuration.digest_manifest to be instance of Lotus::Assets::Configuration::NullDigestManifest"
+      assert @configuration.digest_manifest.class == Hanami::Assets::Config::NullDigestManifest,
+        "Expected @configuration.digest_manifest to be instance of Hanami::Assets::Configuration::NullDigestManifest"
     end
   end
 
@@ -477,7 +477,7 @@ describe Lotus::Assets::Configuration do
       @configuration.cdn                   true
       @configuration.compile               true
       @configuration.scheme                'ftp'
-      @configuration.host                  'lotusrb.org'
+      @configuration.host                  'hanamirb.org'
       @configuration.port                  '8080'
       @configuration.prefix                '/foo'
       @configuration.manifest              'm.json'
@@ -494,7 +494,7 @@ describe Lotus::Assets::Configuration do
       @config.cdn.must_equal                   true
       @config.compile.must_equal               true
       @config.scheme.must_equal                'ftp'
-      @config.host.must_equal                  'lotusrb.org'
+      @config.host.must_equal                  'hanamirb.org'
       @config.port.must_equal                  '8080'
       @config.prefix.must_equal                '/foo'
       @config.manifest.must_equal              'm.json'
@@ -537,7 +537,7 @@ describe Lotus::Assets::Configuration do
       @configuration.cdn.must_equal                   true
       @configuration.compile.must_equal               true
       @configuration.scheme.must_equal                'ftp'
-      @configuration.host.must_equal                  'lotusrb.org'
+      @configuration.host.must_equal                  'hanamirb.org'
       @configuration.port.must_equal                  '8080'
       @configuration.prefix.must_equal                '/foo'
       @configuration.manifest.must_equal              'm.json'

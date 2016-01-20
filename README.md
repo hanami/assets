@@ -1,38 +1,38 @@
-# Lotus::Assets
+# Hanami::Assets
 
 Assets management for Ruby web projects
 
 ## Status
 
-[![Gem Version](http://img.shields.io/gem/v/lotus-assets.svg)](https://badge.fury.io/rb/lotus-assets)
-[![Build Status](http://img.shields.io/travis/lotus/assets/master.svg)](https://travis-ci.org/lotus/assets?branch=master)
-[![Coverage](http://img.shields.io/coveralls/lotus/assets/master.svg)](https://coveralls.io/r/lotus/assets)
-[![Code Climate](http://img.shields.io/codeclimate/github/lotus/assets.svg)](https://codeclimate.com/github/lotus/assets)
-[![Dependencies](http://img.shields.io/gemnasium/lotus/assets.svg)](https://gemnasium.com/lotus/assets)
-[![Inline Docs](http://inch-ci.org/github/lotus/assets.svg)](http://inch-ci.org/github/lotus/assets)
+[![Gem Version](http://img.shields.io/gem/v/hanami-assets.svg)](https://badge.fury.io/rb/hanami-assets)
+[![Build Status](http://img.shields.io/travis/hanami/assets/master.svg)](https://travis-ci.org/hanami/assets?branch=master)
+[![Coverage](http://img.shields.io/coveralls/hanami/assets/master.svg)](https://coveralls.io/r/hanami/assets)
+[![Code Climate](http://img.shields.io/codeclimate/github/hanami/assets.svg)](https://codeclimate.com/github/hanami/assets)
+[![Dependencies](http://img.shields.io/gemnasium/hanami/assets.svg)](https://gemnasium.com/hanami/assets)
+[![Inline Docs](http://inch-ci.org/github/hanami/assets.svg)](http://inch-ci.org/github/hanami/assets)
 
 ## Contact
 
-* Home page: http://lotusrb.org
-* Community: http://lotusrb.org/community
-* Guides: http://lotusrb.org/guides
-* Mailing List: http://lotusrb.org/mailing-list
-* API Doc: http://rdoc.info/gems/lotus-assets
-* Bugs/Issues: https://github.com/lotus/assets/issues
-* Support: http://stackoverflow.com/questions/tagged/lotus-ruby
-* Forum: https://discuss.lotusrb.org
-* Chat: http://chat.lotusrb.org
+* Home page: http://hanamirb.org
+* Community: http://hanamirb.org/community
+* Guides: http://hanamirb.org/guides
+* Mailing List: http://hanamirb.org/mailing-list
+* API Doc: http://rdoc.info/gems/hanami-assets
+* Bugs/Issues: https://github.com/hanami/assets/issues
+* Support: http://stackoverflow.com/questions/tagged/hanami
+* Forum: https://discuss.hanamirb.org
+* Chat: http://chat.hanamirb.org
 
 ## Rubies
 
-__Lotus::Assets__ supports Ruby (MRI) 2+
+__Hanami::Assets__ supports Ruby (MRI) 2+
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'lotus-assets'
+gem 'hanami-assets'
 ```
 
 And then execute:
@@ -44,7 +44,7 @@ $ bundle
 Or install it yourself as:
 
 ```shell
-$ gem install lotus-assets
+$ gem install hanami-assets
 ```
 
 ## Usage
@@ -95,16 +95,16 @@ It will output this markup.
 ```
 
 Let's have a look at the corresponding Ruby code.
-In this example we use ERb, but remember that `Lotus::Assets` is compatible with
+In this example we use ERb, but remember that `Hanami::Assets` is compatible with
 all the rendering engines such as HAML, Slim, Mustache, etc..
 
 ```ruby
 require 'erb'
-require 'lotus/assets'
-require 'lotus/assets/helpers'
+require 'hanami/assets'
+require 'hanami/assets/helpers'
 
 class View
-  include Lotus::Assets::Helpers
+  include Hanami::Assets::Helpers
 
   def initialize
     @template = File.read('template.erb')
@@ -120,7 +120,7 @@ View.new.render # => HTML markup
 ```
 
 For advanced configurations, please have a look at
-[`Lotus::Assets::Configuration`](https://github.com/lotus/assets/blob/master/lib/lotus/assets/configuration.rb).
+[`Hanami::Assets::Configuration`](https://github.com/hanami/assets/blob/master/lib/hanami/assets/configuration.rb).
 
 ### Available Helpers
 
@@ -137,7 +137,7 @@ This gems ships with the following helpers:
 
 ### Development mode
 
-`Lotus::Assets` can help you during the development process of your application.
+`Hanami::Assets` can help you during the development process of your application.
 It can manage multiple source directories for each asset type or run a
 preprocessor for you.
 
@@ -147,9 +147,9 @@ Imagine to have your application's javascripts under `app/assets/javascripts` an
 those assets depends on a vendored version of jQuery.
 
 ```ruby
-require 'lotus/assets'
+require 'hanami/assets'
 
-Lotus::Assets.configure do
+Hanami::Assets.configure do
   compile true
 
   sources << [
@@ -165,7 +165,7 @@ When from a template you do:
 <%= javascript 'jquery', 'jquery-ui', 'login' %>
 ```
 
-`Lotus::Assets` looks at the defined sources and **lazily copies** those files
+`Hanami::Assets` looks at the defined sources and **lazily copies** those files
 under `public/assets` (by default), before the markup is generated.
 
 Your public directory will have the following structure.
@@ -188,7 +188,7 @@ that file would be copied into the public directory instead of the one under
 
 #### Preprocessors
 
-`Lotus::Assets` is able to run assets preprocessors and **lazily compile** them
+`Hanami::Assets` is able to run assets preprocessors and **lazily compile** them
 under `public/assets` (by default), before the markup is generated.
 
 Imagine to have `main.css.scss` under `app/assets/stylesheets` and `reset.css` under
@@ -201,9 +201,9 @@ The second one is optional and it's for a preprocessor: `.scss` for Sass.
 
 ```ruby
 require 'sass'
-require 'lotus/assets'
+require 'hanami/assets'
 
-Lotus::Assets.configure do
+Hanami::Assets.configure do
   compile true
 
   sources << [
@@ -231,7 +231,7 @@ public/
 
 ### Preprocessors engines
 
-`Lotus::Assets` uses [Tilt](https://github.com/rtomayko/tilt) to provide support for the most common preprocessors, such as [Sass](http://sass-lang.com/) (including `sassc-ruby`), [Less](http://lesscss.org/), ES6, [JSX](https://jsx.github.io/), [CoffeScript](http://coffeescript.org), [Opal](http://opalrb.org), [Handlebars](http://handlebarsjs.com), [JBuilder](https://github.com/rails/jbuilder).
+`Hanami::Assets` uses [Tilt](https://github.com/rtomayko/tilt) to provide support for the most common preprocessors, such as [Sass](http://sass-lang.com/) (including `sassc-ruby`), [Less](http://lesscss.org/), ES6, [JSX](https://jsx.github.io/), [CoffeScript](http://coffeescript.org), [Opal](http://opalrb.org), [Handlebars](http://handlebarsjs.com), [JBuilder](https://github.com/rails/jbuilder).
 
 In order to use one or more of them, be sure to include the corresponding gem into your `Gemfile` and require the library.
 
@@ -245,7 +245,7 @@ For this purpose we support [Babel](https://babeljs.io).
 
 ### Deployment
 
-`Lotus::Assets` ships with an executable (`lotus-assets`), which can be used to precompile assets and make them cacheable by browsers (via checksum suffix).
+`Hanami::Assets` ships with an executable (`hanami-assets`), which can be used to precompile assets and make them cacheable by browsers (via checksum suffix).
 
 Let's say we have an application that has main file that requires the entire code (`config/environment.rb`), a gem that brings Ember.js code, and the following sources:
 
@@ -281,7 +281,7 @@ Let's say we have an application that has main file that requires the entire cod
 In order to deploy, we can run:
 
 ```shell
-bundle exec lotus-assets --config=config/environment.rb
+bundle exec hanami-assets --config=config/environment.rb
 ```
 
 It will output:
@@ -324,7 +324,7 @@ public
 Minification is a process that shrink file size in production, by removing unnecessary spaces and characters.
 The goal of this step, is to have lighter assets to be served faster to the browsers.
 
-Lotus supports JavaScript and stylesheets minifiers.
+Hanami supports JavaScript and stylesheets minifiers.
 
 Because this framework relies on external gems for minification, this feature is **turned off by default**.
 
@@ -332,7 +332,7 @@ To do so we need to specify which gem we want to use and add it to our `Gemfile`
 
 ##### JavaScript Compressors
 
-Lotus can use the following compressors (aka minifiers) for JavaScript.
+Hanami can use the following compressors (aka minifiers) for JavaScript.
 
   * `:builtin` - Ruby based implementation of jsmin. It doesn't require any external gem.
   * `:yui` - [YUI Compressor](http://yui.github.io/yuicompressor), it depends on [`yui-compressor`](https://rubygems.org/gems/yui-compressor) gem and iπt requires Java 1.4+
@@ -340,21 +340,21 @@ Lotus can use the following compressors (aka minifiers) for JavaScript.
   * `:closure` - [Google Closure Compiler](https://developers.google.com/closure/compiler), it depends on [`closure-compiler`](https://rubygems.org/gems/closure-compiler) gem and it requires Java
 
 ```ruby
-Lotus::Assets.configure do
+Hanami::Assets.configure do
   javascript_compressor :uglifier
 end
 ```
 
 ##### Stylesheet Compressors
 
-Lotus can use the following compressors (aka minifiers) for Stylesheet.
+Hanami can use the following compressors (aka minifiers) for Stylesheet.
 
   * `:builtin` - Ruby based compressor. It doesn't require any external gem. It's fast, but not an efficient compressor.
   * `:yui` - [YUI Compressor](http://yui.github.io/yuicompressor), it depends on [`yui-compressor`](https://rubygems.org/gems/yui-compressor) gem and iπt requires Java 1.4+
   * `:sass` - [Sass](http://sass-lang.com/), it depends on [`sass`](https://rubygems.org/gems/sass) gem
 
 ```ruby
-Lotus::Assets.configure do
+Hanami::Assets.configure do
   stylesheet_compressor :sass
 end
 ```
@@ -364,7 +364,7 @@ end
 We can specify our own minifiers:
 
 ```ruby
-Lotus::Assets.configure do
+Hanami::Assets.configure do
   javascript_compressor MyJavascriptCompressor.new
   stylesheet_compressor MyStylesheetCompressor.new
 end
@@ -375,7 +375,7 @@ end
 This is a mode that can be activated via the configuration and it's suitable for production environments.
 
 ```ruby
-Lotus::Assets.configure do
+Hanami::Assets.configure do
   digest true
 end
 ```
@@ -392,10 +392,10 @@ Once turned on, it will look at `/public/assets.json`, and helpers such as `java
 
 ### CDN Mode
 
-A Lotus project can serve assets via CDN.
+A Hanami project can serve assets via CDN.
 
 ```ruby
-Lotus::Assets.configure do
+Hanami::Assets.configure do
   scheme 'https'
   host   '123.cloudfront.net'
   port   443
@@ -415,13 +415,13 @@ Since now on, helpers will return the CDN absolute URL for the asset.
 
 ## Third party gems
 
-Developers can maintain gems that distribute assets for Lotus. For instance `lotus-ember` or `lotus-jquery`.
+Developers can maintain gems that distribute assets for Hanami. For instance `hanami-ember` or `hanami-jquery`.
 
 As a gem developer, you must add one or more paths, where the assets are stored inside the gem.
 
 ```ruby
-# lib/lotus/jquery.rb
-Lotus::Assets.sources << '/path/to/jquery'
+# lib/hanami/jquery.rb
+Hanami::Assets.sources << '/path/to/jquery'
 ```
 
 ## Running tests
@@ -436,11 +436,11 @@ bundle exec rake test
 
 ## Versioning
 
-__Lotus::Assets__ uses [Semantic Versioning 2.0.0](http://semver.org)
+__Hanami::Assets__ uses [Semantic Versioning 2.0.0](http://semver.org)
 
 ## Contributing
 
-1. Fork it ( https://github.com/lotus/assets/fork )
+1. Fork it ( https://github.com/hanami/assets/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
@@ -449,3 +449,4 @@ __Lotus::Assets__ uses [Semantic Versioning 2.0.0](http://semver.org)
 ## Copyright
 
 Copyright © 2014-2016 Luca Guidi – Released under MIT License
+This project was formerly known as Lotus (`lotus-assets`).

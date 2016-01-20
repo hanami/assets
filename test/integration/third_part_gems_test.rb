@@ -3,7 +3,7 @@ require __dir__ + '/../fixtures/bookshelf/config/environment'
 
 describe "Third part gems integration" do
   before do
-    load __dir__ + '/../fixtures/lotus-emberjs/lib/lotus/emberjs.rb'
+    load __dir__ + '/../fixtures/hanami-emberjs/lib/hanami/emberjs.rb'
   end
 
   it "renders assets from a third part gem" do

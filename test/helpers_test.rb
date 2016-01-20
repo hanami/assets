@@ -1,6 +1,6 @@
 require 'test_helper'
 
-describe Lotus::Assets::Helpers do
+describe Hanami::Assets::Helpers do
   let(:view)    { ImageHelperView.new({}, {}) }
   let(:cdn_url) { 'https://bookshelf.cdn-example.com' }
 
@@ -11,7 +11,7 @@ describe Lotus::Assets::Helpers do
   describe '#javascript' do
     it 'returns an instance of SafeString' do
       actual = DefaultView.new.javascript('feature-a')
-      actual.must_be_instance_of ::Lotus::Utils::Escape::SafeString
+      actual.must_be_instance_of ::Hanami::Utils::Escape::SafeString
     end
 
     it 'renders <script> tag' do
@@ -34,7 +34,7 @@ describe Lotus::Assets::Helpers do
   describe '#stylesheet' do
     it 'returns an instance of SafeString' do
       actual = DefaultView.new.stylesheet('main')
-      actual.must_be_instance_of ::Lotus::Utils::Escape::SafeString
+      actual.must_be_instance_of ::Hanami::Utils::Escape::SafeString
     end
 
     it 'renders <link> tag' do
@@ -57,7 +57,7 @@ describe Lotus::Assets::Helpers do
   describe 'image' do
     it 'returns an instance of HtmlBuilder' do
       actual = view.image('application.jpg')
-      actual.must_be_instance_of ::Lotus::Helpers::HtmlHelper::HtmlBuilder
+      actual.must_be_instance_of ::Hanami::Helpers::HtmlHelper::HtmlBuilder
     end
 
     it 'renders an <img> tag' do
@@ -90,7 +90,7 @@ describe Lotus::Assets::Helpers do
   describe '#favicon' do
     it 'returns an instance of HtmlBuilder' do
       actual = view.favicon
-      actual.must_be_instance_of ::Lotus::Helpers::HtmlHelper::HtmlBuilder
+      actual.must_be_instance_of ::Hanami::Helpers::HtmlHelper::HtmlBuilder
     end
 
     it 'renders <link> tag' do
@@ -118,7 +118,7 @@ describe Lotus::Assets::Helpers do
   describe '#video' do
     it 'returns an instance of HtmlBuilder' do
       actual = view.video('movie.mp4')
-      actual.must_be_instance_of ::Lotus::Helpers::HtmlHelper::HtmlBuilder
+      actual.must_be_instance_of ::Hanami::Helpers::HtmlHelper::HtmlBuilder
     end
 
     it 'renders <video> tag' do
@@ -183,7 +183,7 @@ describe Lotus::Assets::Helpers do
   describe "#audio" do
     it 'returns an instance of HtmlBuilder' do
       actual = view.audio('song.ogg')
-      actual.must_be_instance_of ::Lotus::Helpers::HtmlHelper::HtmlBuilder
+      actual.must_be_instance_of ::Hanami::Helpers::HtmlHelper::HtmlBuilder
     end
 
     it 'renders <audio> tag' do
@@ -251,13 +251,13 @@ describe Lotus::Assets::Helpers do
     end
 
     it "returns absolute URL if the argument is an absolute URL" do
-      result = view.asset_path('http://assets.lotusrb.org/assets/application.css')
-      result.must_equal 'http://assets.lotusrb.org/assets/application.css'
+      result = view.asset_path('http://assets.hanamirb.org/assets/application.css')
+      result.must_equal 'http://assets.hanamirb.org/assets/application.css'
     end
 
     it "adds source to HTTP/2 PUSH PROMISE list" do
       view.asset_path('dashboard.js')
-      Thread.current[:__lotus_assets].must_include '/assets/dashboard.js'
+      Thread.current[:__hanami_assets].must_include '/assets/dashboard.js'
     end
 
     describe 'cdn mode' do
@@ -283,13 +283,13 @@ describe Lotus::Assets::Helpers do
     end
 
     it "returns absolute URL if the argument is an absolute URL" do
-      result = view.asset_url('http://assets.lotusrb.org/assets/application.css')
-      result.must_equal 'http://assets.lotusrb.org/assets/application.css'
+      result = view.asset_url('http://assets.hanamirb.org/assets/application.css')
+      result.must_equal 'http://assets.hanamirb.org/assets/application.css'
     end
 
     it "adds source to HTTP/2 PUSH PROMISE list" do
       view.asset_url('metrics.js')
-      Thread.current[:__lotus_assets].must_include 'http://localhost:2300/assets/metrics.js'
+      Thread.current[:__hanami_assets].must_include 'http://localhost:2300/assets/metrics.js'
     end
 
     describe 'cdn mode' do

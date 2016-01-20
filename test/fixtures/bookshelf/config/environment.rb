@@ -1,10 +1,10 @@
 require 'rubygems'
 require 'bundler/setup'
-require 'lotus/view'
-require 'lotus/emberjs'
+require 'hanami/view'
+require 'hanami/emberjs'
 require 'tilt/babel'
 
-Lotus::Assets.configure do
+Hanami::Assets.configure do
   public_directory __dir__ + '/../../../../tmp/bookshelf/public'
 
   javascript_compressor :yui
@@ -13,7 +13,7 @@ end
 
 unless defined?(Web)
   module Admin
-    View   = Lotus::View.duplicate(self) do
+    View   = Hanami::View.duplicate(self) do
       root __dir__ + '/../../../fixtures/bookshelf/apps/admin/templates'
       layout :application
 
@@ -22,7 +22,7 @@ unless defined?(Web)
       end
     end
 
-    Assets = Lotus::Assets.duplicate(self) do
+    Assets = Hanami::Assets.duplicate(self) do
       root             __dir__ + '/../../../fixtures/bookshelf/apps/admin'
       public_directory __dir__ + '/../../../../tmp/bookshelf/public'
       manifest         'assets.json'
@@ -48,7 +48,7 @@ unless defined?(Web)
   end
 
   module Metrics
-    View   = Lotus::View.duplicate(self) do
+    View   = Hanami::View.duplicate(self) do
       root __dir__ + '/../../../fixtures/bookshelf/apps/metrics/templates'
       layout :application
 
@@ -57,7 +57,7 @@ unless defined?(Web)
       end
     end
 
-    Assets = Lotus::Assets.duplicate(self) do
+    Assets = Hanami::Assets.duplicate(self) do
       root             __dir__ + '/../../../fixtures/bookshelf/apps/metrics'
       public_directory __dir__ + '/../../../../tmp/bookshelf/public'
       manifest         'assets.json'
@@ -83,7 +83,7 @@ unless defined?(Web)
   end
 
   module Web
-    View   = Lotus::View.duplicate(self) do
+    View   = Hanami::View.duplicate(self) do
       root __dir__ + '/../../../fixtures/bookshelf/apps/web/templates'
       layout :application
 
@@ -92,7 +92,7 @@ unless defined?(Web)
       end
     end
 
-    Assets = Lotus::Assets.duplicate(self) do
+    Assets = Hanami::Assets.duplicate(self) do
       root             __dir__ + '/../../../fixtures/bookshelf/apps/web'
       public_directory __dir__ + '/../../../../tmp/bookshelf/public'
       manifest         'assets.json'

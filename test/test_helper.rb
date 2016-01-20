@@ -18,14 +18,14 @@ end
 
 require 'minitest/autorun'
 $:.unshift 'lib'
-require 'lotus/assets'
+require 'hanami/assets'
 require 'fixtures'
 require 'pathname'
 
 TMP = Pathname.new(__dir__).join('..', 'tmp')
 TMP.mkpath
 
-Lotus::Utils::LoadPaths.class_eval do
+Hanami::Utils::LoadPaths.class_eval do
   def empty?
     @paths.empty?
   end
@@ -43,12 +43,12 @@ Lotus::Utils::LoadPaths.class_eval do
   end
 end
 
-Lotus::Assets::Config::GlobalSources.class_eval do
+Hanami::Assets::Config::GlobalSources.class_eval do
   def clear
     @paths.each do |path|
-      Lotus::Assets.configuration.sources.delete(path)
+      Hanami::Assets.configuration.sources.delete(path)
 
-      Lotus::Assets.duplicates.each do |duplicate|
+      Hanami::Assets.duplicates.each do |duplicate|
         duplicate.configuration.sources.delete(path)
       end
     end

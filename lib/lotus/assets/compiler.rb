@@ -123,8 +123,8 @@ module Lotus
       # @since 0.1.0
       # @api private
       def basename
-        result = ::File.basename(@name)
-
+        # assets folder is default of apps/web/assets, upgrated in lotus v 0.6.0
+        result = @name.to_s.split('/assets/').last || ::File.basename(@name)
         if compile?
           result.scan(/\A[[[:alnum:]][\-\_]]*\.[[\w]]*/).first || result
         else

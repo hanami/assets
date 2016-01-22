@@ -2,12 +2,12 @@ require 'test_helper'
 
 describe 'Rendering test' do
   before do
-    Lotus::Assets.configuration.reset!
+    Hanami::Assets.configuration.reset!
   end
 
   after do
-    Lotus::Assets.configuration.reset!
-    Thread.current[:__lotus_assets] = nil
+    Hanami::Assets.configuration.reset!
+    Thread.current[:__hanami_assets] = nil
   end
 
   describe 'with defaults' do
@@ -24,7 +24,7 @@ describe 'Rendering test' do
     end
 
     it 'stores assets in thread local' do
-      assets = Thread.current[:__lotus_assets]
+      assets = Thread.current[:__hanami_assets]
       assets.must_include '/assets/main.css'
       assets.must_include '/assets/feature-a.js'
     end
@@ -32,7 +32,7 @@ describe 'Rendering test' do
 
   describe 'with custom assets prefix' do
     before do
-      Lotus::Assets.configure do
+      Hanami::Assets.configure do
         prefix '/assets/prefix'
       end
 

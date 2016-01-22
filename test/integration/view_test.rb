@@ -1,7 +1,7 @@
 require 'test_helper'
 require __dir__ + '/../fixtures/bookshelf/config/environment'
 
-describe "Lotus::View integration" do
+describe "Hanami::View integration" do
   before do
     frameworks = [Web::Assets, Admin::Assets]
     frameworks.each do |framework|

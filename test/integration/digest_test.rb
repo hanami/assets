@@ -6,7 +6,7 @@ describe 'Digest mode' do
     dest.mkpath
 
     load __dir__ + '/../fixtures/bookshelf/config/environment.rb'
-    Lotus::Assets.deploy
+    Hanami::Assets.deploy
 
     frameworks = [Web::Assets, Admin::Assets]
     frameworks.each do |framework|
@@ -25,7 +25,7 @@ describe 'Digest mode' do
   end
 
   it "raises error when referencing missing asset" do
-    exception = -> { Web::Views::Users::Show.render(format: :html) }.must_raise(Lotus::Assets::MissingDigestAssetError)
-    exception.message.must_equal "Can't find asset `/assets/missing.js' in manifest (#{ Lotus::Assets.configuration.manifest_path })"
+    exception = -> { Web::Views::Users::Show.render(format: :html) }.must_raise(Hanami::Assets::MissingDigestAssetError)
+    exception.message.must_equal "Can't find asset `/assets/missing.js' in manifest (#{ Hanami::Assets.configuration.manifest_path })"
   end
 end

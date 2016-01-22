@@ -2,17 +2,17 @@ source 'https://rubygems.org'
 gemspec
 
 unless ENV['TRAVIS']
-  gem 'byebug', require: false, platforms: :mri if RUBY_VERSION >= '2.1.0'
+  gem 'byebug', require: false, platforms: :mri if RUBY_VERSION >= '2.2.0'
   gem 'yard',   require: false
 end
 
 gem 'simplecov', require: false
 gem 'coveralls', require: false
 
-gem 'lotus-utils',   '~> 0.6', github: 'lotus/utils',   branch: '0.6.x'
-gem 'lotus-helpers', '~> 0.2', github: 'lotus/helpers', branch: '0.2.x'
-gem 'lotus-view',    '~> 0.5', github: 'lotus/view',    branch: '0.5.x'
+gem 'hanami-utils',   '~> 0.7', github: 'hanami/utils',   branch: '0.7.x'
+gem 'hanami-helpers', '~> 0.3', github: 'hanami/helpers', branch: '0.3.x'
+gem 'hanami-view',    '~> 0.6', github: 'hanami/view',    branch: '0.6.x'
 
-gem 'lotus-emberjs',        path: 'test/fixtures/lotus-emberjs',        require: false
-gem 'lotus-compass',        path: 'test/fixtures/lotus-compass',        require: false
-gem 'lotus-foo-compressor', path: 'test/fixtures/lotus-foo-compressor', require: false
+gem 'hanami-emberjs',        path: 'test/fixtures/hanami-emberjs',        require: false
+gem 'hanami-compass',        path: 'test/fixtures/hanami-compass',        require: false
+gem 'hanami-foo-compressor', path: 'test/fixtures/hanami-foo-compressor', require: false

@@ -1,14 +1,14 @@
 require 'erb'
 require 'sass'
 require 'coffee_script'
-require 'lotus/view'
+require 'hanami/view'
 require 'tilt/erb'
 require 'tilt/babel'
 
 module View
   def self.included(base)
     base.class_eval do
-      include Lotus::Assets::Helpers
+      include Hanami::Assets::Helpers
       extend  ClassMethods
     end
   end
@@ -111,8 +111,8 @@ class HiddenAssetCompilerView
 end
 
 class ImageHelperView
-  include Lotus::View
-  include Lotus::Assets::Helpers
+  include Hanami::View
+  include Hanami::Assets::Helpers
 end
 
 class CustomJavascriptCompressor

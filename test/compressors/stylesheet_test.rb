@@ -1,16 +1,16 @@
 require 'test_helper'
-require 'lotus/assets/compressors/stylesheet'
-require 'lotus/foo/compressor'
+require 'hanami/assets/compressors/stylesheet'
+require 'hanami/foo/compressor'
 
-describe Lotus::Assets::Compressors::Stylesheet do
+describe Hanami::Assets::Compressors::Stylesheet do
   describe '.for' do
-    let(:compressor) { Lotus::Assets::Compressors::Stylesheet.for(engine_name) }
+    let(:compressor) { Hanami::Assets::Compressors::Stylesheet.for(engine_name) }
 
     describe 'when given argument is nil' do
       let(:engine_name) { nil }
 
       it 'returns NullCompressor' do
-        compressor.must_be_kind_of Lotus::Assets::Compressors::NullCompressor
+        compressor.must_be_kind_of Hanami::Assets::Compressors::NullCompressor
       end
     end
 
@@ -18,7 +18,7 @@ describe Lotus::Assets::Compressors::Stylesheet do
       let(:engine_name) { :yui }
 
       it 'returns YuiStylesheet' do
-        compressor.must_be_kind_of Lotus::Assets::Compressors::YuiStylesheet
+        compressor.must_be_kind_of Hanami::Assets::Compressors::YuiStylesheet
       end
     end
 
@@ -26,7 +26,7 @@ describe Lotus::Assets::Compressors::Stylesheet do
       let(:engine_name) { :sass }
 
       it 'returns SassStylesheet' do
-        compressor.must_be_kind_of Lotus::Assets::Compressors::SassStylesheet
+        compressor.must_be_kind_of Hanami::Assets::Compressors::SassStylesheet
       end
     end
 
@@ -34,7 +34,7 @@ describe Lotus::Assets::Compressors::Stylesheet do
       let(:engine_name) { :wat }
 
       it 'raises error' do
-        exception = -> { compressor }.must_raise Lotus::Assets::Compressors::UnknownCompressorError
+        exception = -> { compressor }.must_raise Hanami::Assets::Compressors::UnknownCompressorError
         exception.message.must_equal "Unknown Stylesheet compressor: :wat"
       end
     end
@@ -43,7 +43,7 @@ describe Lotus::Assets::Compressors::Stylesheet do
       let(:engine_name) { :foo }
 
       it 'returns FooStylesheet' do
-        compressor.must_be_kind_of Lotus::Assets::Compressors::FooStylesheet
+        compressor.must_be_kind_of Hanami::Assets::Compressors::FooStylesheet
       end
     end
 

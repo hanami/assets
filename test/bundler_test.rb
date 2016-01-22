@@ -1,11 +1,11 @@
 require 'test_helper'
-require 'lotus/assets/bundler'
-require 'lotus/assets/compressors/javascript'
-require 'lotus/assets/compressors/stylesheet'
+require 'hanami/assets/bundler'
+require 'hanami/assets/compressors/javascript'
+require 'hanami/assets/compressors/stylesheet'
 require 'etc'
 require 'json'
 
-describe Lotus::Assets::Bundler do
+describe Hanami::Assets::Bundler do
   before do
     dest.rmtree if dest.exist?
     dest.mkpath
@@ -18,7 +18,7 @@ describe Lotus::Assets::Bundler do
 
     describe "#{ compressor || "NullCompressor" }" do
       let(:config) do
-        Lotus::Assets::Configuration.new.tap do |c|
+        Hanami::Assets::Configuration.new.tap do |c|
           c.public_directory dest
           c.javascript_compressor _javascript_compressor(compressor)
           c.stylesheet_compressor _stylesheet_compressor(compressor)
@@ -98,7 +98,7 @@ describe Lotus::Assets::Bundler do
   private
 
   def run!
-    Lotus::Assets::Bundler.new(config, []).run
+    Hanami::Assets::Bundler.new(config, []).run
   end
 
   def assets(type)
@@ -173,8 +173,8 @@ describe Lotus::Assets::Bundler do
 
   def compress(compressor, file)
     case File.extname(file)
-    when ".js"  then Lotus::Assets::Compressors::Javascript.for(compressor)
-    when ".css" then Lotus::Assets::Compressors::Stylesheet.for(compressor)
+    when ".js"  then Hanami::Assets::Compressors::Javascript.for(compressor)
+    when ".css" then Hanami::Assets::Compressors::Stylesheet.for(compressor)
     # when ".js"  then YUI::JavaScriptCompressor.new(munge: true)
     # when ".css" then YUI::CssCompressor.new
     end.compress(::File.read(file))

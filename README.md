@@ -335,7 +335,7 @@ To do so we need to specify which gem we want to use and add it to our `Gemfile`
 Hanami can use the following compressors (aka minifiers) for JavaScript.
 
   * `:builtin` - Ruby based implementation of jsmin. It doesn't require any external gem.
-  * `:yui` - [YUI Compressor](http://yui.github.io/yuicompressor), it depends on [`yui-compressor`](https://rubygems.org/gems/yui-compressor) gem and iπt requires Java 1.4+
+  * `:yui` - [YUI Compressor](http://yui.github.io/yuicompressor), it depends on [`yui-compressor`](https://rubygems.org/gems/yui-compressor) gem and it requires Java 1.4+
   * `:uglifier` - [UglifyJS](http://lisperator.net/uglifyjs), it depends on [`uglifier`](https://rubygems.org/gems/uglifier) gem and it requires Node.js
   * `:closure` - [Google Closure Compiler](https://developers.google.com/closure/compiler), it depends on [`closure-compiler`](https://rubygems.org/gems/closure-compiler) gem and it requires Java
 
@@ -350,7 +350,7 @@ end
 Hanami can use the following compressors (aka minifiers) for Stylesheet.
 
   * `:builtin` - Ruby based compressor. It doesn't require any external gem. It's fast, but not an efficient compressor.
-  * `:yui` - [YUI Compressor](http://yui.github.io/yuicompressor), it depends on [`yui-compressor`](https://rubygems.org/gems/yui-compressor) gem and iπt requires Java 1.4+
+  * `:yui` - [YUI Compressor](http://yui.github.io/yuicompressor), it depends on [`yui-compressor`](https://rubygems.org/gems/yui-compressor) gem and it requires Java 1.4+
   * `:sass` - [Sass](http://sass-lang.com/), it depends on [`sass`](https://rubygems.org/gems/sass) gem
 
 ```ruby

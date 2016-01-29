@@ -35,6 +35,14 @@ describe 'Compiler' do
     target.stat.mode.to_s(8).must_equal('100644')
   end
 
+  it 'copies javascript source map from source to destination' do
+    Hanami::Assets::Compiler.compile(@config, 'precompiled.min.map')
+
+    target = @config.public_directory.join('assets', 'precompiled.min.map')
+    target.read.must_match %(//source map of precompiled.min)
+    target.stat.mode.to_s(8).must_equal('100644')
+  end
+
   it 'copies asset from nested source to destination' do
     Hanami::Assets::Compiler.compile(@config, 'bootstrap.js')
 

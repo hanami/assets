@@ -59,12 +59,6 @@ module Hanami
           result
         end
 
-        # @since 0.1.0
-        # @api private
-        def to_a
-          map {|s| s }
-        end
-
         private
         # @since 0.1.0
         # @api private

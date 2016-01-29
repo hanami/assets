@@ -1,3 +1,5 @@
+require 'find'
+
 module Hanami
   module Assets
     class MissingAsset < Error
@@ -170,7 +172,7 @@ module Hanami
         #
         # This is needed to don't create a `.sass-cache' directory at the root of the project,
         # but to have it under `tmp/sass-cache'.
-        write { Tilt.new(source, nil, load_paths: @configuration.sources.to_a, cache_location: sass_cache_location).render }
+        write { Tilt.new(source, nil, load_paths: sass_load_paths, cache_location: sass_cache_location).render }
       rescue RuntimeError
         raise UnknownAssetEngine.new(source)
       end
@@ -200,6 +202,20 @@ module Hanami
       # @api private
       def cache
         self.class.cache
+      end
+
+      # @since x.x.x
+      # @api private
+      def sass_load_paths
+        result = []
+
+        @configuration.sources.each do |source|
+          Find.find(source) do |path|
+            result << path if File.directory?(path)
+          end
+        end
+
+        result
       end
 
       # @since 0.1.0

@@ -36,7 +36,7 @@ describe 'Compiler' do
   end
 
   it 'copies javascript source map from source to destination' do
-    Lotus::Assets::Compiler.compile(@config, 'precompiled.min.map')
+    Hanami::Assets::Compiler.compile(@config, 'precompiled.min.map')
 
     target = @config.public_directory.join('assets', 'precompiled.min.map')
     target.read.must_match %(//source map of precompiled.min)

@@ -35,7 +35,7 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      EXTENSIONS = {'.js' => true, '.css' => true}.freeze
+      EXTENSIONS = {'.js' => true, '.css' => true, '.map' => true}.freeze
 
       # @since 0.1.0
       # @api private

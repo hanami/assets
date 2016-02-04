@@ -126,6 +126,39 @@ describe 'Compiler' do
     compiled.mtime.to_i.must_equal modified_at.to_i
   end
 
+  it "truncates files when copying from source to destination" do
+    source = @config.root.join('javascripts', 'truncate.js')
+
+    begin
+      source.delete if source.exist?
+
+      content = "alert('A reasonably long, very very long message.');"
+
+      File.open(source, File::WRONLY|File::CREAT) do |file|
+        file.write content
+      end
+
+      Hanami::Assets::Compiler.compile(@config, 'truncate.js')
+
+      compiled = @config.public_directory.join('assets', 'truncate.js')
+      compiled.read.must_equal(content)
+
+      sleep 1
+
+      content = "alert('A short one');"
+      File.open(source, File::WRONLY|File::TRUNC|File::CREAT) do |file|
+        file.write content
+      end
+
+      Hanami::Assets::Compiler.compile(@config, 'truncate.js')
+
+      compiled = @config.public_directory.join('assets', 'truncate.js')
+      compiled.read.must_equal(content)
+    ensure
+      source.delete if source.exist?
+    end
+  end
+
   it 'raises an error in case of missing source' do
     sources   = @config.sources.map(&:to_s).join(', ')
     exception = -> {

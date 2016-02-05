@@ -1,6 +1,14 @@
 # Hanami::Assets
 Assets management for Ruby web applications
 
+## v0.2.1 - 2016-02-05
+### Changed
+- [Derk-Jan Karrenbeld] Don't precompile `.map` files
+
+### Fixed
+- [Luca Guidi] Fix recursive Sass imports
+- [Luca Guidi] Ensure to truncate assets in public before to precompile/copy them
+
 ## v0.2.0 - 2016-01-22
 ### Changed
 - [Luca Guidi] Renamed the project

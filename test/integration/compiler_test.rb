@@ -35,6 +35,14 @@ describe 'Compiler' do
     target.stat.mode.to_s(8).must_equal('100644')
   end
 
+  it 'copies javascript source map from source to destination' do
+    Hanami::Assets::Compiler.compile(@config, 'precompiled.min.map')
+
+    target = @config.public_directory.join('assets', 'precompiled.min.map')
+    target.read.must_match %(//source map of precompiled.min)
+    target.stat.mode.to_s(8).must_equal('100644')
+  end
+
   it 'copies asset from nested source to destination' do
     Hanami::Assets::Compiler.compile(@config, 'bootstrap.js')
 
@@ -116,6 +124,39 @@ describe 'Compiler' do
 
     compiled.read.must_match %(alert("Still the same");)
     compiled.mtime.to_i.must_equal modified_at.to_i
+  end
+
+  it "truncates files when copying from source to destination" do
+    source = @config.root.join('javascripts', 'truncate.js')
+
+    begin
+      source.delete if source.exist?
+
+      content = "alert('A reasonably long, very very long message.');"
+
+      File.open(source, File::WRONLY|File::CREAT) do |file|
+        file.write content
+      end
+
+      Hanami::Assets::Compiler.compile(@config, 'truncate.js')
+
+      compiled = @config.public_directory.join('assets', 'truncate.js')
+      compiled.read.must_equal(content)
+
+      sleep 1
+
+      content = "alert('A short one');"
+      File.open(source, File::WRONLY|File::TRUNC|File::CREAT) do |file|
+        file.write content
+      end
+
+      Hanami::Assets::Compiler.compile(@config, 'truncate.js')
+
+      compiled = @config.public_directory.join('assets', 'truncate.js')
+      compiled.read.must_equal(content)
+    ensure
+      source.delete if source.exist?
+    end
   end
 
   it 'raises an error in case of missing source' do

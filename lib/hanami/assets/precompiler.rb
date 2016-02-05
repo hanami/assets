@@ -39,7 +39,7 @@ module Hanami
       # @since 0.1.0
       # @api private
       def clear_public_directory
-        public_directory = Hanami::Assets.configuration.public_directory
+        public_directory = @configuration.public_directory
         public_directory.rmtree if public_directory.exist?
       end
 
@@ -47,7 +47,12 @@ module Hanami
       # @api private
       def precompile
         applications.each do |duplicate|
-          config = duplicate.configuration
+          config = if duplicate.respond_to?(:configuration)
+                     duplicate.configuration
+                   else
+                     duplicate
+                   end
+
           config.compile true
 
           config.files.each do |file|
@@ -60,7 +65,7 @@ module Hanami
       # @api private
       def applications
         @duplicates.empty? ?
-          [Hanami::Assets] : @duplicates
+          [@configuration] : @duplicates
       end
     end
   end

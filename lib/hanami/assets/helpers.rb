@@ -108,6 +108,12 @@ module Hanami
       #   # <script src="/assets/application.js" type="text/javascript"></script>
       #   # <script src="/assets/dashboard.js" type="text/javascript"></script>
       #
+      # @example Asynchronous Execution
+      #
+      #   <%= javascript 'application', async: true %>
+      #
+      #   # <script src="/assets/application.js" type="text/javascript" async="async"></script>
+      #
       # @example Absolute URL
       #
       #   <%= javascript 'https://code.jquery.com/jquery-2.1.4.min.js' %>
@@ -125,9 +131,11 @@ module Hanami
       #   <%= javascript 'application' %>
       #
       #   # <script src="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js" type="text/javascript"></script>
-      def javascript(*sources)
+      def javascript(*sources, **options)
+        options[:async] ||= false
+
         _safe_tags(*sources) do |source|
-          html.script(src: _typed_asset_path(source, JAVASCRIPT_EXT), type: JAVASCRIPT_MIME_TYPE).to_s
+          html.script(src: _typed_asset_path(source, JAVASCRIPT_EXT), type: JAVASCRIPT_MIME_TYPE, async: options[:async]).to_s
         end
       end
 

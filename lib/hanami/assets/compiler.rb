@@ -193,7 +193,7 @@ module Hanami
       # @api private
       def write
         destination.dirname.mkpath
-        destination.open(File::WRONLY|File::CREAT, DEFAULT_PERMISSIONS) do |file|
+        destination.open(File::WRONLY|File::TRUNC|File::CREAT, DEFAULT_PERMISSIONS) do |file|
           file.write(yield)
         end
       end

@@ -4,7 +4,7 @@ module Hanami
   module Assets
     # Store assets references when compile mode is on.
     #
-    # This is expecially useful in development mode, where we want to compile
+    # This is especially useful in development mode, where we want to compile
     # only the assets that were changed from last browser refresh.
     #
     # @since 0.1.0

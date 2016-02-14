@@ -19,11 +19,18 @@ describe Hanami::Assets::Helpers do
       actual.must_equal %(<script src="/assets/feature-a.js" type="text/javascript"></script>)
     end
 
-    it 'renders <script> tag with \'async\' option' do
-      actual = DefaultView.new.javascript('feature-a', async: true)
-      actual.must_equal %(<script src="/assets/feature-a.js" type="text/javascript" async="async"></script>)
-    end
+    describe 'with \'async\' option' do
+      it 'renders <script> tag with when the \'async\' option is true' do
+        actual = DefaultView.new.javascript('feature-a', async: true)
+        actual.must_equal %(<script src="/assets/feature-a.js" type="text/javascript" async="async"></script>)
+      end
 
+      it 'renders <script> tag when when the \'async\' option is false' do
+        actual = DefaultView.new.javascript('feature-a', async: false)
+        actual.must_equal %(<script src="/assets/feature-a.js" type="text/javascript"></script>)
+      end
+    end
+    
     describe 'cdn mode' do
       before do
         activate_cdn_mode!

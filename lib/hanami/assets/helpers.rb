@@ -131,11 +131,9 @@ module Hanami
       #   <%= javascript 'application' %>
       #
       #   # <script src="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js" type="text/javascript"></script>
-      def javascript(*sources, **options)
-        options[:async] ||= false
-
+      def javascript(*sources, async: false)
         _safe_tags(*sources) do |source|
-          html.script(src: _typed_asset_path(source, JAVASCRIPT_EXT), type: JAVASCRIPT_MIME_TYPE, async: options[:async]).to_s
+          html.script(src: _typed_asset_path(source, JAVASCRIPT_EXT), type: JAVASCRIPT_MIME_TYPE, async: async).to_s
         end
       end
 

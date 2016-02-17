@@ -390,6 +390,26 @@ Once turned on, it will look at `/public/assets.json`, and helpers such as `java
 <script src="/assets/application-d1829dc353b734e3adc24855693b70f9.js" type="text/javascript"></script>
 ```
 
+### Subresource Integrity (SRI) Mode
+
+This is a mode that can be activated via the configuration and it's suitable for production environments.
+
+```ruby
+Hanami::Assets.configure do
+  sri true
+end
+```
+
+Once turned on, it will look at `/public/assets.json`, and helpers such as `javascript` will include an `integrity` and `crossorigin` attribute.
+
+```erb
+<%= javascript 'application' %>
+```
+
+```html
+<script src="/assets/application-d1829dc353b734e3adc24855693b70f9.js" type="text/javascript" integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" crossorigin="anonymous"></script>
+```
+
 ### CDN Mode
 
 A Hanami project can serve assets via CDN.

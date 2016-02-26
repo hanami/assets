@@ -57,6 +57,10 @@ module Hanami
       # @api private
       HTTPS_PORT               = '443'.freeze
 
+      # @since 0.3.0-add-options-to-javascript-helper
+      # @api private
+      DEFAULT_SRI_ALGORITHM    = 'sha256'.freeze
+
       # Return a copy of the configuration of the framework instance associated
       # with the given class.
       #
@@ -117,6 +121,20 @@ module Hanami
           @digest
         else
           @digest = value
+        end
+      end
+
+      # Subresource integrity mode
+      #
+      # Determine if the helpers should generate the integrity attribute for an
+      # asset. Usually this is turned on in production mode.
+      #
+      # @since 0.3.0-add-options-to-javascript-helper
+      def sri(value = nil)
+        if value.nil?
+          @sri
+        else
+          @sri = value
         end
       end
 
@@ -378,6 +396,25 @@ module Hanami
         "#{ @base_url }#{ compile_path(source) }"
       end
 
+      # An array of digest algorithms to use for generating asset subresource
+      # integrity (SRI) checks
+      #
+      # @since 0.3.0-add-options-to-javascript-helper
+      def sri_algorithm
+        [DEFAULT_SRI_ALGORITHM]
+      end
+
+      # Subresource integrity attribute
+      # @since 0.3.0-add-options-to-javascript-helper
+      # @api private
+      def sri_value(source)
+        if sri
+          result = prefix.join(source)
+          result = digest_manifest.resolve(result)
+          result.fetch('sri').to_s
+        end
+      end
+
       # Load Javascript compressor
       #
       # @return [Hanami::Assets::Compressors::Javascript] a compressor
@@ -421,6 +458,7 @@ module Hanami
           c.host                  = host
           c.port                  = port
           c.prefix                = prefix
+          c.sri                   = sri
           c.cdn                   = cdn
           c.compile               = compile
           c.public_directory      = public_directory
@@ -439,6 +477,7 @@ module Hanami
         @port                  = DEFAULT_PORT
 
         @prefix                = Utils::PathPrefix.new(DEFAULT_PREFIX)
+        @sri                   = false
         @cdn                   = false
         @compile               = false
         @destination_directory = nil
@@ -458,7 +497,7 @@ module Hanami
       #
       # @since 0.1.0
       def load!
-        if digest && manifest_path.exist?
+        if (digest || sri) && manifest_path.exist?
           @digest_manifest = Config::DigestManifest.new(
             JSON.load(manifest_path.read),
             manifest_path
@@ -469,6 +508,10 @@ module Hanami
       end
 
       protected
+
+      # @since 0.3.0-add-options-to-javascript-helper
+      # @api private
+      attr_writer :sri
 
       # @since 0.1.0
       # @api private
@@ -524,7 +567,12 @@ module Hanami
       # @api private
       def compile_path(source)
         result = prefix.join(source)
-        result = digest_manifest.resolve(result) if digest
+
+        if digest
+          result = digest_manifest.resolve(result)
+          result = result.fetch('target')
+        end
+
         result.to_s
       end
 

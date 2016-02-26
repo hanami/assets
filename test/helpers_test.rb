@@ -19,6 +19,37 @@ describe Hanami::Assets::Helpers do
       actual.must_equal %(<script src="/assets/feature-a.js" type="text/javascript"></script>)
     end
 
+    it 'renders <script> tag with an async attribute' do
+      actual = DefaultView.new.javascript('feature-a', async: true)
+      actual.must_equal %(<script src="/assets/feature-a.js" type="text/javascript" async="async"></script>)
+    end
+
+    it 'renders <script> tag with a defer attribute' do
+      actual = DefaultView.new.javascript('feature-a', defer: true)
+      actual.must_equal %(<script src="/assets/feature-a.js" type="text/javascript" defer="defer"></script>)
+    end
+
+    it 'renders <script> tag with an integrity attribute' do
+      actual = DefaultView.new.javascript('feature-a', integrity: 'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC')
+      actual.must_equal %(<script src="/assets/feature-a.js" type="text/javascript" integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" crossorigin="anonymous"></script>)
+    end
+
+    it 'renders <script> tag with a crossorigin attribute' do
+      actual = DefaultView.new.javascript('feature-a', integrity: 'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC', crossorigin: 'use-credentials')
+      actual.must_equal %(<script src="/assets/feature-a.js" type="text/javascript" integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" crossorigin="use-credentials"></script>)
+    end
+
+    describe 'sri mode' do
+      before do
+        activate_sri_mode!
+      end
+
+      it 'includes sri and crossorigin attributes' do
+        actual = DefaultView.new.javascript('feature-a')
+        actual.must_equal %(<script src="/assets/feature-a.js" type="text/javascript" integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" crossorigin="anonymous"></script>)
+      end
+    end
+
     describe 'cdn mode' do
       before do
         activate_cdn_mode!
@@ -40,6 +71,27 @@ describe Hanami::Assets::Helpers do
     it 'renders <link> tag' do
       actual = DefaultView.new.stylesheet('main')
       actual.must_equal %(<link href="/assets/main.css" type="text/css" rel="stylesheet">)
+    end
+
+    it 'renders <link> tag with an integrity attribute' do
+      actual = DefaultView.new.stylesheet('main', integrity: 'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC')
+      actual.must_equal %(<link href="/assets/main.css" type="text/css" rel="stylesheet" integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" crossorigin="anonymous">)
+    end
+
+    it 'renders <link> tag with a crossorigin attribute' do
+      actual = DefaultView.new.stylesheet('main', integrity: 'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC', crossorigin: 'use-credentials')
+      actual.must_equal %(<link href="/assets/main.css" type="text/css" rel="stylesheet" integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" crossorigin="use-credentials">)
+    end
+
+    describe 'sri mode' do
+      before do
+        activate_sri_mode!
+      end
+
+      it 'includes sri and crossorigin attributes' do
+        actual = DefaultView.new.stylesheet('main')
+        actual.must_equal %(<link href="/assets/main.css" type="text/css" rel="stylesheet" integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" crossorigin="anonymous">)
+      end
     end
 
     describe 'cdn mode' do
@@ -306,6 +358,21 @@ describe Hanami::Assets::Helpers do
 
   private
 
+  def activate_sri_mode!
+    view.class.assets_configuration.sri true
+    view.class.assets_configuration.load!
+
+    manifest = Hanami::Assets::Config::DigestManifest.new({
+      '/assets/feature-a.js' => {
+        'sri' => 'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC'
+      },
+      '/assets/main.css' => {
+        'sri' => 'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC'
+      }
+    }, [])
+    view.class.assets_configuration.instance_variable_set(:@digest_manifest, manifest)
+  end
+
   def activate_cdn_mode!
     view.class.assets_configuration.scheme 'https'
     view.class.assets_configuration.host   'bookshelf.cdn-example.com'
@@ -315,4 +382,3 @@ describe Hanami::Assets::Helpers do
     view.class.assets_configuration.load!
   end
 end
-

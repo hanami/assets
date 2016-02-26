@@ -1,4 +1,5 @@
 require 'digest'
+require 'openssl'
 require 'fileutils'
 require 'json'
 
@@ -60,6 +61,7 @@ module Hanami
       #
       #   * Compress
       #   * Create a checksum version
+      #   * Generate an integrity digest
       #
       # At the end it will generate a digest manifest
       #
@@ -105,7 +107,17 @@ module Hanami
         FileUtils.cp(asset, target)
         _set_permissions(target)
 
-        store_manifest(asset, target)
+        sri_value = sri_checksum(asset)
+
+        store_manifest(asset, target, sri_value)
+      end
+
+      # @since 0.3.0-add-options-to-javascript-helper
+      # @api private
+      def sri_checksum(asset)
+        @configuration.sri_algorithm.collect do |algorithm|
+          "#{algorithm}-#{OpenSSL::Digest.new(algorithm.to_s, File.read(asset)).base64digest}"
+        end.join('\s')
       end
 
       # @since 0.1.0
@@ -116,8 +128,11 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      def store_manifest(asset, target)
-        @manifest[_convert_to_url(::File.expand_path(asset))] = _convert_to_url(::File.expand_path(target))
+      def store_manifest(asset, target, sri_value)
+        @manifest[_convert_to_url(::File.expand_path(asset))] = {
+          target: _convert_to_url(::File.expand_path(target)),
+          sri: sri_value
+        }
       end
 
       # @since 0.1.0

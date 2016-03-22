@@ -6,7 +6,6 @@ unless ENV['TRAVIS']
   gem 'yard',   require: false
 end
 
-gem 'simplecov', require: false
 gem 'coveralls', require: false
 
 gem 'hanami-utils',   '~> 0.8', github: 'hanami/utils',   branch: '0.8.x'

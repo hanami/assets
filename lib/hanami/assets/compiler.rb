@@ -172,7 +172,11 @@ module Hanami
         #
         # This is needed to don't create a `.sass-cache' directory at the root of the project,
         # but to have it under `tmp/sass-cache'.
-        write { Tilt.new(source, nil, load_paths: sass_load_paths, cache_location: sass_cache_location).render }
+        #
+        # NOTE: We need another option for Less: `:paths'.
+        #
+        # This is required by Less to reference variables defined in other files.
+        write { Tilt.new(source, nil, paths: less_load_paths, load_paths: sass_load_paths, cache_location: sass_cache_location).render }
       rescue RuntimeError
         raise UnknownAssetEngine.new(source)
       end
@@ -217,6 +221,10 @@ module Hanami
 
         result
       end
+
+      # @since x.x.x
+      # @api private
+      alias_method :less_load_paths, :sass_load_paths
 
       # @since 0.1.0
       # @api private

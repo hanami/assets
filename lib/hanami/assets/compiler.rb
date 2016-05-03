@@ -151,7 +151,7 @@ module Hanami
       # @since 0.1.0
       # @api private
       def compile?
-        @compile ||= ::File.fnmatch(COMPILE_PATTERN, source.to_s) &&
+        @compile ||= ::File.fnmatch(COMPILE_PATTERN, ::File.basename(source.to_s)) &&
           !EXTENSIONS[::File.extname(source.to_s)]
       end
 

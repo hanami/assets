@@ -16,7 +16,8 @@ describe 'Compiler' do
 
       sources << [
         'javascripts',
-        Pathname.new(fixtures).join('stylesheets')
+        Pathname.new(fixtures).join('stylesheets'),
+        Pathname.new(fixtures).join('images')
       ]
     end
 
@@ -106,6 +107,22 @@ describe 'Compiler' do
     Hanami::Assets::Compiler.compile(@config, 'compile-sass.css')
 
     directory.must_be :exist?
+  end
+
+  it 'copies image asset' do
+    Hanami::Assets::Compiler.compile(@config, 'pixel.gif')
+
+    target  = @config.public_directory.join('assets', 'pixel.gif')
+    content = target.read
+    content.must_equal "GIF89a\u0001\u0000\u0001\u0000\x80\u0000\u0000\u0000\u0000\u0000\xFF\xFF\xFF!\xF9\u0004\u0001\u0000\u0000\u0000\u0000,\u0000\u0000\u0000\u0000\u0001\u0000\u0001\u0000\u0000\u0002\u0001D\u0000;"
+  end
+
+  it 'copies image asset in folder with a dot in it' do
+    Hanami::Assets::Compiler.compile(@config, 'other_pixel.gif')
+
+    target  = @config.public_directory.join('assets', 'other_pixel.gif')
+    content = target.read
+    content.must_equal "GIF89a\u0001\u0000\u0001\u0000\x80\u0000\u0000\u0000\u0000\u0000\xFF\xFF\xFF!\xF9\u0004\u0001\u0000\u0000\u0000\u0000,\u0000\u0000\u0000\u0000\u0001\u0000\u0001\u0000\u0000\u0002\u0001D\u0000;"
   end
 
   it "won't compile/copy if the source hasn't changed" do

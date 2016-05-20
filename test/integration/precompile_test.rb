@@ -75,13 +75,13 @@ describe 'Precompile' do
 
   describe "when 'config' is omitted" do
     it 'raises error and exit' do
-      assert_failing_command "", "You must specify a configuration file (ArgumentError)"
+      assert_failing_command "", "You must specify a configuration file"
     end
   end
 
   describe "when 'config' points to a non-existing file" do
     it 'raises error and exit' do
-      assert_failing_command "--config=path/to/missing.rb", "Cannot find configuration file: path/to/missing.rb (ArgumentError)"
+      assert_failing_command "--config=path/to/missing.rb", "Cannot find configuration file: path/to/missing.rb"
     end
   end
 

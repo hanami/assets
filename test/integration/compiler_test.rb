@@ -108,6 +108,22 @@ describe 'Compiler' do
     directory.must_be :exist?
   end
 
+  it 'copies unknown asset' do
+    Hanami::Assets::Compiler.compile(@config, 'style.foobar')
+
+    target  = @config.public_directory.join('assets', 'style.foobar')
+    content = target.read
+    content.must_equal "This is a foobar file.\n"
+  end
+
+  it 'copies unknown asset in folder with a dot in it' do
+    Hanami::Assets::Compiler.compile(@config, 'other_style.foobar')
+
+    target  = @config.public_directory.join('assets', 'other_style.foobar')
+    content = target.read
+    content.must_equal "This is a foobar file.\n"
+  end
+
   it "won't compile/copy if the source hasn't changed" do
     Hanami::Assets::Compiler.compile(@config, 'unchanged.js')
 

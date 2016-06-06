@@ -479,7 +479,9 @@ module Hanami
         @prefix                = Utils::PathPrefix.new(DEFAULT_PREFIX)
         @sri                   = false
         @cdn                   = false
+        @digest                = false
         @compile               = false
+        @base_url              = nil
         @destination_directory = nil
         @digest_manifest       = Config::NullDigestManifest.new(self)
 

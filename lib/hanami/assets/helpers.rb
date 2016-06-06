@@ -58,6 +58,10 @@ module Hanami
       # @api private
       CROSSORIGIN_ANONYMOUS = 'anonymous'.freeze
 
+      # @since x.x.x
+      # @api private
+      ABSOLUTE_URL_MATCHER = URI::Parser.new.make_regexp
+
       include Hanami::Helpers::HtmlHelper
 
       # Inject helpers into the given class
@@ -764,7 +768,7 @@ module Hanami
       # @since 0.1.0
       # @api private
       def _absolute_url?(source)
-        URI.regexp.match(source)
+        ABSOLUTE_URL_MATCHER.match(source)
       end
 
       # @since 0.1.0

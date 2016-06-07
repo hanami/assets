@@ -51,9 +51,9 @@ $ gem install hanami-assets
 
 ### Helpers
 
-The framework offers assets specific helpers to be used in templates.
+`Hanami::Assets` provides asset-specific helpers to be used in templates.
 They resolve one or multiple sources into corresponding HTML tags.
-Those sources can be the name of the local asset or an absolute URL.
+Those sources can be either a name of a local asset or an absolute URL.
 
 Given the following template:
 
@@ -73,7 +73,7 @@ Given the following template:
 </html>
 ```
 
-It will output this markup.
+It will output this markup:
 
 ```html
 <!doctype HTML>
@@ -124,7 +124,7 @@ For advanced configurations, please have a look at
 
 ### Available Helpers
 
-This gems ships with the following helpers:
+This gem ships with the following helpers:
 
   * `javascript`
   * `stylesheet`
@@ -191,10 +191,10 @@ that file would be copied into the public directory instead of the one under
 `Hanami::Assets` is able to run assets preprocessors and **lazily compile** them
 under `public/assets` (by default), before the markup is generated.
 
-Imagine to have `main.css.scss` under `app/assets/stylesheets` and `reset.css` under
+Imagine you have `main.css.scss` under `app/assets/stylesheets` and `reset.css` under
 `vendor/stylesheets`.
 
-**The extensions structure is important.**
+**The two extensions are important.**
 The first one is mandatory and it's used to understand which asset type we are
 handling: `.css` for stylesheets.
 The second one is optional and it's for a preprocessor: `.scss` for Sass.
@@ -213,13 +213,13 @@ Hanami::Assets.configure do
 end
 ```
 
-When from a template you do:
+And in a template you can use the `stylesheet` helper:
 
 ```erb
 <%= stylesheet 'reset', 'main' %>
 ```
 
-Your public directory will have the following structure.
+Your public directory will look like this:
 
 ```shell
 % tree public
@@ -231,23 +231,25 @@ public/
 
 ### Preprocessors engines
 
-`Hanami::Assets` uses [Tilt](https://github.com/rtomayko/tilt) to provide support for the most common preprocessors, such as [Sass](http://sass-lang.com/) (including `sassc-ruby`), [Less](http://lesscss.org/), ES6, [JSX](https://jsx.github.io/), [CoffeScript](http://coffeescript.org), [Opal](http://opalrb.org), [Handlebars](http://handlebarsjs.com), [JBuilder](https://github.com/rails/jbuilder).
+`Hanami::Assets` uses [Tilt](https://github.com/rtomayko/tilt) to provide support for the most common preprocessors, such as [Sass](http://sass-lang.com/) (including `sassc-ruby`), [Less](http://lesscss.org/), [ES6](https://babeljs.io/), [JSX](https://jsx.github.io/), [CoffeScript](http://coffeescript.org), [Opal](http://opalrb.org), [Handlebars](http://handlebarsjs.com), [JBuilder](https://github.com/rails/jbuilder).
 
-In order to use one or more of them, be sure to include the corresponding gem into your `Gemfile` and require the library.
+In order to use one or more of them, be sure to add the corresponding gem to your `Gemfile` and require the library.
 
 #### EcmaScript 6
 
-We strongly suggest to use [EcmaScript 6](http://es6-features.org/) for your next project.
-It isn't fully [supported](https://kangax.github.io/compat-table/es6/) yet by browser vendors, but it's the future of JavaScript.
+We strongly suggest you use [EcmaScript 6](http://es6-features.org/) for your next project.
+It isn't fully [supported](https://kangax.github.io/compat-table/es6/) yet by browsers, but it's the future of JavaScript.
 
-As of today, you need to transpile ES6 code into something understandable by current browsers, which is ES5.
-For this purpose we support [Babel](https://babeljs.io).
+As of today, you need to 'transpile' ES6 code into ES5, which current browsers understand.
+The most popular tool for this is [Babel](https://babeljs.io), which we support.
 
 ### Deployment
 
 `Hanami::Assets` ships with an executable (`hanami-assets`), which can be used to precompile assets and make them cacheable by browsers (via checksum suffix).
 
-Let's say we have an application that has main file that requires the entire code (`config/environment.rb`), a gem that brings Ember.js code, and the following sources:
+__NOTE__: If you're using `Hanami::Assets` with the full `Hanami` framework, you should use `bundle exec hanami assets precompile` instead of `hanami-assets`.
+
+Let's say we have an application that has a main file that requires the entire codebase (`config/environment.rb`), a gem that brings in Ember.js code, and the following sources:
 
 ```shell
 % tree .
@@ -321,14 +323,14 @@ public
 
 #### Compressors
 
-Minification is a process that shrink file size in production, by removing unnecessary spaces and characters.
-The goal of this step, is to have lighter assets to be served faster to the browsers.
+Minification is a process that shrinks file size in production, by removing unnecessary spaces and characters.
+The goal of this step is to have lighter assets, which will be served faster to browsers.
 
-Hanami supports JavaScript and stylesheets minifiers.
+Hanami supports JavaScript and stylesheet minifiers.
 
 Because this framework relies on external gems for minification, this feature is **turned off by default**.
 
-To do so we need to specify which gem we want to use and add it to our `Gemfile`.
+To use minification, we need to specify which gem we want to use and add it to our `Gemfile`.
 
 ##### JavaScript Compressors
 
@@ -347,7 +349,7 @@ end
 
 ##### Stylesheet Compressors
 
-Hanami can use the following compressors (aka minifiers) for Stylesheet.
+Hanami can use the following compressors (aka minifiers) for stylesheets.
 
   * `:builtin` - Ruby based compressor. It doesn't require any external gem. It's fast, but not an efficient compressor.
   * `:yui` - [YUI Compressor](http://yui.github.io/yuicompressor), it depends on [`yui-compressor`](https://rubygems.org/gems/yui-compressor) gem and it requires Java 1.4+
@@ -372,7 +374,9 @@ end
 
 ### Digest Mode
 
-This is a mode that can be activated via the configuration and it's suitable for production environments.
+This is a mode that can be activated via configuration and it's suitable for production environments.
+When generating files, it adds a string to the end of each file name, which is a cachesum of its contents.
+This lets you leverage caching while still ensuring that clients get the most up-to-date assets (this is known as *cache busting*).
 
 ```ruby
 Hanami::Assets.configure do
@@ -392,7 +396,7 @@ Once turned on, it will look at `/public/assets.json`, and helpers such as `java
 
 ### CDN Mode
 
-A Hanami project can serve assets via CDN.
+A Hanami project can serve assets via a Content Delivery Network (CDN).
 
 ```ruby
 Hanami::Assets.configure do
@@ -403,7 +407,7 @@ Hanami::Assets.configure do
 end
 ```
 
-Since now on, helpers will return the CDN absolute URL for the asset.
+From now on, helpers will return the absolute URL for the asset, hosted on the CDN specified.
 
 ```erb
 <%= javascript 'application' %>
@@ -417,7 +421,7 @@ Since now on, helpers will return the CDN absolute URL for the asset.
 
 Developers can maintain gems that distribute assets for Hanami. For instance `hanami-ember` or `hanami-jquery`.
 
-As a gem developer, you must add one or more paths, where the assets are stored inside the gem.
+To do this, inside your gem you have tell `Hanami::Assets` where to look for assets:
 
 ```ruby
 # lib/hanami/jquery.rb
@@ -428,7 +432,7 @@ Hanami::Assets.sources << '/path/to/jquery'
 
   * Make sure you have one of [ExecJS](https://github.com/rails/execjs)
 supported runtime on your machine.
-  * Java 1.4+
+  * Java 1.4+ (for YUI Compressor and Google Closure Compiler)
 
 ```sh
 bundle exec rake test

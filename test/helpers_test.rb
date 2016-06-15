@@ -19,11 +19,6 @@ describe Hanami::Assets::Helpers do
       actual.must_equal %(<script src="/assets/feature-a.js" type="text/javascript"></script>)
     end
 
-    it 'renders <script> tag with an async attribute' do
-      actual = DefaultView.new.javascript('feature-a', async: true)
-      actual.must_equal %(<script src="/assets/feature-a.js" type="text/javascript" async="async"></script>)
-    end
-
     it 'renders <script> tag with a defer attribute' do
       actual = DefaultView.new.javascript('feature-a', defer: true)
       actual.must_equal %(<script src="/assets/feature-a.js" type="text/javascript" defer="defer"></script>)
@@ -38,6 +33,19 @@ describe Hanami::Assets::Helpers do
       actual = DefaultView.new.javascript('feature-a', integrity: 'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC', crossorigin: 'use-credentials')
       actual.must_equal %(<script src="/assets/feature-a.js" type="text/javascript" integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" crossorigin="use-credentials"></script>)
     end
+
+    describe 'async option' do
+      it 'renders <script> tag with an async=true if async option is true' do
+        actual = DefaultView.new.javascript('feature-a', async: true)
+        actual.must_equal %(<script src="/assets/feature-a.js" type="text/javascript" async="async"></script>)
+      end
+
+      it 'renders <script> tag without an async=true if async option is false' do
+        actual = DefaultView.new.javascript('feature-a', async: false)
+        actual.must_equal %(<script src="/assets/feature-a.js" type="text/javascript"></script>)
+      end
+    end
+
 
     describe 'sri mode' do
       before do

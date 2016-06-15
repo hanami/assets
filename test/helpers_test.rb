@@ -21,23 +21,23 @@ describe Hanami::Assets::Helpers do
 
     it 'renders <script> tag with a defer attribute' do
       actual = DefaultView.new.javascript('feature-a', defer: true)
-      actual.must_equal %(<script src="/assets/feature-a.js" type="text/javascript" defer="defer"></script>)
+      actual.must_equal %(<script defer="defer" src="/assets/feature-a.js" type="text/javascript"></script>)
     end
 
     it 'renders <script> tag with an integrity attribute' do
       actual = DefaultView.new.javascript('feature-a', integrity: 'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC')
-      actual.must_equal %(<script src="/assets/feature-a.js" type="text/javascript" integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" crossorigin="anonymous"></script>)
+      actual.must_equal %(<script integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" src="/assets/feature-a.js" type="text/javascript" crossorigin="anonymous"></script>)
     end
 
     it 'renders <script> tag with a crossorigin attribute' do
       actual = DefaultView.new.javascript('feature-a', integrity: 'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC', crossorigin: 'use-credentials')
-      actual.must_equal %(<script src="/assets/feature-a.js" type="text/javascript" integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" crossorigin="use-credentials"></script>)
+      actual.must_equal %(<script integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" crossorigin="use-credentials" src="/assets/feature-a.js" type="text/javascript"></script>)
     end
 
     describe 'async option' do
       it 'renders <script> tag with an async=true if async option is true' do
         actual = DefaultView.new.javascript('feature-a', async: true)
-        actual.must_equal %(<script src="/assets/feature-a.js" type="text/javascript" async="async"></script>)
+        actual.must_equal %(<script async="async" src="/assets/feature-a.js" type="text/javascript"></script>)
       end
 
       it 'renders <script> tag without an async=true if async option is false' do
@@ -83,12 +83,12 @@ describe Hanami::Assets::Helpers do
 
     it 'renders <link> tag with an integrity attribute' do
       actual = DefaultView.new.stylesheet('main', integrity: 'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC')
-      actual.must_equal %(<link href="/assets/main.css" type="text/css" rel="stylesheet" integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" crossorigin="anonymous">)
+      actual.must_equal %(<link integrity=\"sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC\" href=\"/assets/main.css\" type=\"text/css\" rel=\"stylesheet\" crossorigin=\"anonymous\">)
     end
 
     it 'renders <link> tag with a crossorigin attribute' do
       actual = DefaultView.new.stylesheet('main', integrity: 'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC', crossorigin: 'use-credentials')
-      actual.must_equal %(<link href="/assets/main.css" type="text/css" rel="stylesheet" integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" crossorigin="use-credentials">)
+      actual.must_equal %(<link integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" crossorigin="use-credentials" href="/assets/main.css" type="text/css" rel="stylesheet">)
     end
 
     describe 'subresource_integrity mode' do

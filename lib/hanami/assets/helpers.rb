@@ -159,21 +159,16 @@ module Hanami
       #   # <script src="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js" type="text/javascript"></script>
       def javascript(*sources, **options)
         _safe_tags(*sources) do |source|
-          tag_options = options.merge({
-            src: _typed_asset_path(source, JAVASCRIPT_EXT),
-            type: JAVASCRIPT_MIME_TYPE
-          })
+          tag_options = options.dup
+          tag_options[:src] ||= _typed_asset_path(source, JAVASCRIPT_EXT)
+          tag_options[:type] ||= JAVASCRIPT_MIME_TYPE
 
           if _subresource_integrity? || tag_options.include?(:integrity)
             tag_options[:integrity] ||= _subresource_integrity_value(source, JAVASCRIPT_EXT)
             tag_options[:crossorigin] ||= CROSSORIGIN_ANONYMOUS
           end
 
-          html.script(
-            src: tag_options.delete(:src),
-            type: tag_options.delete(:type),
-            **tag_options
-          ).to_s
+          html.script(**tag_options).to_s
         end
       end
 
@@ -246,23 +241,17 @@ module Hanami
       #   # <link href="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.css" type="text/css" rel="stylesheet">
       def stylesheet(*sources, **options)
         _safe_tags(*sources) do |source|
-          tag_options = options.merge({
-            href: _typed_asset_path(source, STYLESHEET_EXT),
-            type: STYLESHEET_MIME_TYPE,
-            rel: STYLESHEET_REL
-          })
+          tag_options = options.dup
+          tag_options[:href] ||= _typed_asset_path(source, STYLESHEET_EXT)
+          tag_options[:type] ||= STYLESHEET_MIME_TYPE
+          tag_options[:rel] ||= STYLESHEET_REL
 
           if _subresource_integrity? || tag_options.include?(:integrity)
             tag_options[:integrity] ||= _subresource_integrity_value(source, STYLESHEET_EXT)
             tag_options[:crossorigin] ||= CROSSORIGIN_ANONYMOUS
           end
 
-          html.link(
-            href: tag_options.delete(:href),
-            type: tag_options.delete(:type),
-            rel: tag_options.delete(:rel),
-            **tag_options
-          ).to_s
+          html.link(**tag_options).to_s
         end
       end
 

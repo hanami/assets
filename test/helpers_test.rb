@@ -47,12 +47,12 @@ describe Hanami::Assets::Helpers do
     end
 
 
-    describe 'sri mode' do
+    describe 'subresource_integrity mode' do
       before do
-        activate_sri_mode!
+        activate_subresource_integrity_mode!
       end
 
-      it 'includes sri and crossorigin attributes' do
+      it 'includes subresource_integrity and crossorigin attributes' do
         actual = DefaultView.new.javascript('feature-a')
         actual.must_equal %(<script src="/assets/feature-a.js" type="text/javascript" integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" crossorigin="anonymous"></script>)
       end
@@ -91,12 +91,12 @@ describe Hanami::Assets::Helpers do
       actual.must_equal %(<link href="/assets/main.css" type="text/css" rel="stylesheet" integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" crossorigin="use-credentials">)
     end
 
-    describe 'sri mode' do
+    describe 'subresource_integrity mode' do
       before do
-        activate_sri_mode!
+        activate_subresource_integrity_mode!
       end
 
-      it 'includes sri and crossorigin attributes' do
+      it 'includes subresource_integrity and crossorigin attributes' do
         actual = DefaultView.new.stylesheet('main')
         actual.must_equal %(<link href="/assets/main.css" type="text/css" rel="stylesheet" integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" crossorigin="anonymous">)
       end
@@ -366,16 +366,16 @@ describe Hanami::Assets::Helpers do
 
   private
 
-  def activate_sri_mode!
-    view.class.assets_configuration.sri true
+  def activate_subresource_integrity_mode!
+    view.class.assets_configuration.subresource_integrity true
     view.class.assets_configuration.load!
 
     manifest = Hanami::Assets::Config::DigestManifest.new({
       '/assets/feature-a.js' => {
-        'sri' => 'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC'
+        'subresource_integrity' => 'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC'
       },
       '/assets/main.css' => {
-        'sri' => 'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC'
+        'subresource_integrity' => 'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC'
       }
     }, [])
     view.class.assets_configuration.instance_variable_set(:@digest_manifest, manifest)

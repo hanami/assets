@@ -130,11 +130,11 @@ module Hanami
       # asset. Usually this is turned on in production mode.
       #
       # @since 0.3.0-add-options-to-javascript-helper
-      def sri(value = nil)
+      def subresource_integrity(value = nil)
         if value.nil?
-          @sri
+          @subresource_integrity
         else
-          @sri = value
+          @subresource_integrity = value
         end
       end
 
@@ -383,9 +383,11 @@ module Hanami
       # @since 0.1.0
       # @api private
       def asset_path(source)
-        cdn ?
-          asset_url(source) :
+        if cdn
+          asset_url(source)
+        else
           compile_path(source)
+        end
       end
 
       # Absolute URL
@@ -400,18 +402,18 @@ module Hanami
       # integrity (SRI) checks
       #
       # @since 0.3.0-add-options-to-javascript-helper
-      def sri_algorithm
+      def subresource_integrity_algorithm
         [DEFAULT_SRI_ALGORITHM]
       end
 
       # Subresource integrity attribute
       # @since 0.3.0-add-options-to-javascript-helper
       # @api private
-      def sri_value(source)
-        if sri
+      def subresource_integrity_value(source)
+        if subresource_integrity
           result = prefix.join(source)
           result = digest_manifest.resolve(result)
-          result.fetch('sri').to_s
+          result.fetch('subresource_integrity').to_s
         end
       end
 
@@ -458,7 +460,7 @@ module Hanami
           c.host                  = host
           c.port                  = port
           c.prefix                = prefix
-          c.sri                   = sri
+          c.subresource_integrity = subresource_integrity
           c.cdn                   = cdn
           c.compile               = compile
           c.public_directory      = public_directory
@@ -477,7 +479,7 @@ module Hanami
         @port                  = DEFAULT_PORT
 
         @prefix                = Utils::PathPrefix.new(DEFAULT_PREFIX)
-        @sri                   = false
+        @subresource_integrity = false
         @cdn                   = false
         @digest                = false
         @compile               = false
@@ -499,7 +501,7 @@ module Hanami
       #
       # @since 0.1.0
       def load!
-        if (digest || sri) && manifest_path.exist?
+        if (digest || subresource_integrity) && manifest_path.exist?
           @digest_manifest = Config::DigestManifest.new(
             JSON.load(manifest_path.read),
             manifest_path
@@ -513,7 +515,7 @@ module Hanami
 
       # @since 0.3.0-add-options-to-javascript-helper
       # @api private
-      attr_writer :sri
+      attr_writer :subresource_integrity
 
       # @since 0.1.0
       # @api private

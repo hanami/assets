@@ -107,15 +107,15 @@ module Hanami
         FileUtils.cp(asset, target)
         _set_permissions(target)
 
-        sri_value = sri_checksum(asset)
+        subresource_integrity_value = subresource_integrity_checksum(asset)
 
-        store_manifest(asset, target, sri_value)
+        store_manifest(asset, target, subresource_integrity_value)
       end
 
       # @since 0.3.0-add-options-to-javascript-helper
       # @api private
-      def sri_checksum(asset)
-        @configuration.sri_algorithm.collect do |algorithm|
+      def subresource_integrity_checksum(asset)
+        @configuration.subresource_integrity_algorithm.collect do |algorithm|
           "#{algorithm}-#{OpenSSL::Digest.new(algorithm.to_s, File.read(asset)).base64digest}"
         end.join('\s')
       end
@@ -128,10 +128,10 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      def store_manifest(asset, target, sri_value)
+      def store_manifest(asset, target, subresource_integrity_value)
         @manifest[_convert_to_url(::File.expand_path(asset))] = {
           target: _convert_to_url(::File.expand_path(target)),
-          sri: sri_value
+          subresource_integrity: subresource_integrity_value
         }
       end
 

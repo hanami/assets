@@ -164,8 +164,8 @@ module Hanami
             type: JAVASCRIPT_MIME_TYPE
           })
 
-          if _sri? || tag_options.include?(:integrity)
-            tag_options[:integrity] ||= _sri_value(source, JAVASCRIPT_EXT)
+          if _subresource_integrity? || tag_options.include?(:integrity)
+            tag_options[:integrity] ||= _subresource_integrity_value(source, JAVASCRIPT_EXT)
             tag_options[:crossorigin] ||= CROSSORIGIN_ANONYMOUS
           end
 
@@ -252,8 +252,8 @@ module Hanami
             rel: STYLESHEET_REL
           })
 
-          if _sri? || tag_options.include?(:integrity)
-            tag_options[:integrity] ||= _sri_value(source, STYLESHEET_EXT)
+          if _subresource_integrity? || tag_options.include?(:integrity)
+            tag_options[:integrity] ||= _subresource_integrity_value(source, STYLESHEET_EXT)
             tag_options[:crossorigin] ||= CROSSORIGIN_ANONYMOUS
           end
 
@@ -756,13 +756,13 @@ module Hanami
         asset_path(source)
       end
 
-      def _sri?
-        !!self.class.assets_configuration.sri
+      def _subresource_integrity?
+        !!self.class.assets_configuration.subresource_integrity
       end
 
-      def _sri_value(source, ext)
+      def _subresource_integrity_value(source, ext)
         source = "#{ source }#{ ext }" unless source.match(/#{ Regexp.escape(ext) }\z/)
-        self.class.assets_configuration.sri_value(source) unless _absolute_url?(source)
+        self.class.assets_configuration.subresource_integrity_value(source) unless _absolute_url?(source)
       end
 
       # @since 0.1.0

@@ -396,7 +396,7 @@ This is a mode that can be activated via the configuration and it's suitable for
 
 ```ruby
 Hanami::Assets.configure do
-  sri true
+  subresource_integrity true
 end
 ```
 

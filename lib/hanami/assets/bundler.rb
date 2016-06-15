@@ -117,7 +117,7 @@ module Hanami
       def subresource_integrity_checksum(asset)
         @configuration.subresource_integrity_algorithm.collect do |algorithm|
           "#{algorithm}-#{OpenSSL::Digest.new(algorithm.to_s, File.read(asset)).base64digest}"
-        end.join('\s')
+        end.join(' ')
       end
 
       # @since 0.1.0
@@ -131,7 +131,7 @@ module Hanami
       def store_manifest(asset, target, subresource_integrity_value)
         @manifest[_convert_to_url(::File.expand_path(asset))] = {
           target: _convert_to_url(::File.expand_path(target)),
-          subresource_integrity: subresource_integrity_value
+          subresource_integrity: [subresource_integrity_value]
         }
       end
 

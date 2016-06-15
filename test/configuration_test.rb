@@ -443,7 +443,7 @@ describe Hanami::Assets::Configuration do
           manifest = Hanami::Assets::Config::DigestManifest.new({
             '/assets/application.js' => {
               'target' => '/assets/application-abc123.js',
-              'subresource_integrity' => 'sha0-456def'
+              'subresource_integrity' => ['sha0-456def']
             }
           }, [])
 

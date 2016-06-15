@@ -413,7 +413,7 @@ module Hanami
         if subresource_integrity
           result = prefix.join(source)
           result = digest_manifest.resolve(result)
-          result.fetch('subresource_integrity').to_s
+          result.fetch('subresource_integrity').join(' ')
         end
       end
 

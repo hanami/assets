@@ -372,10 +372,14 @@ describe Hanami::Assets::Helpers do
 
     manifest = Hanami::Assets::Config::DigestManifest.new({
       '/assets/feature-a.js' => {
-        'subresource_integrity' => 'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC'
+        'subresource_integrity' => [
+          'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC'
+        ]
       },
       '/assets/main.css' => {
-        'subresource_integrity' => 'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC'
+        'subresource_integrity' => [
+          'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC'
+        ]
       }
     }, [])
     view.class.assets_configuration.instance_variable_set(:@digest_manifest, manifest)

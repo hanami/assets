@@ -572,10 +572,7 @@ module Hanami
       def compile_path(source)
         result = prefix.join(source)
 
-        if digest
-          result = digest_manifest.resolve(result)
-          result = result.fetch('target')
-        end
+        result = digest_manifest.target(result) if digest
 
         result.to_s
       end

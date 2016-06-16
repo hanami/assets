@@ -115,7 +115,7 @@ module Hanami
       # @since 0.3.0-add-options-to-javascript-helper
       # @api private
       def subresource_integrity_values(asset)
-        @configuration.subresource_integrity_algorithm.map do |algorithm|
+        @configuration.subresource_integrity_algorithms.map do |algorithm|
           [
             algorithm,
             OpenSSL::Digest.new(algorithm.to_s, File.read(asset)).base64digest

@@ -22,6 +22,7 @@ describe Hanami::Assets::Bundler do
           c.public_directory dest
           c.javascript_compressor _javascript_compressor(compressor)
           c.stylesheet_compressor _stylesheet_compressor(compressor)
+          c.subresource_integrity true
         end
       end
 
@@ -115,13 +116,13 @@ describe Hanami::Assets::Bundler do
 
   def assert_valid_compressed_asset(compressor, original, current)
     assert_compressed(compressor, original, current)
-    assert_valid_asset(                     current)
+    assert_valid_asset(current)
   end
 
   def assert_valid_asset(current)
-    assert_checksum(   current)
-    assert_owner(      current)
-    assert_permissions(current)
+    assert_checksum    current
+    assert_owner       current
+    assert_permissions current
   end
 
   def assert_compressed(compressor, original, current)

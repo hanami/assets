@@ -15,51 +15,51 @@ module Hanami
     class Configuration
       # @since 0.1.0
       # @api private
-      DEFAULT_SCHEME           = 'http'.freeze
+      DEFAULT_SCHEME                          = 'http'.freeze
 
       # @since 0.1.0
       # @api private
-      DEFAULT_HOST             = 'localhost'.freeze
+      DEFAULT_HOST                            = 'localhost'.freeze
 
       # @since 0.1.0
       # @api private
-      DEFAULT_PORT             = '2300'.freeze
+      DEFAULT_PORT                            = '2300'.freeze
 
       # @since 0.1.0
       # @api private
-      DEFAULT_PUBLIC_DIRECTORY = 'public'.freeze
+      DEFAULT_PUBLIC_DIRECTORY                = 'public'.freeze
 
       # @since 0.1.0
       # @api private
-      DEFAULT_MANIFEST         = 'assets.json'.freeze
+      DEFAULT_MANIFEST                        = 'assets.json'.freeze
 
       # @since 0.1.0
       # @api private
-      DEFAULT_PREFIX           = '/assets'.freeze
+      DEFAULT_PREFIX                          = '/assets'.freeze
 
       # @since 0.1.0
       # @api private
-      URL_SEPARATOR            = '/'.freeze
+      URL_SEPARATOR                           = '/'.freeze
 
       # @since 0.1.0
       # @api private
-      HTTP_SCHEME              = 'http'.freeze
+      HTTP_SCHEME                             = 'http'.freeze
 
       # @since 0.1.0
       # @api private
-      HTTP_PORT                = '80'.freeze
+      HTTP_PORT                               = '80'.freeze
 
       # @since 0.1.0
       # @api private
-      HTTPS_SCHEME             = 'https'.freeze
+      HTTPS_SCHEME                            = 'https'.freeze
 
       # @since 0.1.0
       # @api private
-      HTTPS_PORT               = '443'.freeze
+      HTTPS_PORT                              = '443'.freeze
 
       # @since 0.3.0-add-options-to-javascript-helper
       # @api private
-      DEFAULT_SRI_ALGORITHM    = 'sha256'.freeze
+      DEFAULT_SUBRESOURCE_INTEGRITY_ALGORITHM = :sha256.freeze
 
       # Return a copy of the configuration of the framework instance associated
       # with the given class.
@@ -399,11 +399,17 @@ module Hanami
       end
 
       # An array of digest algorithms to use for generating asset subresource
-      # integrity (SRI) checks
+      # integrity checks
       #
       # @since 0.3.0-add-options-to-javascript-helper
-      def subresource_integrity_algorithm
-        [DEFAULT_SRI_ALGORITHM]
+      def subresource_integrity_algorithms
+        if @subresource_integrity == true
+          [DEFAULT_SUBRESOURCE_INTEGRITY_ALGORITHM]
+        else
+          # Using Array() allows us to accept Array or Symbol, and '|| nil' lets
+          # us return an empty array when @subresource_integrity is `false`
+          Array(@subresource_integrity || nil )
+        end
       end
 
       # Subresource integrity attribute

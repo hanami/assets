@@ -100,9 +100,36 @@ describe Hanami::Assets::Configuration do
       @configuration.subresource_integrity.must_equal false
     end
 
-    it 'allows to set a value' do
+    it 'allows to set to true, with default of SHA256' do
       @configuration.subresource_integrity            true
       @configuration.subresource_integrity.must_equal true
+    end
+
+    it 'allows to set a symbol' do
+      @configuration.subresource_integrity            :sha384
+      @configuration.subresource_integrity.must_equal :sha384
+    end
+
+    it 'allows to set an Array of symbols' do
+      @configuration.subresource_integrity            [:sha256, :sha512]
+      @configuration.subresource_integrity.must_equal [:sha256, :sha512]
+    end
+  end
+
+  describe '#subresource_integrity_algorithms' do
+    it "includes only sha256 by default" do
+      @configuration.subresource_integrity                       true
+      @configuration.subresource_integrity_algorithms.must_equal [:sha256]
+    end
+
+    it 'converts symbol into array of symboles' do
+      @configuration.subresource_integrity                        :sha384
+      @configuration.subresource_integrity_algorithms.must_equal [:sha384]
+    end
+
+    it 'allows to an Array of symbols' do
+      @configuration.subresource_integrity                       [:sha256, :sha512]
+      @configuration.subresource_integrity_algorithms.must_equal [:sha256, :sha512]
     end
   end
 

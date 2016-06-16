@@ -73,7 +73,7 @@ module Hanami
           next if ::File.directory?(asset)
 
           compress(asset)
-          checksum(asset)
+          copy(asset)
         end
 
         generate_manifest
@@ -98,7 +98,7 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      def checksum(asset)
+      def copy(asset)
         digest        = Digest::MD5.file(asset)
         filename, ext = ::File.basename(asset, WILDCARD_EXT), ::File.extname(asset)
         directory     = ::File.dirname(asset)

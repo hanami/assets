@@ -130,11 +130,13 @@ module Hanami
       # asset. Usually this is turned on in production mode.
       #
       # @since 0.3.0-add-options-to-javascript-helper
-      def subresource_integrity(value = nil)
-        if value.nil?
+      def subresource_integrity(*values)
+        if values.empty?
           @subresource_integrity
+        elsif values.length == 1
+          @subresource_integrity = values.first
         else
-          @subresource_integrity = value
+          @subresource_integrity = values
         end
       end
 

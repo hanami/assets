@@ -1,29 +1,36 @@
 module Hanami
   module Assets
-    # Bundle assets from a single application.
-    #
-    # @since 0.1.0
-    # @api private
     class Bundler
+      # Constructs a hash for a single asset's manifest file entry
+      #
+      # @since 0.3.0-add-options-to-javascript-helper
+      # @api private
       class ManifestEntry
         # Return a new instance
         #
-        # @since x.x.x
+        # @since 0.3.0-add-options-to-javascript-helper
         # @api private
         def initialize(asset)
           @asset = asset
         end
 
+        # A single entry for this asset, to go into manifest file
+        # @since 0.3.0-add-options-to-javascript-helper
+        # @api private
         def entry
           { name => values }
         end
 
         private
 
+        # @since 0.3.0-add-options-to-javascript-helper
+        # @api private
         def name
           _convert_to_url(@asset.expanded_path)
         end
 
+        # @since 0.3.0-add-options-to-javascript-helper
+        # @api private
         def values
           {
             target: _convert_to_url(@asset.expanded_fingerprinted_target),
@@ -39,7 +46,7 @@ module Hanami
           end
         end
 
-        # @since 0.1.0
+        # @since 0.3.0-add-options-to-javascript-helper
         # @api private
         def _convert_to_url(path)
           path.sub(@asset.configuration.public_directory.to_s, URL_REPLACEMENT).

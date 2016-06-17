@@ -41,6 +41,8 @@ module Hanami
           ::File.expand_path(fingerprinted_target)
         end
 
+        # @since x.x.x
+        # @api private
         def base64_digest(algorithm)
           raw_digest(algorithm).base64digest
         end

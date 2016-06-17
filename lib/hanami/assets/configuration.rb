@@ -59,7 +59,7 @@ module Hanami
 
       # @since 0.3.0-add-options-to-javascript-helper
       # @api private
-      DEFAULT_SUBRESOURCE_INTEGRITY_ALGORITHM = :sha256.freeze
+      DEFAULT_SUBRESOURCE_INTEGRITY_ALGORITHM = :sha256
 
       # Return a copy of the configuration of the framework instance associated
       # with the given class.
@@ -578,9 +578,7 @@ module Hanami
       # @api private
       def compile_path(source)
         result = prefix.join(source)
-
         result = digest_manifest.target(result) if digest
-
         result.to_s
       end
 

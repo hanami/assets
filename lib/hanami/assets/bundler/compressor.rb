@@ -1,29 +1,31 @@
 module Hanami
   module Assets
-    # Bundle assets from a single application.
-    #
-    # @since 0.1.0
-    # @api private
     class Bundler
+      # Compresses a JS or CSS file
+      #
+      # @since 0.3.0-add-options-to-javascript-helper
+      # @api private
       class Compressor
-        # @since 0.1.0
+        # @since 0.3.0-add-options-to-javascript-helper
         # @api private
         JAVASCRIPT_EXT      = '.js'.freeze
 
-        # @since 0.1.0
+        # @since 0.3.0-add-options-to-javascript-helper
         # @api private
         STYLESHEET_EXT      = '.css'.freeze
 
         # Return a new instance
         #
-        # @since x.x.x
+        # @since 0.3.0-add-options-to-javascript-helper
         # @api private
         def initialize(path, configuration)
           @path = path
           @configuration = configuration
         end
 
-        # @since 0.1.0
+        # @return [String, nil] the compressed contents of the file OR nil if it's not compressable
+        #
+        # @since 0.3.0-add-options-to-javascript-helper
         # @api private
         def compress
           case File.extname(@path)
@@ -34,13 +36,13 @@ module Hanami
 
         private
 
-        # @since 0.1.0
+        # @since 0.3.0-add-options-to-javascript-helper
         # @api private
         def compressor(type)
           @configuration.__send__(:"#{ type }_compressor")
         end
 
-        # @since 0.1.0
+        # @since 0.3.0-add-options-to-javascript-helper
         # @api private
         def _compress(compressor)
           compressor.compress(@path)

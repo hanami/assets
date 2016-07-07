@@ -95,6 +95,49 @@ describe Hanami::Assets::Configuration do
     end
   end
 
+  describe '#subresource_integrity' do
+    it "is false by default" do
+      @configuration.subresource_integrity.must_equal false
+    end
+
+    it 'allows to set to true, with default of SHA256' do
+      @configuration.subresource_integrity            true
+      @configuration.subresource_integrity.must_equal true
+    end
+
+    it 'allows to set a symbol' do
+      @configuration.subresource_integrity            :sha384
+      @configuration.subresource_integrity.must_equal :sha384
+    end
+
+    it 'allows to set an Array of symbols, without brackets' do
+      @configuration.subresource_integrity            :sha256, :sha512
+      @configuration.subresource_integrity.must_equal [:sha256, :sha512]
+    end
+
+    it 'allows to set an Array of symbols, with brackets' do
+      @configuration.subresource_integrity            [:sha256, :sha512]
+      @configuration.subresource_integrity.must_equal [:sha256, :sha512]
+    end
+  end
+
+  describe '#subresource_integrity_algorithms' do
+    it "includes only sha256 by default" do
+      @configuration.subresource_integrity                       true
+      @configuration.subresource_integrity_algorithms.must_equal [:sha256]
+    end
+
+    it 'converts symbol into array of symboles' do
+      @configuration.subresource_integrity                        :sha384
+      @configuration.subresource_integrity_algorithms.must_equal [:sha384]
+    end
+
+    it 'allows to an Array of symbols' do
+      @configuration.subresource_integrity                       [:sha256, :sha512]
+      @configuration.subresource_integrity_algorithms.must_equal [:sha256, :sha512]
+    end
+  end
+
   describe '#cdn' do
     it "is false by default" do
       @configuration.cdn.must_equal false
@@ -236,7 +279,11 @@ describe Hanami::Assets::Configuration do
 
       describe 'with digest manifest' do
         before do
-          manifest = Hanami::Assets::Config::DigestManifest.new({'/assets/application.js' => '/assets/application-abc123.js'}, [])
+          manifest = Hanami::Assets::Config::DigestManifest.new({
+            '/assets/application.js' => {
+              'target' => '/assets/application-abc123.js'
+            }
+          }, [])
           @configuration.instance_variable_set(:@digest_manifest, manifest)
         end
 
@@ -396,7 +443,7 @@ describe Hanami::Assets::Configuration do
 
       describe 'with digest manifest' do
         before do
-          manifest = Hanami::Assets::Config::DigestManifest.new({'/assets/application.js' => '/assets/application-abc123.js'}, [])
+          manifest = Hanami::Assets::Config::DigestManifest.new({'/assets/application.js' => {"target" => '/assets/application-abc123.js'}}, [])
 
           @configuration.load!
           @configuration.instance_variable_set(:@digest_manifest, manifest)
@@ -411,6 +458,40 @@ describe Hanami::Assets::Configuration do
       describe 'with missing digest manifest' do
         it 'returns asset with digest' do
           exception = -> { @configuration.asset_url('application.js') }.must_raise Hanami::Assets::MissingDigestManifestError
+          exception.message.must_equal "Can't read manifest: #{ @configuration.manifest_path }"
+        end
+      end
+    end
+  end
+
+  describe 'subresource_integrity_value' do
+    describe 'subresource_integrity mode' do
+      before do
+        @configuration.subresource_integrity true
+      end
+
+      describe 'with digest manifest' do
+        before do
+          manifest = Hanami::Assets::Config::DigestManifest.new({
+            '/assets/application.js' => {
+              'target' => '/assets/application-abc123.js',
+              'subresource_integrity' => ['sha0-456def']
+            }
+          }, [])
+
+          @configuration.load!
+          @configuration.instance_variable_set(:@digest_manifest, manifest)
+        end
+
+        it 'returns subresource_integrity value' do
+          actual = @configuration.subresource_integrity_value('application.js')
+          actual.must_equal 'sha0-456def'
+        end
+      end
+
+      describe 'with missing digest manifest' do
+        it 'raises an exception' do
+          exception = -> { @configuration.subresource_integrity_value('application.js') }.must_raise Hanami::Assets::MissingDigestManifestError
           exception.message.must_equal "Can't read manifest: #{ @configuration.manifest_path }"
         end
       end
@@ -475,6 +556,7 @@ describe Hanami::Assets::Configuration do
     before do
       @configuration.reset!
       @configuration.cdn                   true
+      @configuration.subresource_integrity true
       @configuration.compile               true
       @configuration.scheme                'ftp'
       @configuration.host                  'hanamirb.org'
@@ -492,6 +574,7 @@ describe Hanami::Assets::Configuration do
 
     it 'returns a copy of the configuration' do
       @config.cdn.must_equal                   true
+      @config.subresource_integrity.must_equal true
       @config.compile.must_equal               true
       @config.scheme.must_equal                'ftp'
       @config.host.must_equal                  'hanamirb.org'
@@ -508,6 +591,7 @@ describe Hanami::Assets::Configuration do
 
     it "doesn't affect the original configuration" do
       @config.cdn                   false
+      @config.subresource_integrity false
       @config.compile               false
       @config.scheme                'mailto'
       @config.host                  'example.org'
@@ -521,6 +605,7 @@ describe Hanami::Assets::Configuration do
       @config.sources << __dir__ + '/fixtures/stylesheets'
 
       @config.cdn.must_equal                   false
+      @config.subresource_integrity.must_equal false
       @config.compile.must_equal               false
       @config.scheme.must_equal                'mailto'
       @config.host.must_equal                  'example.org'
@@ -535,6 +620,7 @@ describe Hanami::Assets::Configuration do
         "Expected @config.sources to eq [#{ __dir__ }/fixtures/javascripts', #{ __dir__ }/fixtures/stylesheets'], found: #{ @config.sources.inspect }"
 
       @configuration.cdn.must_equal                   true
+      @configuration.subresource_integrity.must_equal true
       @configuration.compile.must_equal               true
       @configuration.scheme.must_equal                'ftp'
       @configuration.host.must_equal                  'hanamirb.org'

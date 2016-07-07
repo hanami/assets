@@ -15,47 +15,51 @@ module Hanami
     class Configuration
       # @since 0.1.0
       # @api private
-      DEFAULT_SCHEME           = 'http'.freeze
+      DEFAULT_SCHEME                          = 'http'.freeze
 
       # @since 0.1.0
       # @api private
-      DEFAULT_HOST             = 'localhost'.freeze
+      DEFAULT_HOST                            = 'localhost'.freeze
 
       # @since 0.1.0
       # @api private
-      DEFAULT_PORT             = '2300'.freeze
+      DEFAULT_PORT                            = '2300'.freeze
 
       # @since 0.1.0
       # @api private
-      DEFAULT_PUBLIC_DIRECTORY = 'public'.freeze
+      DEFAULT_PUBLIC_DIRECTORY                = 'public'.freeze
 
       # @since 0.1.0
       # @api private
-      DEFAULT_MANIFEST         = 'assets.json'.freeze
+      DEFAULT_MANIFEST                        = 'assets.json'.freeze
 
       # @since 0.1.0
       # @api private
-      DEFAULT_PREFIX           = '/assets'.freeze
+      DEFAULT_PREFIX                          = '/assets'.freeze
 
       # @since 0.1.0
       # @api private
-      URL_SEPARATOR            = '/'.freeze
+      URL_SEPARATOR                           = '/'.freeze
 
       # @since 0.1.0
       # @api private
-      HTTP_SCHEME              = 'http'.freeze
+      HTTP_SCHEME                             = 'http'.freeze
 
       # @since 0.1.0
       # @api private
-      HTTP_PORT                = '80'.freeze
+      HTTP_PORT                               = '80'.freeze
 
       # @since 0.1.0
       # @api private
-      HTTPS_SCHEME             = 'https'.freeze
+      HTTPS_SCHEME                            = 'https'.freeze
 
       # @since 0.1.0
       # @api private
-      HTTPS_PORT               = '443'.freeze
+      HTTPS_PORT                              = '443'.freeze
+
+      # @since 0.3.0-add-options-to-javascript-helper
+      # @api private
+      DEFAULT_SUBRESOURCE_INTEGRITY_ALGORITHM = :sha256
 
       # Return a copy of the configuration of the framework instance associated
       # with the given class.
@@ -117,6 +121,22 @@ module Hanami
           @digest
         else
           @digest = value
+        end
+      end
+
+      # Subresource integrity mode
+      #
+      # Determine if the helpers should generate the integrity attribute for an
+      # asset. Usually this is turned on in production mode.
+      #
+      # @since 0.3.0-add-options-to-javascript-helper
+      def subresource_integrity(*values)
+        if values.empty?
+          @subresource_integrity
+        elsif values.length == 1
+          @subresource_integrity = values.first
+        else
+          @subresource_integrity = values
         end
       end
 
@@ -365,9 +385,11 @@ module Hanami
       # @since 0.1.0
       # @api private
       def asset_path(source)
-        cdn ?
-          asset_url(source) :
+        if cdn
+          asset_url(source)
+        else
           compile_path(source)
+        end
       end
 
       # Absolute URL
@@ -376,6 +398,30 @@ module Hanami
       # @api private
       def asset_url(source)
         "#{ @base_url }#{ compile_path(source) }"
+      end
+
+      # An array of digest algorithms to use for generating asset subresource
+      # integrity checks
+      #
+      # @since 0.3.0-add-options-to-javascript-helper
+      def subresource_integrity_algorithms
+        if @subresource_integrity == true
+          [DEFAULT_SUBRESOURCE_INTEGRITY_ALGORITHM]
+        else
+          # Using Array() allows us to accept Array or Symbol, and '|| nil' lets
+          # us return an empty array when @subresource_integrity is `false`
+          Array(@subresource_integrity || nil )
+        end
+      end
+
+      # Subresource integrity attribute
+      # @since 0.3.0-add-options-to-javascript-helper
+      # @api private
+      def subresource_integrity_value(source)
+        if subresource_integrity
+          result = prefix.join(source)
+          result = digest_manifest.subresource_integrity_values(result).join(' ')
+        end
       end
 
       # Load Javascript compressor
@@ -421,6 +467,7 @@ module Hanami
           c.host                  = host
           c.port                  = port
           c.prefix                = prefix
+          c.subresource_integrity = subresource_integrity
           c.cdn                   = cdn
           c.compile               = compile
           c.public_directory      = public_directory
@@ -439,6 +486,7 @@ module Hanami
         @port                  = DEFAULT_PORT
 
         @prefix                = Utils::PathPrefix.new(DEFAULT_PREFIX)
+        @subresource_integrity = false
         @cdn                   = false
         @digest                = false
         @compile               = false
@@ -460,7 +508,7 @@ module Hanami
       #
       # @since 0.1.0
       def load!
-        if digest && manifest_path.exist?
+        if (digest || subresource_integrity) && manifest_path.exist?
           @digest_manifest = Config::DigestManifest.new(
             JSON.load(manifest_path.read),
             manifest_path
@@ -471,6 +519,10 @@ module Hanami
       end
 
       protected
+
+      # @since 0.3.0-add-options-to-javascript-helper
+      # @api private
+      attr_writer :subresource_integrity
 
       # @since 0.1.0
       # @api private
@@ -526,7 +578,7 @@ module Hanami
       # @api private
       def compile_path(source)
         result = prefix.join(source)
-        result = digest_manifest.resolve(result) if digest
+        result = digest_manifest.target(result) if digest
         result.to_s
       end
 

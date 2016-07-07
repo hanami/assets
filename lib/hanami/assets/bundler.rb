@@ -1,6 +1,9 @@
-require 'digest'
 require 'fileutils'
 require 'json'
+
+require 'hanami/assets/bundler/compressor'
+require 'hanami/assets/bundler/asset'
+require 'hanami/assets/bundler/manifest_entry'
 
 module Hanami
   module Assets
@@ -12,18 +15,6 @@ module Hanami
       # @since 0.1.0
       # @api private
       DEFAULT_PERMISSIONS = 0644
-
-      # @since 0.1.0
-      # @api private
-      JAVASCRIPT_EXT      = '.js'.freeze
-
-      # @since 0.1.0
-      # @api private
-      STYLESHEET_EXT      = '.css'.freeze
-
-      # @since 0.1.0
-      # @api private
-      WILDCARD_EXT        = '.*'.freeze
 
       # @since 0.1.0
       # @api private
@@ -60,6 +51,7 @@ module Hanami
       #
       #   * Compress
       #   * Create a checksum version
+      #   * Generate an integrity digest
       #
       # At the end it will generate a digest manifest
       #
@@ -67,71 +59,50 @@ module Hanami
       # @see Hanami::Assets::Configuration#manifest
       # @see Hanami::Assets::Configuration#manifest_path
       def run
-        assets.each do |asset|
-          next if ::File.directory?(asset)
-
-          compress(asset)
-          checksum(asset)
+        assets.each do |path|
+          unless File.directory?(path)
+            configuration = _configuration_for(path)
+            process(Asset.new(path, configuration))
+          end
         end
 
-        generate_manifest
+        write_manifest_file
       end
 
       private
 
-      # @since 0.1.0
+      # @since 0.3.0-add-options-to-javascript-helper
       # @api private
-      def assets
-        Dir.glob("#{ public_directory }#{ ::File::SEPARATOR }**#{ ::File::SEPARATOR }*")
+      def process(asset)
+        compress_in_place!(asset)
+        copy_to_fingerprinted_location!(asset)
+        @manifest.merge!(ManifestEntry.new(asset).entry)
       end
 
-      # @since 0.1.0
+      # @since 0.3.0-add-options-to-javascript-helper
       # @api private
-      def compress(asset)
-        case File.extname(asset)
-        when JAVASCRIPT_EXT then _compress(compressor(:js, asset),  asset)
-        when STYLESHEET_EXT then _compress(compressor(:css, asset), asset)
-        end
+      def copy_to_fingerprinted_location!(asset)
+        FileUtils.cp(asset.path, asset.fingerprinted_target)
+        _set_permissions(asset.fingerprinted_target)
       end
 
-      # @since 0.1.0
+      # @since 0.3.0-add-options-to-javascript-helper
       # @api private
-      def checksum(asset)
-        digest        = Digest::MD5.file(asset)
-        filename, ext = ::File.basename(asset, WILDCARD_EXT), ::File.extname(asset)
-        directory     = ::File.dirname(asset)
-        target        = [directory, "#{ filename }-#{ digest }#{ ext }"].join(::File::SEPARATOR)
-
-        FileUtils.cp(asset, target)
-        _set_permissions(target)
-
-        store_manifest(asset, target)
+      def compress_in_place!(asset)
+        compressed = Compressor.new(asset.path, asset.configuration).compress
+        _write(asset.path, compressed) unless compressed.nil?
       end
 
-      # @since 0.1.0
+      # @since 0.3.0-add-options-to-javascript-helper
       # @api private
-      def generate_manifest
+      def write_manifest_file
         _write(@configuration.manifest_path, JSON.dump(@manifest))
       end
 
       # @since 0.1.0
       # @api private
-      def store_manifest(asset, target)
-        @manifest[_convert_to_url(::File.expand_path(asset))] = _convert_to_url(::File.expand_path(target))
-      end
-
-      # @since 0.1.0
-      # @api private
-      def compressor(type, asset)
-        _configuration_for(asset).__send__(:"#{ type }_compressor")
-      end
-
-      # @since 0.1.0
-      # @api private
-      def _compress(compressor, asset)
-        _write(asset, compressor.compress(asset))
-      rescue => e
-        warn "Skipping compression of: `#{ asset }'\nReason: #{ e }\n\t#{ e.backtrace.join("\n\t") }\n\n"
+      def assets
+        Dir.glob("#{ public_directory }#{ ::File::SEPARATOR }**#{ ::File::SEPARATOR }*")
       end
 
       # @since 0.1.0
@@ -156,6 +127,8 @@ module Hanami
         ::File.chmod(DEFAULT_PERMISSIONS, path)
       end
 
+      # @since 0.3.0-add-options-to-javascript-helper
+      # @api private
       def _configuration_for(asset)
         url = _convert_to_url(asset)
 

@@ -95,7 +95,7 @@ module Hanami
         # For a given path <tt>/assets/application.js</tt> it will return
         # <tt>/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js</tt>
         #
-        # @param asset [#to_s] the relateive asset path
+        # @param asset [#to_s] the relative asset path
         #
         # @return [String] the digest path
         #
@@ -105,6 +105,18 @@ module Hanami
           @assets.fetch(asset.to_s) do
             raise Hanami::Assets::MissingDigestAssetError.new(asset, @manifest_path)
           end
+        end
+
+        # @since 0.3.0-add-options-to-javascript-helper
+        # @api private
+        def target(path)
+          resolve(path).fetch('target')
+        end
+
+        # @since 0.3.0-add-options-to-javascript-helper
+        # @api private
+        def subresource_integrity_values(path)
+          resolve(path).fetch('subresource_integrity')
         end
       end
     end

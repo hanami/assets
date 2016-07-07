@@ -54,6 +54,10 @@ module Hanami
       # @api private
       DEFAULT_FAVICON = 'favicon.ico'.freeze
 
+      # @since 0.3.0-add-options-to-javascript-helper
+      # @api private
+      CROSSORIGIN_ANONYMOUS = 'anonymous'.freeze
+
       # @since x.x.x
       # @api private
       ABSOLUTE_URL_MATCHER = URI::Parser.new.make_regexp
@@ -112,6 +116,30 @@ module Hanami
       #   # <script src="/assets/application.js" type="text/javascript"></script>
       #   # <script src="/assets/dashboard.js" type="text/javascript"></script>
       #
+      # @example Asynchronous Execution
+      #
+      #   <%= javascript 'application', async: true %>
+      #
+      #   # <script src="/assets/application.js" type="text/javascript" async="async"></script>
+      #
+      # @example Subresource Integrity
+      #
+      #   <%= javascript 'application' %>
+      #
+      #   # <script src="/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js" type="text/javascript" integrity="sha384-oqVu...Y8wC" crossorigin="anonymous"></script>
+      #
+      # @example Subresource Integrity for 3rd Party Scripts
+      #
+      #   <%= javascript 'https://example.com/assets/example.js', integrity: 'sha384-oqVu...Y8wC' %>
+      #
+      #   # <script src="https://example.com/assets/example.js" type="text/javascript" integrity="sha384-oqVu...Y8wC" crossorigin="anonymous"></script>
+      #
+      # @example Deferred Execution
+      #
+      #   <%= javascript 'application', defer: true %>
+      #
+      #   # <script src="/assets/application.js" type="text/javascript" defer="defer"></script>
+      #
       # @example Absolute URL
       #
       #   <%= javascript 'https://code.jquery.com/jquery-2.1.4.min.js' %>
@@ -129,9 +157,18 @@ module Hanami
       #   <%= javascript 'application' %>
       #
       #   # <script src="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js" type="text/javascript"></script>
-      def javascript(*sources)
+      def javascript(*sources, **options)
         _safe_tags(*sources) do |source|
-          html.script(src: _typed_asset_path(source, JAVASCRIPT_EXT), type: JAVASCRIPT_MIME_TYPE).to_s
+          tag_options = options.dup
+          tag_options[:src] ||= _typed_asset_path(source, JAVASCRIPT_EXT)
+          tag_options[:type] ||= JAVASCRIPT_MIME_TYPE
+
+          if _subresource_integrity? || tag_options.include?(:integrity)
+            tag_options[:integrity] ||= _subresource_integrity_value(source, JAVASCRIPT_EXT)
+            tag_options[:crossorigin] ||= CROSSORIGIN_ANONYMOUS
+          end
+
+          html.script(**tag_options).to_s
         end
       end
 
@@ -173,6 +210,18 @@ module Hanami
       #   # <link href="/assets/application.css" type="text/css" rel="stylesheet">
       #   # <link href="/assets/dashboard.css" type="text/css" rel="stylesheet">
       #
+      # @example Subresource Integrity
+      #
+      #   <%= stylesheet 'application' %>
+      #
+      #   # <link href="/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.css" type="text/css" integrity="sha384-oqVu...Y8wC" crossorigin="anonymous"></script>
+      #
+      # @example Subresource Integrity for 3rd Party Assets
+      #
+      #   <%= stylesheet 'https://example.com/assets/example.css', integrity: 'sha384-oqVu...Y8wC' %>
+      #
+      #   # <link href="https://example.com/assets/example.css" type="text/css" rel="stylesheet" integrity="sha384-oqVu...Y8wC" crossorigin="anonymous"></script>
+      #
       # @example Absolute URL
       #
       #   <%= stylesheet 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css' %>
@@ -190,9 +239,19 @@ module Hanami
       #   <%= stylesheet 'application' %>
       #
       #   # <link href="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.css" type="text/css" rel="stylesheet">
-      def stylesheet(*sources)
+      def stylesheet(*sources, **options)
         _safe_tags(*sources) do |source|
-          html.link(href: _typed_asset_path(source, STYLESHEET_EXT), type: STYLESHEET_MIME_TYPE, rel: STYLESHEET_REL).to_s
+          tag_options = options.dup
+          tag_options[:href] ||= _typed_asset_path(source, STYLESHEET_EXT)
+          tag_options[:type] ||= STYLESHEET_MIME_TYPE
+          tag_options[:rel] ||= STYLESHEET_REL
+
+          if _subresource_integrity? || tag_options.include?(:integrity)
+            tag_options[:integrity] ||= _subresource_integrity_value(source, STYLESHEET_EXT)
+            tag_options[:crossorigin] ||= CROSSORIGIN_ANONYMOUS
+          end
+
+          html.link(**tag_options).to_s
         end
       end
 
@@ -684,6 +743,15 @@ module Hanami
       def _typed_asset_path(source, ext)
         source = "#{ source }#{ ext }" unless source.match(/#{ Regexp.escape(ext) }\z/)
         asset_path(source)
+      end
+
+      def _subresource_integrity?
+        !!self.class.assets_configuration.subresource_integrity
+      end
+
+      def _subresource_integrity_value(source, ext)
+        source = "#{ source }#{ ext }" unless source.match(/#{ Regexp.escape(ext) }\z/)
+        self.class.assets_configuration.subresource_integrity_value(source) unless _absolute_url?(source)
       end
 
       # @since 0.1.0

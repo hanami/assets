@@ -2,8 +2,15 @@
 Assets management for Ruby web applications
 
 ## v0.3.0 - (unreleased)
+### Added
+- [Matthew Gibbons & Sean Collins] Subresource Integrity (SRI)
+- [Matthew Gibbons & Sean Collins] Allow `javascript` and `stylesheet` helpers to accept a Hash representing HTML attributes. Eg. `<%= javascript 'application', async: true %>`
+
+### Fixed
+- [Alexander Gräfe] Safely precompile assets from directories with a dot in their name.
+
 ### Changed
-– [Luca Guidi] Drop support for Ruby 2.0 and 2.1
+– [Luca Guidi] Drop support for Ruby 2.0 and 2.1. Official support for JRuby 9.0.5.0+.
 
 ## v0.2.1 - 2016-02-05
 ### Changed

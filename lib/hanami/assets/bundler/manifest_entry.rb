@@ -3,19 +3,19 @@ module Hanami
     class Bundler
       # Constructs a hash for a single asset's manifest file entry
       #
-      # @since 0.3.0-add-options-to-javascript-helper
+      # @since x.x.x
       # @api private
       class ManifestEntry
         # Return a new instance
         #
-        # @since 0.3.0-add-options-to-javascript-helper
+        # @since x.x.x
         # @api private
         def initialize(asset)
           @asset = asset
         end
 
         # A single entry for this asset, to go into manifest file
-        # @since 0.3.0-add-options-to-javascript-helper
+        # @since x.x.x
         # @api private
         def entry
           { name => values }
@@ -23,13 +23,13 @@ module Hanami
 
         private
 
-        # @since 0.3.0-add-options-to-javascript-helper
+        # @since x.x.x
         # @api private
         def name
           _convert_to_url(@asset.expanded_path)
         end
 
-        # @since 0.3.0-add-options-to-javascript-helper
+        # @since x.x.x
         # @api private
         def values
           {
@@ -38,7 +38,7 @@ module Hanami
           }
         end
 
-        # @since 0.3.0-add-options-to-javascript-helper
+        # @since x.x.x
         # @api private
         def subresource_integrity_values
           @asset.configuration.subresource_integrity_algorithms.map do |algorithm|
@@ -46,7 +46,7 @@ module Hanami
           end
         end
 
-        # @since 0.3.0-add-options-to-javascript-helper
+        # @since x.x.x
         # @api private
         def _convert_to_url(path)
           path.sub(@asset.configuration.public_directory.to_s, URL_REPLACEMENT).

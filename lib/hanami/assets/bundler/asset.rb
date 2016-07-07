@@ -7,10 +7,18 @@ module Hanami
     # @since 0.1.0
     # @api private
     class Bundler
+      # @since x.x.x
+      # @api private
       class Asset
-        attr_reader :path, :configuration
+        # @since x.x.x
+        # @api private
+        attr_reader :path
 
-        # @since 0.1.0
+        # @since x.x.x
+        # @api private
+        attr_reader :configuration
+
+        # @since x.x.x
         # @api private
         WILDCARD_EXT = '.*'.freeze
 

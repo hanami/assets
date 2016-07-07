@@ -54,7 +54,7 @@ module Hanami
       # @api private
       DEFAULT_FAVICON = 'favicon.ico'.freeze
 
-      # @since 0.3.0-add-options-to-javascript-helper
+      # @since x.x.x
       # @api private
       CROSSORIGIN_ANONYMOUS = 'anonymous'.freeze
 

@@ -57,7 +57,7 @@ module Hanami
       # @api private
       HTTPS_PORT                              = '443'.freeze
 
-      # @since 0.3.0-add-options-to-javascript-helper
+      # @since x.x.x
       # @api private
       DEFAULT_SUBRESOURCE_INTEGRITY_ALGORITHM = :sha256
 
@@ -129,7 +129,7 @@ module Hanami
       # Determine if the helpers should generate the integrity attribute for an
       # asset. Usually this is turned on in production mode.
       #
-      # @since 0.3.0-add-options-to-javascript-helper
+      # @since x.x.x
       def subresource_integrity(*values)
         if values.empty?
           @subresource_integrity
@@ -403,7 +403,7 @@ module Hanami
       # An array of digest algorithms to use for generating asset subresource
       # integrity checks
       #
-      # @since 0.3.0-add-options-to-javascript-helper
+      # @since x.x.x
       def subresource_integrity_algorithms
         if @subresource_integrity == true
           [DEFAULT_SUBRESOURCE_INTEGRITY_ALGORITHM]
@@ -415,7 +415,7 @@ module Hanami
       end
 
       # Subresource integrity attribute
-      # @since 0.3.0-add-options-to-javascript-helper
+      # @since x.x.x
       # @api private
       def subresource_integrity_value(source)
         if subresource_integrity
@@ -520,7 +520,7 @@ module Hanami
 
       protected
 
-      # @since 0.3.0-add-options-to-javascript-helper
+      # @since x.x.x
       # @api private
       attr_writer :subresource_integrity
 

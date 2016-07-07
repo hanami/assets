@@ -107,13 +107,13 @@ module Hanami
           end
         end
 
-        # @since 0.3.0-add-options-to-javascript-helper
+        # @since x.x.x
         # @api private
         def target(path)
           resolve(path).fetch('target')
         end
 
-        # @since 0.3.0-add-options-to-javascript-helper
+        # @since x.x.x
         # @api private
         def subresource_integrity_values(path)
           resolve(path).fetch('subresource_integrity')

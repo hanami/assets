@@ -13,7 +13,7 @@ module Hanami
     # @since 0.1.0
     #
     # @see http://www.rubydoc.info/gems/hanami-helpers/Hanami/Helpers/HtmlHelper
-    module Helpers
+    module Helpers # rubocop:disable Metrics/ModuleLength
       # @since 0.1.0
       # @api private
       NEW_LINE_SEPARATOR = "\n".freeze
@@ -239,7 +239,7 @@ module Hanami
       #   <%= stylesheet 'application' %>
       #
       #   # <link href="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.css" type="text/css" rel="stylesheet">
-      def stylesheet(*sources, **options)
+      def stylesheet(*sources, **options) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         _safe_tags(*sources) do |source|
           tag_options = options.dup
           tag_options[:href] ||= _typed_asset_path(source, STYLESHEET_EXT)
@@ -733,7 +733,7 @@ module Hanami
       # @api private
       def _asset_url(source)
         _push_promise(
-          _absolute_url?(source) ?
+          _absolute_url?(source) ? # rubocop:disable Style/MultilineTernaryOperator
             source : yield
         )
       end
@@ -741,16 +741,16 @@ module Hanami
       # @since 0.1.0
       # @api private
       def _typed_asset_path(source, ext)
-        source = "#{ source }#{ ext }" unless source.match(/#{ Regexp.escape(ext) }\z/)
+        source = "#{source}#{ext}" unless source =~ /#{Regexp.escape(ext)}\z/
         asset_path(source)
       end
 
       def _subresource_integrity?
-        !!self.class.assets_configuration.subresource_integrity
+        !!self.class.assets_configuration.subresource_integrity # rubocop:disable Style/DoubleNegation
       end
 
       def _subresource_integrity_value(source, ext)
-        source = "#{ source }#{ ext }" unless source.match(/#{ Regexp.escape(ext) }\z/)
+        source = "#{source}#{ext}" unless source =~ /#{Regexp.escape(ext)}\z/
         self.class.assets_configuration.subresource_integrity_value(source) unless _absolute_url?(source)
       end
 
@@ -774,7 +774,7 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      def _source_options(src, options, &blk)
+      def _source_options(src, options, &_blk)
         options ||= {}
 
         if src.respond_to?(:to_hash)

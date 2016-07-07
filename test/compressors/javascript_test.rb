@@ -43,7 +43,7 @@ describe Hanami::Assets::Compressors::Javascript do
 
       it 'raises error' do
         exception = -> { compressor }.must_raise Hanami::Assets::Compressors::UnknownCompressorError
-        exception.message.must_equal "Unknown Javascript compressor: :wat"
+        exception.message.must_equal 'Unknown Javascript compressor: :wat'
       end
     end
 

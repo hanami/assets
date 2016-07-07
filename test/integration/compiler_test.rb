@@ -142,7 +142,7 @@ describe 'Compiler' do
     compiled.mtime.to_i.must_equal modified_at.to_i
   end
 
-  it "truncates files when copying from source to destination" do
+  it 'truncates files when copying from source to destination' do
     source = @config.root.join('javascripts', 'truncate.js')
 
     begin
@@ -150,7 +150,7 @@ describe 'Compiler' do
 
       content = "alert('A reasonably long, very very long message.');"
 
-      File.open(source, File::WRONLY|File::CREAT) do |file|
+      File.open(source, File::WRONLY | File::CREAT) do |file|
         file.write content
       end
 
@@ -162,7 +162,7 @@ describe 'Compiler' do
       sleep 1
 
       content = "alert('A short one');"
-      File.open(source, File::WRONLY|File::TRUNC|File::CREAT) do |file|
+      File.open(source, File::WRONLY | File::TRUNC | File::CREAT) do |file|
         file.write content
       end
 
@@ -177,24 +177,24 @@ describe 'Compiler' do
 
   it 'raises an error in case of missing source' do
     sources   = @config.sources.map(&:to_s).join(', ')
-    exception = -> {
+    exception = lambda do
       Hanami::Assets::Compiler.compile(@config, 'missing.js')
-    }.must_raise(Hanami::Assets::MissingAsset)
+    end.must_raise(Hanami::Assets::MissingAsset)
 
-    exception.message.must_equal("Missing asset: `missing.js' (sources: #{ sources })")
+    exception.message.must_equal("Missing asset: `missing.js' (sources: #{sources})")
   end
 
   it 'raises an error in case of unknown compiler engine' do
-    exception = -> {
+    exception = lambda do
       Hanami::Assets::Compiler.compile(@config, 'ouch.js')
-    }.must_raise(Hanami::Assets::UnknownAssetEngine)
+    end.must_raise(Hanami::Assets::UnknownAssetEngine)
 
     exception.message.must_equal("No asset engine registered for `ouch.js.unknown'")
   end
 
   it 'ignores hidden files beginning with a dot' do
-    -> {
+    lambda do
       Hanami::Assets::Compiler.compile(@config, 'hidden.css')
-    }.must_raise(Hanami::Assets::MissingAsset)
+    end.must_raise(Hanami::Assets::MissingAsset)
   end
 end

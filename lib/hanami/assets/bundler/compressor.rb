@@ -49,9 +49,9 @@ module Hanami
         rescue => e
           warn(
             [
-              "Skipping compression of: `#{ @path }'",
-              "Reason: #{ e }\n",
-              "\t#{ e.backtrace.join("\n\t") }\n\n"
+              "Skipping compression of: `#{@path}'",
+              "Reason: #{e}\n",
+              "\t#{e.backtrace.join("\n\t")}\n\n"
             ].join("\n")
           )
         end

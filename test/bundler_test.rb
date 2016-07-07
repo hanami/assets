@@ -15,8 +15,7 @@ describe Hanami::Assets::Bundler do
   end
 
   [nil, :builtin, :yui, :uglifier, :closure, :sass].each do |compressor|
-
-    describe "#{ compressor || "NullCompressor" }" do
+    describe (compressor || 'NullCompressor').to_s do # rubocop:disable Lint/ParenthesesAsGroupedExpression
       let(:config) do
         Hanami::Assets::Configuration.new.tap do |c|
           c.public_directory dest
@@ -29,7 +28,7 @@ describe Hanami::Assets::Bundler do
       let(:dest)   { TMP.join('deploy', 'public') }
       let(:source) { __dir__ + '/fixtures/deploy/public/assets' }
 
-      it "compresses javascripts" do
+      it 'compresses javascripts' do
         run!
 
         assets(:js).each do |original, current|
@@ -37,7 +36,7 @@ describe Hanami::Assets::Bundler do
         end
       end
 
-      it "compresses stylesheets" do
+      it 'compresses stylesheets' do
         run!
 
         assets(:css).each do |original, current|
@@ -45,26 +44,26 @@ describe Hanami::Assets::Bundler do
         end
       end
 
-      it "copies other assets" do
+      it 'copies other assets' do
         run!
 
         assets(:png).each do |original, current|
           assert_same_asset(original, current)
-          assert_valid_asset(         current)
+          assert_valid_asset(current)
         end
       end
 
-      it "generates manifest" do
+      it 'generates manifest' do
         run!
 
         manifest = dest.join('assets.json')
         manifest.must_be :exist?
 
-        assert_owner(      manifest)
+        assert_owner(manifest)
         assert_permissions(manifest)
 
         actual   = JSON.load(manifest.read)
-        expected = JSON.load(File.read(__dir__ + "/fixtures/deploy/assets-#{ compressor || "null" }.json"))
+        expected = JSON.load(File.read(__dir__ + "/fixtures/deploy/assets-#{compressor || 'null'}.json"))
 
         actual.size.must_equal expected.size
         expected.each do |original, current|
@@ -72,7 +71,7 @@ describe Hanami::Assets::Bundler do
         end
       end
 
-      it "ensures intermediate directories to be created" do
+      it 'ensures intermediate directories to be created' do
         dest.rmtree if dest.exist?
 
         run!
@@ -82,18 +81,17 @@ describe Hanami::Assets::Bundler do
       end
 
       if compressor == :yui
-        describe "in case of error" do
+        describe 'in case of error' do
           let(:dest)   { TMP.join('broken', 'public') }
           let(:source) { __dir__ + '/fixtures/broken/public/assets' }
 
-          it "prints the name of the asset that caused the problem" do
+          it 'prints the name of the asset that caused the problem' do
             _, err = capture_subprocess_io { run! }
-            err.must_match "Skipping compression of:"
+            err.must_match 'Skipping compression of:'
           end
         end
       end
     end
-
   end # compressor
 
   private
@@ -103,7 +101,7 @@ describe Hanami::Assets::Bundler do
   end
 
   def assets(type)
-    Dir.glob("#{ dest }/**/*.#{ type }").each_with_object({}) do |current, result|
+    Dir.glob("#{dest}/**/*.#{type}").each_with_object({}) do |current, result|
       next unless checksum(current)
       result[original_for(current)] = current
     end
@@ -111,7 +109,7 @@ describe Hanami::Assets::Bundler do
 
   def original_for(asset)
     filename = ::File.basename(asset).sub(/\-[\w]{32}+(\.(.*))\z/, '\1')
-    Dir.glob("#{ source }/**/#{ filename }").first
+    Dir.glob("#{source}/**/#{filename}").first
   end
 
   def assert_valid_compressed_asset(compressor, original, current)
@@ -125,12 +123,12 @@ describe Hanami::Assets::Bundler do
     assert_permissions current
   end
 
-  def assert_compressed(compressor, original, current)
+  def assert_compressed(_compressor, original, current)
     original_size = ::File.size(original)
     current_size  = ::File.size(current)
 
     assert current_size <= original_size,
-      "Expected #{ current } (#{ current_size }b) to be smaller or equal than #{ original } (#{ original_size }b)"
+           "Expected #{current} (#{current_size}b) to be smaller or equal than #{original} (#{original_size}b)"
 
     # compressed = compress(compressor, original)
     # actual     = ::File.read(current)
@@ -165,7 +163,7 @@ describe Hanami::Assets::Bundler do
 
   def assert_same_asset(original, current)
     assert Digest::MD5.file(original) == Digest::MD5.file(current),
-      "Expected #{ current } to be the same asset of #{ original }"
+           "Expected #{current} to be the same asset of #{original}"
   end
 
   def checksum(file)
@@ -174,10 +172,10 @@ describe Hanami::Assets::Bundler do
 
   def compress(compressor, file)
     case File.extname(file)
-    when ".js"  then Hanami::Assets::Compressors::Javascript.for(compressor)
-    when ".css" then Hanami::Assets::Compressors::Stylesheet.for(compressor)
-    # when ".js"  then YUI::JavaScriptCompressor.new(munge: true)
-    # when ".css" then YUI::CssCompressor.new
+    when '.js'  then Hanami::Assets::Compressors::Javascript.for(compressor)
+    when '.css' then Hanami::Assets::Compressors::Stylesheet.for(compressor)
+      # when ".js"  then YUI::JavaScriptCompressor.new(munge: true)
+      # when ".css" then YUI::CssCompressor.new
     end.compress(::File.read(file))
   end
 
@@ -185,8 +183,6 @@ describe Hanami::Assets::Bundler do
     case compressor
     when :builtin, :yui, :uglifier, :closure
       compressor
-    else
-      nil
     end
   end
 
@@ -194,8 +190,6 @@ describe Hanami::Assets::Bundler do
     case compressor
     when :builtin, :yui, :sass
       compressor
-    else
-      nil
     end
   end
 end

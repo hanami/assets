@@ -2,16 +2,18 @@ require 'find'
 
 module Hanami
   module Assets
+    # Missing Asset error
     class MissingAsset < Error
       def initialize(name, sources)
         sources = sources.map(&:to_s).join(', ')
-        super("Missing asset: `#{ name }' (sources: #{ sources })")
+        super("Missing asset: `#{name}' (sources: #{sources})")
       end
     end
 
+    # Unknown Asset Engine error
     class UnknownAssetEngine < Error
       def initialize(source)
-        super("No asset engine registered for `#{ ::File.basename(source) }'")
+        super("No asset engine registered for `#{::File.basename(source)}'")
       end
     end
 
@@ -27,7 +29,7 @@ module Hanami
     class Compiler
       # @since 0.1.0
       # @api private
-      DEFAULT_PERMISSIONS = 0644
+      DEFAULT_PERMISSIONS = 0o644
 
       # @since 0.1.0
       # @api private
@@ -35,11 +37,11 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      EXTENSIONS = {'.js' => true, '.css' => true, '.map' => true}.freeze
+      EXTENSIONS = { '.js' => true, '.css' => true, '.map' => true }.freeze
 
       # @since 0.1.0
       # @api private
-      SASS_CACHE_LOCATION = Pathname(Hanami.respond_to?(:root) ?
+      SASS_CACHE_LOCATION = Pathname(Hanami.respond_to?(:root) ? # rubocop:disable Style/MultilineTernaryOperator
                                      Hanami.root : Dir.pwd).join('tmp', 'sass-cache')
 
       # Compile the given asset
@@ -66,7 +68,7 @@ module Hanami
       #
       # @see Hanami::Assets::Cache
       def self.cache
-        @@cache ||= Assets::Cache.new
+        @@cache ||= Assets::Cache.new # rubocop:disable Style/ClassVars
       end
 
       # Return a new instance
@@ -111,7 +113,7 @@ module Hanami
       # @api private
       def source
         @source ||= begin
-          @name.absolute? ? @name :
+          @name.absolute? ? @name : # rubocop:disable Style/MultilineTernaryOperator
             @configuration.find(@name)
         end
       end
@@ -152,7 +154,7 @@ module Hanami
       # @api private
       def compile?
         @compile ||= ::File.fnmatch(COMPILE_PATTERN, ::File.basename(source.to_s)) &&
-          !EXTENSIONS[::File.extname(source.to_s)]
+                     !EXTENSIONS[::File.extname(source.to_s)]
       end
 
       # @since 0.1.0
@@ -197,7 +199,7 @@ module Hanami
       # @api private
       def write
         destination.dirname.mkpath
-        destination.open(File::WRONLY|File::TRUNC|File::CREAT, DEFAULT_PERMISSIONS) do |file|
+        destination.open(File::WRONLY | File::TRUNC | File::CREAT, DEFAULT_PERMISSIONS) do |file|
           file.write(yield)
         end
       end
@@ -224,7 +226,7 @@ module Hanami
 
       # @since x.x.x
       # @api private
-      alias_method :less_load_paths, :sass_load_paths
+      alias less_load_paths sass_load_paths
 
       # @since 0.1.0
       # @api private

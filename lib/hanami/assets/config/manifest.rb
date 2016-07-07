@@ -7,7 +7,7 @@ module Hanami
     # @api private
     class MissingDigestManifestError < Error
       def initialize(path)
-        super("Can't read manifest: #{ path }")
+        super("Can't read manifest: #{path}")
       end
     end
 
@@ -18,7 +18,7 @@ module Hanami
     # @api private
     class MissingDigestAssetError < Error
       def initialize(asset, manifest_path)
-        super("Can't find asset `#{ asset }' in manifest (#{ manifest_path })")
+        super("Can't find asset `#{asset}' in manifest (#{manifest_path})")
       end
     end
 
@@ -73,6 +73,14 @@ module Hanami
       # @since 0.1.0
       # @api private
       class DigestManifest
+        # @since x.x.x
+        # @api private
+        TARGET                = 'target'.freeze
+
+        # @since x.x.x
+        # @api private
+        SUBRESOURCE_INTEGRITY = 'sri'.freeze
+
         # Return a new instance
         #
         # @param assets [Hash] the content of the digest manifest
@@ -110,13 +118,13 @@ module Hanami
         # @since x.x.x
         # @api private
         def target(path)
-          resolve(path).fetch('target')
+          resolve(path).fetch(TARGET)
         end
 
         # @since x.x.x
         # @api private
         def subresource_integrity_values(path)
-          resolve(path).fetch('subresource_integrity')
+          resolve(path).fetch(SUBRESOURCE_INTEGRITY)
         end
       end
     end

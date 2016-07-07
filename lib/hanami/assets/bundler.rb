@@ -14,7 +14,7 @@ module Hanami
     class Bundler
       # @since 0.1.0
       # @api private
-      DEFAULT_PERMISSIONS = 0644
+      DEFAULT_PERMISSIONS = 0o644
 
       # @since 0.1.0
       # @api private
@@ -36,7 +36,7 @@ module Hanami
       # @since 0.1.0
       # @api private
       def initialize(configuration, duplicates)
-        @manifest       = Hash.new
+        @manifest       = Hash[]
         @configuration  = configuration
         @configurations = if duplicates.empty?
                             [@configuration]
@@ -102,14 +102,14 @@ module Hanami
       # @since 0.1.0
       # @api private
       def assets
-        Dir.glob("#{ public_directory }#{ ::File::SEPARATOR }**#{ ::File::SEPARATOR }*")
+        Dir.glob("#{public_directory}#{::File::SEPARATOR}**#{::File::SEPARATOR}*")
       end
 
       # @since 0.1.0
       # @api private
       def _convert_to_url(path)
-        path.sub(public_directory.to_s, URL_REPLACEMENT).
-          gsub(File::SEPARATOR, URL_SEPARATOR)
+        path.sub(public_directory.to_s, URL_REPLACEMENT)
+            .gsub(File::SEPARATOR, URL_SEPARATOR)
       end
 
       # @since 0.1.0
@@ -132,7 +132,7 @@ module Hanami
       def _configuration_for(asset)
         url = _convert_to_url(asset)
 
-        @configurations.find {|config| url.start_with?(config.prefix) } ||
+        @configurations.find { |config| url.start_with?(config.prefix) } ||
           @configuration
       end
 

@@ -4,13 +4,13 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'hanami/compass/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "hanami-compass"
+  spec.name          = 'hanami-compass'
   spec.version       = Hanami::Compass::VERSION
-  spec.authors       = ["Luca Guidi"]
-  spec.email         = ["me@lucaguidi.com"]
+  spec.authors       = ['Luca Guidi']
+  spec.email         = ['me@lucaguidi.com']
 
-  spec.summary       = %q{Test gem}
-  spec.description   = %q{Test to simulate Hanami::Assets integration with Sass imports}
+  spec.summary       = 'Test gem'
+  spec.description   = 'Test to simulate Hanami::Assets integration with Sass imports'
   spec.homepage      = "TODO: Put your gem's website or public repo URL here."
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
@@ -18,18 +18,18 @@ Gem::Specification.new do |spec|
   if spec.respond_to?(:metadata)
     spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com'"
   else
-    raise "RubyGems 2.0 or newer is required to protect against public gem pushes."
+    raise 'RubyGems 2.0 or newer is required to protect against public gem pushes.'
   end
 
-  spec.files         = [
-    "lib/hanami/compass.rb",
-    "lib/hanami/compass/version.rb",
-    "lib/hanami/compass/src/_compass.scss",
-    "lib/hanami/compass/src/compass/_typography.scss"
+  spec.files = [
+    'lib/hanami/compass.rb',
+    'lib/hanami/compass/version.rb',
+    'lib/hanami/compass/src/_compass.scss',
+    'lib/hanami/compass/src/compass/_typography.scss'
   ]
 
-  spec.require_paths = ["lib"]
+  spec.require_paths = ['lib']
 
-  spec.add_development_dependency "bundler", "~> 1.10"
-  spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency 'bundler', '~> 1.10'
+  spec.add_development_dependency 'rake', '~> 10.0'
 end

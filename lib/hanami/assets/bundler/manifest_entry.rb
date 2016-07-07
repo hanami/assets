@@ -6,6 +6,10 @@ module Hanami
       # @since x.x.x
       # @api private
       class ManifestEntry
+        # @since x.x.x
+        # @api private
+        SUBRESOURCE_INTEGRITY_SEPARATOR = '-'.freeze
+
         # Return a new instance
         #
         # @since x.x.x
@@ -32,25 +36,25 @@ module Hanami
         # @since x.x.x
         # @api private
         def values
-          {
+          Hash[
             target: _convert_to_url(@asset.expanded_fingerprinted_target),
-            subresource_integrity: subresource_integrity_values
-          }
+            sri:    subresource_integrity_values
+          ]
         end
 
         # @since x.x.x
         # @api private
         def subresource_integrity_values
           @asset.configuration.subresource_integrity_algorithms.map do |algorithm|
-            [ algorithm, @asset.base64_digest(algorithm) ].join('-')
+            [algorithm, @asset.base64_digest(algorithm)].join(SUBRESOURCE_INTEGRITY_SEPARATOR)
           end
         end
 
         # @since x.x.x
         # @api private
         def _convert_to_url(path)
-          path.sub(@asset.configuration.public_directory.to_s, URL_REPLACEMENT).
-            gsub(File::SEPARATOR, URL_SEPARATOR)
+          path.sub(@asset.configuration.public_directory.to_s, URL_REPLACEMENT)
+              .gsub(File::SEPARATOR, URL_SEPARATOR)
         end
       end
     end

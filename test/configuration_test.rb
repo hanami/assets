@@ -12,91 +12,91 @@ describe Hanami::Assets::Configuration do
   end
 
   describe '#javascript_compressor' do
-    describe "default" do
-      it "is nil by default" do
+    describe 'default' do
+      it 'is nil by default' do
         @configuration.javascript_compressor.must_be_nil
       end
 
-      it "returns NullCompressor for internal usage" do
+      it 'returns NullCompressor for internal usage' do
         @configuration.js_compressor.must_be_kind_of Hanami::Assets::Compressors::NullCompressor
       end
     end
 
-    describe "when :yui" do
+    describe 'when :yui' do
       before do
         @configuration.javascript_compressor :yui
       end
 
-      it "returns value before to load configuration" do
+      it 'returns value before to load configuration' do
         @configuration.javascript_compressor.must_equal :yui
       end
 
-      it "is instance of Hanami::Assets::Compressors::YuiJavascriptCompressor" do
+      it 'is instance of Hanami::Assets::Compressors::YuiJavascriptCompressor' do
         @configuration.js_compressor.must_be_kind_of Hanami::Assets::Compressors::YuiJavascript
       end
     end
 
-    describe "when object" do
+    describe 'when object' do
       before do
         @configuration.javascript_compressor compressor
       end
 
       let(:compressor) { CustomJavascriptCompressor.new }
 
-      it "returns value before to load configuration" do
+      it 'returns value before to load configuration' do
         @configuration.javascript_compressor.must_equal compressor
       end
 
-      it "returns value after loading" do
+      it 'returns value after loading' do
         @configuration.js_compressor.must_equal compressor
       end
     end
   end
 
   describe '#stylesheet_compressor' do
-    describe "default" do
-      it "is nil by default" do
+    describe 'default' do
+      it 'is nil by default' do
         @configuration.stylesheet_compressor.must_be_nil
       end
 
-      it "returns NullCompressor when loaded" do
+      it 'returns NullCompressor when loaded' do
         @configuration.css_compressor.must_be_kind_of Hanami::Assets::Compressors::NullCompressor
       end
     end
 
-    describe "when :yui" do
+    describe 'when :yui' do
       before do
         @configuration.stylesheet_compressor :yui
       end
 
-      it "returns value before to load configuration" do
+      it 'returns value before to load configuration' do
         @configuration.stylesheet_compressor.must_equal :yui
       end
 
-      it "is instance of Hanami::Assets::Compressors::YuiStylesheetCompressor" do
+      it 'is instance of Hanami::Assets::Compressors::YuiStylesheetCompressor' do
         @configuration.css_compressor.must_be_kind_of Hanami::Assets::Compressors::YuiStylesheet
       end
     end
 
-    describe "when object" do
+    describe 'when object' do
       before do
         @configuration.stylesheet_compressor compressor
       end
 
       let(:compressor) { CustomStylesheetCompressor.new }
 
-      it "returns value before to load configuration" do
+      it 'returns value before to load configuration' do
         @configuration.css_compressor.must_equal compressor
       end
 
-      it "returns value after loading" do
+      it 'returns value after loading' do
         @configuration.css_compressor.must_equal compressor
       end
     end
   end
 
   describe '#subresource_integrity' do
-    it "is false by default" do
+    it 'is false by default' do
       @configuration.subresource_integrity.must_equal false
     end
 
@@ -122,7 +122,7 @@ describe Hanami::Assets::Configuration do
   end
 
   describe '#subresource_integrity_algorithms' do
-    it "includes only sha256 by default" do
+    it 'includes only sha256 by default' do
       @configuration.subresource_integrity                       true
       @configuration.subresource_integrity_algorithms.must_equal [:sha256]
     end
@@ -139,7 +139,7 @@ describe Hanami::Assets::Configuration do
   end
 
   describe '#cdn' do
-    it "is false by default" do
+    it 'is false by default' do
       @configuration.cdn.must_equal false
     end
 
@@ -150,24 +150,24 @@ describe Hanami::Assets::Configuration do
   end
 
   describe '#sources' do
-    it "is empty by default" do
+    it 'is empty by default' do
       @configuration.sources.must_be_empty
     end
 
-    it "allows to add paths" do
+    it 'allows to add paths' do
       @configuration.sources << __dir__
 
       assert @configuration.sources == [__dir__],
-        "Expected @configuration.sources to eq [#{ __dir__ }], got #{ @configuration.sources.inspect }"
+             "Expected @configuration.sources to eq [#{__dir__}], got #{@configuration.sources.inspect}"
     end
 
-    it "removes duplicates and nil sources" do
+    it 'removes duplicates and nil sources' do
       @configuration.sources << __dir__
       @configuration.sources << __dir__
       @configuration.sources << nil
 
       assert @configuration.sources == [__dir__],
-        "Expected @configuration.sources to eq [#{ __dir__ }], got #{ @configuration.sources.inspect }"
+             "Expected @configuration.sources to eq [#{__dir__}], got #{@configuration.sources.inspect}"
     end
   end
 
@@ -212,7 +212,7 @@ describe Hanami::Assets::Configuration do
   describe '#prefix' do
     it 'returns "/assets" value default' do
       @configuration.prefix.must_be_kind_of(Hanami::Utils::PathPrefix)
-      @configuration.prefix.must_equal "/assets"
+      @configuration.prefix.must_equal '/assets'
     end
 
     it 'allows to set a value' do
@@ -280,10 +280,10 @@ describe Hanami::Assets::Configuration do
       describe 'with digest manifest' do
         before do
           manifest = Hanami::Assets::Config::DigestManifest.new({
-            '/assets/application.js' => {
-              'target' => '/assets/application-abc123.js'
-            }
-          }, [])
+                                                                  '/assets/application.js' => {
+                                                                    'target' => '/assets/application-abc123.js'
+                                                                  }
+                                                                }, [])
           @configuration.instance_variable_set(:@digest_manifest, manifest)
         end
 
@@ -312,7 +312,7 @@ describe Hanami::Assets::Configuration do
       describe 'with missing digest manifest' do
         it 'returns asset with digest' do
           exception = -> { @configuration.asset_path('application.js') }.must_raise Hanami::Assets::MissingDigestManifestError
-          exception.message.must_equal "Can't read manifest: #{ @configuration.manifest_path }"
+          exception.message.must_equal "Can't read manifest: #{@configuration.manifest_path}"
         end
       end
     end
@@ -443,7 +443,7 @@ describe Hanami::Assets::Configuration do
 
       describe 'with digest manifest' do
         before do
-          manifest = Hanami::Assets::Config::DigestManifest.new({'/assets/application.js' => {"target" => '/assets/application-abc123.js'}}, [])
+          manifest = Hanami::Assets::Config::DigestManifest.new({ '/assets/application.js' => { 'target' => '/assets/application-abc123.js' } }, [])
 
           @configuration.load!
           @configuration.instance_variable_set(:@digest_manifest, manifest)
@@ -458,7 +458,7 @@ describe Hanami::Assets::Configuration do
       describe 'with missing digest manifest' do
         it 'returns asset with digest' do
           exception = -> { @configuration.asset_url('application.js') }.must_raise Hanami::Assets::MissingDigestManifestError
-          exception.message.must_equal "Can't read manifest: #{ @configuration.manifest_path }"
+          exception.message.must_equal "Can't read manifest: #{@configuration.manifest_path}"
         end
       end
     end
@@ -473,11 +473,11 @@ describe Hanami::Assets::Configuration do
       describe 'with digest manifest' do
         before do
           manifest = Hanami::Assets::Config::DigestManifest.new({
-            '/assets/application.js' => {
-              'target' => '/assets/application-abc123.js',
-              'subresource_integrity' => ['sha0-456def']
-            }
-          }, [])
+                                                                  '/assets/application.js' => {
+                                                                    'target' => '/assets/application-abc123.js',
+                                                                    'sri' => ['sha0-456def']
+                                                                  }
+                                                                }, [])
 
           @configuration.load!
           @configuration.instance_variable_set(:@digest_manifest, manifest)
@@ -492,7 +492,7 @@ describe Hanami::Assets::Configuration do
       describe 'with missing digest manifest' do
         it 'raises an exception' do
           exception = -> { @configuration.subresource_integrity_value('application.js') }.must_raise Hanami::Assets::MissingDigestManifestError
-          exception.message.must_equal "Can't read manifest: #{ @configuration.manifest_path }"
+          exception.message.must_equal "Can't read manifest: #{@configuration.manifest_path}"
         end
       end
     end
@@ -548,7 +548,7 @@ describe Hanami::Assets::Configuration do
 
     it 'sets default value fore digest manifest' do
       assert @configuration.digest_manifest.class == Hanami::Assets::Config::NullDigestManifest,
-        "Expected @configuration.digest_manifest to be instance of Hanami::Assets::Configuration::NullDigestManifest"
+             'Expected @configuration.digest_manifest to be instance of Hanami::Assets::Configuration::NullDigestManifest'
     end
   end
 
@@ -567,7 +567,7 @@ describe Hanami::Assets::Configuration do
       @configuration.stylesheet_compressor :yui
       @configuration.root                  __dir__
       @configuration.public_directory      __dir__
-      @configuration.sources            << __dir__ + '/fixtures/javascripts'
+      @configuration.sources << __dir__ + '/fixtures/javascripts'
 
       @config = @configuration.duplicate
     end
@@ -586,7 +586,7 @@ describe Hanami::Assets::Configuration do
       @config.root.must_equal                  Pathname.new(__dir__)
       @config.public_directory.must_equal      Pathname.new(__dir__)
       assert @config.sources == [__dir__ + '/fixtures/javascripts'],
-        "Expected #{ @config.sources } to eq [#{ __dir__ }/fixtures/javascripts'], found: #{ @config.sources.inspect }"
+             "Expected #{@config.sources} to eq [#{__dir__}/fixtures/javascripts'], found: #{@config.sources.inspect}"
     end
 
     it "doesn't affect the original configuration" do
@@ -617,7 +617,7 @@ describe Hanami::Assets::Configuration do
       @config.root.must_equal                  Pathname.new(__dir__ + '/fixtures')
       @config.public_directory.must_equal      Pathname.new(__dir__ + '/fixtures')
       assert @config.sources == [__dir__ + '/fixtures/javascripts', __dir__ + '/fixtures/stylesheets'],
-        "Expected @config.sources to eq [#{ __dir__ }/fixtures/javascripts', #{ __dir__ }/fixtures/stylesheets'], found: #{ @config.sources.inspect }"
+             "Expected @config.sources to eq [#{__dir__}/fixtures/javascripts', #{__dir__}/fixtures/stylesheets'], found: #{@config.sources.inspect}"
 
       @configuration.cdn.must_equal                   true
       @configuration.subresource_integrity.must_equal true
@@ -632,7 +632,7 @@ describe Hanami::Assets::Configuration do
       @configuration.root.must_equal                  Pathname.new(__dir__)
       @configuration.public_directory.must_equal      Pathname.new(__dir__)
       assert @configuration.sources == [__dir__ + '/fixtures/javascripts'],
-        "Expected @config.sources to eq [#{ __dir__ }/fixtures/javascripts'], found: #{ @config.sources.inspect }"
+             "Expected @config.sources to eq [#{__dir__}/fixtures/javascripts'], found: #{@config.sources.inspect}"
     end
   end
 end

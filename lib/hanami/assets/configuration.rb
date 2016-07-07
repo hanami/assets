@@ -12,7 +12,7 @@ module Hanami
     # Framework configuration
     #
     # @since 0.1.0
-    class Configuration
+    class Configuration # rubocop:disable Metrics/ClassLength
       # @since 0.1.0
       # @api private
       DEFAULT_SCHEME                          = 'http'.freeze
@@ -61,6 +61,10 @@ module Hanami
       # @api private
       DEFAULT_SUBRESOURCE_INTEGRITY_ALGORITHM = :sha256
 
+      # @since x.x.x
+      # @api private
+      SUBRESOURCE_INTEGRITY_SEPARATOR         = ' '.freeze
+
       # Return a copy of the configuration of the framework instance associated
       # with the given class.
       #
@@ -76,7 +80,7 @@ module Hanami
       # @since 0.1.0
       # @api private
       def self.for(base)
-        # TODO this implementation is similar to Hanami::Controller::Configuration consider to extract it into Hanami::Utils
+        # TODO: this implementation is similar to Hanami::Controller::Configuration consider to extract it into Hanami::Utils
         namespace = Utils::String.new(base).namespace
         framework = Utils::Class.load_from_pattern!("(#{namespace}|Hanami)::Assets")
         framework.configuration
@@ -150,7 +154,7 @@ module Hanami
         if value.nil?
           @cdn
         else
-          @cdn = !!value
+          @cdn = !!value # rubocop:disable Style/DoubleNegation
         end
       end
 
@@ -397,7 +401,7 @@ module Hanami
       # @since 0.1.0
       # @api private
       def asset_url(source)
-        "#{ @base_url }#{ compile_path(source) }"
+        "#{@base_url}#{compile_path(source)}"
       end
 
       # An array of digest algorithms to use for generating asset subresource
@@ -410,17 +414,19 @@ module Hanami
         else
           # Using Array() allows us to accept Array or Symbol, and '|| nil' lets
           # us return an empty array when @subresource_integrity is `false`
-          Array(@subresource_integrity || nil )
+          Array(@subresource_integrity || nil)
         end
       end
 
       # Subresource integrity attribute
+      #
       # @since x.x.x
       # @api private
       def subresource_integrity_value(source)
         if subresource_integrity
-          result = prefix.join(source)
-          result = digest_manifest.subresource_integrity_values(result).join(' ')
+          digest_manifest.subresource_integrity_values(
+            prefix.join(source)
+          ).join(SUBRESOURCE_INTEGRITY_SEPARATOR)
         end
       end
 
@@ -460,7 +466,7 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      def duplicate
+      def duplicate # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         Configuration.new.tap do |c|
           c.root                  = root
           c.scheme                = scheme
@@ -480,7 +486,7 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      def reset!
+      def reset! # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         @scheme                = DEFAULT_SCHEME
         @host                  = DEFAULT_HOST
         @port                  = DEFAULT_PORT
@@ -585,8 +591,8 @@ module Hanami
       # @since 0.1.0
       # @api private
       def url_port
-        ( (scheme == HTTP_SCHEME  && port == HTTP_PORT  ) ||
-          (scheme == HTTPS_SCHEME && port == HTTPS_PORT ) ) ? nil : port.to_i
+        ((scheme == HTTP_SCHEME && port == HTTP_PORT) || # rubocop:disable Style/MultilineTernaryOperator
+          (scheme == HTTPS_SCHEME && port == HTTPS_PORT)) ? nil : port.to_i
       end
     end
   end

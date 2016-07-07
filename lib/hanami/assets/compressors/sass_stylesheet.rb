@@ -18,7 +18,7 @@ module Hanami
         # @api private
         #
         # FIXME This is the same logic that we have for Hanami::Assets::Compiler
-        SASS_CACHE_LOCATION = Pathname(Hanami.respond_to?(:root) ?
+        SASS_CACHE_LOCATION = Pathname(Hanami.respond_to?(:root) ? # rubocop:disable Style/MultilineTernaryOperator
                                        Hanami.root : Dir.pwd).join('tmp', 'sass-cache')
         # @since 0.1.0
         # @api private
@@ -30,7 +30,7 @@ module Hanami
         # @api private
         def compress(filename)
           compressor.new(read(filename), filename: filename, syntax: :scss,
-            style: :compressed, cache_location: SASS_CACHE_LOCATION).render
+                                         style: :compressed, cache_location: SASS_CACHE_LOCATION).render
         end
       end
     end

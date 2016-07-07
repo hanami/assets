@@ -8,12 +8,12 @@ Gem::Specification.new do |spec|
   spec.version       = Hanami::Assets::VERSION
   spec.authors       = ['Luca Guidi', 'Trung Lê', 'Alfonso Uceda']
   spec.email         = ['me@lucaguidi.com', 'trung.le@ruby-journal.com', 'uceda73@gmail.com']
-  spec.summary       = %q{Assets management}
-  spec.description   = %q{Assets management for Ruby web applications}
+  spec.summary       = 'Assets management'
+  spec.description   = 'Assets management for Ruby web applications'
   spec.homepage      = 'http://hanamirb.org'
   spec.license       = 'MIT'
 
-  spec.files         = `git ls-files -- lib/* bin/* CHANGELOG.md LICENSE.md README.md hanami-assets.gemspec`.split($/)
+  spec.files         = `git ls-files -- lib/* bin/* CHANGELOG.md LICENSE.md README.md hanami-assets.gemspec`.split($/) # rubocop:disable Style/SpecialGlobalVars
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']

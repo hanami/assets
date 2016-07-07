@@ -40,7 +40,7 @@ module Hanami
         # @since x.x.x
         # @api private
         def fingerprinted_target
-          ::File.join(directory, "#{ filename }-#{ fingerprint }#{ extension }")
+          ::File.join(directory, "#{filename}-#{fingerprint}#{extension}")
         end
 
         # @since x.x.x

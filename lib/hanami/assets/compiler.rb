@@ -70,6 +70,7 @@ module Hanami
         require 'tilt'
         require 'hanami/assets/cache'
         require 'hanami/assets/compilers/sass'
+        require 'hanami/assets/compilers/less'
         fabricate(configuration, name).compile
       end
 
@@ -221,10 +222,7 @@ module Hanami
       # @since x.x.x
       # @api private
       def renderer
-        # NOTE: We need another option for Less: `:paths'.
-        #
-        # This is required by Less to reference variables defined in other files.
-        Tilt.new(source, nil, paths: less_load_paths)
+        Tilt.new(source)
       end
 
       # @since x.x.x
@@ -235,7 +233,7 @@ module Hanami
 
       # @since x.x.x
       # @api private
-      def sass_load_paths
+      def load_paths
         result = []
 
         @configuration.sources.each do |source|
@@ -246,10 +244,6 @@ module Hanami
 
         result
       end
-
-      # @since x.x.x
-      # @api private
-      alias less_load_paths sass_load_paths
     end
   end
 end

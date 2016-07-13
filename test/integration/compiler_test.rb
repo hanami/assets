@@ -8,6 +8,7 @@ describe 'Compiler' do
     require 'hanami/compass'
     fixtures = __dir__ + '/../fixtures'
     TMP.rmtree if TMP.exist?
+    TMP.mkdir
 
     Hanami::Assets.configure do
       compile          true
@@ -16,7 +17,8 @@ describe 'Compiler' do
 
       sources << [
         'javascripts',
-        Pathname.new(fixtures).join('stylesheets')
+        Pathname.new(fixtures).join('stylesheets'),
+        TMP
       ]
     end
 
@@ -92,6 +94,42 @@ describe 'Compiler' do
     content.must_match %(p {\n  white-space: pre;)
   end
 
+  it 'compiles sass asset if a direct dependency has changed' do
+    dependency = TestFile.new(path: '_background.scss') do
+      write '$background-color: green'
+    end
+
+    Hanami::Assets::Compiler.compile(@config, 'sass-dependencies.css')
+
+    target  = @config.public_directory.join('assets', 'sass-dependencies.css')
+    content = target.read
+    content.must_match %(body {\n  background-color: green; }\n)
+
+    dependency.touch('$background-color: blue') do
+      Hanami::Assets::Compiler.compile(@config, 'sass-dependencies.css')
+      content = target.read
+      content.must_match %(body {\n  background-color: blue; }\n)
+    end
+  end
+
+  it 'compiles sass asset if a transitive dependency has changed' do
+    dependency = TestFile.new(path: '_grid.scss') do
+      write '$framework-padding: 0'
+    end
+
+    Hanami::Assets::Compiler.compile(@config, 'sass-transitive-dependencies.css')
+
+    target  = @config.public_directory.join('assets', 'sass-transitive-dependencies.css')
+    content = target.read
+    content.must_match %(body {\n  padding: 0; }\n)
+
+    dependency.touch('$framework-padding: 1') do
+      Hanami::Assets::Compiler.compile(@config, 'sass-transitive-dependencies.css')
+      content = target.read
+      content.must_match %(body {\n  padding: 1; }\n)
+    end
+  end
+
   it 'compiles scss asset' do
     Hanami::Assets::Compiler.compile(@config, 'compile-scss.css')
 
@@ -106,6 +144,42 @@ describe 'Compiler' do
     Hanami::Assets::Compiler.compile(@config, 'compile-sass.css')
 
     directory.must_be :exist?
+  end
+
+  it 'compiles scss asset if direct dependency has changed' do
+    dependency = TestFile.new(path: '_background.scss') do
+      write 'body { background-color: purple; }'
+    end
+
+    Hanami::Assets::Compiler.compile(@config, 'scss-dependencies.css')
+
+    target  = @config.public_directory.join('assets', 'scss-dependencies.css')
+    content = target.read
+    content.must_match %(body {\n  background-color: purple; }\n)
+
+    dependency.touch('body { background-color: turquoise; }') do
+      Hanami::Assets::Compiler.compile(@config, 'scss-dependencies.css')
+      content = target.read
+      content.must_match %(body {\n  background-color: turquoise; }\n)
+    end
+  end
+
+  it 'compiles scss asset if transitive dependency has changed' do
+    dependency = TestFile.new(path: '_grid.scss') do
+      write 'body { padding: 0; }'
+    end
+
+    Hanami::Assets::Compiler.compile(@config, 'scss-transitive-dependencies.css')
+
+    target  = @config.public_directory.join('assets', 'scss-transitive-dependencies.css')
+    content = target.read
+    content.must_match %(body {\n  padding: 0; }\n)
+
+    dependency.touch('body { padding: 1; }') do
+      Hanami::Assets::Compiler.compile(@config, 'scss-transitive-dependencies.css')
+      content = target.read
+      content.must_match %(body {\n  padding: 1; }\n)
+    end
   end
 
   it 'copies unknown asset' do

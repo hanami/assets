@@ -1,4 +1,5 @@
 require 'thread'
+require 'pathname'
 
 module Hanami
   module Assets
@@ -10,6 +11,45 @@ module Hanami
     # @since 0.1.0
     # @api private
     class Cache
+      # File cache entry
+      #
+      # @since x.x.x
+      # @api private
+      class File
+        # @since x.x.x
+        # @api private
+        def initialize(file, dependencies = nil)
+          @file  = file.is_a?(String) ? Pathname.new(file) : file
+          @mtime = @file.mtime.utc.to_i
+
+          @dependencies = (dependencies || []).map { |d| self.class.new(d) }
+        end
+
+        # @since x.x.x
+        # @api private
+        def <(other)
+          modified_dependencies?(other) ||
+            mtime < other.mtime
+        end
+
+        protected
+
+        # @since x.x.x
+        # @api private
+        attr_reader :mtime
+
+        # @since x.x.x
+        # @api private
+        attr_reader :dependencies
+
+        # @since x.x.x
+        # @api private
+        def modified_dependencies?(other)
+          return false if dependencies.empty?
+          dependencies.all? { |dep| dep.mtime > other.mtime }
+        end
+      end
+
       # Return a new instance
       #
       # @return [Hanami::Assets::Cache] a new instance
@@ -18,17 +58,17 @@ module Hanami
         @mutex = Mutex.new
       end
 
-      # Check if the given file is fresh or changed from last check.
+      # Check if the given file was modified
       #
       # @param file [String,Pathname] the file path
       #
       # @return [TrueClass,FalseClass] the result of the check
       #
-      # @since 0.1.0
+      # @since x.x.x
       # @api private
-      def fresh?(file)
+      def modified?(file)
         @mutex.synchronize do
-          @data[file.to_s] < mtime(file)
+          @data[file.to_s] < File.new(file)
         end
       end
 
@@ -40,18 +80,10 @@ module Hanami
       #
       # @since 0.1.0
       # @api private
-      def store(file)
+      def store(file, dependencies = nil)
         @mutex.synchronize do
-          @data[file.to_s] = mtime(file)
+          @data[file.to_s] = File.new(file, dependencies)
         end
-      end
-
-      private
-
-      # @since 0.1.0
-      # @api private
-      def mtime(file)
-        file.mtime.utc.to_i
       end
     end
   end

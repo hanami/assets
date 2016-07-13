@@ -1,4 +1,6 @@
+require 'set'
 require 'find'
+require 'hanami/utils/class_attribute'
 
 module Hanami
   module Assets
@@ -39,10 +41,19 @@ module Hanami
       # @api private
       EXTENSIONS = { '.js' => true, '.css' => true, '.map' => true }.freeze
 
-      # @since 0.1.0
+      include Utils::ClassAttribute
+
+      # @since x.x.x
       # @api private
-      SASS_CACHE_LOCATION = Pathname(Hanami.respond_to?(:root) ? # rubocop:disable Style/MultilineTernaryOperator
-                                     Hanami.root : Dir.pwd).join('tmp', 'sass-cache')
+      class_attribute :subclasses
+      self.subclasses = Set.new
+
+      # @since x.x.x
+      # @api private
+      def self.inherited(subclass)
+        super
+        subclasses.add(subclass)
+      end
 
       # Compile the given asset
       #
@@ -58,7 +69,25 @@ module Hanami
 
         require 'tilt'
         require 'hanami/assets/cache'
-        new(configuration, name).compile
+        require 'hanami/assets/compilers/sass'
+        fabricate(configuration, name).compile
+      end
+
+      # @since x.x.x
+      # @api private
+      def self.fabricate(configuration, name)
+        source = configuration.source(name)
+        engine = (subclasses + [self]).find do |klass|
+          klass.eligible?(source)
+        end
+
+        engine.new(configuration, name)
+      end
+
+      # @since x.x.x
+      # @api private
+      def self.eligible?(_name)
+        true
       end
 
       # Assets cache
@@ -96,7 +125,7 @@ module Hanami
       # @api private
       def compile
         raise MissingAsset.new(@name, @configuration.sources) unless exist?
-        return unless fresh?
+        return unless modified?
 
         if compile?
           compile!
@@ -112,10 +141,7 @@ module Hanami
       # @since 0.1.0
       # @api private
       def source
-        @source ||= begin
-          @name.absolute? ? @name : # rubocop:disable Style/MultilineTernaryOperator
-            @configuration.find(@name)
-        end
+        @source ||= @configuration.source(@name)
       end
 
       # @since 0.1.0
@@ -143,11 +169,11 @@ module Hanami
           source.exist?
       end
 
-      # @since 0.1.0
+      # @since x.x.x
       # @api private
-      def fresh?
+      def modified?
         !destination.exist? ||
-          cache.fresh?(source)
+          cache.modified?(source)
       end
 
       # @since 0.1.0
@@ -160,25 +186,7 @@ module Hanami
       # @since 0.1.0
       # @api private
       def compile!
-        # NOTE `:load_paths' is useful only for Sass engine, to make `@include' directive to work.
-        # For now we don't want to maintan a specialized Compiler version for Sass.
-        #
-        # If in the future other precompilers will need special treatment,
-        # we can consider to maintain several specialized versions in order to
-        # don't add a perf tax to all the other preprocessors who "just work".
-        #
-        # Example: if Less "just works", we can keep it in the general `Compiler',
-        # but have a `SassCompiler` if it requires more than `:load_paths'.
-        #
-        # NOTE: We need another option to pass for Sass: `:cache_location'.
-        #
-        # This is needed to don't create a `.sass-cache' directory at the root of the project,
-        # but to have it under `tmp/sass-cache'.
-        #
-        # NOTE: We need another option for Less: `:paths'.
-        #
-        # This is required by Less to reference variables defined in other files.
-        write { Tilt.new(source, nil, paths: less_load_paths, load_paths: sass_load_paths, cache_location: sass_cache_location).render }
+        write { renderer.render }
       rescue RuntimeError
         raise UnknownAssetEngine.new(source)
       end
@@ -192,7 +200,7 @@ module Hanami
       # @since 0.1.0
       # @api private
       def cache!
-        cache.store(source)
+        cache.store(source, dependencies)
       end
 
       # @since 0.1.0
@@ -212,6 +220,21 @@ module Hanami
 
       # @since x.x.x
       # @api private
+      def renderer
+        # NOTE: We need another option for Less: `:paths'.
+        #
+        # This is required by Less to reference variables defined in other files.
+        Tilt.new(source, nil, paths: less_load_paths)
+      end
+
+      # @since x.x.x
+      # @api private
+      def dependencies
+        nil
+      end
+
+      # @since x.x.x
+      # @api private
       def sass_load_paths
         result = []
 
@@ -227,12 +250,6 @@ module Hanami
       # @since x.x.x
       # @api private
       alias less_load_paths sass_load_paths
-
-      # @since 0.1.0
-      # @api private
-      def sass_cache_location
-        SASS_CACHE_LOCATION
-      end
     end
   end
 end

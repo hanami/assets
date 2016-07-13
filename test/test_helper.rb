@@ -9,6 +9,7 @@ end
 require 'minitest/autorun'
 $LOAD_PATH.unshift 'lib'
 require 'hanami/assets'
+require 'support/test_file'
 require 'fixtures'
 require 'pathname'
 

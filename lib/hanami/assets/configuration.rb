@@ -376,6 +376,13 @@ module Hanami
         sources.files
       end
 
+      # @since x.x.x
+      # @api private
+      def source(file)
+        pathname = Pathname.new(file)
+        pathname.absolute? ? pathname : find(file)
+      end
+
       # Find a file from sources
       #
       # @since 0.1.0

@@ -2,6 +2,8 @@ Metrics/LineLength:
   Enabled: false
 Style/RaiseArgs:
   Enabled: false
+Style/WhileUntilModifier:
+  Enabled: false
 
 AllCops:
   Exclude:

@@ -28,22 +28,22 @@ describe Hanami::Assets::Cache do
     end
 
     describe 'with dependencies' do
-      it "returns false when both file and deps weren't updated" do
+      it "returns true when both file and deps weren't updated, but checking at the same timestamp" do
         file =  TestFile.new
         deps = [TestFile.new]
 
         cache.store(file, deps)
-        refute cache.modified?(file), "Expected #{file} to NOT be modified"
+        assert cache.modified?(file), "Expected #{file} to be modified"
       end
 
-      it 'returns false when at least one dependency was updated' do
+      it 'returns true when at least one dependency was updated' do
         file =        TestFile.new
         deps = [dep = TestFile.new]
 
         cache.store(file, deps)
 
         dep.touch do
-          refute cache.modified?(file), "Expected #{file} to NOT be modified"
+          assert cache.modified?(file), "Expected #{file} to be modified"
         end
       end
     end

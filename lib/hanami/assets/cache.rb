@@ -27,9 +27,15 @@ module Hanami
 
         # @since x.x.x
         # @api private
-        def <(other)
-          modified_dependencies?(other) ||
-            mtime < other.mtime
+        def modified?(other)
+          file = other.is_a?(self.class) ? other : self.class.new(other)
+
+          if dependencies?
+            modified_dependencies?(file) ||
+              mtime <= file.mtime
+          else
+            mtime < file.mtime
+          end
         end
 
         protected
@@ -45,8 +51,13 @@ module Hanami
         # @since x.x.x
         # @api private
         def modified_dependencies?(other)
-          return false if dependencies.empty?
           dependencies.all? { |dep| dep.mtime > other.mtime }
+        end
+
+        # @since x.x.x
+        # @api private
+        def dependencies?
+          dependencies.any?
         end
       end
 
@@ -68,7 +79,7 @@ module Hanami
       # @api private
       def modified?(file)
         @mutex.synchronize do
-          @data[file.to_s] < File.new(file)
+          @data[file.to_s].modified?(file)
         end
       end
 

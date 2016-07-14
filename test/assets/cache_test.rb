@@ -21,6 +21,12 @@ describe Hanami::Assets::Cache do
       end
     end
 
+    it 'returns true when the file was never stored' do
+      file = TestFile.new
+
+      assert cache.modified?(file), "Expected #{file} to be modified"
+    end
+
     describe 'with dependencies' do
       it "returns false when both file and deps weren't updated" do
         file =  TestFile.new

@@ -18,9 +18,9 @@ module Hanami
       class File
         # @since x.x.x
         # @api private
-        def initialize(file, dependencies = nil)
+        def initialize(file, mtime: nil, dependencies: nil)
           @file  = file.is_a?(String) ? Pathname.new(file) : file
-          @mtime = @file.mtime.utc.to_i
+          @mtime = mtime || @file.mtime.utc.to_i
 
           @dependencies = (dependencies || []).map { |d| self.class.new(d) }
         end
@@ -54,7 +54,7 @@ module Hanami
       #
       # @return [Hanami::Assets::Cache] a new instance
       def initialize
-        @data  = Hash.new { |h, k| h[k] = 0 }
+        @data  = Hash.new { |h, k| h[k] = File.new(k, mtime: 0) }
         @mutex = Mutex.new
       end
 
@@ -82,7 +82,7 @@ module Hanami
       # @api private
       def store(file, dependencies = nil)
         @mutex.synchronize do
-          @data[file.to_s] = File.new(file, dependencies)
+          @data[file.to_s] = File.new(file, dependencies: dependencies)
         end
       end
     end

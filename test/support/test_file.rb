@@ -1,4 +1,5 @@
 require 'securerandom'
+require_relative 'ci'
 
 class TestFile
   OPEN_MODE   = File::WRONLY | File::TRUNC | File::CREAT
@@ -17,7 +18,7 @@ class TestFile
     last_modified = mtime
 
     while mtime <= last_modified
-      wait 2
+      wait 1
       write(content)
     end
 
@@ -43,6 +44,6 @@ class TestFile
   private
 
   def wait(seconds)
-    sleep(seconds) if ENV['TRAVIS']
+    sleep(seconds) if CI.enabled?
   end
 end

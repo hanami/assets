@@ -17,6 +17,7 @@ class TestFile
     last_modified = mtime
 
     while mtime <= last_modified
+      wait 1
       write(content)
     end
 
@@ -38,4 +39,10 @@ class TestFile
   end
 
   alias to_str to_s
+
+  private
+
+  def wait(seconds)
+    sleep(seconds) if ENV['TRAVIS']
+  end
 end

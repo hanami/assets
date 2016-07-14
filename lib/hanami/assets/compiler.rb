@@ -28,7 +28,7 @@ module Hanami
     #
     # @since 0.1.0
     # @api private
-    class Compiler
+    class Compiler # rubocop:disable Metrics/ClassLength
       # @since 0.1.0
       # @api private
       DEFAULT_PERMISSIONS = 0o644

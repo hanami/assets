@@ -17,7 +17,7 @@ class TestFile
     last_modified = mtime
 
     while mtime <= last_modified
-      wait 1
+      wait 2
       write(content)
     end
 

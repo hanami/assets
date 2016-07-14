@@ -17,6 +17,10 @@ module Hanami
       #
       # TODO The perf of this class is poor, consider to improve it.
       class Sources < Utils::LoadPaths
+        # @since x.x.x
+        # @api private
+        SKIPPED_FILE_PREFIX = '_'.freeze
+
         # @since 0.1.0
         # @api private
         attr_writer :root
@@ -31,7 +35,7 @@ module Hanami
         # @since 0.1.0
         # @api private
         def map
-          Array.new.tap do |result|
+          [].tap do |result|
             each do |source|
               result << yield(source)
             end
@@ -51,8 +55,8 @@ module Hanami
         def files(name = nil)
           result = []
 
-          Dir.glob(map {|source| "#{ source }#{ ::File::SEPARATOR }**#{ ::File::SEPARATOR }#{ name }*"}).each do |file|
-            next if ::File.directory?(file) || ::File.basename(file).match(/\A\_/)
+          Dir.glob(map { |source| "#{source}#{::File::SEPARATOR}**#{::File::SEPARATOR}#{name}*" }).each do |file|
+            next if ::File.directory?(file) || ::File.basename(file).start_with?(SKIPPED_FILE_PREFIX)
             result << file
           end
 
@@ -60,6 +64,7 @@ module Hanami
         end
 
         private
+
         # @since 0.1.0
         # @api private
         def realpath(path)

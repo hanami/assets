@@ -14,19 +14,19 @@ describe Hanami::Assets do
       Hanami::Assets.sources.must_be :empty?
     end
 
-    it "allows to add a source" do
+    it 'allows to add a source' do
       Hanami::Assets.sources << __dir__
 
-      assert Hanami::Assets.sources == [ __dir__ ],
-        "Expected Hanami::Assets.sources to eq [#{ __dir__ }], got: #{ Hanami::Assets.sources.inspect }"
+      assert Hanami::Assets.sources == [__dir__],
+             "Expected Hanami::Assets.sources to eq [#{__dir__}], got: #{Hanami::Assets.sources.inspect}"
     end
 
-    it "adds a source to the configuration" do
+    it 'adds a source to the configuration' do
       Hanami::Assets.sources << __dir__
       Hanami::Assets.configuration.sources.must_include __dir__
     end
 
-    it "keeps duplicated frameworks in sync" do
+    it 'keeps duplicated frameworks in sync' do
       source = __dir__ + '/fixtures/bookshelf/vendor/assets' + '/fixtures/bookshelf/vendor/assets'
       Hanami::Assets.sources << source
 

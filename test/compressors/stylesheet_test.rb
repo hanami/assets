@@ -35,7 +35,7 @@ describe Hanami::Assets::Compressors::Stylesheet do
 
       it 'raises error' do
         exception = -> { compressor }.must_raise Hanami::Assets::Compressors::UnknownCompressorError
-        exception.message.must_equal "Unknown Stylesheet compressor: :wat"
+        exception.message.must_equal 'Unknown Stylesheet compressor: :wat'
       end
     end
 

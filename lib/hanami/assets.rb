@@ -93,7 +93,7 @@ module Hanami
     #   Hanami::Assets.sources << '/path/to/emberjs/assets'
     def self.sources
       synchronize do
-        @@sources ||= Config::GlobalSources.new
+        @@sources ||= Config::GlobalSources.new # rubocop:disable Style/ClassVars
       end
     end
 
@@ -104,11 +104,11 @@ module Hanami
     #
     # @return [Module] a copy of Hanami::Assets
     #
-    # @since 0.1.0
+    # @since 0.1.0
     #
     # @see Hanami::Assets#dupe
     # @see Hanami::Assets::Configuration
-    def self.duplicate(mod, &blk)
+    def self.duplicate(_mod, &blk)
       dupe.tap do |duplicated|
         duplicated.configure(&blk) if block_given?
         duplicates << duplicated
@@ -143,16 +143,18 @@ module Hanami
     # @see Hanami::Assets#dupe
     def self.duplicates
       synchronize do
-        @@duplicates ||= Array.new
+        @@duplicates ||= [] # rubocop:disable Style/ClassVars
       end
     end
 
-    private
+    class << self
+      private
 
-    # @since 0.1.0
-    # @api private
-    def self.synchronize(&blk)
-      Mutex.new.synchronize(&blk)
+      # @since 0.1.0
+      # @api private
+      def synchronize(&blk)
+        Mutex.new.synchronize(&blk)
+      end
     end
   end
 end

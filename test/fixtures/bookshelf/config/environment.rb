@@ -13,7 +13,7 @@ end
 
 unless defined?(Web)
   module Admin
-    View   = Hanami::View.duplicate(self) do
+    View = Hanami::View.duplicate(self) do
       root __dir__ + '/../../../fixtures/bookshelf/apps/admin/templates'
       layout :application
 
@@ -48,7 +48,7 @@ unless defined?(Web)
   end
 
   module Metrics
-    View   = Hanami::View.duplicate(self) do
+    View = Hanami::View.duplicate(self) do
       root __dir__ + '/../../../fixtures/bookshelf/apps/metrics/templates'
       layout :application
 
@@ -83,7 +83,7 @@ unless defined?(Web)
   end
 
   module Web
-    View   = Hanami::View.duplicate(self) do
+    View = Hanami::View.duplicate(self) do
       root __dir__ + '/../../../fixtures/bookshelf/apps/web/templates'
       layout :application
 

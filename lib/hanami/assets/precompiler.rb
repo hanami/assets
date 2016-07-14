@@ -45,7 +45,7 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      def precompile
+      def precompile # rubocop:disable Metrics/MethodLength
         applications.each do |duplicate|
           config = if duplicate.respond_to?(:configuration)
                      duplicate.configuration
@@ -64,8 +64,11 @@ module Hanami
       # @since 0.1.0
       # @api private
       def applications
-        @duplicates.empty? ?
-          [@configuration] : @duplicates
+        if @duplicates.empty?
+          [@configuration]
+        else
+          @duplicates
+        end
       end
     end
   end

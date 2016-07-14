@@ -12,50 +12,58 @@ module Hanami
     # Framework configuration
     #
     # @since 0.1.0
-    class Configuration
+    class Configuration # rubocop:disable Metrics/ClassLength
       # @since 0.1.0
       # @api private
-      DEFAULT_SCHEME           = 'http'.freeze
+      DEFAULT_SCHEME                          = 'http'.freeze
 
       # @since 0.1.0
       # @api private
-      DEFAULT_HOST             = 'localhost'.freeze
+      DEFAULT_HOST                            = 'localhost'.freeze
 
       # @since 0.1.0
       # @api private
-      DEFAULT_PORT             = '2300'.freeze
+      DEFAULT_PORT                            = '2300'.freeze
 
       # @since 0.1.0
       # @api private
-      DEFAULT_PUBLIC_DIRECTORY = 'public'.freeze
+      DEFAULT_PUBLIC_DIRECTORY                = 'public'.freeze
 
       # @since 0.1.0
       # @api private
-      DEFAULT_MANIFEST         = 'assets.json'.freeze
+      DEFAULT_MANIFEST                        = 'assets.json'.freeze
 
       # @since 0.1.0
       # @api private
-      DEFAULT_PREFIX           = '/assets'.freeze
+      DEFAULT_PREFIX                          = '/assets'.freeze
 
       # @since 0.1.0
       # @api private
-      URL_SEPARATOR            = '/'.freeze
+      URL_SEPARATOR                           = '/'.freeze
 
       # @since 0.1.0
       # @api private
-      HTTP_SCHEME              = 'http'.freeze
+      HTTP_SCHEME                             = 'http'.freeze
 
       # @since 0.1.0
       # @api private
-      HTTP_PORT                = '80'.freeze
+      HTTP_PORT                               = '80'.freeze
 
       # @since 0.1.0
       # @api private
-      HTTPS_SCHEME             = 'https'.freeze
+      HTTPS_SCHEME                            = 'https'.freeze
 
       # @since 0.1.0
       # @api private
-      HTTPS_PORT               = '443'.freeze
+      HTTPS_PORT                              = '443'.freeze
+
+      # @since x.x.x
+      # @api private
+      DEFAULT_SUBRESOURCE_INTEGRITY_ALGORITHM = :sha256
+
+      # @since x.x.x
+      # @api private
+      SUBRESOURCE_INTEGRITY_SEPARATOR         = ' '.freeze
 
       # Return a copy of the configuration of the framework instance associated
       # with the given class.
@@ -72,7 +80,7 @@ module Hanami
       # @since 0.1.0
       # @api private
       def self.for(base)
-        # TODO this implementation is similar to Hanami::Controller::Configuration consider to extract it into Hanami::Utils
+        # TODO: this implementation is similar to Hanami::Controller::Configuration consider to extract it into Hanami::Utils
         namespace = Utils::String.new(base).namespace
         framework = Utils::Class.load_from_pattern!("(#{namespace}|Hanami)::Assets")
         framework.configuration
@@ -120,6 +128,22 @@ module Hanami
         end
       end
 
+      # Subresource integrity mode
+      #
+      # Determine if the helpers should generate the integrity attribute for an
+      # asset. Usually this is turned on in production mode.
+      #
+      # @since x.x.x
+      def subresource_integrity(*values)
+        if values.empty?
+          @subresource_integrity
+        elsif values.length == 1
+          @subresource_integrity = values.first
+        else
+          @subresource_integrity = values
+        end
+      end
+
       # CDN mode
       #
       # Determine if the helpers should always generate absolute URL.
@@ -130,7 +154,7 @@ module Hanami
         if value.nil?
           @cdn
         else
-          @cdn = !!value
+          @cdn = !!value # rubocop:disable Style/DoubleNegation
         end
       end
 
@@ -352,6 +376,13 @@ module Hanami
         sources.files
       end
 
+      # @since x.x.x
+      # @api private
+      def source(file)
+        pathname = Pathname.new(file)
+        pathname.absolute? ? pathname : find(file)
+      end
+
       # Find a file from sources
       #
       # @since 0.1.0
@@ -365,9 +396,11 @@ module Hanami
       # @since 0.1.0
       # @api private
       def asset_path(source)
-        cdn ?
-          asset_url(source) :
+        if cdn
+          asset_url(source)
+        else
           compile_path(source)
+        end
       end
 
       # Absolute URL
@@ -375,7 +408,33 @@ module Hanami
       # @since 0.1.0
       # @api private
       def asset_url(source)
-        "#{ @base_url }#{ compile_path(source) }"
+        "#{@base_url}#{compile_path(source)}"
+      end
+
+      # An array of digest algorithms to use for generating asset subresource
+      # integrity checks
+      #
+      # @since x.x.x
+      def subresource_integrity_algorithms
+        if @subresource_integrity == true
+          [DEFAULT_SUBRESOURCE_INTEGRITY_ALGORITHM]
+        else
+          # Using Array() allows us to accept Array or Symbol, and '|| nil' lets
+          # us return an empty array when @subresource_integrity is `false`
+          Array(@subresource_integrity || nil)
+        end
+      end
+
+      # Subresource integrity attribute
+      #
+      # @since x.x.x
+      # @api private
+      def subresource_integrity_value(source)
+        if subresource_integrity
+          digest_manifest.subresource_integrity_values(
+            prefix.join(source)
+          ).join(SUBRESOURCE_INTEGRITY_SEPARATOR)
+        end
       end
 
       # Load Javascript compressor
@@ -414,13 +473,14 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      def duplicate
+      def duplicate # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         Configuration.new.tap do |c|
           c.root                  = root
           c.scheme                = scheme
           c.host                  = host
           c.port                  = port
           c.prefix                = prefix
+          c.subresource_integrity = subresource_integrity
           c.cdn                   = cdn
           c.compile               = compile
           c.public_directory      = public_directory
@@ -433,12 +493,13 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      def reset!
+      def reset! # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         @scheme                = DEFAULT_SCHEME
         @host                  = DEFAULT_HOST
         @port                  = DEFAULT_PORT
 
         @prefix                = Utils::PathPrefix.new(DEFAULT_PREFIX)
+        @subresource_integrity = false
         @cdn                   = false
         @digest                = false
         @compile               = false
@@ -460,7 +521,7 @@ module Hanami
       #
       # @since 0.1.0
       def load!
-        if digest && manifest_path.exist?
+        if (digest || subresource_integrity) && manifest_path.exist?
           @digest_manifest = Config::DigestManifest.new(
             JSON.load(manifest_path.read),
             manifest_path
@@ -471,6 +532,10 @@ module Hanami
       end
 
       protected
+
+      # @since x.x.x
+      # @api private
+      attr_writer :subresource_integrity
 
       # @since 0.1.0
       # @api private
@@ -526,15 +591,15 @@ module Hanami
       # @api private
       def compile_path(source)
         result = prefix.join(source)
-        result = digest_manifest.resolve(result) if digest
+        result = digest_manifest.target(result) if digest
         result.to_s
       end
 
       # @since 0.1.0
       # @api private
       def url_port
-        ( (scheme == HTTP_SCHEME  && port == HTTP_PORT  ) ||
-          (scheme == HTTPS_SCHEME && port == HTTPS_PORT ) ) ? nil : port.to_i
+        ((scheme == HTTP_SCHEME && port == HTTP_PORT) || # rubocop:disable Style/MultilineTernaryOperator
+          (scheme == HTTPS_SCHEME && port == HTTPS_PORT)) ? nil : port.to_i
       end
     end
   end

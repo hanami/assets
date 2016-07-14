@@ -1,4 +1,4 @@
-require "hanami/foo/compressor/version"
+require 'hanami/foo/compressor/version'
 
 module Hanami
   module Foo

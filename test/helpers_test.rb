@@ -19,6 +19,44 @@ describe Hanami::Assets::Helpers do
       actual.must_equal %(<script src="/assets/feature-a.js" type="text/javascript"></script>)
     end
 
+    it 'renders <script> tag with a defer attribute' do
+      actual = DefaultView.new.javascript('feature-a', defer: true)
+      actual.must_equal %(<script defer="defer" src="/assets/feature-a.js" type="text/javascript"></script>)
+    end
+
+    it 'renders <script> tag with an integrity attribute' do
+      actual = DefaultView.new.javascript('feature-a', integrity: 'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC')
+      actual.must_equal %(<script integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" src="/assets/feature-a.js" type="text/javascript" crossorigin="anonymous"></script>)
+    end
+
+    it 'renders <script> tag with a crossorigin attribute' do
+      actual = DefaultView.new.javascript('feature-a', integrity: 'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC', crossorigin: 'use-credentials')
+      actual.must_equal %(<script integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" crossorigin="use-credentials" src="/assets/feature-a.js" type="text/javascript"></script>)
+    end
+
+    describe 'async option' do
+      it 'renders <script> tag with an async=true if async option is true' do
+        actual = DefaultView.new.javascript('feature-a', async: true)
+        actual.must_equal %(<script async="async" src="/assets/feature-a.js" type="text/javascript"></script>)
+      end
+
+      it 'renders <script> tag without an async=true if async option is false' do
+        actual = DefaultView.new.javascript('feature-a', async: false)
+        actual.must_equal %(<script src="/assets/feature-a.js" type="text/javascript"></script>)
+      end
+    end
+
+    describe 'subresource_integrity mode' do
+      before do
+        activate_subresource_integrity_mode!
+      end
+
+      it 'includes subresource_integrity and crossorigin attributes' do
+        actual = DefaultView.new.javascript('feature-a')
+        actual.must_equal %(<script src="/assets/feature-a.js" type="text/javascript" integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" crossorigin="anonymous"></script>)
+      end
+    end
+
     describe 'cdn mode' do
       before do
         activate_cdn_mode!
@@ -26,7 +64,7 @@ describe Hanami::Assets::Helpers do
 
       it 'returns absolute url for src attribute' do
         actual = DefaultView.new.javascript('feature-a')
-        actual.must_equal %(<script src="#{ cdn_url }/assets/feature-a.js" type="text/javascript"></script>)
+        actual.must_equal %(<script src="#{cdn_url}/assets/feature-a.js" type="text/javascript"></script>)
       end
     end
   end
@@ -42,6 +80,27 @@ describe Hanami::Assets::Helpers do
       actual.must_equal %(<link href="/assets/main.css" type="text/css" rel="stylesheet">)
     end
 
+    it 'renders <link> tag with an integrity attribute' do
+      actual = DefaultView.new.stylesheet('main', integrity: 'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC')
+      actual.must_equal %(<link integrity=\"sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC\" href=\"/assets/main.css\" type=\"text/css\" rel=\"stylesheet\" crossorigin=\"anonymous\">)
+    end
+
+    it 'renders <link> tag with a crossorigin attribute' do
+      actual = DefaultView.new.stylesheet('main', integrity: 'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC', crossorigin: 'use-credentials')
+      actual.must_equal %(<link integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" crossorigin="use-credentials" href="/assets/main.css" type="text/css" rel="stylesheet">)
+    end
+
+    describe 'subresource_integrity mode' do
+      before do
+        activate_subresource_integrity_mode!
+      end
+
+      it 'includes subresource_integrity and crossorigin attributes' do
+        actual = DefaultView.new.stylesheet('main')
+        actual.must_equal %(<link href="/assets/main.css" type="text/css" rel="stylesheet" integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" crossorigin="anonymous">)
+      end
+    end
+
     describe 'cdn mode' do
       before do
         activate_cdn_mode!
@@ -49,7 +108,7 @@ describe Hanami::Assets::Helpers do
 
       it 'returns absolute url for href attribute' do
         actual = DefaultView.new.stylesheet('main')
-        actual.must_equal %(<link href="#{ cdn_url }/assets/main.css" type="text/css" rel="stylesheet">)
+        actual.must_equal %(<link href="#{cdn_url}/assets/main.css" type="text/css" rel="stylesheet">)
       end
     end
   end
@@ -82,7 +141,7 @@ describe Hanami::Assets::Helpers do
 
       it 'returns absolute url for src attribute' do
         actual = view.image('application.jpg').to_s
-        actual.must_equal %(<img src="#{ cdn_url }/assets/application.jpg" alt="Application">)
+        actual.must_equal %(<img src="#{cdn_url}/assets/application.jpg" alt="Application">)
       end
     end
   end
@@ -110,7 +169,7 @@ describe Hanami::Assets::Helpers do
 
       it 'returns absolute url for href attribute' do
         actual = view.favicon.to_s
-        actual.must_equal %(<link href="#{ cdn_url }/assets/favicon.ico" rel="shortcut icon" type="image/x-icon">)
+        actual.must_equal %(<link href="#{cdn_url}/assets/favicon.ico" rel="shortcut icon" type="image/x-icon">)
       end
     end
   end
@@ -133,7 +192,7 @@ describe Hanami::Assets::Helpers do
 
     it 'renders with fallback content' do
       actual = view.video('movie.mp4') do
-        "Your browser does not support the video tag"
+        'Your browser does not support the video tag'
       end.to_s
 
       actual.must_equal %(<video src="/assets/movie.mp4">\nYour browser does not support the video tag\n</video>)
@@ -149,7 +208,7 @@ describe Hanami::Assets::Helpers do
 
     it 'renders with sources' do
       actual = view.video do
-        text "Your browser does not support the video tag"
+        text 'Your browser does not support the video tag'
         source src: view.asset_path('movie.mp4'), type: 'video/mp4'
         source src: view.asset_path('movie.ogg'), type: 'video/ogg'
       end.to_s
@@ -158,13 +217,13 @@ describe Hanami::Assets::Helpers do
     end
 
     it 'raises an exception when no arguments' do
-      exception = -> { view.video() }.must_raise ArgumentError
-      exception.message.must_equal "You should provide a source via `src` option or with a `source` HTML tag"
+      exception = -> { view.video }.must_raise ArgumentError
+      exception.message.must_equal 'You should provide a source via `src` option or with a `source` HTML tag'
     end
 
     it 'raises an exception when no src and no block' do
       exception = -> { view.video(content: true) }.must_raise ArgumentError
-      exception.message.must_equal "You should provide a source via `src` option or with a `source` HTML tag"
+      exception.message.must_equal 'You should provide a source via `src` option or with a `source` HTML tag'
     end
 
     describe 'cdn mode' do
@@ -174,13 +233,12 @@ describe Hanami::Assets::Helpers do
 
       it 'returns absolute url for src attribute' do
         actual = view.video('movie.mp4').to_s
-        actual.must_equal %(<video src="#{ cdn_url }/assets/movie.mp4"></video>)
+        actual.must_equal %(<video src="#{cdn_url}/assets/movie.mp4"></video>)
       end
     end
   end
 
-
-  describe "#audio" do
+  describe '#audio' do
     it 'returns an instance of HtmlBuilder' do
       actual = view.audio('song.ogg')
       actual.must_be_instance_of ::Hanami::Helpers::HtmlHelper::HtmlBuilder
@@ -198,7 +256,7 @@ describe Hanami::Assets::Helpers do
 
     it 'renders with fallback content' do
       actual = view.audio('song.ogg') do
-        "Your browser does not support the audio tag"
+        'Your browser does not support the audio tag'
       end.to_s
 
       actual.must_equal %(<audio src="/assets/song.ogg">\nYour browser does not support the audio tag\n</audio>)
@@ -214,7 +272,7 @@ describe Hanami::Assets::Helpers do
 
     it 'renders with sources' do
       actual = view.audio do
-        text "Your browser does not support the audio tag"
+        text 'Your browser does not support the audio tag'
         source src: view.asset_path('song.ogg'), type: 'audio/ogg'
         source src: view.asset_path('song.wav'), type: 'audio/wav'
       end.to_s
@@ -223,13 +281,13 @@ describe Hanami::Assets::Helpers do
     end
 
     it 'raises an exception when no arguments' do
-      exception = -> { view.audio() }.must_raise ArgumentError
-      exception.message.must_equal "You should provide a source via `src` option or with a `source` HTML tag"
+      exception = -> { view.audio }.must_raise ArgumentError
+      exception.message.must_equal 'You should provide a source via `src` option or with a `source` HTML tag'
     end
 
     it 'raises an exception when no src and no block' do
       exception = -> { view.audio(controls: true) }.must_raise ArgumentError
-      exception.message.must_equal "You should provide a source via `src` option or with a `source` HTML tag"
+      exception.message.must_equal 'You should provide a source via `src` option or with a `source` HTML tag'
     end
 
     describe 'cdn mode' do
@@ -239,23 +297,23 @@ describe Hanami::Assets::Helpers do
 
       it 'returns absolute url for src attribute' do
         actual = view.audio('song.ogg').to_s
-        actual.must_equal %(<audio src="#{ cdn_url }/assets/song.ogg"></audio>)
+        actual.must_equal %(<audio src="#{cdn_url}/assets/song.ogg"></audio>)
       end
     end
   end
 
-  describe "#asset_path" do
-    it "returns relative URL for given asset name" do
+  describe '#asset_path' do
+    it 'returns relative URL for given asset name' do
       result = view.asset_path('application.js')
       result.must_equal '/assets/application.js'
     end
 
-    it "returns absolute URL if the argument is an absolute URL" do
+    it 'returns absolute URL if the argument is an absolute URL' do
       result = view.asset_path('http://assets.hanamirb.org/assets/application.css')
       result.must_equal 'http://assets.hanamirb.org/assets/application.css'
     end
 
-    it "adds source to HTTP/2 PUSH PROMISE list" do
+    it 'adds source to HTTP/2 PUSH PROMISE list' do
       view.asset_path('dashboard.js')
       Thread.current[:__hanami_assets].must_include '/assets/dashboard.js'
     end
@@ -267,27 +325,27 @@ describe Hanami::Assets::Helpers do
 
       it 'returns absolute url' do
         result = view.asset_path('application.js')
-        result.must_equal "https://bookshelf.cdn-example.com/assets/application.js"
+        result.must_equal 'https://bookshelf.cdn-example.com/assets/application.js'
       end
     end
   end
 
-  describe "#asset_url" do
+  describe '#asset_url' do
     before do
       view.class.assets_configuration.load!
     end
 
-    it "returns absolute URL for given asset name" do
+    it 'returns absolute URL for given asset name' do
       result = view.asset_url('application.js')
       result.must_equal('http://localhost:2300/assets/application.js')
     end
 
-    it "returns absolute URL if the argument is an absolute URL" do
+    it 'returns absolute URL if the argument is an absolute URL' do
       result = view.asset_url('http://assets.hanamirb.org/assets/application.css')
       result.must_equal 'http://assets.hanamirb.org/assets/application.css'
     end
 
-    it "adds source to HTTP/2 PUSH PROMISE list" do
+    it 'adds source to HTTP/2 PUSH PROMISE list' do
       view.asset_url('metrics.js')
       Thread.current[:__hanami_assets].must_include 'http://localhost:2300/assets/metrics.js'
     end
@@ -299,14 +357,33 @@ describe Hanami::Assets::Helpers do
 
       it 'still returns absolute url' do
         result = view.asset_url('application.js')
-        result.must_equal "https://bookshelf.cdn-example.com/assets/application.js"
+        result.must_equal 'https://bookshelf.cdn-example.com/assets/application.js'
       end
     end
   end
 
   private
 
-  def activate_cdn_mode!
+  def activate_subresource_integrity_mode! # rubocop:disable Metrics/MethodLength
+    view.class.assets_configuration.subresource_integrity true
+    view.class.assets_configuration.load!
+
+    manifest = Hanami::Assets::Config::DigestManifest.new({
+                                                            '/assets/feature-a.js' => {
+                                                              'sri' => [
+                                                                'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC'
+                                                              ]
+                                                            },
+                                                            '/assets/main.css' => {
+                                                              'sri' => [
+                                                                'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC'
+                                                              ]
+                                                            }
+                                                          }, [])
+    view.class.assets_configuration.instance_variable_set(:@digest_manifest, manifest)
+  end
+
+  def activate_cdn_mode! # rubocop:disable Metrics/AbcSize
     view.class.assets_configuration.scheme 'https'
     view.class.assets_configuration.host   'bookshelf.cdn-example.com'
     view.class.assets_configuration.port   '443'
@@ -315,4 +392,3 @@ describe Hanami::Assets::Helpers do
     view.class.assets_configuration.load!
   end
 end
-

@@ -7,8 +7,10 @@ if ENV['COVERALL']
 end
 
 require 'minitest/autorun'
-$:.unshift 'lib'
+$LOAD_PATH.unshift 'lib'
 require 'hanami/assets'
+require 'support/test_file'
+require 'support/ci'
 require 'fixtures'
 require 'pathname'
 

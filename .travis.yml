@@ -1,12 +1,15 @@
 language: ruby
 sudo: false
 cache: bundler
-script: 'bundle exec rake test:coverage --trace'
+script: 'bundle exec rake test:coverage --trace && bundle exec rubocop --display-cop-names'
 rvm:
   - 2.2.5
   - 2.3.1
+  - jruby-9.0.5.0
   - ruby-head
+  - jruby-head
 
 matrix:
   allow_failures:
     - rvm: ruby-head
+    - rvm: jruby-head

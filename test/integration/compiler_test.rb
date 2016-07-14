@@ -130,6 +130,54 @@ describe 'Compiler' do
     end
   end
 
+  it 'compiles sass asset if a dependency is added' do
+    asset_name  = "#{SecureRandom.uuid}.css"
+    asset       = TestFile.new(path: "#{asset_name}.sass") do
+      write "body\n  margin: 0"
+    end
+
+    Hanami::Assets::Compiler.compile(@config, asset_name)
+
+    target  = @config.public_directory.join('assets', asset_name)
+    content = target.read
+    content.must_match %(body {\n  margin: 0; }\n)
+
+    dependency_name = SecureRandom.uuid
+    _               = TestFile.new(path: "_#{dependency_name}.sass") do
+      write "html\n  padding: 0"
+    end
+
+    asset.touch("@import #{dependency_name}\n\nbody\n  margin: 0") do
+      Hanami::Assets::Compiler.compile(@config, asset_name)
+      content = target.read
+      content.must_match %(html {\n  padding: 0; }\n\nbody {\n  margin: 0; }\n)
+    end
+  end
+
+  it 'compiles sass asset if a dependency is removed' do
+    dependency_name = SecureRandom.uuid
+    _               = TestFile.new(path: "_#{dependency_name}.sass") do
+      write "html\n  padding: 0"
+    end
+
+    asset_name  = "#{SecureRandom.uuid}.css"
+    asset       = TestFile.new(path: "#{asset_name}.sass") do
+      write "@import #{dependency_name}\n\nbody\n  margin: 0"
+    end
+
+    Hanami::Assets::Compiler.compile(@config, asset_name)
+
+    target  = @config.public_directory.join('assets', asset_name)
+    content = target.read
+    content.must_match %(html {\n  padding: 0; }\n\nbody {\n  margin: 0; }\n)
+
+    asset.touch("body\n  margin: 0") do
+      Hanami::Assets::Compiler.compile(@config, asset_name)
+      content = target.read
+      content.must_match %(body {\n  margin: 0; }\n)
+    end
+  end
+
   it 'compiles scss asset' do
     Hanami::Assets::Compiler.compile(@config, 'compile-scss.css')
 

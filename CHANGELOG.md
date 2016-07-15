@@ -8,6 +8,8 @@ Assets management for Ruby web applications
 
 ### Fixed
 - [Alexander Gräfe] Safely precompile assets from directories with a dot in their name.
+- [Luca Guidi] Detect changes for Sass/SCSS dependencies.
+- [Maxim Dorofienko & Luca Guidi] Preserve static assets under public directory, by removing only assets directory and manifest at the precompile time.
 
 ### Changed
 – [Luca Guidi] Drop support for Ruby 2.0 and 2.1. Official support for JRuby 9.0.5.0+.

@@ -1,3 +1,4 @@
+require 'fileutils'
 require 'hanami/assets/compiler'
 
 module Hanami
@@ -30,7 +31,7 @@ module Hanami
       # @since 0.1.0
       # @api private
       def run
-        clear_old_assets
+        clear_assets_directory
         precompile
       end
 
@@ -38,9 +39,9 @@ module Hanami
 
       # @since x.x.x
       # @api private
-      def clear_old_assets
-        manifest_mask = @configuration.public_directory.join('assets*\.json')
-        Pathname.glob(manifest_mask).each { |manifest| clear_manifest(manifest) }
+      def clear_assets_directory
+        delete @configuration.manifest_path
+        delete @configuration.destination_directory
       end
 
       # @since x.x.x
@@ -82,6 +83,12 @@ module Hanami
         else
           @duplicates
         end
+      end
+
+      # @since x.x.x
+      # @api private
+      def delete(path)
+        FileUtils.rm_rf(path) if path.exist?
       end
     end
   end

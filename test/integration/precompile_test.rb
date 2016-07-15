@@ -11,10 +11,7 @@ describe 'Precompile' do
   let(:dest)   { TMP }
   let(:target) { dest.join('assets') }
 
-  let(:vendor_files) { %w(assets/readme.txt robots.txt).map { |file| dest.join(file) } }
-  let(:bad_manifest) { dest.join('assets-bad.json') }
-
-  let(:message_to_stderr) { 'Non JSON manifest found and unlinked.' }
+  let(:vendor_files) { %w(robots.txt).map { |file| dest.join(file) } }
 
   describe 'standalone framework' do
     let(:dest) { TMP.join('standalone', 'public') }
@@ -49,20 +46,6 @@ describe 'Precompile' do
         assert_successful_command environment
 
         vendor_files.each { |f| f.exist?.must_equal true }
-      end
-    end
-
-    describe 'when non json manifest exists' do
-      it 'silently deletes bad manifest' do
-        _, err = capture_io do
-          assert_successful_command environment
-          create_bad_json_file bad_manifest
-          assert_successful_command environment
-
-          bad_manifest.exist?.must_equal false
-        end
-
-        assert_match err, message_to_stderr
       end
     end
   end
@@ -114,20 +97,6 @@ describe 'Precompile' do
         assert_successful_command environment
 
         vendor_files.each { |f| f.exist?.must_equal true }
-      end
-    end
-
-    describe 'when non json manifest exists' do
-      it 'silently deletes bad manifest' do
-        _, err = capture_io do
-          assert_successful_command environment
-          create_bad_json_file bad_manifest
-          assert_successful_command environment
-
-          bad_manifest.exist?.must_equal false
-        end
-
-        assert_match err, message_to_stderr
       end
     end
   end

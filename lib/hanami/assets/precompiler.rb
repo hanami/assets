@@ -30,17 +30,30 @@ module Hanami
       # @since 0.1.0
       # @api private
       def run
-        clear_public_directory
+        clear_old_assets
         precompile
       end
 
       private
 
-      # @since 0.1.0
+      # @since x.x.x
       # @api private
-      def clear_public_directory
-        public_directory = @configuration.public_directory
-        public_directory.rmtree if public_directory.exist?
+      def clear_old_assets
+        manifest_mask = @configuration.public_directory.join('assets*\.json')
+        Pathname.glob(manifest_mask).each { |manifest| clear_manifest(manifest) }
+      end
+
+      # @since x.x.x
+      # @api private
+      def clear_manifest(manifest)
+        JSON.load(manifest).each do |_, asset_hash|
+          asset_file_name = @configuration.public_directory.join(asset_hash['target'])
+          asset_file_name.unlink if asset_file_name.exist?
+        end
+      rescue JSON::ParserError
+        $stderr.puts 'Non JSON manifest found and unlinked.'
+      ensure
+        manifest.unlink
       end
 
       # @since 0.1.0

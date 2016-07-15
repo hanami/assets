@@ -11,6 +11,11 @@ describe 'Precompile' do
   let(:dest)   { TMP }
   let(:target) { dest.join('assets') }
 
+  let(:vendor_files) { %w(assets/readme.txt robots.txt).map { |file| dest.join(file) } }
+  let(:bad_manifest) { dest.join('assets-bad.json') }
+
+  let(:message_to_stderr) { 'Non JSON manifest found and unlinked.' }
+
   describe 'standalone framework' do
     let(:dest) { TMP.join('standalone', 'public') }
 
@@ -18,19 +23,46 @@ describe 'Precompile' do
       ['users.js']
     end
 
+    let(:environment) { "#{__dir__}/../fixtures/standalone/config/environment.rb" }
+
     it 'precompiles assets' do
-      assert_successful_command "#{__dir__}/../fixtures/standalone/config/environment.rb"
+      assert_successful_command environment
       assert_successful_output(assets)
     end
 
     describe 'when already precompiled ' do
       it 'cleans up the destination directory before to precompile' do
         2.times do
-          assert_successful_command "#{__dir__}/../fixtures/standalone/config/environment.rb"
+          assert_successful_command environment
         end
 
         duplicated_manifests = Dir[dest.join('assets-*.json').to_s]
         duplicated_manifests.count.must_equal 0
+        dest.join(target).exist?.must_equal true
+      end
+    end
+
+    describe 'when public directory or public/assets contains some files' do
+      it 'keeps this files' do
+        assert_successful_command environment
+        vendor_files.each { |file| FileUtils.touch file }
+        assert_successful_command environment
+
+        vendor_files.each { |f| f.exist?.must_equal true }
+      end
+    end
+
+    describe 'when non json manifest exists' do
+      it 'silently deletes bad manifest' do
+        _, err = capture_io do
+          assert_successful_command environment
+          create_bad_json_file bad_manifest
+          assert_successful_command environment
+
+          bad_manifest.exist?.must_equal false
+        end
+
+        assert_match err, message_to_stderr
       end
     end
   end
@@ -56,19 +88,46 @@ describe 'Precompile' do
        'metrics/dashboard.js']
     end
 
+    let(:environment) { "#{__dir__}/../fixtures/bookshelf/config/environment.rb" }
+
     it 'precompiles assets' do
-      assert_successful_command "#{__dir__}/../fixtures/bookshelf/config/environment.rb"
+      assert_successful_command environment
       assert_successful_output(assets)
     end
 
     describe 'when already precompiled ' do
       it 'cleans up the destination directory before to precompile' do
         2.times do
-          assert_successful_command "#{__dir__}/../fixtures/bookshelf/config/environment.rb"
+          assert_successful_command environment
         end
 
         duplicated_manifests = Dir[dest.join('assets-*.json').to_s]
         duplicated_manifests.count.must_equal 0
+        dest.join(target).exist?.must_equal true
+      end
+    end
+
+    describe 'when public directory or public/assets contains some files' do
+      it 'keeps this files' do
+        assert_successful_command environment
+        vendor_files.each { |file| FileUtils.touch file }
+        assert_successful_command environment
+
+        vendor_files.each { |f| f.exist?.must_equal true }
+      end
+    end
+
+    describe 'when non json manifest exists' do
+      it 'silently deletes bad manifest' do
+        _, err = capture_io do
+          assert_successful_command environment
+          create_bad_json_file bad_manifest
+          assert_successful_command environment
+
+          bad_manifest.exist?.must_equal false
+        end
+
+        assert_match err, message_to_stderr
       end
     end
   end
@@ -86,6 +145,10 @@ describe 'Precompile' do
   end
 
   private
+
+  def create_bad_json_file(file)
+    File.open(file, 'w+') { |f| f.write 'bad json' }
+  end
 
   def assert_successful_command(configuration_path)
     assert system("bundle exec bin/hanami-assets --config=#{configuration_path}"),

@@ -102,7 +102,7 @@ module Hanami
       # @since 0.1.0
       # @api private
       def assets
-        Dir.glob("#{public_directory}#{::File::SEPARATOR}**#{::File::SEPARATOR}*")
+        Dir.glob("#{@configuration.destination_directory}#{::File::SEPARATOR}**#{::File::SEPARATOR}*")
       end
 
       # @since 0.1.0

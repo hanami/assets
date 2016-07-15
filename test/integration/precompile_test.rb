@@ -47,6 +47,16 @@ describe 'Precompile' do
 
         vendor_files.each { |f| f.exist?.must_equal true }
       end
+
+      it "doesn't creates a digest version" do
+        vendor_files.each { |file| FileUtils.touch file }
+        assert_successful_command environment
+
+        vendor_files.each do |f|
+          digest_versions = Dir[dest.join("#{f.basename(f.extname)}-*#{f.extname}").to_s]
+          digest_versions.must_be :empty?
+        end
+      end
     end
   end
 
@@ -98,6 +108,16 @@ describe 'Precompile' do
 
         vendor_files.each { |f| f.exist?.must_equal true }
       end
+
+      it "doesn't creates a digest version" do
+        vendor_files.each { |file| FileUtils.touch file }
+        assert_successful_command environment
+
+        vendor_files.each do |f|
+          digest_versions = Dir[dest.join("#{f.basename(f.extname)}-*#{f.extname}").to_s]
+          digest_versions.must_be :empty?
+        end
+      end
     end
   end
 
@@ -114,10 +134,6 @@ describe 'Precompile' do
   end
 
   private
-
-  def create_bad_json_file(file)
-    File.open(file, 'w+') { |f| f.write 'bad json' }
-  end
 
   def assert_successful_command(configuration_path)
     assert system("bundle exec bin/hanami-assets --config=#{configuration_path}"),

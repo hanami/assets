@@ -13,6 +13,7 @@ Assets management for Ruby web applications
 
 ### Changed
 – [Luca Guidi] Drop support for Ruby 2.0 and 2.1. Official support for JRuby 9.0.5.0+.
+- [Luca Guidi] Don't create digest version of files under public directory, but only for precompiled files.
 
 ## v0.2.1 - 2016-02-05
 ### Changed

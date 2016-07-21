@@ -88,7 +88,7 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      attr_reader :digest_manifest
+      attr_reader :manifest
 
       # Return a new instance
       #
@@ -431,11 +431,11 @@ module Hanami
       # @since 0.3.0
       # @api private
       def subresource_integrity_value(source)
-        return unless subresource_integrity
-
-        digest_manifest.subresource_integrity_values(
-          prefix.join(source)
-        ).join(SUBRESOURCE_INTEGRITY_SEPARATOR)
+        if subresource_integrity
+          manifest.subresource_integrity_values(
+            prefix.join(source)
+          ).join(SUBRESOURCE_INTEGRITY_SEPARATOR)
+        end
       end
 
       # Load Javascript compressor
@@ -506,7 +506,7 @@ module Hanami
         @compile               = false
         @base_url              = nil
         @destination_directory = nil
-        @digest_manifest       = Config::NullManifest.new(self)
+        @manifest              = Config::NullManifest.new(self)
 
         @javascript_compressor = nil
         @stylesheet_compressor = nil
@@ -523,7 +523,7 @@ module Hanami
       # @since 0.1.0
       def load!
         if (fingerprint || subresource_integrity) && manifest_path.exist?
-          @digest_manifest = Config::Manifest.new(
+          @manifest = Config::Manifest.new(
             JSON.load(manifest_path.read),
             manifest_path
           )
@@ -592,7 +592,7 @@ module Hanami
       # @api private
       def compile_path(source)
         result = prefix.join(source)
-        result = digest_manifest.target(result) if fingerprint
+        result = manifest.target(result) if fingerprint
         result.to_s
       end
 

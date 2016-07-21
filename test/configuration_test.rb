@@ -284,7 +284,7 @@ describe Hanami::Assets::Configuration do
               'target' => '/assets/application-abc123.js'
             }
           }, [])
-          @configuration.instance_variable_set(:@digest_manifest, manifest)
+          @configuration.instance_variable_set(:@manifest, manifest)
         end
 
         it 'returns asset with fingerprint' do
@@ -446,7 +446,7 @@ describe Hanami::Assets::Configuration do
           manifest = Hanami::Assets::Config::Manifest.new({ '/assets/application.js' => { 'target' => '/assets/application-abc123.js' } }, [])
 
           @configuration.load!
-          @configuration.instance_variable_set(:@digest_manifest, manifest)
+          @configuration.instance_variable_set(:@manifest, manifest)
         end
 
         it 'returns asset with fingerprint' do
@@ -480,7 +480,7 @@ describe Hanami::Assets::Configuration do
                                                                 }, [])
 
           @configuration.load!
-          @configuration.instance_variable_set(:@digest_manifest, manifest)
+          @configuration.instance_variable_set(:@manifest, manifest)
         end
 
         it 'returns subresource_integrity value' do
@@ -508,7 +508,7 @@ describe Hanami::Assets::Configuration do
       @configuration.stylesheet_compressor :yui
       @configuration.manifest 'assets.json'
       @configuration.public_directory(Dir.pwd + '/tmp')
-      @configuration.instance_variable_set(:@digest_manifest, {})
+      @configuration.instance_variable_set(:@manifest, {})
 
       @configuration.reset!
     end
@@ -547,8 +547,8 @@ describe Hanami::Assets::Configuration do
     end
 
     it 'sets default value fore digest manifest' do
-      assert @configuration.digest_manifest.class == Hanami::Assets::Config::NullManifest,
-             'Expected @configuration.digest_manifest to be instance of Hanami::Assets::Configuration::NullManifest'
+      assert @configuration.manifest.class == Hanami::Assets::Config::NullManifest,
+             'Expected @configuration.manifest to be instance of Hanami::Assets::Configuration::NullManifest'
     end
   end
 

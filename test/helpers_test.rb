@@ -380,7 +380,7 @@ describe Hanami::Assets::Helpers do
                                                               ]
                                                             }
                                                           }, [])
-    view.class.assets_configuration.instance_variable_set(:@digest_manifest, manifest)
+    view.class.assets_configuration.instance_variable_set(:@manifest, manifest)
   end
 
   def activate_cdn_mode! # rubocop:disable Metrics/AbcSize

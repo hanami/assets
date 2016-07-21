@@ -5,7 +5,7 @@ module Hanami
     #
     # @since 0.1.0
     # @api private
-    class MissingDigestManifestError < Error
+    class MissingManifestFileError < Error
       def initialize(path)
         super("Can't read manifest: #{path}")
       end
@@ -16,7 +16,7 @@ module Hanami
     #
     # @since 0.1.0
     # @api private
-    class MissingDigestAssetError < Error
+    class MissingManifestAssetError < Error
       def initialize(asset, manifest_path)
         super("Can't find asset `#{asset}' in manifest (#{manifest_path})")
       end
@@ -36,7 +36,7 @@ module Hanami
       #
       # If for some reason that won't happen, the instance of this class is
       # still referenced by the configuration and all the method invocations
-      # will raise a <tt>Hanami::Assets::MissingDigestManifestError</tt>.
+      # will raise a <tt>Hanami::Assets::MissingManifestFileError</tt>.
       #
       # @since 0.1.0
       # @api private
@@ -57,13 +57,13 @@ module Hanami
           @configuration = configuration
         end
 
-        # @raise [Hanami::Assets::MissingDigestManifestError]
+        # @raise [Hanami::Assets::MissingManifestFileError]
         #
         # @since 0.1.0
         # @api private
         def method_missing(*)
           ::Kernel.raise(
-            ::Hanami::Assets::MissingDigestManifestError.new(@configuration.manifest_path)
+            ::Hanami::Assets::MissingManifestFileError.new(@configuration.manifest_path)
           )
         end
       end
@@ -107,11 +107,11 @@ module Hanami
         #
         # @return [String] the digest path
         #
-        # @raise [Hanami::Assets::MissingDigestAssetError] when the asset can't be
+        # @raise [Hanami::Assets::MissingManifestAssetError] when the asset can't be
         #   found in manifest
         def resolve(asset)
           @assets.fetch(asset.to_s) do
-            raise Hanami::Assets::MissingDigestAssetError.new(asset, @manifest_path)
+            raise Hanami::Assets::MissingManifestAssetError.new(asset, @manifest_path)
           end
         end
 

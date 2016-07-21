@@ -311,7 +311,7 @@ describe Hanami::Assets::Configuration do
 
       describe 'with missing manifest' do
         it 'raises exception with correct message' do
-          exception = -> { @configuration.asset_path('application.js') }.must_raise Hanami::Assets::MissingDigestManifestError
+          exception = -> { @configuration.asset_path('application.js') }.must_raise Hanami::Assets::MissingManifestFileError
           exception.message.must_equal "Can't read manifest: #{@configuration.manifest_path}"
         end
       end
@@ -457,7 +457,7 @@ describe Hanami::Assets::Configuration do
 
       describe 'with missing manifest' do
         it 'raises exception with correct message' do
-          exception = -> { @configuration.asset_url('application.js') }.must_raise Hanami::Assets::MissingDigestManifestError
+          exception = -> { @configuration.asset_url('application.js') }.must_raise Hanami::Assets::MissingManifestFileError
           exception.message.must_equal "Can't read manifest: #{@configuration.manifest_path}"
         end
       end
@@ -491,7 +491,7 @@ describe Hanami::Assets::Configuration do
 
       describe 'with missing manifest' do
         it 'raises an exception' do
-          exception = -> { @configuration.subresource_integrity_value('application.js') }.must_raise Hanami::Assets::MissingDigestManifestError
+          exception = -> { @configuration.subresource_integrity_value('application.js') }.must_raise Hanami::Assets::MissingManifestFileError
           exception.message.must_equal "Can't read manifest: #{@configuration.manifest_path}"
         end
       end

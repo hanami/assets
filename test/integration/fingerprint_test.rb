@@ -25,7 +25,7 @@ describe 'Fingerprint mode' do
   end
 
   it 'raises error when referencing missing asset' do
-    exception = -> { Web::Views::Users::Show.render(format: :html) }.must_raise(Hanami::Assets::MissingDigestAssetError)
+    exception = -> { Web::Views::Users::Show.render(format: :html) }.must_raise(Hanami::Assets::MissingManifestAssetError)
     exception.message.must_equal "Can't find asset `/assets/missing.js' in manifest (#{Hanami::Assets.configuration.manifest_path})"
   end
 end

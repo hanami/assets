@@ -98,7 +98,7 @@ module Hanami
       #
       # @return [Hanami::Utils::Escape::SafeString] the markup
       #
-      # @raise [Hanami::Assets::MissingDigestAssetError] if digest mode is on and
+      # @raise [Hanami::Assets::MissingManifestAssetError] if digest mode is on and
       #   at least one of the given sources is missing from the manifest
       #
       # @since 0.1.0
@@ -195,7 +195,7 @@ module Hanami
       #
       # @return [Hanami::Utils::Escape::SafeString] the markup
       #
-      # @raise [Hanami::Assets::MissingDigestAssetError] if digest mode is on and
+      # @raise [Hanami::Assets::MissingManifestAssetError] if digest mode is on and
       #   at least one of the given sources is missing from the manifest
       #
       # @since 0.1.0
@@ -282,7 +282,7 @@ module Hanami
       #
       # @return [Hanami::Utils::Helpers::HtmlBuilder] the builder
       #
-      # @raise [Hanami::Assets::MissingDigestAssetError] if digest mode is on and
+      # @raise [Hanami::Assets::MissingManifestAssetError] if digest mode is on and
       #   the image is missing from the manifest
       #
       # @since 0.1.0
@@ -350,7 +350,7 @@ module Hanami
       #
       # @return [Hanami::Utils::Helpers::HtmlBuilder] the builder
       #
-      # @raise [Hanami::Assets::MissingDigestAssetError] if digest mode is on and
+      # @raise [Hanami::Assets::MissingManifestAssetError] if digest mode is on and
       #   the favicon is missing from the manifest
       #
       # @since 0.1.0
@@ -415,7 +415,7 @@ module Hanami
       #
       # @return [Hanami::Utils::Helpers::HtmlBuilder] the builder
       #
-      # @raise [Hanami::Assets::MissingDigestAssetError] if digest mode is on and
+      # @raise [Hanami::Assets::MissingManifestAssetError] if digest mode is on and
       #   the image is missing from the manifest
       #
       # @raise [ArgumentError] if source isn't specified both as argument or
@@ -533,7 +533,7 @@ module Hanami
       #
       # @return [Hanami::Utils::Helpers::HtmlBuilder] the builder
       #
-      # @raise [Hanami::Assets::MissingDigestAssetError] if digest mode is on and
+      # @raise [Hanami::Assets::MissingManifestAssetError] if digest mode is on and
       #   the image is missing from the manifest
       #
       # @raise [ArgumentError] if source isn't specified both as argument or
@@ -647,7 +647,7 @@ module Hanami
       #
       # @return [String] the asset path
       #
-      # @raise [Hanami::Assets::MissingDigestAssetError] if digest mode is on and
+      # @raise [Hanami::Assets::MissingManifestAssetError] if digest mode is on and
       #   the asset is missing from the manifest
       #
       # @since 0.1.0
@@ -694,7 +694,7 @@ module Hanami
       #
       # @return [String] the asset URL
       #
-      # @raise [Hanami::Assets::MissingDigestAssetError] if digest mode is on and
+      # @raise [Hanami::Assets::MissingManifestAssetError] if digest mode is on and
       #   the asset is missing from the manifest
       #
       # @since 0.1.0

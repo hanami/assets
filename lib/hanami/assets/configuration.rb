@@ -117,15 +117,15 @@ module Hanami
 
       # Digest mode
       #
-      # Determine if the helpers should generate the digest path for an asset.
+      # Determine if the helpers should generate the fingerprinted path for an asset.
       # Usually this is turned on in production mode.
       #
       # @since 0.1.0
-      def digest(value = nil)
+      def fingerprint(value = nil)
         if value.nil?
-          @digest
+          @fingerprint
         else
-          @digest = value
+          @fingerprint = value
         end
       end
 
@@ -412,8 +412,8 @@ module Hanami
         "#{@base_url}#{compile_path(source)}"
       end
 
-      # An array of digest algorithms to use for generating asset subresource
-      # integrity checks
+      # An array of crypographically secure hashing algorithms to use for
+      # generating asset subresource integrity checks
       #
       # @since 0.3.0
       def subresource_integrity_algorithms
@@ -502,7 +502,7 @@ module Hanami
         @prefix                = Utils::PathPrefix.new(DEFAULT_PREFIX)
         @subresource_integrity = false
         @cdn                   = false
-        @digest                = false
+        @fingerprint           = false
         @compile               = false
         @base_url              = nil
         @destination_directory = nil
@@ -522,7 +522,7 @@ module Hanami
       #
       # @since 0.1.0
       def load!
-        if (digest || subresource_integrity) && manifest_path.exist?
+        if (fingerprint || subresource_integrity) && manifest_path.exist?
           @digest_manifest = Config::DigestManifest.new(
             JSON.parse(manifest_path.read),
             manifest_path
@@ -592,7 +592,7 @@ module Hanami
       # @api private
       def compile_path(source)
         result = prefix.join(source)
-        result = digest_manifest.target(result) if digest
+        result = digest_manifest.target(result) if fingerprint
         result.to_s
       end
 

@@ -84,11 +84,15 @@ module Hanami
       # comes from the application or third party gems. It also accepts strings
       # representing absolute URLs in case of public CDN (eg. jQuery CDN).
       #
-      # If the "digest mode" is on, <tt>src</tt> is the digest version of the
-      # relative URL.
+      # If the "fingerprint mode" is on, <tt>src</tt> is the fingerprinted
+      # version of the relative URL.
       #
       # If the "CDN mode" is on, the <tt>src</tt> is an absolute URL of the
       # application CDN.
+      #
+      # If the "subresource integrity mode" is on, <tt>integriy</tt> is the
+      # name of the algorithm, then a hyphen, then the hash value of the file.
+      # If more than one algorithm is used, they'll be separated by a space.
       #
       # @param sources [Array<String>] one or more assets by name or absolute URL
       #
@@ -99,7 +103,7 @@ module Hanami
       #
       # @since 0.1.0
       #
-      # @see Hanami::Assets::Configuration#digest
+      # @see Hanami::Assets::Configuration#fingerprint
       # @see Hanami::Assets::Configuration#cdn
       # @see Hanami::Assets::Helpers#asset_path
       #
@@ -178,12 +182,15 @@ module Hanami
       # comes from the application or third party gems. It also accepts strings
       # representing absolute URLs in case of public CDN (eg. Bootstrap CDN).
       #
-      # If the "digest mode" is on, <tt>href</tt> is the digest version of the
-      # relative URL.
+      # If the "fingerprint mode" is on, <tt>href</tt> is the fingerprinted
+      # version of the relative URL.
       #
       # If the "CDN mode" is on, the <tt>href</tt> is an absolute URL of the
       # application CDN.
       #
+      # If the "subresource integrity mode" is on, <tt>integriy</tt> is the
+      # name of the algorithm, then a hyphen, then the hashed value of the file.
+      # If more than one algorithm is used, they'll be separated by a space.
       # @param sources [Array<String>] one or more assets by name or absolute URL
       #
       # @return [Hanami::Utils::Escape::SafeString] the markup
@@ -193,8 +200,9 @@ module Hanami
       #
       # @since 0.1.0
       #
-      # @see Hanami::Assets::Configuration#digest
+      # @see Hanami::Assets::Configuration#fingerprint
       # @see Hanami::Assets::Configuration#cdn
+      # @see Hanami::Assets::Configuration#subresource_integrity
       # @see Hanami::Assets::Helpers#asset_path
       #
       # @example Single Asset
@@ -264,8 +272,8 @@ module Hanami
       # <tt>alt</tt> Attribute is auto generated from <tt>src</tt>.
       # You can specify a different value, by passing the <tt>:src</tt> option.
       #
-      # If the "digest mode" is on, <tt>src</tt> is the digest version of the
-      # relative URL.
+      # If the "fingerprint mode" is on, <tt>src</tt> is the fingerprinted
+      # version of the relative URL.
       #
       # If the "CDN mode" is on, the <tt>src</tt> is an absolute URL of the
       # application CDN.
@@ -279,8 +287,9 @@ module Hanami
       #
       # @since 0.1.0
       #
-      # @see Hanami::Assets::Configuration#digest
+      # @see Hanami::Assets::Configuration#fingerprint
       # @see Hanami::Assets::Configuration#cdn
+      # @see Hanami::Assets::Configuration#subresource_integrity
       # @see Hanami::Assets::Helpers#asset_path
       #
       # @example Basic Usage
@@ -331,8 +340,8 @@ module Hanami
       #
       # It accepts one string representing the name of the asset.
       #
-      # If the "digest mode" is on, <tt>href</tt> is the digest version of the
-      # relative URL.
+      # If the "fingerprint mode" is on, <tt>href</tt> is the fingerprinted version
+      # of the relative URL.
       #
       # If the "CDN mode" is on, the <tt>href</tt> is an absolute URL of the
       # application CDN.
@@ -346,7 +355,7 @@ module Hanami
       #
       # @since 0.1.0
       #
-      # @see Hanami::Assets::Configuration#digest
+      # @see Hanami::Assets::Configuration#fingerprint
       # @see Hanami::Assets::Configuration#cdn
       # @see Hanami::Assets::Helpers#asset_path
       #
@@ -396,8 +405,8 @@ module Hanami
       # Alternatively, it accepts a block that allows to specify one or more
       # sources via the <tt>source</tt> tag.
       #
-      # If the "digest mode" is on, <tt>src</tt> is the digest version of the
-      # relative URL.
+      # If the "fingerprint mode" is on, <tt>src</tt> is the fingerprinted
+      # version of the relative URL.
       #
       # If the "CDN mode" is on, the <tt>src</tt> is an absolute URL of the
       # application CDN.
@@ -414,7 +423,7 @@ module Hanami
       #
       # @since 0.1.0
       #
-      # @see Hanami::Assets::Configuration#digest
+      # @see Hanami::Assets::Configuration#fingerprint
       # @see Hanami::Assets::Configuration#cdn
       # @see Hanami::Assets::Helpers#asset_path
       #
@@ -514,8 +523,8 @@ module Hanami
       # Alternatively, it accepts a block that allows to specify one or more
       # sources via the <tt>source</tt> tag.
       #
-      # If the "digest mode" is on, <tt>src</tt> is the digest version of the
-      # relative URL.
+      # If the "fingerprint mode" is on, <tt>src</tt> is the fingerprinted
+      # version of the relative URL.
       #
       # If the "CDN mode" is on, the <tt>src</tt> is an absolute URL of the
       # application CDN.
@@ -532,7 +541,7 @@ module Hanami
       #
       # @since 0.1.0
       #
-      # @see Hanami::Assets::Configuration#digest
+      # @see Hanami::Assets::Configuration#fingerprint
       # @see Hanami::Assets::Configuration#cdn
       # @see Hanami::Assets::Helpers#asset_path
       #
@@ -630,7 +639,7 @@ module Hanami
       #
       # Absolute URLs are returned as they are.
       #
-      # If Digest mode is on, it returns the digest path of the source
+      # If Fingerprint mode is on, it returns the fingerprinted path of the source
       #
       # If CDN mode is on, it returns the absolute URL of the asset.
       #
@@ -677,7 +686,7 @@ module Hanami
       #
       # Absolute URLs are returned as they are.
       #
-      # If Digest mode is on, it returns the digest URL of the source
+      # If Fingerprint mode is on, it returns the fingerprint URL of the source
       #
       # If CDN mode is on, it returns the absolute URL of the asset.
       #

@@ -44,12 +44,12 @@ module Hanami
       # @see Hanami::Assets::Configuration#manifest
       # @see Hanami::Assets::Configuration#manifest_path
       # @see Hanami::Assets::Configuration#digest
-      class NullDigestManifest < Utils::BasicObject
+      class NullManifest < Utils::BasicObject
         # Return a new instance
         #
         # @param configuration [Hanami::Assets::Configuration]
         #
-        # @return [Hanami::Assets::Config::NullDigestManifest] a new instance
+        # @return [Hanami::Assets::Config::NullManifest] a new instance
         #
         # @since 0.1.0
         # @api private
@@ -68,12 +68,12 @@ module Hanami
         end
       end
 
-      # Digest manifest
+      # Manifest file
       #
       # @since 0.1.0
       # @api private
-      class DigestManifest
-        # @since 0.3.0
+      class Manifest
+        # @since x.x.x
         # @api private
         TARGET                = 'target'.freeze
 

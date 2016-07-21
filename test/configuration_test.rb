@@ -279,11 +279,11 @@ describe Hanami::Assets::Configuration do
 
       describe 'with manifest' do
         before do
-          manifest = Hanami::Assets::Config::DigestManifest.new({
-                                                                  '/assets/application.js' => {
-                                                                    'target' => '/assets/application-abc123.js'
-                                                                  }
-                                                                }, [])
+          manifest = Hanami::Assets::Config::Manifest.new({
+            '/assets/application.js' => {
+              'target' => '/assets/application-abc123.js'
+            }
+          }, [])
           @configuration.instance_variable_set(:@digest_manifest, manifest)
         end
 
@@ -443,7 +443,7 @@ describe Hanami::Assets::Configuration do
 
       describe 'with manifest' do
         before do
-          manifest = Hanami::Assets::Config::DigestManifest.new({ '/assets/application.js' => { 'target' => '/assets/application-abc123.js' } }, [])
+          manifest = Hanami::Assets::Config::Manifest.new({ '/assets/application.js' => { 'target' => '/assets/application-abc123.js' } }, [])
 
           @configuration.load!
           @configuration.instance_variable_set(:@digest_manifest, manifest)
@@ -472,7 +472,7 @@ describe Hanami::Assets::Configuration do
 
       describe 'with manifest' do
         before do
-          manifest = Hanami::Assets::Config::DigestManifest.new({
+          manifest = Hanami::Assets::Config::Manifest.new({
                                                                   '/assets/application.js' => {
                                                                     'target' => '/assets/application-abc123.js',
                                                                     'sri' => ['sha0-456def']
@@ -547,8 +547,8 @@ describe Hanami::Assets::Configuration do
     end
 
     it 'sets default value fore digest manifest' do
-      assert @configuration.digest_manifest.class == Hanami::Assets::Config::NullDigestManifest,
-             'Expected @configuration.digest_manifest to be instance of Hanami::Assets::Configuration::NullDigestManifest'
+      assert @configuration.digest_manifest.class == Hanami::Assets::Config::NullManifest,
+             'Expected @configuration.digest_manifest to be instance of Hanami::Assets::Configuration::NullManifest'
     end
   end
 

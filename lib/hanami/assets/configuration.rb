@@ -506,7 +506,7 @@ module Hanami
         @compile               = false
         @base_url              = nil
         @destination_directory = nil
-        @digest_manifest       = Config::NullDigestManifest.new(self)
+        @digest_manifest       = Config::NullManifest.new(self)
 
         @javascript_compressor = nil
         @stylesheet_compressor = nil
@@ -523,8 +523,8 @@ module Hanami
       # @since 0.1.0
       def load!
         if (fingerprint || subresource_integrity) && manifest_path.exist?
-          @digest_manifest = Config::DigestManifest.new(
-            JSON.parse(manifest_path.read),
+          @digest_manifest = Config::Manifest.new(
+            JSON.load(manifest_path.read),
             manifest_path
           )
         end

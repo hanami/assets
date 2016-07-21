@@ -368,7 +368,7 @@ describe Hanami::Assets::Helpers do
     view.class.assets_configuration.subresource_integrity true
     view.class.assets_configuration.load!
 
-    manifest = Hanami::Assets::Config::DigestManifest.new({
+    manifest = Hanami::Assets::Config::Manifest.new({
                                                             '/assets/feature-a.js' => {
                                                               'sri' => [
                                                                 'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC'

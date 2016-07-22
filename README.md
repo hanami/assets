@@ -372,19 +372,19 @@ Hanami::Assets.configure do
 end
 ```
 
-### Digest Mode
+### Fingerprint Mode
 
 This is a mode that can be activated via configuration and it's suitable for production environments.
-When generating files, it adds a string to the end of each file name, which is a cachesum of its contents.
+When generating files, it adds a string to the end of each file name, which is a [checksum](https://en.wikipedia.org/wiki/Checksum).
 This lets you leverage caching while still ensuring that clients get the most up-to-date assets (this is known as *cache busting*).
 
 ```ruby
 Hanami::Assets.configure do
-  digest true
+  fingerprint true
 end
 ```
 
-Once turned on, it will look at `/public/assets.json`, and helpers such as `javascript` will return a relative URL that includes the digest of the asset.
+Once turned on, it will look at `/public/assets.json`, and helpers such as `javascript` will return a relative URL that includes the fingerprint of the asset.
 
 ```erb
 <%= javascript 'application' %>

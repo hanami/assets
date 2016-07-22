@@ -1,7 +1,7 @@
 module Hanami
   module Assets
     # This error is raised when the application starts but can't be load the
-    # digest manifest.
+    # manifest file.
     #
     # @since 0.1.0
     # @api private
@@ -12,7 +12,7 @@ module Hanami
     end
 
     # This error is raised when an asset is referenced from the DOM, but it's
-    # not present in the digest manifest
+    # not present in the manifest
     #
     # @since 0.1.0
     # @api private
@@ -27,9 +27,9 @@ module Hanami
     # @since 0.1.0
     # @api private
     module Config
-      # Default value for configuration's digest manifest.
+      # Default value for configuration's manifest.
       #
-      # It indicates that the digest manifest wasn't loaded yet.
+      # It indicates that the manifest wasn't loaded yet.
       #
       # At the load time, this should be replaced by an instance of
       # <tt>Hanami::Assets::Config::Manifest</tt>.
@@ -43,7 +43,7 @@ module Hanami
       #
       # @see Hanami::Assets::Configuration#manifest
       # @see Hanami::Assets::Configuration#manifest_path
-      # @see Hanami::Assets::Configuration#digest
+      # @see Hanami::Assets::Configuration#fingerprint
       class NullManifest < Utils::BasicObject
         # Return a new instance
         #
@@ -83,8 +83,8 @@ module Hanami
 
         # Return a new instance
         #
-        # @param assets [Hash] the content of the digest manifest
-        # @param manifest_path [Pathname] the path to the digest manifest
+        # @param assets [Hash] the content of the manifest
+        # @param manifest_path [Pathname] the path to the manifest
         #
         # @return [Hanami::Assets::Config::Manifest] a new instance
         #
@@ -98,14 +98,14 @@ module Hanami
           @manifest_path = manifest_path
         end
 
-        # Resolve the given asset into a digest path
+        # Resolve the given asset into a fingerprinted path
         #
         # For a given path <tt>/assets/application.js</tt> it will return
         # <tt>/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js</tt>
         #
         # @param asset [#to_s] the relative asset path
         #
-        # @return [String] the digest path
+        # @return [String] the fingerprinted path
         #
         # @raise [Hanami::Assets::MissingManifestAssetError] when the asset can't be
         #   found in manifest

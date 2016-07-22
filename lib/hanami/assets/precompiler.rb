@@ -37,14 +37,14 @@ module Hanami
 
       private
 
-      # @since x.x.x
+      # @since 0.3.0
       # @api private
       def clear_assets_directory
         delete @configuration.manifest_path
         delete @configuration.destination_directory
       end
 
-      # @since x.x.x
+      # @since 0.3.0
       # @api private
       def clear_manifest(manifest)
         JSON.load(manifest).each do |_, asset_hash|
@@ -85,7 +85,7 @@ module Hanami
         end
       end
 
-      # @since x.x.x
+      # @since 0.3.0
       # @api private
       def delete(path)
         FileUtils.rm_rf(path) if path.exist?

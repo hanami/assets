@@ -54,11 +54,11 @@ module Hanami
       # @api private
       DEFAULT_FAVICON = 'favicon.ico'.freeze
 
-      # @since x.x.x
+      # @since 0.3.0
       # @api private
       CROSSORIGIN_ANONYMOUS = 'anonymous'.freeze
 
-      # @since x.x.x
+      # @since 0.3.0
       # @api private
       ABSOLUTE_URL_MATCHER = URI::Parser.new.make_regexp
 

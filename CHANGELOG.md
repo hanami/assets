@@ -1,7 +1,7 @@
 # Hanami::Assets
 Assets management for Ruby web applications
 
-## v0.3.0 - (unreleased)
+## v0.3.0 - 2016-07-22
 ### Added
 - [Matthew Gibbons & Sean Collins] Subresource Integrity (SRI)
 - [Matthew Gibbons & Sean Collins] Allow `javascript` and `stylesheet` helpers to accept a Hash representing HTML attributes. Eg. `<%= javascript 'application', async: true %>`

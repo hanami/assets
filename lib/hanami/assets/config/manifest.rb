@@ -73,11 +73,11 @@ module Hanami
       # @since 0.1.0
       # @api private
       class DigestManifest
-        # @since x.x.x
+        # @since 0.3.0
         # @api private
         TARGET                = 'target'.freeze
 
-        # @since x.x.x
+        # @since 0.3.0
         # @api private
         SUBRESOURCE_INTEGRITY = 'sri'.freeze
 
@@ -115,13 +115,13 @@ module Hanami
           end
         end
 
-        # @since x.x.x
+        # @since 0.3.0
         # @api private
         def target(path)
           resolve(path).fetch(TARGET)
         end
 
-        # @since x.x.x
+        # @since 0.3.0
         # @api private
         def subresource_integrity_values(path)
           resolve(path).fetch(SUBRESOURCE_INTEGRITY)

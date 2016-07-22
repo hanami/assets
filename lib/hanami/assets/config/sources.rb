@@ -17,7 +17,7 @@ module Hanami
       #
       # TODO The perf of this class is poor, consider to improve it.
       class Sources < Utils::LoadPaths
-        # @since x.x.x
+        # @since 0.3.0
         # @api private
         SKIPPED_FILE_PREFIX = '_'.freeze
 

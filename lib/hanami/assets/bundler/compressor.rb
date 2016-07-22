@@ -3,20 +3,20 @@ module Hanami
     class Bundler
       # Compresses a JS or CSS file
       #
-      # @since x.x.x
+      # @since 0.3.0
       # @api private
       class Compressor
-        # @since x.x.x
+        # @since 0.3.0
         # @api private
         JAVASCRIPT_EXT      = '.js'.freeze
 
-        # @since x.x.x
+        # @since 0.3.0
         # @api private
         STYLESHEET_EXT      = '.css'.freeze
 
         # Return a new instance
         #
-        # @since x.x.x
+        # @since 0.3.0
         # @api private
         def initialize(path, configuration)
           @path = path
@@ -25,7 +25,7 @@ module Hanami
 
         # @return [String, nil] the compressed contents of the file OR nil if it's not compressable
         #
-        # @since x.x.x
+        # @since 0.3.0
         # @api private
         def compress
           case File.extname(@path)
@@ -36,13 +36,13 @@ module Hanami
 
         private
 
-        # @since x.x.x
+        # @since 0.3.0
         # @api private
         def compressor(type)
           @configuration.__send__(:"#{ type }_compressor")
         end
 
-        # @since x.x.x
+        # @since 0.3.0
         # @api private
         def _compress(compressor)
           compressor.compress(@path)

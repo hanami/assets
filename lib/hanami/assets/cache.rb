@@ -13,10 +13,10 @@ module Hanami
     class Cache
       # File cache entry
       #
-      # @since x.x.x
+      # @since 0.3.0
       # @api private
       class File
-        # @since x.x.x
+        # @since 0.3.0
         # @api private
         def initialize(file, mtime: nil, dependencies: nil)
           @file  = file.is_a?(String) ? Pathname.new(file) : file
@@ -25,7 +25,7 @@ module Hanami
           @dependencies = (dependencies || []).map { |d| self.class.new(d) }
         end
 
-        # @since x.x.x
+        # @since 0.3.0
         # @api private
         def modified?(other)
           file = other.is_a?(self.class) ? other : self.class.new(other)
@@ -40,21 +40,21 @@ module Hanami
 
         protected
 
-        # @since x.x.x
+        # @since 0.3.0
         # @api private
         attr_reader :mtime
 
-        # @since x.x.x
+        # @since 0.3.0
         # @api private
         attr_reader :dependencies
 
-        # @since x.x.x
+        # @since 0.3.0
         # @api private
         def modified_dependencies?(other)
           dependencies.all? { |dep| dep.mtime > other.mtime }
         end
 
-        # @since x.x.x
+        # @since 0.3.0
         # @api private
         def dependencies?
           dependencies.any?
@@ -75,7 +75,7 @@ module Hanami
       #
       # @return [TrueClass,FalseClass] the result of the check
       #
-      # @since x.x.x
+      # @since 0.3.0
       # @api private
       def modified?(file)
         @mutex.synchronize do

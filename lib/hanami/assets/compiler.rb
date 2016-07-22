@@ -43,12 +43,12 @@ module Hanami
 
       include Utils::ClassAttribute
 
-      # @since x.x.x
+      # @since 0.3.0
       # @api private
       class_attribute :subclasses
       self.subclasses = Set.new
 
-      # @since x.x.x
+      # @since 0.3.0
       # @api private
       def self.inherited(subclass)
         super
@@ -74,7 +74,7 @@ module Hanami
         fabricate(configuration, name).compile
       end
 
-      # @since x.x.x
+      # @since 0.3.0
       # @api private
       def self.fabricate(configuration, name)
         source = configuration.source(name)
@@ -85,7 +85,7 @@ module Hanami
         engine.new(configuration, name)
       end
 
-      # @since x.x.x
+      # @since 0.3.0
       # @api private
       def self.eligible?(_name)
         true
@@ -170,7 +170,7 @@ module Hanami
           source.exist?
       end
 
-      # @since x.x.x
+      # @since 0.3.0
       # @api private
       def modified?
         !destination.exist? ||
@@ -219,19 +219,19 @@ module Hanami
         self.class.cache
       end
 
-      # @since x.x.x
+      # @since 0.3.0
       # @api private
       def renderer
         Tilt.new(source)
       end
 
-      # @since x.x.x
+      # @since 0.3.0
       # @api private
       def dependencies
         nil
       end
 
-      # @since x.x.x
+      # @since 0.3.0
       # @api private
       def load_paths
         result = []

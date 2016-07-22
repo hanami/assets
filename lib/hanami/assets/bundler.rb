@@ -71,7 +71,7 @@ module Hanami
 
       private
 
-      # @since x.x.x
+      # @since 0.3.0
       # @api private
       def process(asset)
         compress_in_place!(asset)
@@ -79,21 +79,21 @@ module Hanami
         @manifest.merge!(ManifestEntry.new(asset).entry)
       end
 
-      # @since x.x.x
+      # @since 0.3.0
       # @api private
       def copy_to_fingerprinted_location!(asset)
         FileUtils.cp(asset.path, asset.fingerprinted_target)
         _set_permissions(asset.fingerprinted_target)
       end
 
-      # @since x.x.x
+      # @since 0.3.0
       # @api private
       def compress_in_place!(asset)
         compressed = Compressor.new(asset.path, asset.configuration).compress
         _write(asset.path, compressed) unless compressed.nil?
       end
 
-      # @since x.x.x
+      # @since 0.3.0
       # @api private
       def write_manifest_file
         _write(@configuration.manifest_path, JSON.dump(@manifest))
@@ -127,7 +127,7 @@ module Hanami
         ::File.chmod(DEFAULT_PERMISSIONS, path)
       end
 
-      # @since x.x.x
+      # @since 0.3.0
       # @api private
       def _configuration_for(asset)
         url = _convert_to_url(asset)

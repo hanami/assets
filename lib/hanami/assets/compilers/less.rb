@@ -3,14 +3,14 @@ module Hanami
     module Compilers
       # LESS compiler
       #
-      # @since x.x.x
+      # @since 0.3.0
       # @api private
       class Less < Compiler
-        # @since x.x.x
+        # @since 0.3.0
         # @api private
         EXTENSIONS = /\.(less)\z/
 
-        # @since x.x.x
+        # @since 0.3.0
         # @api private
         def self.eligible?(name)
           name.to_s =~ EXTENSIONS
@@ -18,7 +18,7 @@ module Hanami
 
         private
 
-        # @since x.x.x
+        # @since 0.3.0
         # @api private
         def renderer
           Tilt.new(source, nil, paths: load_paths)

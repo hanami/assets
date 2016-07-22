@@ -99,7 +99,7 @@ module Hanami
 
     # Duplicate the framework and generate modules for the target application
     #
-    # @param mod [Module] the Ruby namespace of the application
+    # @param _mod [Module] the Ruby namespace of the application
     # @param blk [Proc] an optional block to configure the framework
     #
     # @return [Module] a copy of Hanami::Assets

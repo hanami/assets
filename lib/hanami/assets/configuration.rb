@@ -345,11 +345,11 @@ module Hanami
       # Manifest path from public directory
       #
       # @since 0.1.0
-      def manifest(value = nil)
+      def manifest_name(value = nil)
         if value.nil?
-          @manifest
+          @manifest_name
         else
-          @manifest = value.to_s
+          @manifest_name = value.to_s
         end
       end
 
@@ -358,7 +358,7 @@ module Hanami
       # @since 0.1.0
       # @api private
       def manifest_path
-        public_directory.join(manifest)
+        public_directory.join(manifest_name)
       end
 
       # Application's assets sources
@@ -485,7 +485,7 @@ module Hanami
           c.cdn                   = cdn
           c.compile               = compile
           c.public_directory      = public_directory
-          c.manifest              = manifest
+          c.manifest_name         = manifest_name
           c.sources               = sources.dup
           c.javascript_compressor = javascript_compressor
           c.stylesheet_compressor = stylesheet_compressor
@@ -513,7 +513,7 @@ module Hanami
 
         root             Dir.pwd
         public_directory root.join(DEFAULT_PUBLIC_DIRECTORY)
-        manifest         DEFAULT_MANIFEST
+        manifest_name    DEFAULT_MANIFEST
       end
 
       # Load the configuration
@@ -572,7 +572,7 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      attr_writer :manifest
+      attr_writer :manifest_name
 
       # @since 0.1.0
       # @api private
@@ -592,7 +592,7 @@ module Hanami
       # @api private
       def compile_path(source)
         result = prefix.join(source)
-        result = manifest.target(result) if fingerprint
+        result = @manifest.target(result) if fingerprint
         result.to_s
       end
 

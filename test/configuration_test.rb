@@ -234,25 +234,25 @@ describe Hanami::Assets::Configuration do
     end
   end
 
-  describe '#manifest' do
+  describe '#manifest_name' do
     it 'defaults to "assets.json"' do
-      @configuration.manifest.must_equal 'assets.json'
+      @configuration.manifest_name.must_equal 'assets.json'
     end
 
     it 'allows to set a relative path' do
-      @configuration.manifest            'manifest.json'
-      @configuration.manifest.must_equal 'manifest.json'
+      @configuration.manifest_name            'manifest.json'
+      @configuration.manifest_name.must_equal 'manifest.json'
     end
   end
 
   describe '#manifest_path' do
     it 'joins #manifest with #public_directory' do
-      expected = @configuration.public_directory.join(@configuration.manifest)
+      expected = @configuration.public_directory.join(@configuration.manifest_name)
       @configuration.manifest_path.must_equal expected
     end
 
     it 'returns absolute path, if #manifest is absolute path' do
-      @configuration.manifest expected = __dir__ + '/manifest.json'
+      @configuration.manifest_name expected = __dir__ + '/manifest.json'
       @configuration.manifest_path.must_equal Pathname.new(expected)
     end
   end
@@ -506,7 +506,7 @@ describe Hanami::Assets::Configuration do
       @configuration.prefix 'prfx'
       @configuration.javascript_compressor :yui
       @configuration.stylesheet_compressor :yui
-      @configuration.manifest 'assets.json'
+      @configuration.manifest_name 'assets.json'
       @configuration.public_directory(Dir.pwd + '/tmp')
       @configuration.instance_variable_set(:@manifest, {})
 
@@ -543,7 +543,7 @@ describe Hanami::Assets::Configuration do
     end
 
     it 'sets default value for manifest' do
-      @configuration.manifest.must_equal('assets.json')
+      @configuration.manifest_name.must_equal('assets.json')
     end
 
     it 'sets default value for manifest' do
@@ -562,7 +562,7 @@ describe Hanami::Assets::Configuration do
       @configuration.host                  'hanamirb.org'
       @configuration.port                  '8080'
       @configuration.prefix                '/foo'
-      @configuration.manifest              'm.json'
+      @configuration.manifest_name         'm.json'
       @configuration.javascript_compressor :yui
       @configuration.stylesheet_compressor :yui
       @configuration.root                  __dir__
@@ -580,7 +580,7 @@ describe Hanami::Assets::Configuration do
       @config.host.must_equal                  'hanamirb.org'
       @config.port.must_equal                  '8080'
       @config.prefix.must_equal                '/foo'
-      @config.manifest.must_equal              'm.json'
+      @config.manifest_name.must_equal         'm.json'
       @config.javascript_compressor.must_equal :yui
       @config.stylesheet_compressor.must_equal :yui
       @config.root.must_equal                  Pathname.new(__dir__)
@@ -597,7 +597,7 @@ describe Hanami::Assets::Configuration do
       @config.host                  'example.org'
       @config.port                  '9091'
       @config.prefix                '/bar'
-      @config.manifest              'a.json'
+      @config.manifest_name         'a.json'
       @config.javascript_compressor :uglify
       @config.stylesheet_compressor :uglify
       @config.root                  __dir__ + '/fixtures'
@@ -611,7 +611,7 @@ describe Hanami::Assets::Configuration do
       @config.host.must_equal                  'example.org'
       @config.port.must_equal                  '9091'
       @config.prefix.must_equal                '/bar'
-      @config.manifest.must_equal              'a.json'
+      @config.manifest_name.must_equal         'a.json'
       @config.javascript_compressor.must_equal :uglify
       @config.stylesheet_compressor.must_equal :uglify
       @config.root.must_equal                  Pathname.new(__dir__ + '/fixtures')
@@ -626,7 +626,7 @@ describe Hanami::Assets::Configuration do
       @configuration.host.must_equal                  'hanamirb.org'
       @configuration.port.must_equal                  '8080'
       @configuration.prefix.must_equal                '/foo'
-      @configuration.manifest.must_equal              'm.json'
+      @configuration.manifest_name.must_equal         'm.json'
       @configuration.javascript_compressor.must_equal :yui
       @configuration.stylesheet_compressor.must_equal :yui
       @configuration.root.must_equal                  Pathname.new(__dir__)

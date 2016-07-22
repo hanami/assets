@@ -115,7 +115,7 @@ module Hanami
         end
       end
 
-      # Digest mode
+      # Fingerprint mode
       #
       # Determine if the helpers should generate the fingerprinted path for an asset.
       # Usually this is turned on in production mode.

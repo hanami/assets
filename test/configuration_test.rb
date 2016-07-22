@@ -546,7 +546,7 @@ describe Hanami::Assets::Configuration do
       @configuration.manifest.must_equal('assets.json')
     end
 
-    it 'sets default value fore digest manifest' do
+    it 'sets default value for manifest' do
       assert @configuration.manifest.class == Hanami::Assets::Config::NullManifest,
              'Expected @configuration.manifest to be instance of Hanami::Assets::Configuration::NullManifest'
     end

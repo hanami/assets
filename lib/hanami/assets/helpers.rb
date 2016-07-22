@@ -98,8 +98,9 @@ module Hanami
       #
       # @return [Hanami::Utils::Escape::SafeString] the markup
       #
-      # @raise [Hanami::Assets::MissingManifestAssetError] if digest mode is on and
-      #   at least one of the given sources is missing from the manifest
+      # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
+      # `subresource_integrity` modes are on and the javascript file is missing
+      # from the manifest
       #
       # @since 0.1.0
       #
@@ -150,7 +151,7 @@ module Hanami
       #
       #   # <script src="https://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
       #
-      # @example Digest Mode
+      # @example Fingerprint Mode
       #
       #   <%= javascript 'application' %>
       #
@@ -195,8 +196,9 @@ module Hanami
       #
       # @return [Hanami::Utils::Escape::SafeString] the markup
       #
-      # @raise [Hanami::Assets::MissingManifestAssetError] if digest mode is on and
-      #   at least one of the given sources is missing from the manifest
+      # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
+      # `subresource_integrity` modes are on and the stylesheet file is missing
+      # from the manifest
       #
       # @since 0.1.0
       #
@@ -236,7 +238,7 @@ module Hanami
       #
       #   # <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css" rel="stylesheet">
       #
-      # @example Digest Mode
+      # @example Fingerprint Mode
       #
       #   <%= stylesheet 'application' %>
       #
@@ -282,8 +284,9 @@ module Hanami
       #
       # @return [Hanami::Utils::Helpers::HtmlBuilder] the builder
       #
-      # @raise [Hanami::Assets::MissingManifestAssetError] if digest mode is on and
-      #   the image is missing from the manifest
+      # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
+      # `subresource_integrity` modes are on and the image file is missing
+      # from the manifest
       #
       # @since 0.1.0
       #
@@ -316,7 +319,7 @@ module Hanami
       #
       #   # <img src="https://example-cdn.com/images/logo.png" alt="Logo">
       #
-      # @example Digest Mode
+      # @example Fingerprint Mode
       #
       #   <%= image 'logo.png' %>
       #
@@ -350,8 +353,9 @@ module Hanami
       #
       # @return [Hanami::Utils::Helpers::HtmlBuilder] the builder
       #
-      # @raise [Hanami::Assets::MissingManifestAssetError] if digest mode is on and
-      #   the favicon is missing from the manifest
+      # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
+      # `subresource_integrity` modes are on and the favicon is file missing
+      # from the manifest
       #
       # @since 0.1.0
       #
@@ -377,7 +381,7 @@ module Hanami
       #
       #   # <link id: "fav" href="/assets/favicon.ico" rel="shortcut icon" type="image/x-icon">
       #
-      # @example Digest Mode
+      # @example Fingerprint Mode
       #
       #   <%= favicon %>
       #
@@ -415,8 +419,9 @@ module Hanami
       #
       # @return [Hanami::Utils::Helpers::HtmlBuilder] the builder
       #
-      # @raise [Hanami::Assets::MissingManifestAssetError] if digest mode is on and
-      #   the image is missing from the manifest
+      # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
+      # `subresource_integrity` modes are on and the video file is missing
+      # from the manifest
       #
       # @raise [ArgumentError] if source isn't specified both as argument or
       #   tag inside the given block
@@ -498,7 +503,7 @@ module Hanami
       #
       #   # ArgumentError
       #
-      # @example Digest Mode
+      # @example Fingerprint Mode
       #
       #   <%= video 'movie.mp4' %>
       #
@@ -533,8 +538,9 @@ module Hanami
       #
       # @return [Hanami::Utils::Helpers::HtmlBuilder] the builder
       #
-      # @raise [Hanami::Assets::MissingManifestAssetError] if digest mode is on and
-      #   the image is missing from the manifest
+      # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
+      # `subresource_integrity` modes are on and the audio file is missing
+      # from the manifest
       #
       # @raise [ArgumentError] if source isn't specified both as argument or
       #   tag inside the given block
@@ -616,7 +622,7 @@ module Hanami
       #
       #   # ArgumentError
       #
-      # @example Digest Mode
+      # @example Fingerprint Mode
       #
       #   <%= audio 'song.ogg' %>
       #
@@ -647,8 +653,9 @@ module Hanami
       #
       # @return [String] the asset path
       #
-      # @raise [Hanami::Assets::MissingManifestAssetError] if digest mode is on and
-      #   the asset is missing from the manifest
+      # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
+      # `subresource_integrity` modes are on and the asset is missing
+      # from the manifest
       #
       # @since 0.1.0
       #
@@ -664,7 +671,7 @@ module Hanami
       #
       #   # "https://code.jquery.com/jquery-2.1.4.min.js"
       #
-      # @example Digest Mode
+      # @example Fingerprint Mode
       #
       #   <%= asset_path 'application.js' %>
       #
@@ -694,8 +701,9 @@ module Hanami
       #
       # @return [String] the asset URL
       #
-      # @raise [Hanami::Assets::MissingManifestAssetError] if digest mode is on and
-      #   the asset is missing from the manifest
+      # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
+      # `subresource_integrity` modes are on and the asset is missing
+      # from the manifest
       #
       # @since 0.1.0
       #
@@ -711,7 +719,7 @@ module Hanami
       #
       #   # "https://code.jquery.com/jquery-2.1.4.min.js"
       #
-      # @example Digest Mode
+      # @example Fingerprint Mode
       #
       #   <%= asset_url 'application.js' %>
       #

@@ -6,7 +6,7 @@ unless ENV['TRAVIS']
   gem 'yard',   require: false
 end
 
-gem 'hanami-utils',   '~> 0.8', github: 'hanami/utils',   branch: '0.8.x'
+gem 'hanami-utils',   '~> 0.8', github: 'hanami/utils',   branch: 'master'
 gem 'hanami-helpers', '~> 0.4', github: 'hanami/helpers', branch: '0.4.x'
 gem 'hanami-view',    '~> 0.7', github: 'hanami/view',    branch: '0.7.x'
 

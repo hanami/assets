@@ -280,10 +280,10 @@ describe Hanami::Assets::Configuration do
       describe 'with manifest' do
         before do
           manifest = Hanami::Assets::Config::Manifest.new({
-            '/assets/application.js' => {
-              'target' => '/assets/application-abc123.js'
-            }
-          }, [])
+                                                            '/assets/application.js' => {
+                                                              'target' => '/assets/application-abc123.js'
+                                                            }
+                                                          }, [])
           @configuration.instance_variable_set(:@manifest, manifest)
         end
 
@@ -473,11 +473,11 @@ describe Hanami::Assets::Configuration do
       describe 'with manifest' do
         before do
           manifest = Hanami::Assets::Config::Manifest.new({
-                                                                  '/assets/application.js' => {
-                                                                    'target' => '/assets/application-abc123.js',
-                                                                    'sri' => ['sha0-456def']
-                                                                  }
-                                                                }, [])
+                                                            '/assets/application.js' => {
+                                                              'target' => '/assets/application-abc123.js',
+                                                              'sri' => ['sha0-456def']
+                                                            }
+                                                          }, [])
 
           @configuration.load!
           @configuration.instance_variable_set(:@manifest, manifest)

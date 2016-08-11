@@ -369,17 +369,17 @@ describe Hanami::Assets::Helpers do
     view.class.assets_configuration.load!
 
     manifest = Hanami::Assets::Config::Manifest.new({
-                                                            '/assets/feature-a.js' => {
-                                                              'sri' => [
-                                                                'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC'
-                                                              ]
-                                                            },
-                                                            '/assets/main.css' => {
-                                                              'sri' => [
-                                                                'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC'
-                                                              ]
-                                                            }
-                                                          }, [])
+                                                      '/assets/feature-a.js' => {
+                                                        'sri' => [
+                                                          'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC'
+                                                        ]
+                                                      },
+                                                      '/assets/main.css' => {
+                                                        'sri' => [
+                                                          'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC'
+                                                        ]
+                                                      }
+                                                    }, [])
     view.class.assets_configuration.instance_variable_set(:@manifest, manifest)
   end
 

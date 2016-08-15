@@ -35,7 +35,7 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      COMPILE_PATTERN = '*.*.*'.freeze # Example hello.js.es6
+      COMPILE_PATTERN = /.*[.].*[.].*/ # Example hello.js.es6 or hello.core.js.es6
 
       # @since 0.1.0
       # @api private
@@ -157,7 +157,7 @@ module Hanami
         result = ::File.basename(@name)
 
         if compile?
-          result.scan(/\A[[[:alnum:]][\-\_]]*\.[[\w]]*/).first || result
+          result.scan(/\A[[[:alnum:]][\-\_].]*\.[[\w]]*/).first || result
         else
           result
         end
@@ -180,7 +180,7 @@ module Hanami
       # @since 0.1.0
       # @api private
       def compile?
-        @compile ||= ::File.fnmatch(COMPILE_PATTERN, ::File.basename(source.to_s)) &&
+        @compile ||= COMPILE_PATTERN.match(::File.basename(source.to_s)) &&
                      !EXTENSIONS[::File.extname(source.to_s)]
       end
 

@@ -85,6 +85,14 @@ describe 'Compiler' do
     target.stat.mode.to_s(8).must_equal('100644')
   end
 
+  it 'compiles assets with dots in name' do
+    Hanami::Assets::Compiler.compile(@config, 'person.foo.bar.js')
+
+    target = @config.public_directory.join('assets', 'person.foo.bar.js')
+    target.read.must_match %(function Person(firstName, lastName))
+    target.stat.mode.to_s(8).must_equal('100644')
+  end
+
   it 'compiles sass asset' do
     Hanami::Assets::Compiler.compile(@config, 'compile-sass.css')
 

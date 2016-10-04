@@ -53,6 +53,17 @@ module Hanami
       Bundler.new(configuration,     duplicates).run
     end
 
+    # Precompile assets
+    #
+    # @since x.x.x
+    def self.precompile(configurations)
+      require 'hanami/assets/precompiler'
+      require 'hanami/assets/bundler'
+
+      Precompiler.new(configuration, configurations).run
+      Bundler.new(configuration,     configurations).run
+    end
+
     # Preload the framework
     #
     # This MUST be used in production mode

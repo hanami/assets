@@ -38,11 +38,7 @@ module Hanami
       def initialize(configuration, duplicates)
         @manifest       = Hash[]
         @configuration  = configuration
-        @configurations = if duplicates.empty?
-                            [@configuration]
-                          else
-                            duplicates.map(&:configuration)
-                          end
+        @duplicates     = duplicates
       end
 
       # Start the process.
@@ -132,7 +128,7 @@ module Hanami
       def _configuration_for(asset)
         url = _convert_to_url(asset)
 
-        @configurations.find { |config| url.start_with?(config.prefix) } ||
+        configurations.find { |config| url.start_with?(config.prefix) } ||
           @configuration
       end
 
@@ -140,6 +136,16 @@ module Hanami
       # @api private
       def public_directory
         @configuration.public_directory
+      end
+
+      # @since x.x.x
+      # @api private
+      def configurations
+        if @duplicates.empty?
+          [@configuration]
+        else
+          @duplicates.map { |dup| dup.respond_to?(:configuration) ? dup.configuration : dup }
+        end
       end
     end
   end

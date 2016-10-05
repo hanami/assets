@@ -96,8 +96,9 @@ module Hanami
       #
       # @since 0.1.0
       # @api private
-      def initialize
+      def initialize(&blk)
         reset!
+        instance_eval(&blk) if block_given?
       end
 
       # Compile mode

@@ -1,3 +1,11 @@
+AllCops:
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+  ExtraDetails: false
+  Exclude:
+    - 'vendor/**/*'
+    - 'lib/hanami/assets/compressors/*'
+    - 'test/fixtures/**/*.gemspec'
 Metrics/LineLength:
   Enabled: false
 Style/RaiseArgs:
@@ -6,8 +14,8 @@ Style/WhileUntilModifier:
   Enabled: false
 Style/MethodMissing:
   Enabled: false
-
-AllCops:
+Style/TernaryParentheses:
+  Enabled: false
+Metrics/BlockLength:
   Exclude:
-    - 'vendor/**/*'
-    - 'lib/hanami/assets/compressors/*'
+    - 'test/**/*'

@@ -431,11 +431,11 @@ module Hanami
       # @since 0.3.0
       # @api private
       def subresource_integrity_value(source)
-        if subresource_integrity
-          digest_manifest.subresource_integrity_values(
-            prefix.join(source)
-          ).join(SUBRESOURCE_INTEGRITY_SEPARATOR)
-        end
+        return unless subresource_integrity
+
+        digest_manifest.subresource_integrity_values(
+          prefix.join(source)
+        ).join(SUBRESOURCE_INTEGRITY_SEPARATOR)
       end
 
       # Load Javascript compressor
@@ -524,7 +524,7 @@ module Hanami
       def load!
         if (digest || subresource_integrity) && manifest_path.exist?
           @digest_manifest = Config::DigestManifest.new(
-            JSON.load(manifest_path.read),
+            JSON.parse(manifest_path.read),
             manifest_path
           )
         end

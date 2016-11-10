@@ -55,7 +55,7 @@ module Hanami
 
     # Precompile assets
     #
-    # @since x.x.x
+    # @since 0.4.0
     def self.precompile(configurations)
       require 'hanami/assets/precompiler'
       require 'hanami/assets/bundler'

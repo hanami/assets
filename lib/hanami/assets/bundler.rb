@@ -138,7 +138,7 @@ module Hanami
         @configuration.public_directory
       end
 
-      # @since x.x.x
+      # @since 0.4.0
       # @api private
       def configurations
         if @duplicates.empty?

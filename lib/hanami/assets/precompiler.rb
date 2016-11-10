@@ -47,7 +47,7 @@ module Hanami
       # @since 0.3.0
       # @api private
       def clear_manifest(manifest)
-        JSON.load(manifest).each do |_, asset_hash|
+        JSON.parse(manifest).each do |_, asset_hash|
           asset_file_name = @configuration.public_directory.join(asset_hash['target'])
           asset_file_name.unlink if asset_file_name.exist?
         end

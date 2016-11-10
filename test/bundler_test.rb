@@ -62,8 +62,8 @@ describe Hanami::Assets::Bundler do
         assert_owner(manifest)
         assert_permissions(manifest)
 
-        actual   = JSON.load(manifest.read)
-        expected = JSON.load(File.read(__dir__ + "/fixtures/deploy/assets-#{compressor || 'null'}.json"))
+        actual   = JSON.parse(manifest.read)
+        expected = JSON.parse(File.read(__dir__ + "/fixtures/deploy/assets-#{compressor || 'null'}.json"))
 
         actual.size.must_equal expected.size
         expected.each do |original, current|

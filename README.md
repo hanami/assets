@@ -375,7 +375,7 @@ end
 ### Fingerprint Mode
 
 This is a mode that can be activated via configuration and it's suitable for production environments.
-When generating files, it adds a string to the end of each file name, which is a [checksum](https://en.wikipedia.org/wiki/Checksum).
+When generating files, it adds a string to the end of each file name, which is a [checksum](https://en.wikipedia.org/wiki/Checksum) of its contents.
 This lets you leverage caching while still ensuring that clients get the most up-to-date assets (this is known as *cache busting*).
 
 ```ruby

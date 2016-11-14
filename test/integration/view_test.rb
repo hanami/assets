@@ -6,7 +6,7 @@ describe 'Hanami::View integration' do
     frameworks = [Web::Assets, Admin::Assets]
     frameworks.each do |framework|
       framework.configure do
-        digest false
+        fingerprint false
       end
     end
   end

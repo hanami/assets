@@ -84,22 +84,27 @@ module Hanami
       # comes from the application or third party gems. It also accepts strings
       # representing absolute URLs in case of public CDN (eg. jQuery CDN).
       #
-      # If the "digest mode" is on, <tt>src</tt> is the digest version of the
-      # relative URL.
+      # If the "fingerprint mode" is on, <tt>src</tt> is the fingerprinted
+      # version of the relative URL.
       #
       # If the "CDN mode" is on, the <tt>src</tt> is an absolute URL of the
       # application CDN.
+      #
+      # If the "subresource integrity mode" is on, <tt>integriy</tt> is the
+      # name of the algorithm, then a hyphen, then the hash value of the file.
+      # If more than one algorithm is used, they'll be separated by a space.
       #
       # @param sources [Array<String>] one or more assets by name or absolute URL
       #
       # @return [Hanami::Utils::Escape::SafeString] the markup
       #
-      # @raise [Hanami::Assets::MissingDigestAssetError] if digest mode is on and
-      #   at least one of the given sources is missing from the manifest
+      # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
+      # `subresource_integrity` modes are on and the javascript file is missing
+      # from the manifest
       #
       # @since 0.1.0
       #
-      # @see Hanami::Assets::Configuration#digest
+      # @see Hanami::Assets::Configuration#fingerprint
       # @see Hanami::Assets::Configuration#cdn
       # @see Hanami::Assets::Helpers#asset_path
       #
@@ -146,7 +151,7 @@ module Hanami
       #
       #   # <script src="https://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
       #
-      # @example Digest Mode
+      # @example Fingerprint Mode
       #
       #   <%= javascript 'application' %>
       #
@@ -178,23 +183,28 @@ module Hanami
       # comes from the application or third party gems. It also accepts strings
       # representing absolute URLs in case of public CDN (eg. Bootstrap CDN).
       #
-      # If the "digest mode" is on, <tt>href</tt> is the digest version of the
-      # relative URL.
+      # If the "fingerprint mode" is on, <tt>href</tt> is the fingerprinted
+      # version of the relative URL.
       #
       # If the "CDN mode" is on, the <tt>href</tt> is an absolute URL of the
       # application CDN.
       #
+      # If the "subresource integrity mode" is on, <tt>integriy</tt> is the
+      # name of the algorithm, then a hyphen, then the hashed value of the file.
+      # If more than one algorithm is used, they'll be separated by a space.
       # @param sources [Array<String>] one or more assets by name or absolute URL
       #
       # @return [Hanami::Utils::Escape::SafeString] the markup
       #
-      # @raise [Hanami::Assets::MissingDigestAssetError] if digest mode is on and
-      #   at least one of the given sources is missing from the manifest
+      # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
+      # `subresource_integrity` modes are on and the stylesheet file is missing
+      # from the manifest
       #
       # @since 0.1.0
       #
-      # @see Hanami::Assets::Configuration#digest
+      # @see Hanami::Assets::Configuration#fingerprint
       # @see Hanami::Assets::Configuration#cdn
+      # @see Hanami::Assets::Configuration#subresource_integrity
       # @see Hanami::Assets::Helpers#asset_path
       #
       # @example Single Asset
@@ -228,7 +238,7 @@ module Hanami
       #
       #   # <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css" rel="stylesheet">
       #
-      # @example Digest Mode
+      # @example Fingerprint Mode
       #
       #   <%= stylesheet 'application' %>
       #
@@ -264,8 +274,8 @@ module Hanami
       # <tt>alt</tt> Attribute is auto generated from <tt>src</tt>.
       # You can specify a different value, by passing the <tt>:src</tt> option.
       #
-      # If the "digest mode" is on, <tt>src</tt> is the digest version of the
-      # relative URL.
+      # If the "fingerprint mode" is on, <tt>src</tt> is the fingerprinted
+      # version of the relative URL.
       #
       # If the "CDN mode" is on, the <tt>src</tt> is an absolute URL of the
       # application CDN.
@@ -274,13 +284,15 @@ module Hanami
       #
       # @return [Hanami::Utils::Helpers::HtmlBuilder] the builder
       #
-      # @raise [Hanami::Assets::MissingDigestAssetError] if digest mode is on and
-      #   the image is missing from the manifest
+      # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
+      # `subresource_integrity` modes are on and the image file is missing
+      # from the manifest
       #
       # @since 0.1.0
       #
-      # @see Hanami::Assets::Configuration#digest
+      # @see Hanami::Assets::Configuration#fingerprint
       # @see Hanami::Assets::Configuration#cdn
+      # @see Hanami::Assets::Configuration#subresource_integrity
       # @see Hanami::Assets::Helpers#asset_path
       #
       # @example Basic Usage
@@ -307,7 +319,7 @@ module Hanami
       #
       #   # <img src="https://example-cdn.com/images/logo.png" alt="Logo">
       #
-      # @example Digest Mode
+      # @example Fingerprint Mode
       #
       #   <%= image 'logo.png' %>
       #
@@ -331,8 +343,8 @@ module Hanami
       #
       # It accepts one string representing the name of the asset.
       #
-      # If the "digest mode" is on, <tt>href</tt> is the digest version of the
-      # relative URL.
+      # If the "fingerprint mode" is on, <tt>href</tt> is the fingerprinted version
+      # of the relative URL.
       #
       # If the "CDN mode" is on, the <tt>href</tt> is an absolute URL of the
       # application CDN.
@@ -341,12 +353,13 @@ module Hanami
       #
       # @return [Hanami::Utils::Helpers::HtmlBuilder] the builder
       #
-      # @raise [Hanami::Assets::MissingDigestAssetError] if digest mode is on and
-      #   the favicon is missing from the manifest
+      # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
+      # `subresource_integrity` modes are on and the favicon is file missing
+      # from the manifest
       #
       # @since 0.1.0
       #
-      # @see Hanami::Assets::Configuration#digest
+      # @see Hanami::Assets::Configuration#fingerprint
       # @see Hanami::Assets::Configuration#cdn
       # @see Hanami::Assets::Helpers#asset_path
       #
@@ -368,7 +381,7 @@ module Hanami
       #
       #   # <link id: "fav" href="/assets/favicon.ico" rel="shortcut icon" type="image/x-icon">
       #
-      # @example Digest Mode
+      # @example Fingerprint Mode
       #
       #   <%= favicon %>
       #
@@ -396,8 +409,8 @@ module Hanami
       # Alternatively, it accepts a block that allows to specify one or more
       # sources via the <tt>source</tt> tag.
       #
-      # If the "digest mode" is on, <tt>src</tt> is the digest version of the
-      # relative URL.
+      # If the "fingerprint mode" is on, <tt>src</tt> is the fingerprinted
+      # version of the relative URL.
       #
       # If the "CDN mode" is on, the <tt>src</tt> is an absolute URL of the
       # application CDN.
@@ -406,15 +419,16 @@ module Hanami
       #
       # @return [Hanami::Utils::Helpers::HtmlBuilder] the builder
       #
-      # @raise [Hanami::Assets::MissingDigestAssetError] if digest mode is on and
-      #   the image is missing from the manifest
+      # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
+      # `subresource_integrity` modes are on and the video file is missing
+      # from the manifest
       #
       # @raise [ArgumentError] if source isn't specified both as argument or
       #   tag inside the given block
       #
       # @since 0.1.0
       #
-      # @see Hanami::Assets::Configuration#digest
+      # @see Hanami::Assets::Configuration#fingerprint
       # @see Hanami::Assets::Configuration#cdn
       # @see Hanami::Assets::Helpers#asset_path
       #
@@ -489,7 +503,7 @@ module Hanami
       #
       #   # ArgumentError
       #
-      # @example Digest Mode
+      # @example Fingerprint Mode
       #
       #   <%= video 'movie.mp4' %>
       #
@@ -514,8 +528,8 @@ module Hanami
       # Alternatively, it accepts a block that allows to specify one or more
       # sources via the <tt>source</tt> tag.
       #
-      # If the "digest mode" is on, <tt>src</tt> is the digest version of the
-      # relative URL.
+      # If the "fingerprint mode" is on, <tt>src</tt> is the fingerprinted
+      # version of the relative URL.
       #
       # If the "CDN mode" is on, the <tt>src</tt> is an absolute URL of the
       # application CDN.
@@ -524,15 +538,16 @@ module Hanami
       #
       # @return [Hanami::Utils::Helpers::HtmlBuilder] the builder
       #
-      # @raise [Hanami::Assets::MissingDigestAssetError] if digest mode is on and
-      #   the image is missing from the manifest
+      # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
+      # `subresource_integrity` modes are on and the audio file is missing
+      # from the manifest
       #
       # @raise [ArgumentError] if source isn't specified both as argument or
       #   tag inside the given block
       #
       # @since 0.1.0
       #
-      # @see Hanami::Assets::Configuration#digest
+      # @see Hanami::Assets::Configuration#fingerprint
       # @see Hanami::Assets::Configuration#cdn
       # @see Hanami::Assets::Helpers#asset_path
       #
@@ -607,7 +622,7 @@ module Hanami
       #
       #   # ArgumentError
       #
-      # @example Digest Mode
+      # @example Fingerprint Mode
       #
       #   <%= audio 'song.ogg' %>
       #
@@ -630,7 +645,7 @@ module Hanami
       #
       # Absolute URLs are returned as they are.
       #
-      # If Digest mode is on, it returns the digest path of the source
+      # If Fingerprint mode is on, it returns the fingerprinted path of the source
       #
       # If CDN mode is on, it returns the absolute URL of the asset.
       #
@@ -638,8 +653,9 @@ module Hanami
       #
       # @return [String] the asset path
       #
-      # @raise [Hanami::Assets::MissingDigestAssetError] if digest mode is on and
-      #   the asset is missing from the manifest
+      # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
+      # `subresource_integrity` modes are on and the asset is missing
+      # from the manifest
       #
       # @since 0.1.0
       #
@@ -655,7 +671,7 @@ module Hanami
       #
       #   # "https://code.jquery.com/jquery-2.1.4.min.js"
       #
-      # @example Digest Mode
+      # @example Fingerprint Mode
       #
       #   <%= asset_path 'application.js' %>
       #
@@ -677,7 +693,7 @@ module Hanami
       #
       # Absolute URLs are returned as they are.
       #
-      # If Digest mode is on, it returns the digest URL of the source
+      # If Fingerprint mode is on, it returns the fingerprint URL of the source
       #
       # If CDN mode is on, it returns the absolute URL of the asset.
       #
@@ -685,8 +701,9 @@ module Hanami
       #
       # @return [String] the asset URL
       #
-      # @raise [Hanami::Assets::MissingDigestAssetError] if digest mode is on and
-      #   the asset is missing from the manifest
+      # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
+      # `subresource_integrity` modes are on and the asset is missing
+      # from the manifest
       #
       # @since 0.1.0
       #
@@ -702,7 +719,7 @@ module Hanami
       #
       #   # "https://code.jquery.com/jquery-2.1.4.min.js"
       #
-      # @example Digest Mode
+      # @example Fingerprint Mode
       #
       #   <%= asset_url 'application.js' %>
       #

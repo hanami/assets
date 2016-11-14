@@ -7,6 +7,7 @@ Assets management for Ruby web applications
 
 ### Changed
 - [Luca Guidi] Official support for Ruby: MRI 2.3+ and JRuby 9.1.5.0+
+- [Sean Collins] Rename digest into fingerprint
 
 ## v0.3.0 - 2016-07-22
 ### Added

@@ -272,22 +272,22 @@ describe Hanami::Assets::Configuration do
       actual.must_be_kind_of ::String
     end
 
-    describe 'digest mode' do
+    describe 'fingerprint mode' do
       before do
-        @configuration.digest true
+        @configuration.fingerprint true
       end
 
-      describe 'with digest manifest' do
+      describe 'with manifest' do
         before do
-          manifest = Hanami::Assets::Config::DigestManifest.new({
-                                                                  '/assets/application.js' => {
-                                                                    'target' => '/assets/application-abc123.js'
-                                                                  }
-                                                                }, [])
-          @configuration.instance_variable_set(:@digest_manifest, manifest)
+          manifest = Hanami::Assets::Config::Manifest.new({
+                                                            '/assets/application.js' => {
+                                                              'target' => '/assets/application-abc123.js'
+                                                            }
+                                                          }, [])
+          @configuration.instance_variable_set(:@public_manifest, manifest)
         end
 
-        it 'returns asset with digest' do
+        it 'returns asset with fingerprint' do
           actual = @configuration.asset_path('application.js')
           actual.must_equal '/assets/application-abc123.js'
         end
@@ -309,9 +309,9 @@ describe Hanami::Assets::Configuration do
         end
       end
 
-      describe 'with missing digest manifest' do
-        it 'returns asset with digest' do
-          exception = -> { @configuration.asset_path('application.js') }.must_raise Hanami::Assets::MissingDigestManifestError
+      describe 'with missing manifest' do
+        it 'raises exception with correct message' do
+          exception = -> { @configuration.asset_path('application.js') }.must_raise Hanami::Assets::MissingManifestFileError
           exception.message.must_equal "Can't read manifest: #{@configuration.manifest_path}"
         end
       end
@@ -436,28 +436,28 @@ describe Hanami::Assets::Configuration do
       end
     end
 
-    describe 'digest mode' do
+    describe 'fingerprint mode' do
       before do
-        @configuration.digest true
+        @configuration.fingerprint true
       end
 
-      describe 'with digest manifest' do
+      describe 'with manifest' do
         before do
-          manifest = Hanami::Assets::Config::DigestManifest.new({ '/assets/application.js' => { 'target' => '/assets/application-abc123.js' } }, [])
+          manifest = Hanami::Assets::Config::Manifest.new({ '/assets/application.js' => { 'target' => '/assets/application-abc123.js' } }, [])
 
           @configuration.load!
-          @configuration.instance_variable_set(:@digest_manifest, manifest)
+          @configuration.instance_variable_set(:@public_manifest, manifest)
         end
 
-        it 'returns asset with digest' do
+        it 'returns asset with fingerprint' do
           actual = @configuration.asset_url('application.js')
           actual.must_equal 'http://localhost:2300/assets/application-abc123.js'
         end
       end
 
-      describe 'with missing digest manifest' do
-        it 'returns asset with digest' do
-          exception = -> { @configuration.asset_url('application.js') }.must_raise Hanami::Assets::MissingDigestManifestError
+      describe 'with missing manifest' do
+        it 'raises exception with correct message' do
+          exception = -> { @configuration.asset_url('application.js') }.must_raise Hanami::Assets::MissingManifestFileError
           exception.message.must_equal "Can't read manifest: #{@configuration.manifest_path}"
         end
       end
@@ -470,17 +470,17 @@ describe Hanami::Assets::Configuration do
         @configuration.subresource_integrity true
       end
 
-      describe 'with digest manifest' do
+      describe 'with manifest' do
         before do
-          manifest = Hanami::Assets::Config::DigestManifest.new({
-                                                                  '/assets/application.js' => {
-                                                                    'target' => '/assets/application-abc123.js',
-                                                                    'sri' => ['sha0-456def']
-                                                                  }
-                                                                }, [])
+          manifest = Hanami::Assets::Config::Manifest.new({
+                                                            '/assets/application.js' => {
+                                                              'target' => '/assets/application-abc123.js',
+                                                              'sri' => ['sha0-456def']
+                                                            }
+                                                          }, [])
 
           @configuration.load!
-          @configuration.instance_variable_set(:@digest_manifest, manifest)
+          @configuration.instance_variable_set(:@public_manifest, manifest)
         end
 
         it 'returns subresource_integrity value' do
@@ -489,9 +489,9 @@ describe Hanami::Assets::Configuration do
         end
       end
 
-      describe 'with missing digest manifest' do
+      describe 'with missing manifest' do
         it 'raises an exception' do
-          exception = -> { @configuration.subresource_integrity_value('application.js') }.must_raise Hanami::Assets::MissingDigestManifestError
+          exception = -> { @configuration.subresource_integrity_value('application.js') }.must_raise Hanami::Assets::MissingManifestFileError
           exception.message.must_equal "Can't read manifest: #{@configuration.manifest_path}"
         end
       end
@@ -508,7 +508,7 @@ describe Hanami::Assets::Configuration do
       @configuration.stylesheet_compressor :yui
       @configuration.manifest 'assets.json'
       @configuration.public_directory(Dir.pwd + '/tmp')
-      @configuration.instance_variable_set(:@digest_manifest, {})
+      @configuration.instance_variable_set(:@public_manifest, {})
 
       @configuration.reset!
     end
@@ -546,9 +546,9 @@ describe Hanami::Assets::Configuration do
       @configuration.manifest.must_equal('assets.json')
     end
 
-    it 'sets default value fore digest manifest' do
-      assert @configuration.digest_manifest.class == Hanami::Assets::Config::NullDigestManifest,
-             'Expected @configuration.digest_manifest to be instance of Hanami::Assets::Configuration::NullDigestManifest'
+    it 'sets default value for manifest' do
+      assert @configuration.public_manifest.class == Hanami::Assets::Config::NullManifest,
+             'Expected @configuration.public_manifest to be instance of Hanami::Assets::Configuration::NullManifest'
     end
   end
 

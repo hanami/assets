@@ -86,9 +86,9 @@ module Hanami
         framework.configuration
       end
 
-      # @since 0.1.0
+      # @since 0.4.0
       # @api private
-      attr_reader :digest_manifest
+      attr_reader :public_manifest
 
       # Return a new instance
       #
@@ -115,17 +115,17 @@ module Hanami
         end
       end
 
-      # Digest mode
+      # Fingerprint mode
       #
-      # Determine if the helpers should generate the digest path for an asset.
+      # Determine if the helpers should generate the fingerprinted path for an asset.
       # Usually this is turned on in production mode.
       #
       # @since 0.1.0
-      def digest(value = nil)
+      def fingerprint(value = nil)
         if value.nil?
-          @digest
+          @fingerprint
         else
-          @digest = value
+          @fingerprint = value
         end
       end
 
@@ -412,8 +412,8 @@ module Hanami
         "#{@base_url}#{compile_path(source)}"
       end
 
-      # An array of digest algorithms to use for generating asset subresource
-      # integrity checks
+      # An array of crypographically secure hashing algorithms to use for
+      # generating asset subresource integrity checks
       #
       # @since 0.3.0
       def subresource_integrity_algorithms
@@ -433,7 +433,7 @@ module Hanami
       def subresource_integrity_value(source)
         return unless subresource_integrity
 
-        digest_manifest.subresource_integrity_values(
+        public_manifest.subresource_integrity_values(
           prefix.join(source)
         ).join(SUBRESOURCE_INTEGRITY_SEPARATOR)
       end
@@ -502,11 +502,11 @@ module Hanami
         @prefix                = Utils::PathPrefix.new(DEFAULT_PREFIX)
         @subresource_integrity = false
         @cdn                   = false
-        @digest                = false
+        @fingerprint           = false
         @compile               = false
         @base_url              = nil
         @destination_directory = nil
-        @digest_manifest       = Config::NullDigestManifest.new(self)
+        @public_manifest       = Config::NullManifest.new(self)
 
         @javascript_compressor = nil
         @stylesheet_compressor = nil
@@ -522,8 +522,8 @@ module Hanami
       #
       # @since 0.1.0
       def load!
-        if (digest || subresource_integrity) && manifest_path.exist?
-          @digest_manifest = Config::DigestManifest.new(
+        if (fingerprint || subresource_integrity) && manifest_path.exist?
+          @public_manifest = Config::Manifest.new(
             JSON.parse(manifest_path.read),
             manifest_path
           )
@@ -592,7 +592,7 @@ module Hanami
       # @api private
       def compile_path(source)
         result = prefix.join(source)
-        result = digest_manifest.target(result) if digest
+        result = public_manifest.target(result) if fingerprint
         result.to_s
       end
 

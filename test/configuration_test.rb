@@ -548,7 +548,7 @@ describe Hanami::Assets::Configuration do
 
     it 'sets default value for manifest' do
       assert @configuration.public_manifest.class == Hanami::Assets::Config::NullManifest,
-          'Expected @configuration.public_manifest to be instance of Hanami::Assets::Configuration::NullManifest'
+             'Expected @configuration.public_manifest to be instance of Hanami::Assets::Configuration::NullManifest'
     end
   end
 

@@ -88,7 +88,7 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      attr_reader :digest_manifest
+      attr_reader :manifest
 
       # Return a new instance
       #
@@ -115,17 +115,17 @@ module Hanami
         end
       end
 
-      # Digest mode
+      # Fingerprint mode
       #
-      # Determine if the helpers should generate the digest path for an asset.
+      # Determine if the helpers should generate the fingerprinted path for an asset.
       # Usually this is turned on in production mode.
       #
       # @since 0.1.0
-      def digest(value = nil)
+      def fingerprint(value = nil)
         if value.nil?
-          @digest
+          @fingerprint
         else
-          @digest = value
+          @fingerprint = value
         end
       end
 
@@ -345,11 +345,11 @@ module Hanami
       # Manifest path from public directory
       #
       # @since 0.1.0
-      def manifest(value = nil)
+      def manifest_name(value = nil)
         if value.nil?
-          @manifest
+          @manifest_name
         else
-          @manifest = value.to_s
+          @manifest_name = value.to_s
         end
       end
 
@@ -358,7 +358,7 @@ module Hanami
       # @since 0.1.0
       # @api private
       def manifest_path
-        public_directory.join(manifest)
+        public_directory.join(manifest_name)
       end
 
       # Application's assets sources
@@ -412,8 +412,8 @@ module Hanami
         "#{@base_url}#{compile_path(source)}"
       end
 
-      # An array of digest algorithms to use for generating asset subresource
-      # integrity checks
+      # An array of crypographically secure hashing algorithms to use for
+      # generating asset subresource integrity checks
       #
       # @since 0.3.0
       def subresource_integrity_algorithms
@@ -433,7 +433,7 @@ module Hanami
       def subresource_integrity_value(source)
         return unless subresource_integrity
 
-        digest_manifest.subresource_integrity_values(
+        manifest.subresource_integrity_values(
           prefix.join(source)
         ).join(SUBRESOURCE_INTEGRITY_SEPARATOR)
       end
@@ -485,7 +485,7 @@ module Hanami
           c.cdn                   = cdn
           c.compile               = compile
           c.public_directory      = public_directory
-          c.manifest              = manifest
+          c.manifest_name         = manifest_name
           c.sources               = sources.dup
           c.javascript_compressor = javascript_compressor
           c.stylesheet_compressor = stylesheet_compressor
@@ -502,18 +502,18 @@ module Hanami
         @prefix                = Utils::PathPrefix.new(DEFAULT_PREFIX)
         @subresource_integrity = false
         @cdn                   = false
-        @digest                = false
+        @fingerprint           = false
         @compile               = false
         @base_url              = nil
         @destination_directory = nil
-        @digest_manifest       = Config::NullDigestManifest.new(self)
+        @manifest              = Config::NullManifest.new(self)
 
         @javascript_compressor = nil
         @stylesheet_compressor = nil
 
         root             Dir.pwd
         public_directory root.join(DEFAULT_PUBLIC_DIRECTORY)
-        manifest         DEFAULT_MANIFEST
+        manifest_name    DEFAULT_MANIFEST
       end
 
       # Load the configuration
@@ -522,8 +522,8 @@ module Hanami
       #
       # @since 0.1.0
       def load!
-        if (digest || subresource_integrity) && manifest_path.exist?
-          @digest_manifest = Config::DigestManifest.new(
+        if (fingerprint || subresource_integrity) && manifest_path.exist?
+          @manifest = Config::Manifest.new(
             JSON.parse(manifest_path.read),
             manifest_path
           )
@@ -572,7 +572,7 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      attr_writer :manifest
+      attr_writer :manifest_name
 
       # @since 0.1.0
       # @api private
@@ -592,7 +592,7 @@ module Hanami
       # @api private
       def compile_path(source)
         result = prefix.join(source)
-        result = digest_manifest.target(result) if digest
+        result = @manifest.target(result) if fingerprint
         result.to_s
       end
 

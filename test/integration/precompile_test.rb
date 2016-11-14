@@ -48,13 +48,13 @@ describe 'Precompile' do
         vendor_files.each { |f| f.exist?.must_equal true }
       end
 
-      it "doesn't creates a digest version" do
+      it "doesn't creates a fingerprinted version" do
         vendor_files.each { |file| FileUtils.touch file }
         assert_successful_command environment
 
         vendor_files.each do |f|
-          digest_versions = Dir[dest.join("#{f.basename(f.extname)}-*#{f.extname}").to_s]
-          digest_versions.must_be :empty?
+          fingerprinted_versions = Dir[dest.join("#{f.basename(f.extname)}-*#{f.extname}").to_s]
+          fingerprinted_versions.must_be :empty?
         end
       end
     end
@@ -109,13 +109,13 @@ describe 'Precompile' do
         vendor_files.each { |f| f.exist?.must_equal true }
       end
 
-      it "doesn't creates a digest version" do
+      it "doesn't creates a fingerprinted version" do
         vendor_files.each { |file| FileUtils.touch file }
         assert_successful_command environment
 
         vendor_files.each do |f|
-          digest_versions = Dir[dest.join("#{f.basename(f.extname)}-*#{f.extname}").to_s]
-          digest_versions.must_be :empty?
+          fingerprinted_versions = Dir[dest.join("#{f.basename(f.extname)}-*#{f.extname}").to_s]
+          fingerprinted_versions.must_be :empty?
         end
       end
     end

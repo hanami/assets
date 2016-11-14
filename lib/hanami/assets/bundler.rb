@@ -46,12 +46,12 @@ module Hanami
       # For each asset contained in the sources and third party gems, it will:
       #
       #   * Compress
-      #   * Create a checksum version
-      #   * Generate an integrity digest
+      #   * Create a fingerprinted version of the file
+      #   * Generate a subresource integrity digest
       #
-      # At the end it will generate a digest manifest
+      # At the end it will generate a manifest
       #
-      # @see Hanami::Assets::Configuration#digest
+      # @see Hanami::Assets::Configuration#fingerprint
       # @see Hanami::Assets::Configuration#manifest
       # @see Hanami::Assets::Configuration#manifest_path
       def run

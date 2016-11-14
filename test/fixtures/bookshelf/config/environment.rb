@@ -25,7 +25,7 @@ unless defined?(Web)
     Assets = Hanami::Assets.duplicate(self) do
       root             __dir__ + '/../../../fixtures/bookshelf/apps/admin'
       public_directory __dir__ + '/../../../../tmp/bookshelf/public'
-      manifest_name    'assets.json'
+      manifest         'assets.json'
       prefix           '/assets/admin'
       compile          true
 
@@ -60,7 +60,7 @@ unless defined?(Web)
     Assets = Hanami::Assets.duplicate(self) do
       root             __dir__ + '/../../../fixtures/bookshelf/apps/metrics'
       public_directory __dir__ + '/../../../../tmp/bookshelf/public'
-      manifest_name    'assets.json'
+      manifest         'assets.json'
       prefix           '/assets/metrics'
       compile          true
 
@@ -95,7 +95,7 @@ unless defined?(Web)
     Assets = Hanami::Assets.duplicate(self) do
       root             __dir__ + '/../../../fixtures/bookshelf/apps/web'
       public_directory __dir__ + '/../../../../tmp/bookshelf/public'
-      manifest_name    'assets.json'
+      manifest         'assets.json'
       prefix           '/assets'
       compile          true
 

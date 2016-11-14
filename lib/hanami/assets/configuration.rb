@@ -86,9 +86,9 @@ module Hanami
         framework.configuration
       end
 
-      # @since 0.1.0
+      # @since 0.4.0
       # @api private
-      attr_reader :manifest
+      attr_reader :public_manifest
 
       # Return a new instance
       #
@@ -345,11 +345,11 @@ module Hanami
       # Manifest path from public directory
       #
       # @since 0.1.0
-      def manifest_name(value = nil)
+      def manifest(value = nil)
         if value.nil?
-          @manifest_name
+          @manifest
         else
-          @manifest_name = value.to_s
+          @manifest = value.to_s
         end
       end
 
@@ -358,7 +358,7 @@ module Hanami
       # @since 0.1.0
       # @api private
       def manifest_path
-        public_directory.join(manifest_name)
+        public_directory.join(manifest)
       end
 
       # Application's assets sources
@@ -433,7 +433,7 @@ module Hanami
       def subresource_integrity_value(source)
         return unless subresource_integrity
 
-        manifest.subresource_integrity_values(
+        public_manifest.subresource_integrity_values(
           prefix.join(source)
         ).join(SUBRESOURCE_INTEGRITY_SEPARATOR)
       end
@@ -485,7 +485,7 @@ module Hanami
           c.cdn                   = cdn
           c.compile               = compile
           c.public_directory      = public_directory
-          c.manifest_name         = manifest_name
+          c.manifest              = manifest
           c.sources               = sources.dup
           c.javascript_compressor = javascript_compressor
           c.stylesheet_compressor = stylesheet_compressor
@@ -506,14 +506,14 @@ module Hanami
         @compile               = false
         @base_url              = nil
         @destination_directory = nil
-        @manifest              = Config::NullManifest.new(self)
+        @public_manifest       = Config::NullManifest.new(self)
 
         @javascript_compressor = nil
         @stylesheet_compressor = nil
 
         root             Dir.pwd
         public_directory root.join(DEFAULT_PUBLIC_DIRECTORY)
-        manifest_name    DEFAULT_MANIFEST
+        manifest         DEFAULT_MANIFEST
       end
 
       # Load the configuration
@@ -523,7 +523,7 @@ module Hanami
       # @since 0.1.0
       def load!
         if (fingerprint || subresource_integrity) && manifest_path.exist?
-          @manifest = Config::Manifest.new(
+          @public_manifest = Config::Manifest.new(
             JSON.parse(manifest_path.read),
             manifest_path
           )
@@ -572,7 +572,7 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      attr_writer :manifest_name
+      attr_writer :manifest
 
       # @since 0.1.0
       # @api private
@@ -592,7 +592,7 @@ module Hanami
       # @api private
       def compile_path(source)
         result = prefix.join(source)
-        result = @manifest.target(result) if fingerprint
+        result = public_manifest.target(result) if fingerprint
         result.to_s
       end
 

@@ -73,7 +73,7 @@ module Hanami
       # @since 0.1.0
       # @api private
       class Manifest
-        # @since x.x.x
+        # @since 0.4.0
         # @api private
         TARGET                = 'target'.freeze
 

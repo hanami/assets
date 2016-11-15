@@ -1,7 +1,7 @@
 # Hanami::Assets
 Assets management for Ruby web applications
 
-## v0.4.0 - (unreleased)
+## v0.4.0 - 2016-11-15
 ### Fixed
 - [Luca Guidi] Ensure `NullManifest` to be pretty printable
 

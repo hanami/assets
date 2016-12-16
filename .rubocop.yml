@@ -1,13 +1,12 @@
+# Please keep AllCops, Bundler, Style, Metrics groups and then order cops
+# alphabetically
+inherit_from:
+  - https://raw.githubusercontent.com/hanami/hanami/master/.rubocop.yml
 AllCops:
-  DisplayCopNames: true
-  DisplayStyleGuide: true
-  ExtraDetails: false
   Exclude:
     - 'vendor/**/*'
     - 'lib/hanami/assets/compressors/*'
     - 'test/fixtures/**/*.gemspec'
-Metrics/LineLength:
-  Enabled: false
 Style/RaiseArgs:
   Enabled: false
 Style/WhileUntilModifier:

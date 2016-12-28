@@ -3,6 +3,7 @@ sudo: false
 script: 'bundle exec rake test:coverage --trace && bundle exec rubocop'
 rvm:
   - 2.3.3
+  - 2.4.0
   - jruby-9.1.6.0
   - ruby-head
   - jruby-head

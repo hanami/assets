@@ -1,6 +1,10 @@
 # Hanami::Assets
 Assets management for Ruby web applications
 
+## v1.0.0.beta1 (unreleased)
+### Added
+- [Luca Guidi] Official support for Ruby: MRI 2.4
+
 ## v0.4.0 - 2016-11-15
 ### Fixed
 - [Luca Guidi] Ensure `NullManifest` to be pretty printable

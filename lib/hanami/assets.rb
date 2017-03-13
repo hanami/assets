@@ -1,6 +1,9 @@
 require 'thread'
 require 'hanami/utils/class_attribute'
 
+# Hanami
+#
+# @since 0.1.0
 module Hanami
   # Assets management for Ruby web applications
   #

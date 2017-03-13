@@ -48,6 +48,7 @@ require 'strscan'
 #
 #   File.open('example.js', 'r') {|file| puts JSMin.minify(file) }
 #
+# @api private
 module JSMin
   CHR_APOS       = "'".freeze
   CHR_ASTERISK   = '*'.freeze

@@ -521,6 +521,7 @@ module Hanami
       # This MUST be executed before to accept the first HTTP request
       #
       # @since 0.1.0
+      # @api private
       def load!
         if (fingerprint || subresource_integrity) && manifest_path.exist?
           @public_manifest = Config::Manifest.new(

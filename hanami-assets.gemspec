@@ -6,8 +6,8 @@ require 'hanami/assets/version'
 Gem::Specification.new do |spec|
   spec.name          = 'hanami-assets'
   spec.version       = Hanami::Assets::VERSION
-  spec.authors       = ['Luca Guidi', 'Trung Lê', 'Alfonso Uceda']
-  spec.email         = ['me@lucaguidi.com', 'trung.le@ruby-journal.com', 'uceda73@gmail.com']
+  spec.authors       = ['Luca Guidi']
+  spec.email         = ['me@lucaguidi.com']
   spec.summary       = 'Assets management'
   spec.description   = 'Assets management for Ruby web applications'
   spec.homepage      = 'http://hanamirb.org'

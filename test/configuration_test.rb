@@ -112,12 +112,12 @@ describe Hanami::Assets::Configuration do
 
     it 'allows to set an Array of symbols, without brackets' do
       @configuration.subresource_integrity            :sha256, :sha512
-      @configuration.subresource_integrity.must_equal [:sha256, :sha512]
+      @configuration.subresource_integrity.must_equal %i(sha256 sha512)
     end
 
     it 'allows to set an Array of symbols, with brackets' do
-      @configuration.subresource_integrity            [:sha256, :sha512]
-      @configuration.subresource_integrity.must_equal [:sha256, :sha512]
+      @configuration.subresource_integrity            %i(sha256 sha512)
+      @configuration.subresource_integrity.must_equal %i(sha256 sha512)
     end
   end
 
@@ -133,8 +133,8 @@ describe Hanami::Assets::Configuration do
     end
 
     it 'allows to an Array of symbols' do
-      @configuration.subresource_integrity                       [:sha256, :sha512]
-      @configuration.subresource_integrity_algorithms.must_equal [:sha256, :sha512]
+      @configuration.subresource_integrity                       %i(sha256 sha512)
+      @configuration.subresource_integrity_algorithms.must_equal %i(sha256 sha512)
     end
   end
 

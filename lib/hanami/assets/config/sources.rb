@@ -1,4 +1,5 @@
 require 'hanami/utils/load_paths'
+require 'hanami/utils/file_list'
 
 module Hanami
   module Assets
@@ -55,7 +56,7 @@ module Hanami
         def files(name = nil)
           result = []
 
-          Dir.glob(map { |source| "#{source}#{::File::SEPARATOR}**#{::File::SEPARATOR}#{name}*" }).each do |file|
+          Utils::FileList[map { |source| "#{source}#{::File::SEPARATOR}**#{::File::SEPARATOR}#{name}*" }].each do |file|
             next if ::File.directory?(file) || ::File.basename(file).start_with?(SKIPPED_FILE_PREFIX)
             result << file
           end

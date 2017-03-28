@@ -14,5 +14,5 @@ gem 'hanami-emberjs',        path: 'test/fixtures/hanami-emberjs',        requir
 gem 'hanami-compass',        path: 'test/fixtures/hanami-compass',        require: false
 gem 'hanami-foo-compressor', path: 'test/fixtures/hanami-foo-compressor', require: false
 
-gem 'rubocop', '~> 0.45', require: false
-gem 'coveralls',          require: false
+gem 'rubocop', '0.48.0', require: false
+gem 'coveralls',         require: false

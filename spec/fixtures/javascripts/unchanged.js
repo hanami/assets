@@ -1,0 +1,1 @@
+alert("Still the same");

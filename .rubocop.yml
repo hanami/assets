@@ -6,7 +6,7 @@ AllCops:
   Exclude:
     - 'vendor/**/*'
     - 'lib/hanami/assets/compressors/*'
-    - 'test/fixtures/**/*.gemspec'
+    - '**/*.gemspec'
 Style/RaiseArgs:
   Enabled: false
 Style/WhileUntilModifier:
@@ -18,3 +18,4 @@ Style/TernaryParentheses:
 Metrics/BlockLength:
   Exclude:
     - 'test/**/*'
+    - 'spec/**/*'

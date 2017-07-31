@@ -8,7 +8,7 @@ $LOAD_PATH.unshift 'spec'
 require 'hanami/assets'
 require 'support/test_file'
 require 'support/ci'
-require 'fixtures'
+require 'support/fixtures'
 require 'pathname'
 
 TMP = Pathname.new(__dir__).join('..', 'tmp')

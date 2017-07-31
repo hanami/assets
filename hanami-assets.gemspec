@@ -1,4 +1,5 @@
 # coding: utf-8
+
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'hanami/assets/version'
@@ -6,8 +7,8 @@ require 'hanami/assets/version'
 Gem::Specification.new do |spec|
   spec.name          = 'hanami-assets'
   spec.version       = Hanami::Assets::VERSION
-  spec.authors       = ['Luca Guidi', 'Trung Lê', 'Alfonso Uceda']
-  spec.email         = ['me@lucaguidi.com', 'trung.le@ruby-journal.com', 'uceda73@gmail.com']
+  spec.authors       = ['Luca Guidi']
+  spec.email         = ['me@lucaguidi.com']
   spec.summary       = 'Assets management'
   spec.description   = 'Assets management for Ruby web applications'
   spec.homepage      = 'http://hanamirb.org'
@@ -19,8 +20,8 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
   spec.required_ruby_version = '>= 2.3.0'
 
-  spec.add_runtime_dependency 'hanami-utils',    '~> 1.0.0.beta1'
-  spec.add_runtime_dependency 'hanami-helpers',  '~> 1.0.0.beta1'
+  spec.add_runtime_dependency 'hanami-utils',    '~> 1.0'
+  spec.add_runtime_dependency 'hanami-helpers',  '~> 1.0'
   spec.add_runtime_dependency 'tilt',            '~> 2.0', '>= 2.0.2'
 
   spec.add_development_dependency 'bundler',          '~> 1.6'

@@ -38,6 +38,14 @@ class DefaultView
   end
 end
 
+class UJSView
+  include View
+
+  def self.template
+    __dir__ + '/fixtures/ujs-template.erb'
+  end
+end
+
 class CustomAssetsPathView
   include View
 end

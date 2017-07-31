@@ -177,6 +177,13 @@ module Hanami
         end
       end
 
+      def ujs
+        Dir[
+          File.join(Gem::Specification.find_by_name("vanilla-ujs").gem_dir,
+          "/lib/assets/javascripts/vanilla-ujs/*")
+        ].map { |path| File.read(path) }.join
+      end
+
       # Generate <tt>link</tt> tag for given source(s)
       #
       # It accepts one or more strings representing the name of the asset, if it

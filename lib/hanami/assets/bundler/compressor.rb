@@ -46,7 +46,7 @@ module Hanami
         # @api private
         def _compress(compressor)
           compressor.compress(@path)
-        rescue => e
+        rescue => e # rubocop:disable Lint/RescueWithoutErrorClass
           warn(
             [
               "Skipping compression of: `#{@path}'",

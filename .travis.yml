@@ -1,6 +1,6 @@
 language: ruby
 sudo: false
-script: 'bundle exec rake spec:coverage --trace && bundle exec rubocop'
+script: ./script/ci
 before_install:
   - gem update --system
   - rvm @global do gem uninstall bundler -a -x

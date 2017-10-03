@@ -60,7 +60,7 @@ module Hanami
 
       # @since 0.3.0
       # @api private
-      ABSOLUTE_URL_MATCHER = URI::Parser.new.make_regexp
+      ABSOLUTE_URL_MATCHER = URI::DEFAULT_PARSER.make_regexp
 
       include Hanami::Helpers::HtmlHelper
 

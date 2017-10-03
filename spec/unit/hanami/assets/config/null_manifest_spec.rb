@@ -5,6 +5,6 @@ describe Hanami::Assets::Config::NullManifest do
   let(:manifest)      { Hanami::Assets::Config::NullManifest.new(configuration) }
 
   it 'is pretty printable' do
-    pp manifest
+    expect { pp manifest }.to output(%r{Hanami::Assets::Config::NullManifest}).to_stdout
   end
 end

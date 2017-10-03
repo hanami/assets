@@ -599,10 +599,15 @@ module Hanami
 
       # @since 0.1.0
       # @api private
+      #
+      # rubocop:disable Style/MultilineTernaryOperator
+      # rubocop:disable Style/TernaryParentheses
       def url_port
-        ((scheme == HTTP_SCHEME && port == HTTP_PORT) || # rubocop:disable Style/MultilineTernaryOperator
+        ((scheme == HTTP_SCHEME && port == HTTP_PORT) ||
           (scheme == HTTPS_SCHEME && port == HTTPS_PORT)) ? nil : port.to_i
       end
+      # rubocop:enable Style/TernaryParentheses
+      # rubocop:enable Style/MultilineTernaryOperator
     end
   end
 end

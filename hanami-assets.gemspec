@@ -20,14 +20,13 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
   spec.required_ruby_version = '>= 2.3.0'
 
-  spec.add_runtime_dependency 'hanami-utils',    '1.1.0.beta1'
-  spec.add_runtime_dependency 'hanami-helpers',  '1.1.0.beta1'
+  spec.add_runtime_dependency 'hanami-utils',    '1.1.0.beta2'
+  spec.add_runtime_dependency 'hanami-helpers',  '1.1.0.beta2'
   spec.add_runtime_dependency 'tilt',            '~> 2.0', '>= 2.0.2'
 
-  spec.add_development_dependency 'bundler',          '~> 1.6'
-  spec.add_development_dependency 'rake',             '~> 11'
-  spec.add_development_dependency 'minitest',         '~> 5'
-  spec.add_development_dependency 'rspec',            '~> 3.5'
+  spec.add_development_dependency 'bundler',          '~> 1.15'
+  spec.add_development_dependency 'rake',             '~> 12.0'
+  spec.add_development_dependency 'rspec',            '~> 3.6'
 
   spec.add_development_dependency 'yui-compressor',   '~> 0.12'
   spec.add_development_dependency 'uglifier',         '~> 2.7'

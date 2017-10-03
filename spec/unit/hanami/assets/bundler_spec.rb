@@ -70,7 +70,7 @@ describe Hanami::Assets::Bundler do
           basename = File.join(File.dirname(original), File.basename(original, extname))
 
           expected_target = /\A#{basename}\-[[:alnum:]]{32}#{extname}\z/
-          expected_sri    = [/\Asha256\-[[[:alnum:]][[:punct:]]]{43}\=\z/]
+          expected_sri    = [/\Asha256\-[[[:alnum:]][[:punct:]][[:graph:]]]{43}\=\z/]
 
           expect(current.fetch("target")).to match(expected_target)
           expected_sri.each_with_index do |value, i|

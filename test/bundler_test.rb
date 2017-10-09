@@ -63,11 +63,20 @@ describe Hanami::Assets::Bundler do
         assert_permissions(manifest)
 
         actual   = JSON.parse(manifest.read)
-        expected = JSON.parse(File.read(__dir__ + "/fixtures/deploy/assets-#{compressor || 'null'}.json"))
+        expected = JSON.parse(File.read(__dir__ + "/fixtures/deploy/assets.json"))
 
         actual.size.must_equal expected.size
         expected.each do |original, current|
-          actual[original].must_equal current
+          extname  = File.extname(original)
+          basename = File.join(File.dirname(original), File.basename(original, extname))
+
+          expected_target = /\A#{basename}\-[[:alnum:]]{32}#{extname}\z/
+          expected_sri    = [/\Asha256\-[[[:alnum:]][[:punct:]][[:graph:]]]{43}\=\z/]
+
+          current.fetch("target").must_match(expected_target)
+          expected_sri.each_with_index do |value, i|
+            current.fetch("sri")[i].must_match(value)
+          end
         end
       end
 

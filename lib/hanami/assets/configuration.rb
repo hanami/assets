@@ -369,6 +369,10 @@ module Hanami
         @sources ||= Hanami::Assets::Config::Sources.new(root)
       end
 
+      def nested_assets
+        @nested_assets ||= []
+      end
+
       # Application's assets
       #
       # @since 0.1.0

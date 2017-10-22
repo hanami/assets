@@ -148,7 +148,7 @@ module Hanami
       # @since 0.1.0
       # @api private
       def destination
-        @destination ||= @configuration.destination_directory.join(basename)
+        @destination ||= @configuration.destination_directory.join(asset_name)
       end
 
       # @since 0.1.0
@@ -160,6 +160,37 @@ module Hanami
           result.scan(/\A[[[:alnum:]][\-\_]]*\.[[\w]]*/).first || result
         else
           result
+        end
+      end
+
+      def asset_name
+        return path_for_nested if path_for_nested&.relative?
+        basename
+      end
+
+      def path_for_nested
+        nested = @configuration.nested_assets.detect { |n| @name.to_s.include?(n) }
+        return nil unless nested
+
+        source = nil
+        @configuration.sources.each do |s|
+          condition = @name.relative? ? File.exist?(s.join(@name)) : @name.to_s.start_with?(s.to_s)
+          if condition
+            source = s
+            break
+          end
+        end
+
+        return nil unless source
+
+        Pathname.new(nested_pathname(nested))
+      end
+
+      def nested_pathname(nested)
+        if @name.relative?
+          @name
+        else
+          nested
         end
       end
 

@@ -32,6 +32,8 @@ unless defined?(Web)
       sources << [
         "assets"
       ]
+
+      nested_assets << "style/style.css"
     end
 
     module Views

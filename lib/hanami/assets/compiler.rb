@@ -164,33 +164,10 @@ module Hanami
       end
 
       def asset_name
-        return path_for_nested if path_for_nested&.relative?
-        basename
-      end
-
-      def path_for_nested
-        nested = @configuration.nested_assets.detect { |n| @name.to_s.include?(n) }
-        return nil unless nested
-
-        source = nil
-        @configuration.sources.each do |s|
-          condition = @name.relative? ? File.exist?(s.join(@name)) : @name.to_s.start_with?(s.to_s)
-          if condition
-            source = s
-            break
-          end
-        end
-
-        return nil unless source
-
-        Pathname.new(nested_pathname(nested))
-      end
-
-      def nested_pathname(nested)
-        if @name.relative?
-          @name
+        if @configuration.nested?(@name)
+          @configuration.nested_path(@name)
         else
-          nested
+          basename
         end
       end
 

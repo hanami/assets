@@ -6,6 +6,10 @@ describe Hanami::Assets::Config::NullManifest do
   let(:manifest)      { Hanami::Assets::Config::NullManifest.new(configuration) }
 
   it 'is pretty printable' do
-    pp manifest
+    out, = capture_io do
+      pp manifest
+    end
+
+    out.must_match(%r{Hanami::Assets::Config::NullManifest})
   end
 end

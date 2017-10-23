@@ -17,6 +17,11 @@ describe Hanami::Assets::Helpers do
       expect(actual).to eq(%(<script src="/assets/feature-a.js" type="text/javascript"></script>))
     end
 
+    it 'renders <script> tag without appending ext after query string' do
+      actual = DefaultView.new.javascript('feature-x?callback=init')
+      expect(actual).to eq(%(<script src="/assets/feature-x?callback=init" type="text/javascript"></script>))
+    end
+
     it 'renders <script> tag with a defer attribute' do
       actual = DefaultView.new.javascript('feature-a', defer: true)
       expect(actual).to eq(%(<script defer="defer" src="/assets/feature-a.js" type="text/javascript"></script>))
@@ -76,6 +81,11 @@ describe Hanami::Assets::Helpers do
     it 'renders <link> tag' do
       actual = DefaultView.new.stylesheet('main')
       expect(actual).to eq(%(<link href="/assets/main.css" type="text/css" rel="stylesheet">))
+    end
+
+    it 'renders <link> tag without appending ext after query string' do
+      actual = DefaultView.new.stylesheet('fonts?font=Helvetica')
+      expect(actual).to eq(%(<link href="/assets/fonts?font=Helvetica" type="text/css" rel="stylesheet">))
     end
 
     it 'renders <link> tag with an integrity attribute' do

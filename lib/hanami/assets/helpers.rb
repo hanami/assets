@@ -62,6 +62,10 @@ module Hanami
       # @api private
       ABSOLUTE_URL_MATCHER = URI::DEFAULT_PARSER.make_regexp
 
+      # @since 1.1.0
+      # @api private
+      QUERY_STRING_MATCHER = /\?/
+
       include Hanami::Helpers::HtmlHelper
 
       # Inject helpers into the given class
@@ -758,7 +762,7 @@ module Hanami
       # @since 0.1.0
       # @api private
       def _typed_asset_path(source, ext)
-        source = "#{source}#{ext}" unless source =~ /#{Regexp.escape(ext)}\z/
+        source = "#{source}#{ext}" if _append_extension?(source, ext)
         asset_path(source)
       end
 
@@ -818,6 +822,12 @@ module Hanami
         end
 
         url
+      end
+
+      # @since 1.1.0
+      # @api private
+      def _append_extension?(source, ext)
+        source !~ QUERY_STRING_MATCHER && source !~ /#{Regexp.escape(ext)}\z/
       end
     end
   end

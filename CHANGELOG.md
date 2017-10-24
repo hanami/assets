@@ -1,6 +1,10 @@
 # Hanami::Assets
 Assets management for Ruby web applications
 
+## v1.1.0 - 2017-10-25
+### Fixed
+- [Luca Guidi] Don't let `#javascript` and `#stylesheet` helpers to append file extension if the URL contains a query string
+
 ## v1.1.0.rc1 - 2017-10-16
 
 ## v1.1.0.beta3 - 2017-10-04

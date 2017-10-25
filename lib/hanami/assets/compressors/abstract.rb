@@ -102,10 +102,10 @@ module Hanami
         # @since 0.1.0
         # @api private
         def self.load_engine(type, engine_name)
-          type = Utils::String.new(type).demodulize
+          type = Utils::String.demodulize(type)
 
-          require "hanami/assets/compressors/#{ engine_name }_#{ type.underscore }"
-          Utils::Class.load!("#{ Utils::String.new(engine_name).classify }#{ type }", Hanami::Assets::Compressors).new
+          require "hanami/assets/compressors/#{ engine_name }_#{ Utils::String.underscore(type) }"
+          Utils::Class.load!("#{ Utils::String.classify(engine_name) }#{ type }", Hanami::Assets::Compressors).new
         rescue LoadError
           raise UnknownCompressorError.new(type, engine_name)
         end

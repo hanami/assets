@@ -1,20 +1,9 @@
 # Please keep AllCops, Bundler, Style, Metrics groups and then order cops
 # alphabetically
 inherit_from:
-  - https://raw.githubusercontent.com/hanami/hanami/master/.rubocop.yml
+  - https://raw.githubusercontent.com/hanami/devtools/master/.rubocop.yml
 AllCops:
   Exclude:
-    - 'vendor/**/*'
-    - 'lib/hanami/assets/compressors/*'
-    - 'test/fixtures/**/*.gemspec'
-Style/RaiseArgs:
-  Enabled: false
-Style/WhileUntilModifier:
-  Enabled: false
-Style/MethodMissing:
-  Enabled: false
-Style/TernaryParentheses:
-  Enabled: false
-Metrics/BlockLength:
-  Exclude:
-    - 'test/**/*'
+    - "vendor/**/*"
+    - "lib/hanami/assets/compressors/*"
+    - "**/*.gemspec"

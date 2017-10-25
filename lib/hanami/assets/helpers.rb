@@ -60,7 +60,11 @@ module Hanami
 
       # @since 0.3.0
       # @api private
-      ABSOLUTE_URL_MATCHER = URI::Parser.new.make_regexp
+      ABSOLUTE_URL_MATCHER = URI::DEFAULT_PARSER.make_regexp
+
+      # @since 1.1.0
+      # @api private
+      QUERY_STRING_MATCHER = /\?/
 
       include Hanami::Helpers::HtmlHelper
 
@@ -332,7 +336,7 @@ module Hanami
       #   # <img src="https://assets.bookshelf.org/assets/logo-28a6b886de2372ee3922fcaf3f78f2d8.png" alt="Logo">
       def image(source, options = {})
         options[:src] = asset_path(source)
-        options[:alt] ||= Utils::String.new(::File.basename(source, WILDCARD_EXT)).titleize
+        options[:alt] ||= Utils::String.titleize(::File.basename(source, WILDCARD_EXT))
 
         html.img(options)
       end
@@ -758,7 +762,7 @@ module Hanami
       # @since 0.1.0
       # @api private
       def _typed_asset_path(source, ext)
-        source = "#{source}#{ext}" unless source =~ /#{Regexp.escape(ext)}\z/
+        source = "#{source}#{ext}" if _append_extension?(source, ext)
         asset_path(source)
       end
 
@@ -818,6 +822,12 @@ module Hanami
         end
 
         url
+      end
+
+      # @since 1.1.0
+      # @api private
+      def _append_extension?(source, ext)
+        source !~ QUERY_STRING_MATCHER && source !~ /#{Regexp.escape(ext)}\z/
       end
     end
   end

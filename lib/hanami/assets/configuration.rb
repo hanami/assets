@@ -81,7 +81,7 @@ module Hanami
       # @api private
       def self.for(base)
         # TODO: this implementation is similar to Hanami::Controller::Configuration consider to extract it into Hanami::Utils
-        namespace = Utils::String.new(base).namespace
+        namespace = Utils::String.namespace(base)
         framework = Utils::Class.load_from_pattern!("(#{namespace}|Hanami)::Assets")
         framework.configuration
       end
@@ -599,10 +599,15 @@ module Hanami
 
       # @since 0.1.0
       # @api private
+      #
+      # rubocop:disable Style/MultilineTernaryOperator
+      # rubocop:disable Style/TernaryParentheses
       def url_port
-        ((scheme == HTTP_SCHEME && port == HTTP_PORT) || # rubocop:disable Style/MultilineTernaryOperator
+        ((scheme == HTTP_SCHEME && port == HTTP_PORT) ||
           (scheme == HTTPS_SCHEME && port == HTTPS_PORT)) ? nil : port.to_i
       end
+      # rubocop:enable Style/TernaryParentheses
+      # rubocop:enable Style/MultilineTernaryOperator
     end
   end
 end

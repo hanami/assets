@@ -17,7 +17,7 @@ class TestFile
   def touch(content = nil)
     last_modified = mtime
 
-    while mtime <= last_modified
+    while mtime.to_i <= last_modified.to_i
       wait 1
       write(content)
     end

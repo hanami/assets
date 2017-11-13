@@ -167,7 +167,7 @@ module Hanami
       def javascript(*sources, push: true, **options)
         _safe_tags(*sources) do |source|
           tag_options = options.dup
-          tag_options[:src] ||= _typed_asset_path(source, JAVASCRIPT_EXT, push: push)
+          tag_options[:src] ||= _typed_asset_path(source, JAVASCRIPT_EXT, push: push, type: :script)
           tag_options[:type] ||= JAVASCRIPT_MIME_TYPE
 
           if _subresource_integrity? || tag_options.include?(:integrity)
@@ -254,7 +254,7 @@ module Hanami
       def stylesheet(*sources, push: true, **options) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         _safe_tags(*sources) do |source|
           tag_options = options.dup
-          tag_options[:href] ||= _typed_asset_path(source, STYLESHEET_EXT, push: push)
+          tag_options[:href] ||= _typed_asset_path(source, STYLESHEET_EXT, push: push, type: :style)
           tag_options[:type] ||= STYLESHEET_MIME_TYPE
           tag_options[:rel] ||= STYLESHEET_REL
 
@@ -333,7 +333,7 @@ module Hanami
       #
       #   # <img src="https://assets.bookshelf.org/assets/logo-28a6b886de2372ee3922fcaf3f78f2d8.png" alt="Logo">
       def image(source, options = {})
-        options[:src] = asset_path(source, push: options.delete(:push) || false)
+        options[:src] = asset_path(source, push: options.delete(:push) || false, type: :image)
         options[:alt] ||= Utils::String.titleize(::File.basename(source, WILDCARD_EXT))
 
         html.img(options)
@@ -395,7 +395,7 @@ module Hanami
       #
       #   # <link href="https://assets.bookshelf.org/assets/favicon-28a6b886de2372ee3922fcaf3f78f2d8.ico" rel="shortcut icon" type="image/x-icon">
       def favicon(source = DEFAULT_FAVICON, options = {})
-        options[:href]   = asset_path(source, push: options.delete(:push) || false)
+        options[:href]   = asset_path(source, push: options.delete(:push) || false, type: :image)
         options[:rel]  ||= FAVICON_REL
         options[:type] ||= FAVICON_MIME_TYPE
 
@@ -517,7 +517,7 @@ module Hanami
       #
       #   # <video src="https://assets.bookshelf.org/assets/movie-28a6b886de2372ee3922fcaf3f78f2d8.mp4"></video>
       def video(source = nil, options = {}, &blk)
-        options = _source_options(source, options, &blk)
+        options = _source_options(source, options, type: :video, &blk)
         html.video(blk, options)
       end
 
@@ -636,7 +636,7 @@ module Hanami
       #
       #   # <audio src="https://assets.bookshelf.org/assets/song-28a6b886de2372ee3922fcaf3f78f2d8.ogg"></audio>
       def audio(source = nil, options = {}, &blk)
-        options = _source_options(source, options, &blk)
+        options = _source_options(source, options, type: :audio, &blk)
         html.audio(blk, options)
       end
 
@@ -684,8 +684,8 @@ module Hanami
       #   <%= asset_path 'application.js' %>
       #
       #   # "https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js"
-      def asset_path(source, push: false)
-        _asset_url(source, push: push) { _relative_url(source) }
+      def asset_path(source, push: false, type: nil)
+        _asset_url(source, push: push, type: type) { _relative_url(source) }
       end
 
       # It generates the absolute URL for the given source.
@@ -732,8 +732,8 @@ module Hanami
       #   <%= asset_url 'application.js' %>
       #
       #   # "https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js"
-      def asset_url(source, push: false)
-        _asset_url(source, push: push) { _absolute_url(source) }
+      def asset_url(source, push: false, type: nil)
+        _asset_url(source, push: push, type: type) { _absolute_url(source) }
       end
 
       private
@@ -750,17 +750,24 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      def _asset_url(source, push:)
+      def _asset_url(source, push:, type:)
         url = _absolute_url?(source) ? source : yield
-        _push_promise(url) if push
+
+        case push
+        when Symbol
+          _push_promise(url, type: push)
+        when TrueClass
+          _push_promise(url, type: type)
+        end
+
         url
       end
 
       # @since 0.1.0
       # @api private
-      def _typed_asset_path(source, ext, push: false)
+      def _typed_asset_path(source, ext, push: false, type: nil)
         source = "#{source}#{ext}" if _append_extension?(source, ext)
-        asset_path(source, push: push)
+        asset_path(source, push: push, type: type)
       end
 
       # @api private
@@ -794,13 +801,13 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      def _source_options(src, options, &_blk)
+      def _source_options(src, options, type:, &_blk)
         options ||= {}
 
         if src.respond_to?(:to_hash)
           options = src.to_hash
         elsif src
-          options[:src] = asset_path(src, push: options.delete(:push) || false)
+          options[:src] = asset_path(src, push: options.delete(:push) || false, type: type)
         end
 
         if !options[:src] && !block_given?
@@ -812,9 +819,9 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      def _push_promise(url)
+      def _push_promise(url, type: nil)
         Thread.current[:__hanami_assets] ||= {}
-        Thread.current[:__hanami_assets][url.to_s] = {}
+        Thread.current[:__hanami_assets][url.to_s] = { type: type }
 
         url
       end

@@ -80,7 +80,7 @@ describe Hanami::Assets::Helpers do
         DefaultView.new.javascript("feature-a")
         assets = Thread.current[:__hanami_assets]
 
-        expect(assets.fetch("/assets/feature-a.js")).to eq({})
+        expect(assets.fetch("/assets/feature-a.js")).to eq(type: :script)
       end
 
       it "allows asset exclusion from push promise assets" do
@@ -95,8 +95,8 @@ describe Hanami::Assets::Helpers do
         DefaultView.new.javascript("feature-c", "feature-d")
         assets = Thread.current[:__hanami_assets]
 
-        expect(assets.fetch("/assets/feature-c.js")).to eq({})
-        expect(assets.fetch("/assets/feature-d.js")).to eq({})
+        expect(assets.fetch("/assets/feature-c.js")).to eq(type: :script)
+        expect(assets.fetch("/assets/feature-d.js")).to eq(type: :script)
       end
 
       it "allows the exclusion of multiple assets from push promise assets" do
@@ -161,7 +161,7 @@ describe Hanami::Assets::Helpers do
         DefaultView.new.stylesheet("main")
         assets = Thread.current[:__hanami_assets]
 
-        expect(assets.fetch("/assets/main.css")).to eq({})
+        expect(assets.fetch("/assets/main.css")).to eq(type: :style)
       end
 
       it "allows asset exclusion from push promise assets" do
@@ -176,8 +176,8 @@ describe Hanami::Assets::Helpers do
         DefaultView.new.stylesheet("framework", "styles")
         assets = Thread.current[:__hanami_assets]
 
-        expect(assets.fetch("/assets/framework.css")).to eq({})
-        expect(assets.fetch("/assets/styles.css")).to eq({})
+        expect(assets.fetch("/assets/framework.css")).to eq(type: :style)
+        expect(assets.fetch("/assets/styles.css")).to eq(type: :style)
       end
 
       it "allows the exclusion of multiple assets from push promise assets" do
@@ -234,7 +234,7 @@ describe Hanami::Assets::Helpers do
         expect(actual).to eq(%(<img src="/assets/application.jpg" alt="Application">))
 
         assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("/assets/application.jpg")).to eq({})
+        expect(assets.fetch("/assets/application.jpg")).to eq(type: :image)
       end
     end
   end
@@ -279,7 +279,7 @@ describe Hanami::Assets::Helpers do
         expect(actual).to eq(%(<link href="/assets/favicon.ico" rel="shortcut icon" type="image/x-icon">))
 
         assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("/assets/favicon.ico")).to eq({})
+        expect(assets.fetch("/assets/favicon.ico")).to eq(type: :image)
       end
     end
   end
@@ -364,7 +364,7 @@ describe Hanami::Assets::Helpers do
         expect(actual).to eq(%(<video src="/assets/movie.mp4"></video>))
 
         assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("/assets/movie.mp4")).to eq({})
+        expect(assets.fetch("/assets/movie.mp4")).to eq(type: :video)
       end
 
       it "allows asset inclusion in push promise assets when using block syntax" do
@@ -375,20 +375,20 @@ describe Hanami::Assets::Helpers do
         expect(actual).to eq(%(<video src="/assets/movie.mp4">\nYour browser does not support the video tag\n</video>))
 
         assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("/assets/movie.mp4")).to eq({})
+        expect(assets.fetch("/assets/movie.mp4")).to eq(type: :video)
       end
 
       it "allows asset inclusion in push promise assets when using block syntax and source tags" do
         actual = view.video do
           text "Your browser does not support the video tag"
-          source src: view.asset_path("movie.mp4", push: true), type: "video/mp4"
+          source src: view.asset_path("movie.mp4", push: :video), type: "video/mp4"
           source src: view.asset_path("movie.ogg"), type: "video/ogg"
         end.to_s
 
         expect(actual).to eq(%(<video>\nYour browser does not support the video tag\n<source src="/assets/movie.mp4" type="video/mp4">\n<source src="/assets/movie.ogg" type="video/ogg">\n</video>))
 
         assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("/assets/movie.mp4")).to eq({})
+        expect(assets.fetch("/assets/movie.mp4")).to eq(type: :video)
       end
     end
   end
@@ -473,7 +473,7 @@ describe Hanami::Assets::Helpers do
         expect(actual).to eq(%(<audio src="/assets/song.ogg"></audio>))
 
         assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("/assets/song.ogg")).to eq({})
+        expect(assets.fetch("/assets/song.ogg")).to eq(type: :audio)
       end
 
       it "allows asset inclusion in push promise assets when using block syntax" do
@@ -484,20 +484,20 @@ describe Hanami::Assets::Helpers do
         expect(actual).to eq(%(<audio src="/assets/song.ogg">\nYour browser does not support the audio tag\n</audio>))
 
         assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("/assets/song.ogg")).to eq({})
+        expect(assets.fetch("/assets/song.ogg")).to eq(type: :audio)
       end
 
       it "allows asset inclusion in push promise assets when using block syntax and source tags" do
         actual = view.audio do
           text "Your browser does not support the audio tag"
-          source src: view.asset_path("song.ogg", push: true), type: "audio/ogg"
+          source src: view.asset_path("song.ogg", push: :audio), type: "audio/ogg"
           source src: view.asset_path("song.wav"), type: "audio/wav"
         end.to_s
 
         expect(actual).to eq(%(<audio>\nYour browser does not support the audio tag\n<source src="/assets/song.ogg" type="audio/ogg">\n<source src="/assets/song.wav" type="audio/wav">\n</audio>))
 
         assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("/assets/song.ogg")).to eq({})
+        expect(assets.fetch("/assets/song.ogg")).to eq(type: :audio)
       end
     end
   end
@@ -537,7 +537,15 @@ describe Hanami::Assets::Helpers do
         assets = Thread.current[:__hanami_assets]
 
         expect(assets).to be_kind_of(Hash)
-        expect(assets.fetch('/assets/dashboard.js')).to eq({})
+        expect(assets.fetch('/assets/dashboard.js')).to eq(type: nil)
+      end
+
+      it "allows to specify asset type" do
+        view.asset_path("video.mp4", push: :video)
+        assets = Thread.current[:__hanami_assets]
+
+        expect(assets).to be_kind_of(Hash)
+        expect(assets.fetch('/assets/video.mp4')).to eq(type: :video)
       end
     end
   end
@@ -581,7 +589,15 @@ describe Hanami::Assets::Helpers do
         assets = Thread.current[:__hanami_assets]
 
         expect(assets).to be_kind_of(Hash)
-        expect(assets.fetch("http://localhost:2300/assets/metrics.js")).to eq({})
+        expect(assets.fetch("http://localhost:2300/assets/metrics.js")).to eq(type: nil)
+      end
+
+      it "allows to specify asset type" do
+        view.asset_url("metrics.js", push: :script)
+        assets = Thread.current[:__hanami_assets]
+
+        expect(assets).to be_kind_of(Hash)
+        expect(assets.fetch("http://localhost:2300/assets/metrics.js")).to eq(type: :script)
       end
     end
   end

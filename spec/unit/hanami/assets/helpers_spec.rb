@@ -81,14 +81,14 @@ describe Hanami::Assets::Helpers do
         DefaultView.new.javascript("feature-a")
         assets = Thread.current[:__hanami_assets]
 
-        expect(assets.fetch("/assets/feature-a.js")).to eq(type: :script, crossorigin: false)
+        expect(assets.fetch("/assets/feature-a.js")).to eq(as: :script, crossorigin: false)
       end
 
       it "includes crossorigin asset in push promise assets" do
         DefaultView.new.javascript("https://assets.hanamirb.org/assets/framework.js")
         assets = Thread.current[:__hanami_assets]
 
-        expect(assets.fetch("https://assets.hanamirb.org/assets/framework.js")).to eq(type: :script, crossorigin: true)
+        expect(assets.fetch("https://assets.hanamirb.org/assets/framework.js")).to eq(as: :script, crossorigin: true)
       end
 
       it "allows asset exclusion from push promise assets" do
@@ -103,8 +103,8 @@ describe Hanami::Assets::Helpers do
         DefaultView.new.javascript("feature-c", "feature-d")
         assets = Thread.current[:__hanami_assets]
 
-        expect(assets.fetch("/assets/feature-c.js")).to eq(type: :script, crossorigin: false)
-        expect(assets.fetch("/assets/feature-d.js")).to eq(type: :script, crossorigin: false)
+        expect(assets.fetch("/assets/feature-c.js")).to eq(as: :script, crossorigin: false)
+        expect(assets.fetch("/assets/feature-d.js")).to eq(as: :script, crossorigin: false)
       end
 
       it "allows the exclusion of multiple assets from push promise assets" do
@@ -169,7 +169,7 @@ describe Hanami::Assets::Helpers do
         DefaultView.new.stylesheet("main")
         assets = Thread.current[:__hanami_assets]
 
-        expect(assets.fetch("/assets/main.css")).to eq(type: :style, crossorigin: false)
+        expect(assets.fetch("/assets/main.css")).to eq(as: :style, crossorigin: false)
       end
 
       it "allows asset exclusion from push promise assets" do
@@ -184,8 +184,8 @@ describe Hanami::Assets::Helpers do
         DefaultView.new.stylesheet("framework", "styles")
         assets = Thread.current[:__hanami_assets]
 
-        expect(assets.fetch("/assets/framework.css")).to eq(type: :style, crossorigin: false)
-        expect(assets.fetch("/assets/styles.css")).to eq(type: :style, crossorigin: false)
+        expect(assets.fetch("/assets/framework.css")).to eq(as: :style, crossorigin: false)
+        expect(assets.fetch("/assets/styles.css")).to eq(as: :style, crossorigin: false)
       end
 
       it "allows the exclusion of multiple assets from push promise assets" do
@@ -242,7 +242,7 @@ describe Hanami::Assets::Helpers do
         expect(actual).to eq(%(<img src="/assets/application.jpg" alt="Application">))
 
         assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("/assets/application.jpg")).to eq(type: :image, crossorigin: false)
+        expect(assets.fetch("/assets/application.jpg")).to eq(as: :image, crossorigin: false)
       end
 
       it "allows crossorigin assets inclusion in push promise assets" do
@@ -250,7 +250,7 @@ describe Hanami::Assets::Helpers do
         expect(actual).to eq(%(<img src="https://assets.hanamirb.org/assets/application.jpg" alt="Application">))
 
         assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("https://assets.hanamirb.org/assets/application.jpg")).to eq(type: :image, crossorigin: true)
+        expect(assets.fetch("https://assets.hanamirb.org/assets/application.jpg")).to eq(as: :image, crossorigin: true)
       end
     end
   end
@@ -295,7 +295,7 @@ describe Hanami::Assets::Helpers do
         expect(actual).to eq(%(<link href="/assets/favicon.ico" rel="shortcut icon" type="image/x-icon">))
 
         assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("/assets/favicon.ico")).to eq(type: :image, crossorigin: false)
+        expect(assets.fetch("/assets/favicon.ico")).to eq(as: :image, crossorigin: false)
       end
 
       it "allows crossorigin assets inclusion in push promise assets" do
@@ -303,7 +303,7 @@ describe Hanami::Assets::Helpers do
         expect(actual).to eq(%(<link href="https://assets.hanamirb.org/assets/favicon.ico" rel="shortcut icon" type="image/x-icon">))
 
         assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("https://assets.hanamirb.org/assets/favicon.ico")).to eq(type: :image, crossorigin: true)
+        expect(assets.fetch("https://assets.hanamirb.org/assets/favicon.ico")).to eq(as: :image, crossorigin: true)
       end
     end
   end
@@ -388,7 +388,7 @@ describe Hanami::Assets::Helpers do
         expect(actual).to eq(%(<video src="/assets/movie.mp4"></video>))
 
         assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("/assets/movie.mp4")).to eq(type: :video, crossorigin: false)
+        expect(assets.fetch("/assets/movie.mp4")).to eq(as: :video, crossorigin: false)
       end
 
       it "allows crossorigin asset inclusion in push promise assets" do
@@ -396,7 +396,7 @@ describe Hanami::Assets::Helpers do
         expect(actual).to eq(%(<video src="https://assets.hanamirb.org/assets/movie.mp4"></video>))
 
         assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("https://assets.hanamirb.org/assets/movie.mp4")).to eq(type: :video, crossorigin: true)
+        expect(assets.fetch("https://assets.hanamirb.org/assets/movie.mp4")).to eq(as: :video, crossorigin: true)
       end
 
       it "allows asset inclusion in push promise assets when using block syntax" do
@@ -407,7 +407,7 @@ describe Hanami::Assets::Helpers do
         expect(actual).to eq(%(<video src="/assets/movie.mp4">\nYour browser does not support the video tag\n</video>))
 
         assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("/assets/movie.mp4")).to eq(type: :video, crossorigin: false)
+        expect(assets.fetch("/assets/movie.mp4")).to eq(as: :video, crossorigin: false)
       end
 
       it "allows asset inclusion in push promise assets when using block syntax and source tags" do
@@ -420,7 +420,7 @@ describe Hanami::Assets::Helpers do
         expect(actual).to eq(%(<video>\nYour browser does not support the video tag\n<source src="/assets/movie.mp4" type="video/mp4">\n<source src="/assets/movie.ogg" type="video/ogg">\n</video>))
 
         assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("/assets/movie.mp4")).to eq(type: :video, crossorigin: false)
+        expect(assets.fetch("/assets/movie.mp4")).to eq(as: :video, crossorigin: false)
       end
     end
   end
@@ -505,7 +505,7 @@ describe Hanami::Assets::Helpers do
         expect(actual).to eq(%(<audio src="/assets/song.ogg"></audio>))
 
         assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("/assets/song.ogg")).to eq(type: :audio, crossorigin: false)
+        expect(assets.fetch("/assets/song.ogg")).to eq(as: :audio, crossorigin: false)
       end
 
       it "allows crossorigin asset inclusion in push promise assets" do
@@ -513,7 +513,7 @@ describe Hanami::Assets::Helpers do
         expect(actual).to eq(%(<audio src="https://assets.hanamirbg.org/assets/song.ogg"></audio>))
 
         assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("https://assets.hanamirbg.org/assets/song.ogg")).to eq(type: :audio, crossorigin: true)
+        expect(assets.fetch("https://assets.hanamirbg.org/assets/song.ogg")).to eq(as: :audio, crossorigin: true)
       end
 
       it "allows asset inclusion in push promise assets when using block syntax" do
@@ -524,7 +524,7 @@ describe Hanami::Assets::Helpers do
         expect(actual).to eq(%(<audio src="/assets/song.ogg">\nYour browser does not support the audio tag\n</audio>))
 
         assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("/assets/song.ogg")).to eq(type: :audio, crossorigin: false)
+        expect(assets.fetch("/assets/song.ogg")).to eq(as: :audio, crossorigin: false)
       end
 
       it "allows asset inclusion in push promise assets when using block syntax and source tags" do
@@ -537,7 +537,7 @@ describe Hanami::Assets::Helpers do
         expect(actual).to eq(%(<audio>\nYour browser does not support the audio tag\n<source src="/assets/song.ogg" type="audio/ogg">\n<source src="/assets/song.wav" type="audio/wav">\n</audio>))
 
         assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("/assets/song.ogg")).to eq(type: :audio, crossorigin: false)
+        expect(assets.fetch("/assets/song.ogg")).to eq(as: :audio, crossorigin: false)
       end
     end
   end
@@ -577,7 +577,7 @@ describe Hanami::Assets::Helpers do
         assets = Thread.current[:__hanami_assets]
 
         expect(assets).to be_kind_of(Hash)
-        expect(assets.fetch('/assets/dashboard.js')).to eq(type: nil, crossorigin: false)
+        expect(assets.fetch('/assets/dashboard.js')).to eq(as: nil, crossorigin: false)
       end
 
       it "allows to specify asset type" do
@@ -585,7 +585,7 @@ describe Hanami::Assets::Helpers do
         assets = Thread.current[:__hanami_assets]
 
         expect(assets).to be_kind_of(Hash)
-        expect(assets.fetch('/assets/video.mp4')).to eq(type: :video, crossorigin: false)
+        expect(assets.fetch('/assets/video.mp4')).to eq(as: :video, crossorigin: false)
       end
 
       it "allows to link crossorigin asset" do
@@ -593,7 +593,7 @@ describe Hanami::Assets::Helpers do
         assets = Thread.current[:__hanami_assets]
 
         expect(assets).to be_kind_of(Hash)
-        expect(assets.fetch("https://assets.hanamirb.org/assets/video.mp4")).to eq(type: :video, crossorigin: true)
+        expect(assets.fetch("https://assets.hanamirb.org/assets/video.mp4")).to eq(as: :video, crossorigin: true)
       end
     end
   end
@@ -637,7 +637,7 @@ describe Hanami::Assets::Helpers do
         assets = Thread.current[:__hanami_assets]
 
         expect(assets).to be_kind_of(Hash)
-        expect(assets.fetch("http://localhost:2300/assets/metrics.js")).to eq(type: nil, crossorigin: false)
+        expect(assets.fetch("http://localhost:2300/assets/metrics.js")).to eq(as: nil, crossorigin: false)
       end
 
       it "allows to specify asset type" do
@@ -645,7 +645,7 @@ describe Hanami::Assets::Helpers do
         assets = Thread.current[:__hanami_assets]
 
         expect(assets).to be_kind_of(Hash)
-        expect(assets.fetch("http://localhost:2300/assets/metrics.js")).to eq(type: :script, crossorigin: false)
+        expect(assets.fetch("http://localhost:2300/assets/metrics.js")).to eq(as: :script, crossorigin: false)
       end
 
       it "allows to link crossorigin asset" do
@@ -653,7 +653,7 @@ describe Hanami::Assets::Helpers do
         assets = Thread.current[:__hanami_assets]
 
         expect(assets).to be_kind_of(Hash)
-        expect(assets.fetch("https://assets.hanamirb.org/assets/metrics.js")).to eq(type: :script, crossorigin: true)
+        expect(assets.fetch("https://assets.hanamirb.org/assets/metrics.js")).to eq(as: :script, crossorigin: true)
       end
     end
   end

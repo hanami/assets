@@ -164,10 +164,10 @@ module Hanami
       #   <%= javascript 'application' %>
       #
       #   # <script src="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js" type="text/javascript"></script>
-      def javascript(*sources, **options)
+      def javascript(*sources, push: true, **options)
         _safe_tags(*sources) do |source|
           tag_options = options.dup
-          tag_options[:src] ||= _typed_asset_path(source, JAVASCRIPT_EXT)
+          tag_options[:src] ||= _typed_asset_path(source, JAVASCRIPT_EXT, push: push)
           tag_options[:type] ||= JAVASCRIPT_MIME_TYPE
 
           if _subresource_integrity? || tag_options.include?(:integrity)
@@ -251,10 +251,10 @@ module Hanami
       #   <%= stylesheet 'application' %>
       #
       #   # <link href="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.css" type="text/css" rel="stylesheet">
-      def stylesheet(*sources, **options) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def stylesheet(*sources, push: true, **options) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         _safe_tags(*sources) do |source|
           tag_options = options.dup
-          tag_options[:href] ||= _typed_asset_path(source, STYLESHEET_EXT)
+          tag_options[:href] ||= _typed_asset_path(source, STYLESHEET_EXT, push: push)
           tag_options[:type] ||= STYLESHEET_MIME_TYPE
           tag_options[:rel] ||= STYLESHEET_REL
 
@@ -333,7 +333,7 @@ module Hanami
       #
       #   # <img src="https://assets.bookshelf.org/assets/logo-28a6b886de2372ee3922fcaf3f78f2d8.png" alt="Logo">
       def image(source, options = {})
-        options[:src] = asset_path(source)
+        options[:src] = asset_path(source, push: options.delete(:push) || false)
         options[:alt] ||= Utils::String.titleize(::File.basename(source, WILDCARD_EXT))
 
         html.img(options)
@@ -379,7 +379,7 @@ module Hanami
       #
       # @example Custom HTML Attributes
       #
-      #   <%= favicon id: 'fav' %>
+      #   <%= favicon "favicon.ico", id: "fav" %>
       #
       #   # <link id: "fav" href="/assets/favicon.ico" rel="shortcut icon" type="image/x-icon">
       #
@@ -395,7 +395,7 @@ module Hanami
       #
       #   # <link href="https://assets.bookshelf.org/assets/favicon-28a6b886de2372ee3922fcaf3f78f2d8.ico" rel="shortcut icon" type="image/x-icon">
       def favicon(source = DEFAULT_FAVICON, options = {})
-        options[:href]   = asset_path(source)
+        options[:href]   = asset_path(source, push: options.delete(:push) || false)
         options[:rel]  ||= FAVICON_REL
         options[:type] ||= FAVICON_MIME_TYPE
 
@@ -684,8 +684,8 @@ module Hanami
       #   <%= asset_path 'application.js' %>
       #
       #   # "https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js"
-      def asset_path(source)
-        _asset_url(source) { _relative_url(source) }
+      def asset_path(source, push: false)
+        _asset_url(source, push: push) { _relative_url(source) }
       end
 
       # It generates the absolute URL for the given source.
@@ -732,8 +732,8 @@ module Hanami
       #   <%= asset_url 'application.js' %>
       #
       #   # "https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js"
-      def asset_url(source)
-        _asset_url(source) { _absolute_url(source) }
+      def asset_url(source, push: false)
+        _asset_url(source, push: push) { _absolute_url(source) }
       end
 
       private
@@ -750,18 +750,17 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      def _asset_url(source)
-        _push_promise(
-          _absolute_url?(source) ? # rubocop:disable Style/MultilineTernaryOperator
-            source : yield
-        )
+      def _asset_url(source, push:)
+        url = _absolute_url?(source) ? source : yield
+        _push_promise(url) if push
+        url
       end
 
       # @since 0.1.0
       # @api private
-      def _typed_asset_path(source, ext)
+      def _typed_asset_path(source, ext, push: false)
         source = "#{source}#{ext}" if _append_extension?(source, ext)
-        asset_path(source)
+        asset_path(source, push: push)
       end
 
       # @api private
@@ -801,7 +800,7 @@ module Hanami
         if src.respond_to?(:to_hash)
           options = src.to_hash
         elsif src
-          options[:src] = asset_path(src)
+          options[:src] = asset_path(src, push: options.delete(:push) || false)
         end
 
         if !options[:src] && !block_given?

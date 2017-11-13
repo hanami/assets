@@ -331,7 +331,8 @@ describe Hanami::Assets::Helpers do
 
     it 'adds source to HTTP/2 PUSH PROMISE list' do
       view.asset_path('dashboard.js')
-      expect(Thread.current[:__hanami_assets]).to include('/assets/dashboard.js')
+      expect(Thread.current[:__hanami_assets]).to be_kind_of(Hash)
+      expect(Thread.current[:__hanami_assets].fetch('/assets/dashboard.js')).to eq({})
     end
 
     describe 'cdn mode' do

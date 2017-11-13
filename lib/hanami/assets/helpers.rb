@@ -1,6 +1,4 @@
 require 'uri'
-require 'set'
-require 'thread'
 require 'hanami/helpers/html_helper'
 require 'hanami/utils/escape'
 
@@ -816,10 +814,8 @@ module Hanami
       # @since 0.1.0
       # @api private
       def _push_promise(url)
-        Mutex.new.synchronize do
-          Thread.current[:__hanami_assets] ||= Set.new
-          Thread.current[:__hanami_assets].add(url.to_s)
-        end
+        Thread.current[:__hanami_assets] ||= {}
+        Thread.current[:__hanami_assets][url.to_s] = {}
 
         url
       end

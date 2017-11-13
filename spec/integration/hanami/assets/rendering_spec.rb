@@ -22,8 +22,9 @@ describe 'Rendering test' do
     it 'stores assets in thread local' do
       result
       assets = Thread.current[:__hanami_assets]
-      expect(assets).to include '/assets/main.css'
-      expect(assets).to include '/assets/feature-a.js'
+      expect(assets).to be_kind_of(Hash)
+      expect(assets.fetch('/assets/main.css')).to eq({})
+      expect(assets.fetch('/assets/feature-a.js')).to eq({})
     end
   end
 

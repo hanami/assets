@@ -787,6 +787,13 @@ module Hanami
         ABSOLUTE_URL_MATCHER.match(source)
       end
 
+      # @since x.x.x
+      # @api private
+      def _crossorigin?(source)
+        return false unless _absolute_url?(source)
+        self.class.assets_configuration.crossorigin?(source)
+      end
+
       # @since 0.1.0
       # @api private
       def _relative_url(source)
@@ -821,7 +828,7 @@ module Hanami
       # @api private
       def _push_promise(url, type: nil)
         Thread.current[:__hanami_assets] ||= {}
-        Thread.current[:__hanami_assets][url.to_s] = { type: type }
+        Thread.current[:__hanami_assets][url.to_s] = { type: type, crossorigin: _crossorigin?(url) }
 
         url
       end

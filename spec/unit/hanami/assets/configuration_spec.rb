@@ -465,6 +465,68 @@ describe Hanami::Assets::Configuration do
     end
   end
 
+  describe "#crossorigin?" do
+    after do
+      @configuration.reset!
+    end
+
+    context "development mode" do
+      before do
+        @configuration.load!
+      end
+
+      it "returns false when scheme, host, and port match" do
+        expect(@configuration.crossorigin?("http://localhost:2300/assets/application.js")).to be(false)
+      end
+
+      it "returns true when scheme doesn't match" do
+        expect(@configuration.crossorigin?("https://localhost:2300/assets/application.js")).to be(true)
+      end
+
+      it "returns true when host doesn't match" do
+        expect(@configuration.crossorigin?("http://some-host:2300/assets/application.js")).to be(true)
+      end
+
+      it "returns true when uses a subdomain" do
+        expect(@configuration.crossorigin?("http://assets.localhost:2300/assets/application.js")).to be(true)
+      end
+
+      it "returns true when port doesn't match" do
+        expect(@configuration.crossorigin?("http://localhost:8080/assets/application.js")).to be(true)
+      end
+    end
+
+    describe "production mode" do
+      before do
+        @configuration.scheme "https"
+        @configuration.host   "hanamirb.org"
+        @configuration.port   443
+        @configuration.load!
+      end
+
+      it "returns false when scheme, host, and port match" do
+        expect(@configuration.crossorigin?("https://hanamirb.org/assets/application.js")).to be(false)
+      end
+
+      it "returns true when scheme doesn't match" do
+        expect(@configuration.crossorigin?("http://hanamirb.org/assets/application.js")).to be(true)
+      end
+
+      it "returns true when host doesn't match" do
+        expect(@configuration.crossorigin?("https://hanamirb.test/assets/application.js")).to be(true)
+      end
+
+      it "returns true when uses a subdomain" do
+        expect(@configuration.crossorigin?("https://www.hanamirb.org/assets/application.js")).to be(true)
+      end
+
+      xit "returns true when port doesn't match" do
+        @configuration.crossorigin?("https://hanamirb.org:8081/assets/application.js")
+        expect(@configuration.crossorigin?("https://hanamirb.org:8081/assets/application.js")).to be(true)
+      end
+    end
+  end
+
   describe 'subresource_integrity_value' do
     describe 'subresource_integrity mode' do
       before do

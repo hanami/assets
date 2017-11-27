@@ -412,6 +412,18 @@ module Hanami
         "#{@base_url}#{compile_path(source)}"
       end
 
+      # Check if the given source is linked via Cross-Origin policy.
+      # In other words, the given source, doesn't satisfy the Same-Origin policy.
+      #
+      # @see https://en.wikipedia.org/wiki/Same-origin_policy#Origin_determination_rules
+      # @see https://en.wikipedia.org/wiki/Same-origin_policy#document.domain_property
+      #
+      # @since x.x.x
+      # @api private
+      def crossorigin?(source)
+        !source.start_with?(@base_url)
+      end
+
       # An array of crypographically secure hashing algorithms to use for
       # generating asset subresource integrity checks
       #

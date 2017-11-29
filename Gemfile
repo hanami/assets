@@ -6,9 +6,9 @@ unless ENV['TRAVIS']
   gem 'yard',   require: false
 end
 
-gem 'hanami-utils',   '~> 1.1', git: 'https://github.com/hanami/utils.git',   branch: 'develop'
-gem 'hanami-helpers', '~> 1.1', git: 'https://github.com/hanami/helpers.git', branch: 'develop'
-gem 'hanami-view',    '~> 1.1', git: 'https://github.com/hanami/view.git',    branch: 'develop'
+gem 'hanami-utils',   '2.0.0.alpha1', git: 'https://github.com/hanami/utils.git',   branch: 'unstable'
+gem 'hanami-helpers', '2.0.0.alpha1', git: 'https://github.com/hanami/helpers.git', branch: 'unstable'
+gem 'hanami-view',    '2.0.0.alpha1', git: 'https://github.com/hanami/view.git',    branch: 'unstable'
 
 gem 'hanami-emberjs',        path: 'spec/support/fixtures/hanami-emberjs',        require: false
 gem 'hanami-compass',        path: 'spec/support/fixtures/hanami-compass',        require: false

@@ -111,12 +111,12 @@ describe Hanami::Assets::Configuration do
 
     it 'allows to set an Array of symbols, without brackets' do
       @configuration.subresource_integrity :sha256, :sha512
-      expect(@configuration.subresource_integrity).to eq(%i(sha256 sha512))
+      expect(@configuration.subresource_integrity).to eq(%i[sha256 sha512])
     end
 
     it 'allows to set an Array of symbols, with brackets' do
-      @configuration.subresource_integrity %i(sha256 sha512)
-      expect(@configuration.subresource_integrity).to eq(%i(sha256 sha512))
+      @configuration.subresource_integrity %i[sha256 sha512]
+      expect(@configuration.subresource_integrity).to eq(%i[sha256 sha512])
     end
   end
 
@@ -132,8 +132,8 @@ describe Hanami::Assets::Configuration do
     end
 
     it 'allows to an Array of symbols' do
-      @configuration.subresource_integrity %i(sha256 sha512)
-      expect(@configuration.subresource_integrity_algorithms).to eq(%i(sha256 sha512))
+      @configuration.subresource_integrity %i[sha256 sha512]
+      expect(@configuration.subresource_integrity_algorithms).to eq(%i[sha256 sha512])
     end
   end
 
@@ -461,6 +461,68 @@ describe Hanami::Assets::Configuration do
           end.to raise_error(Hanami::Assets::MissingManifestFileError,
                              "Can't read manifest: #{@configuration.manifest_path}")
         end
+      end
+    end
+  end
+
+  describe "#crossorigin?" do
+    after do
+      @configuration.reset!
+    end
+
+    context "development mode" do
+      before do
+        @configuration.load!
+      end
+
+      it "returns false when scheme, host, and port match" do
+        expect(@configuration.crossorigin?("http://localhost:2300/assets/application.js")).to be(false)
+      end
+
+      it "returns true when scheme doesn't match" do
+        expect(@configuration.crossorigin?("https://localhost:2300/assets/application.js")).to be(true)
+      end
+
+      it "returns true when host doesn't match" do
+        expect(@configuration.crossorigin?("http://some-host:2300/assets/application.js")).to be(true)
+      end
+
+      it "returns true when uses a subdomain" do
+        expect(@configuration.crossorigin?("http://assets.localhost:2300/assets/application.js")).to be(true)
+      end
+
+      it "returns true when port doesn't match" do
+        expect(@configuration.crossorigin?("http://localhost:8080/assets/application.js")).to be(true)
+      end
+    end
+
+    describe "production mode" do
+      before do
+        @configuration.scheme "https"
+        @configuration.host   "hanamirb.org"
+        @configuration.port   443
+        @configuration.load!
+      end
+
+      it "returns false when scheme, host, and port match" do
+        expect(@configuration.crossorigin?("https://hanamirb.org/assets/application.js")).to be(false)
+      end
+
+      it "returns true when scheme doesn't match" do
+        expect(@configuration.crossorigin?("http://hanamirb.org/assets/application.js")).to be(true)
+      end
+
+      it "returns true when host doesn't match" do
+        expect(@configuration.crossorigin?("https://hanamirb.test/assets/application.js")).to be(true)
+      end
+
+      it "returns true when uses a subdomain" do
+        expect(@configuration.crossorigin?("https://www.hanamirb.org/assets/application.js")).to be(true)
+      end
+
+      xit "returns true when port doesn't match" do
+        @configuration.crossorigin?("https://hanamirb.org:8081/assets/application.js")
+        expect(@configuration.crossorigin?("https://hanamirb.org:8081/assets/application.js")).to be(true)
       end
     end
   end

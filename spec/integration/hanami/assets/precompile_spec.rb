@@ -10,7 +10,7 @@ describe 'Precompile' do
   let(:dest)   { TMP }
   let(:target) { dest.join('assets') }
 
-  let(:vendor_files) { %w(robots.txt).map { |file| dest.join(file) } }
+  let(:vendor_files) { %w[robots.txt].map { |file| dest.join(file) } }
 
   describe 'standalone framework' do
     let(:dest) { TMP.join('standalone', 'public') }

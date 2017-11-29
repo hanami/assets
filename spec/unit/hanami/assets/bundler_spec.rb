@@ -62,11 +62,20 @@ describe Hanami::Assets::Bundler do
         expect_permissions(manifest)
 
         actual   = JSON.parse(manifest.read)
-        expected = JSON.parse(File.read(__dir__ + "/../../../support/fixtures/deploy/assets-#{compressor || 'null'}.json"))
+        expected = JSON.parse(File.read(__dir__ + "/../../../support/fixtures/deploy/assets.json"))
 
         expect(actual.size).to eq(expected.size)
         expected.each do |original, current|
-          expect(actual[original]).to eq(current)
+          extname  = File.extname(original)
+          basename = File.join(File.dirname(original), File.basename(original, extname))
+
+          expected_target = /\A#{basename}\-[[:alnum:]]{32}#{extname}\z/
+          expected_sri    = [/\Asha256\-[[[:alnum:]][[:punct:]][[:graph:]]]{43}\=\z/]
+
+          expect(current.fetch("target")).to match(expected_target)
+          expected_sri.each_with_index do |value, i|
+            expect(current.fetch("sri")[i]).to match(value)
+          end
         end
       end
 

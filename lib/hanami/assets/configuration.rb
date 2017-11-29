@@ -81,7 +81,7 @@ module Hanami
       # @api private
       def self.for(base)
         # TODO: this implementation is similar to Hanami::Controller::Configuration consider to extract it into Hanami::Utils
-        namespace = Utils::String.new(base).namespace
+        namespace = Utils::String.namespace(base)
         framework = Utils::Class.load_from_pattern!("(#{namespace}|Hanami)::Assets")
         framework.configuration
       end
@@ -412,6 +412,18 @@ module Hanami
         "#{@base_url}#{compile_path(source)}"
       end
 
+      # Check if the given source is linked via Cross-Origin policy.
+      # In other words, the given source, doesn't satisfy the Same-Origin policy.
+      #
+      # @see https://en.wikipedia.org/wiki/Same-origin_policy#Origin_determination_rules
+      # @see https://en.wikipedia.org/wiki/Same-origin_policy#document.domain_property
+      #
+      # @since x.x.x
+      # @api private
+      def crossorigin?(source)
+        !source.start_with?(@base_url)
+      end
+
       # An array of crypographically secure hashing algorithms to use for
       # generating asset subresource integrity checks
       #
@@ -599,10 +611,15 @@ module Hanami
 
       # @since 0.1.0
       # @api private
+      #
+      # rubocop:disable Style/MultilineTernaryOperator
+      # rubocop:disable Style/TernaryParentheses
       def url_port
-        ((scheme == HTTP_SCHEME && port == HTTP_PORT) || # rubocop:disable Style/MultilineTernaryOperator
+        ((scheme == HTTP_SCHEME && port == HTTP_PORT) ||
           (scheme == HTTPS_SCHEME && port == HTTPS_PORT)) ? nil : port.to_i
       end
+      # rubocop:enable Style/TernaryParentheses
+      # rubocop:enable Style/MultilineTernaryOperator
     end
   end
 end

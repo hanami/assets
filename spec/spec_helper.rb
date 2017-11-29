@@ -1,17 +1,19 @@
-if ENV['COVERALL']
-  require 'coveralls'
+# frozen_string_literal: true
+
+if ENV["COVERALL"]
+  require "coveralls"
   Coveralls.wear!
 end
 
-$LOAD_PATH.unshift 'lib'
-$LOAD_PATH.unshift 'spec'
-require 'hanami/assets'
-require 'support/test_file'
-require 'support/ci'
-require 'support/fixtures'
-require 'pathname'
+$LOAD_PATH.unshift "lib"
+$LOAD_PATH.unshift "spec"
+require "hanami/assets"
+require "support/test_file"
+require "support/ci"
+require "support/fixtures"
+require "pathname"
 
-TMP = Pathname.new(__dir__).join('..', 'tmp')
+TMP = Pathname.new(__dir__).join("..", "tmp")
 TMP.mkpath
 
 Hanami::Utils::LoadPaths.class_eval do

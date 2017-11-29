@@ -1,5 +1,7 @@
-require 'thread'
-require 'pathname'
+# frozen_string_literal: true
+
+require "thread"
+require "pathname"
 
 module Hanami
   module Assets

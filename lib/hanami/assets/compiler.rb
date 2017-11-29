@@ -1,13 +1,15 @@
-require 'set'
-require 'find'
-require 'hanami/utils/class_attribute'
+# frozen_string_literal: true
+
+require "set"
+require "find"
+require "hanami/utils/class_attribute"
 
 module Hanami
   module Assets
     # Missing Asset error
     class MissingAsset < Error
       def initialize(name, sources)
-        sources = sources.map(&:to_s).join(', ')
+        sources = sources.map(&:to_s).join(", ")
         super("Missing asset: `#{name}' (sources: #{sources})")
       end
     end
@@ -35,11 +37,11 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      COMPILE_PATTERN = '*.*.*'.freeze # Example hello.js.es6
+      COMPILE_PATTERN = "*.*.*" # Example hello.js.es6
 
       # @since 0.1.0
       # @api private
-      EXTENSIONS = { '.js' => true, '.css' => true, '.map' => true }.freeze
+      EXTENSIONS = { ".js" => true, ".css" => true, ".map" => true }.freeze
 
       include Utils::ClassAttribute
 
@@ -67,10 +69,10 @@ module Hanami
       def self.compile(configuration, name)
         return unless configuration.compile
 
-        require 'tilt'
-        require 'hanami/assets/cache'
-        require 'hanami/assets/compilers/sass'
-        require 'hanami/assets/compilers/less'
+        require "tilt"
+        require "hanami/assets/cache"
+        require "hanami/assets/compilers/sass"
+        require "hanami/assets/compilers/less"
         fabricate(configuration, name).compile
       end
 

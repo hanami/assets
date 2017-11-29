@@ -1,4 +1,6 @@
-require 'hanami/assets/compressors/stylesheet'
+# frozen_string_literal: true
+
+require "hanami/assets/compressors/stylesheet"
 
 module Hanami
   module Assets

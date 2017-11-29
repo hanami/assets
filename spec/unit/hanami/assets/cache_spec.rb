@@ -1,9 +1,11 @@
-require 'hanami/assets/cache'
+# frozen_string_literal: true
+
+require "hanami/assets/cache"
 
 RSpec.describe Hanami::Assets::Cache do
   let(:cache) { Hanami::Assets::Cache.new }
 
-  describe '#modified?' do
+  describe "#modified?" do
     it "returns false when the stored file wasn't updated" do
       file = TestFile.new
       cache.store(file)
@@ -11,7 +13,7 @@ RSpec.describe Hanami::Assets::Cache do
       expect(cache.modified?(file)).not_to eq(true)
     end
 
-    it 'returns true when the file was updated after the last check' do
+    it "returns true when the file was updated after the last check" do
       file = TestFile.new
       cache.store(file)
 
@@ -20,13 +22,13 @@ RSpec.describe Hanami::Assets::Cache do
       end
     end
 
-    it 'returns true when the file was never stored' do
+    it "returns true when the file was never stored" do
       file = TestFile.new
 
       expect(cache.modified?(file)).to eq(true)
     end
 
-    describe 'with dependencies' do
+    describe "with dependencies" do
       it "returns true when both file and deps weren't updated, but checking at the same timestamp" do
         file =  TestFile.new
         deps = [TestFile.new]
@@ -35,7 +37,7 @@ RSpec.describe Hanami::Assets::Cache do
         expect(cache.modified?(file)).to eq(true)
       end
 
-      it 'returns true when at least one dependency was updated' do
+      it "returns true when at least one dependency was updated" do
         file =        TestFile.new
         deps = [dep = TestFile.new]
 

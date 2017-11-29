@@ -1,5 +1,7 @@
-require 'thread'
-require 'hanami/utils/class_attribute'
+# frozen_string_literal: true
+
+require "thread"
+require "hanami/utils/class_attribute"
 
 # Hanami
 #
@@ -17,10 +19,10 @@ module Hanami
     class Error < ::StandardError
     end
 
-    require 'hanami/assets/version'
-    require 'hanami/assets/configuration'
-    require 'hanami/assets/config/global_sources'
-    require 'hanami/assets/helpers'
+    require "hanami/assets/version"
+    require "hanami/assets/configuration"
+    require "hanami/assets/config/global_sources"
+    require "hanami/assets/helpers"
 
     include Utils::ClassAttribute
 
@@ -49,8 +51,8 @@ module Hanami
     #
     # @since 0.1.0
     def self.deploy
-      require 'hanami/assets/precompiler'
-      require 'hanami/assets/bundler'
+      require "hanami/assets/precompiler"
+      require "hanami/assets/bundler"
 
       Precompiler.new(configuration, duplicates).run
       Bundler.new(configuration,     duplicates).run
@@ -60,8 +62,8 @@ module Hanami
     #
     # @since 0.4.0
     def self.precompile(configurations)
-      require 'hanami/assets/precompiler'
-      require 'hanami/assets/bundler'
+      require "hanami/assets/precompiler"
+      require "hanami/assets/bundler"
 
       Precompiler.new(configuration, configurations).run
       Bundler.new(configuration,     configurations).run

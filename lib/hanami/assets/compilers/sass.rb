@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Hanami
   module Assets
     module Compilers
@@ -13,7 +15,7 @@ module Hanami
         # @since 0.1.0
         # @api private
         CACHE_LOCATION = Pathname(Hanami.respond_to?(:root) ? # rubocop:disable Style/MultilineTernaryOperator
-                                  Hanami.root : Dir.pwd).join('tmp', 'sass-cache')
+                                  Hanami.root : Dir.pwd).join("tmp", "sass-cache")
 
         # @since 0.3.0
         # @api private

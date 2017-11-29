@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Hanami
   module Assets
     class Bundler
@@ -8,7 +10,7 @@ module Hanami
       class ManifestEntry
         # @since 0.3.0
         # @api private
-        SUBRESOURCE_INTEGRITY_SEPARATOR = '-'.freeze
+        SUBRESOURCE_INTEGRITY_SEPARATOR = "-"
 
         # Return a new instance
         #

@@ -1,11 +1,13 @@
-require 'pathname'
-require 'json'
-require 'hanami/utils/string'
-require 'hanami/utils/class'
-require 'hanami/utils/path_prefix'
-require 'hanami/utils/basic_object'
-require 'hanami/assets/config/manifest'
-require 'hanami/assets/config/sources'
+# frozen_string_literal: true
+
+require "pathname"
+require "json"
+require "hanami/utils/string"
+require "hanami/utils/class"
+require "hanami/utils/path_prefix"
+require "hanami/utils/basic_object"
+require "hanami/assets/config/manifest"
+require "hanami/assets/config/sources"
 
 module Hanami
   module Assets
@@ -15,47 +17,47 @@ module Hanami
     class Configuration # rubocop:disable Metrics/ClassLength
       # @since 0.1.0
       # @api private
-      DEFAULT_SCHEME                          = 'http'.freeze
+      DEFAULT_SCHEME                          = "http"
 
       # @since 0.1.0
       # @api private
-      DEFAULT_HOST                            = 'localhost'.freeze
+      DEFAULT_HOST                            = "localhost"
 
       # @since 0.1.0
       # @api private
-      DEFAULT_PORT                            = '2300'.freeze
+      DEFAULT_PORT                            = "2300"
 
       # @since 0.1.0
       # @api private
-      DEFAULT_PUBLIC_DIRECTORY                = 'public'.freeze
+      DEFAULT_PUBLIC_DIRECTORY                = "public"
 
       # @since 0.1.0
       # @api private
-      DEFAULT_MANIFEST                        = 'assets.json'.freeze
+      DEFAULT_MANIFEST                        = "assets.json"
 
       # @since 0.1.0
       # @api private
-      DEFAULT_PREFIX                          = '/assets'.freeze
+      DEFAULT_PREFIX                          = "/assets"
 
       # @since 0.1.0
       # @api private
-      URL_SEPARATOR                           = '/'.freeze
+      URL_SEPARATOR                           = "/"
 
       # @since 0.1.0
       # @api private
-      HTTP_SCHEME                             = 'http'.freeze
+      HTTP_SCHEME                             = "http"
 
       # @since 0.1.0
       # @api private
-      HTTP_PORT                               = '80'.freeze
+      HTTP_PORT                               = "80"
 
       # @since 0.1.0
       # @api private
-      HTTPS_SCHEME                            = 'https'.freeze
+      HTTPS_SCHEME                            = "https"
 
       # @since 0.1.0
       # @api private
-      HTTPS_PORT                              = '443'.freeze
+      HTTPS_PORT                              = "443"
 
       # @since 0.3.0
       # @api private
@@ -63,7 +65,7 @@ module Hanami
 
       # @since 0.3.0
       # @api private
-      SUBRESOURCE_INTEGRITY_SEPARATOR         = ' '.freeze
+      SUBRESOURCE_INTEGRITY_SEPARATOR         = " "
 
       # Return a copy of the configuration of the framework instance associated
       # with the given class.
@@ -463,7 +465,7 @@ module Hanami
       # @see Hanami::Assets::Configuration#javascript_compressor
       # @see Hanami::Assets::Compressors::Javascript#for
       def js_compressor
-        require 'hanami/assets/compressors/javascript'
+        require "hanami/assets/compressors/javascript"
         Hanami::Assets::Compressors::Javascript.for(javascript_compressor)
       end
 
@@ -480,7 +482,7 @@ module Hanami
       # @see Hanami::Assets::Configuration#stylesheet_compressor
       # @see Hanami::Assets::Compressors::Stylesheet#for
       def css_compressor
-        require 'hanami/assets/compressors/stylesheet'
+        require "hanami/assets/compressors/stylesheet"
         Hanami::Assets::Compressors::Stylesheet.for(stylesheet_compressor)
       end
 

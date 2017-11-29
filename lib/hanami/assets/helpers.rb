@@ -1,6 +1,8 @@
-require 'uri'
-require 'hanami/helpers/html_helper'
-require 'hanami/utils/escape'
+# frozen_string_literal: true
+
+require "uri"
+require "hanami/helpers/html_helper"
+require "hanami/utils/escape"
 
 module Hanami
   module Assets
@@ -14,47 +16,47 @@ module Hanami
     module Helpers # rubocop:disable Metrics/ModuleLength
       # @since 0.1.0
       # @api private
-      NEW_LINE_SEPARATOR = "\n".freeze
+      NEW_LINE_SEPARATOR = "\n"
 
       # @since 0.1.0
       # @api private
-      WILDCARD_EXT   = '.*'.freeze
+      WILDCARD_EXT   = ".*"
 
       # @since 0.1.0
       # @api private
-      JAVASCRIPT_EXT = '.js'.freeze
+      JAVASCRIPT_EXT = ".js"
 
       # @since 0.1.0
       # @api private
-      STYLESHEET_EXT = '.css'.freeze
+      STYLESHEET_EXT = ".css"
 
       # @since 0.1.0
       # @api private
-      JAVASCRIPT_MIME_TYPE = 'text/javascript'.freeze
+      JAVASCRIPT_MIME_TYPE = "text/javascript"
 
       # @since 0.1.0
       # @api private
-      STYLESHEET_MIME_TYPE = 'text/css'.freeze
+      STYLESHEET_MIME_TYPE = "text/css"
 
       # @since 0.1.0
       # @api private
-      FAVICON_MIME_TYPE    = 'image/x-icon'.freeze
+      FAVICON_MIME_TYPE    = "image/x-icon"
 
       # @since 0.1.0
       # @api private
-      STYLESHEET_REL  = 'stylesheet'.freeze
+      STYLESHEET_REL  = "stylesheet"
 
       # @since 0.1.0
       # @api private
-      FAVICON_REL     = 'shortcut icon'.freeze
+      FAVICON_REL     = "shortcut icon"
 
       # @since 0.1.0
       # @api private
-      DEFAULT_FAVICON = 'favicon.ico'.freeze
+      DEFAULT_FAVICON = "favicon.ico"
 
       # @since 0.3.0
       # @api private
-      CROSSORIGIN_ANONYMOUS = 'anonymous'.freeze
+      CROSSORIGIN_ANONYMOUS = "anonymous"
 
       # @since 0.3.0
       # @api private
@@ -848,7 +850,7 @@ module Hanami
 
       # @api private
       def _subresource_integrity_value(source, ext)
-        source = "#{source}#{ext}" unless source =~ /#{Regexp.escape(ext)}\z/
+        source = "#{source}#{ext}" unless source.match?(/#{Regexp.escape(ext)}\z/)
         self.class.assets_configuration.subresource_integrity_value(source) unless _absolute_url?(source)
       end
 
@@ -889,7 +891,7 @@ module Hanami
         end
 
         if !options[:src] && !block_given?
-          raise ArgumentError.new('You should provide a source via `src` option or with a `source` HTML tag')
+          raise ArgumentError.new("You should provide a source via `src` option or with a `source` HTML tag")
         end
 
         options

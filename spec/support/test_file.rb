@@ -1,5 +1,7 @@
-require 'securerandom'
-require_relative 'ci'
+# frozen_string_literal: true
+
+require "securerandom"
+require_relative "ci"
 
 class TestFile
   OPEN_MODE   = File::WRONLY | File::TRUNC | File::CREAT

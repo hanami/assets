@@ -1,9 +1,11 @@
-require 'erb'
-require 'sass'
-require 'coffee_script'
-require 'hanami/view'
-require 'tilt/erb'
-require 'tilt/babel'
+# frozen_string_literal: true
+
+require "erb"
+require "sass"
+require "coffee_script"
+require "hanami/view"
+require "tilt/erb"
+require "tilt/babel"
 
 module View
   def self.included(base)
@@ -15,7 +17,7 @@ module View
 
   module ClassMethods
     def template
-      __dir__ + '/fixtures/template.erb'
+      __dir__ + "/fixtures/template.erb"
     end
   end
 
@@ -34,7 +36,7 @@ class DefaultView
   include View
 
   def self.template
-    __dir__ + '/fixtures/template.erb'
+    __dir__ + "/fixtures/template.erb"
   end
 end
 
@@ -50,7 +52,7 @@ class RenderMultipleAssets
   include View
 
   def self.template
-    __dir__ + '/fixtures/multi-template.erb'
+    __dir__ + "/fixtures/multi-template.erb"
   end
 end
 
@@ -58,7 +60,7 @@ class AbsoluteUrlsView
   include View
 
   def self.template
-    __dir__ + '/fixtures/absolute-urls-template.erb'
+    __dir__ + "/fixtures/absolute-urls-template.erb"
   end
 end
 
@@ -66,7 +68,7 @@ class CompilerView
   include View
 
   def self.template
-    __dir__ + '/fixtures/compiler-template.erb'
+    __dir__ + "/fixtures/compiler-template.erb"
   end
 end
 
@@ -74,7 +76,7 @@ class MissingAssetSourceView
   include View
 
   def self.template
-    __dir__ + '/fixtures/missing-asset-source.erb'
+    __dir__ + "/fixtures/missing-asset-source.erb"
   end
 end
 
@@ -82,7 +84,7 @@ class UnknownAssetEngineView
   include View
 
   def self.template
-    __dir__ + '/fixtures/unknown-asset-engine.erb'
+    __dir__ + "/fixtures/unknown-asset-engine.erb"
   end
 end
 
@@ -90,7 +92,7 @@ class UnchangedCompilerView
   include View
 
   def self.template
-    __dir__ + '/fixtures/unchanged-asset.erb'
+    __dir__ + "/fixtures/unchanged-asset.erb"
   end
 end
 
@@ -98,7 +100,7 @@ class CssCompilerView
   include View
 
   def self.template
-    __dir__ + '/fixtures/compile-css.erb'
+    __dir__ + "/fixtures/compile-css.erb"
   end
 end
 
@@ -106,7 +108,7 @@ class HiddenAssetCompilerView
   include View
 
   def self.template
-    __dir__ + '/fixtures/hidden-asset.erb'
+    __dir__ + "/fixtures/hidden-asset.erb"
   end
 end
 

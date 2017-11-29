@@ -1,4 +1,6 @@
-require 'hanami/utils/load_paths'
+# frozen_string_literal: true
+
+require "hanami/utils/load_paths"
 
 module Hanami
   module Assets

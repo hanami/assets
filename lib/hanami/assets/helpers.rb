@@ -257,19 +257,23 @@ module Hanami
       #   <%= stylesheet 'application' %>
       #
       #   # <link href="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.css" type="text/css" rel="stylesheet">
-      def stylesheet(*sources, **options) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-        _safe_tags(*sources) do |source|
-          tag_options = options.dup
-          tag_options[:href] ||= _typed_asset_path(source, STYLESHEET_EXT)
-          tag_options[:type] ||= STYLESHEET_MIME_TYPE
-          tag_options[:rel] ||= STYLESHEET_REL
+      def stylesheet(*sources, **options) # rubocop:disable Metrics/MethodLength
+        options.reject! { |k, _| k.to_sym == :href }
 
-          if _subresource_integrity? || tag_options.include?(:integrity)
-            tag_options[:integrity] ||= _subresource_integrity_value(source, STYLESHEET_EXT)
-            tag_options[:crossorigin] ||= CROSSORIGIN_ANONYMOUS
+        _safe_tags(*sources) do |source|
+          attributes = {
+            href: _typed_asset_path(source, STYLESHEET_EXT),
+            type: STYLESHEET_MIME_TYPE,
+            rel:  STYLESHEET_REL
+          }
+          attributes.merge!(options)
+
+          if _subresource_integrity? || attributes.include?(:integrity)
+            attributes[:integrity] ||= _subresource_integrity_value(source, STYLESHEET_EXT)
+            attributes[:crossorigin] ||= CROSSORIGIN_ANONYMOUS
           end
 
-          html.link(**tag_options).to_s
+          html.link(**attributes).to_s
         end
       end
 

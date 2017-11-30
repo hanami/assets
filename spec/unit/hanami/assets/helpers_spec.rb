@@ -144,12 +144,17 @@ describe Hanami::Assets::Helpers do
 
     it 'custom alt' do
       actual = view.image('application.jpg', alt: 'My Alt').to_s
-      expect(actual).to eq(%(<img alt="My Alt" src="/assets/application.jpg">))
+      expect(actual).to eq(%(<img src="/assets/application.jpg" alt="My Alt">))
     end
 
     it 'custom data attribute' do
       actual = view.image('application.jpg', 'data-user-id' => 5).to_s
-      expect(actual).to eq(%(<img data-user-id="5" src="/assets/application.jpg" alt="Application">))
+      expect(actual).to eq(%(<img src="/assets/application.jpg" alt="Application" data-user-id="5">))
+    end
+
+    it 'ignores src passed as an option' do
+      actual = view.image('application.jpg', src: 'wrong').to_s
+      expect(actual).to eq(%(<img src="/assets/application.jpg" alt="Application">))
     end
 
     describe 'cdn mode' do

@@ -166,18 +166,22 @@ module Hanami
       #   <%= javascript 'application' %>
       #
       #   # <script src="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js" type="text/javascript"></script>
-      def javascript(*sources, **options)
-        _safe_tags(*sources) do |source|
-          tag_options = options.dup
-          tag_options[:src] ||= _typed_asset_path(source, JAVASCRIPT_EXT)
-          tag_options[:type] ||= JAVASCRIPT_MIME_TYPE
+      def javascript(*sources, **options) # rubocop:disable Metrics/MethodLength
+        options = options.reject { |k, _| k.to_sym == :src }
 
-          if _subresource_integrity? || tag_options.include?(:integrity)
-            tag_options[:integrity] ||= _subresource_integrity_value(source, JAVASCRIPT_EXT)
-            tag_options[:crossorigin] ||= CROSSORIGIN_ANONYMOUS
+        _safe_tags(*sources) do |source|
+          attributes = {
+            src:  _typed_asset_path(source, JAVASCRIPT_EXT),
+            type: JAVASCRIPT_MIME_TYPE
+          }
+          attributes.merge!(options)
+
+          if _subresource_integrity? || attributes.include?(:integrity)
+            attributes[:integrity] ||= _subresource_integrity_value(source, JAVASCRIPT_EXT)
+            attributes[:crossorigin] ||= CROSSORIGIN_ANONYMOUS
           end
 
-          html.script(**tag_options).to_s
+          html.script(**attributes).to_s
         end
       end
 

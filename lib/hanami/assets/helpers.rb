@@ -343,10 +343,15 @@ module Hanami
       #
       #   # <img src="https://assets.bookshelf.org/assets/logo-28a6b886de2372ee3922fcaf3f78f2d8.png" alt="Logo">
       def image(source, options = {})
-        options[:src] = asset_path(source)
-        options[:alt] ||= Utils::String.titleize(::File.basename(source, WILDCARD_EXT))
+        options.reject! { |k, _| k.to_sym == :src }
 
-        html.img(options)
+        attributes = {
+          src: asset_path(source),
+          alt: Utils::String.titleize(::File.basename(source, WILDCARD_EXT))
+        }
+        attributes.merge!(options)
+
+        html.img(attributes)
       end
 
       # Generate <tt>link</tt> tag application favicon.

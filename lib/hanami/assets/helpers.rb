@@ -850,7 +850,7 @@ module Hanami
 
       # @api private
       def _subresource_integrity_value(source, ext)
-        source = "#{source}#{ext}" unless source.match?(/#{Regexp.escape(ext)}\z/)
+        source = "#{source}#{ext}" unless source =~ /#{Regexp.escape(ext)}\z/
         self.class.assets_configuration.subresource_integrity_value(source) unless _absolute_url?(source)
       end
 

@@ -410,11 +410,16 @@ module Hanami
       #
       #   # <link href="https://assets.bookshelf.org/assets/favicon-28a6b886de2372ee3922fcaf3f78f2d8.ico" rel="shortcut icon" type="image/x-icon">
       def favicon(source = DEFAULT_FAVICON, options = {})
-        options[:href]   = asset_path(source)
-        options[:rel]  ||= FAVICON_REL
-        options[:type] ||= FAVICON_MIME_TYPE
+        options.reject! { |k, _| k.to_sym == :href }
 
-        html.link(options)
+        attributes = {
+          href: asset_path(source),
+          rel:  FAVICON_REL,
+          type: FAVICON_MIME_TYPE
+        }
+        attributes.merge!(options)
+
+        html.link(attributes)
       end
 
       # Generate <tt>video</tt> tag for given source

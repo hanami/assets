@@ -182,7 +182,12 @@ describe Hanami::Assets::Helpers do
 
     it 'renders with HTML attributes' do
       actual = view.favicon('favicon.png', rel: 'icon', type: 'image/png').to_s
-      expect(actual).to eq(%(<link rel="icon" type="image/png" href="/assets/favicon.png">))
+      expect(actual).to eq(%(<link href="/assets/favicon.png" rel="icon" type="image/png">))
+    end
+
+    it 'ignores href passed as an option' do
+      actual = view.favicon('favicon.png', href: 'wrong').to_s
+      expect(actual).to eq(%(<link href="/assets/favicon.png" rel="shortcut icon" type="image/x-icon">))
     end
 
     describe 'cdn mode' do

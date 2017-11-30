@@ -95,12 +95,17 @@ describe Hanami::Assets::Helpers do
 
     it 'renders <link> tag with an integrity attribute' do
       actual = DefaultView.new.stylesheet('main', integrity: 'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC')
-      expect(actual).to eq(%(<link integrity=\"sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC\" href=\"/assets/main.css\" type=\"text/css\" rel=\"stylesheet\" crossorigin=\"anonymous\">))
+      expect(actual).to eq(%(<link href="/assets/main.css" type="text/css" rel="stylesheet" integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" crossorigin="anonymous">))
     end
 
     it 'renders <link> tag with a crossorigin attribute' do
       actual = DefaultView.new.stylesheet('main', integrity: 'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC', crossorigin: 'use-credentials')
-      expect(actual).to eq(%(<link integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" crossorigin="use-credentials" href="/assets/main.css" type="text/css" rel="stylesheet">))
+      expect(actual).to eq(%(<link href="/assets/main.css" type="text/css" rel="stylesheet" integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" crossorigin="use-credentials">))
+    end
+
+    it 'ignores href passed as an option' do
+      actual = DefaultView.new.stylesheet('main', href: 'wrong')
+      expect(actual).to eq(%(<link href="/assets/main.css" type="text/css" rel="stylesheet">))
     end
 
     describe 'subresource_integrity mode' do

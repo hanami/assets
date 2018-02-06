@@ -52,7 +52,7 @@ module Hanami
           asset_file_name.unlink if asset_file_name.exist?
         end
       rescue JSON::ParserError
-        $stderr.puts 'Non JSON manifest found and unlinked.'
+        warn 'Non JSON manifest found and unlinked.'
       ensure
         manifest.unlink
       end

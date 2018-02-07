@@ -166,7 +166,7 @@ module Hanami
       #
       #   # <script src="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js" type="text/javascript"></script>
       def javascript(*sources, **options) # rubocop:disable Metrics/MethodLength
-        options.reject! { |k, _| k.to_sym == :src }
+        options = options.reject { |k, _| k.to_sym == :src }
 
         _safe_tags(*sources) do |source|
           attributes = {
@@ -257,7 +257,7 @@ module Hanami
       #
       #   # <link href="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.css" type="text/css" rel="stylesheet">
       def stylesheet(*sources, **options) # rubocop:disable Metrics/MethodLength
-        options.reject! { |k, _| k.to_sym == :href }
+        options = options.reject { |k, _| k.to_sym == :href }
 
         _safe_tags(*sources) do |source|
           attributes = {
@@ -342,7 +342,7 @@ module Hanami
       #
       #   # <img src="https://assets.bookshelf.org/assets/logo-28a6b886de2372ee3922fcaf3f78f2d8.png" alt="Logo">
       def image(source, options = {})
-        options.reject! { |k, _| k.to_sym == :src }
+        options = options.reject { |k, _| k.to_sym == :src }
 
         attributes = {
           src: asset_path(source),
@@ -409,7 +409,7 @@ module Hanami
       #
       #   # <link href="https://assets.bookshelf.org/assets/favicon-28a6b886de2372ee3922fcaf3f78f2d8.ico" rel="shortcut icon" type="image/x-icon">
       def favicon(source = DEFAULT_FAVICON, options = {})
-        options.reject! { |k, _| k.to_sym == :href }
+        options = options.reject { |k, _| k.to_sym == :href }
 
         attributes = {
           href: asset_path(source),

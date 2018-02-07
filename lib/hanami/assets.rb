@@ -1,4 +1,3 @@
-require 'thread'
 require 'hanami/utils/class_attribute'
 
 # Hanami

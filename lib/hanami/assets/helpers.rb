@@ -173,18 +173,22 @@ module Hanami
       #
       #   <%= javascript 'application', push: false %>
       #   <%= javascript 'http://cdn.example.test/jquery.js', 'dashboard', push: false %>
-      def javascript(*sources, push: true, **options)
-        _safe_tags(*sources) do |source|
-          tag_options = options.dup
-          tag_options[:src] ||= _typed_asset_path(source, JAVASCRIPT_EXT, push: push, as: :script)
-          tag_options[:type] ||= JAVASCRIPT_MIME_TYPE
+      def javascript(*sources, push: true, **options) # rubocop:disable Metrics/MethodLength
+        options = options.reject { |k, _| k.to_sym == :src }
 
-          if _subresource_integrity? || tag_options.include?(:integrity)
-            tag_options[:integrity] ||= _subresource_integrity_value(source, JAVASCRIPT_EXT)
-            tag_options[:crossorigin] ||= CROSSORIGIN_ANONYMOUS
+        _safe_tags(*sources) do |source|
+          attributes = {
+            src:  _typed_asset_path(source, JAVASCRIPT_EXT, push: push, as: :script),
+            type: JAVASCRIPT_MIME_TYPE
+          }
+          attributes.merge!(options)
+
+          if _subresource_integrity? || attributes.include?(:integrity)
+            attributes[:integrity] ||= _subresource_integrity_value(source, JAVASCRIPT_EXT)
+            attributes[:crossorigin] ||= CROSSORIGIN_ANONYMOUS
           end
 
-          html.script(**tag_options).to_s
+          html.script(**attributes).to_s
         end
       end
 
@@ -270,19 +274,23 @@ module Hanami
       #
       #   <%= stylesheet 'application', push: false %>
       #   <%= stylesheet 'http://cdn.example.test/bootstrap.css', 'dashboard', push: false %>
-      def stylesheet(*sources, push: true, **options) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-        _safe_tags(*sources) do |source|
-          tag_options = options.dup
-          tag_options[:href] ||= _typed_asset_path(source, STYLESHEET_EXT, push: push, as: :style)
-          tag_options[:type] ||= STYLESHEET_MIME_TYPE
-          tag_options[:rel] ||= STYLESHEET_REL
+      def stylesheet(*sources, push: true, **options) # rubocop:disable Metrics/MethodLength
+        options = options.reject { |k, _| k.to_sym == :href }
 
-          if _subresource_integrity? || tag_options.include?(:integrity)
-            tag_options[:integrity] ||= _subresource_integrity_value(source, STYLESHEET_EXT)
-            tag_options[:crossorigin] ||= CROSSORIGIN_ANONYMOUS
+        _safe_tags(*sources) do |source|
+          attributes = {
+            href: _typed_asset_path(source, STYLESHEET_EXT, push: push, as: :style),
+            type: STYLESHEET_MIME_TYPE,
+            rel:  STYLESHEET_REL
+          }
+          attributes.merge!(options)
+
+          if _subresource_integrity? || attributes.include?(:integrity)
+            attributes[:integrity] ||= _subresource_integrity_value(source, STYLESHEET_EXT)
+            attributes[:crossorigin] ||= CROSSORIGIN_ANONYMOUS
           end
 
-          html.link(**tag_options).to_s
+          html.link(**attributes).to_s
         end
       end
 
@@ -358,10 +366,14 @@ module Hanami
       #
       #   <%= image 'logo.png', push: true %>
       def image(source, options = {})
-        options[:src] = asset_path(source, push: options.delete(:push) || false, as: :image)
-        options[:alt] ||= Utils::String.titleize(::File.basename(source, WILDCARD_EXT))
+        options = options.reject { |k, _| k.to_sym == :src }
+        attributes = {
+          src: asset_path(source, push: options.delete(:push) || false, as: :image),
+          alt: Utils::String.titleize(::File.basename(source, WILDCARD_EXT))
+        }
+        attributes.merge!(options)
 
-        html.img(options)
+        html.img(attributes)
       end
 
       # Generate <tt>link</tt> tag application favicon.
@@ -426,11 +438,16 @@ module Hanami
       #
       #   <%= favicon 'favicon.ico', push: true %>
       def favicon(source = DEFAULT_FAVICON, options = {})
-        options[:href]   = asset_path(source, push: options.delete(:push) || false, as: :image)
-        options[:rel]  ||= FAVICON_REL
-        options[:type] ||= FAVICON_MIME_TYPE
+        options = options.reject { |k, _| k.to_sym == :href }
 
-        html.link(options)
+        attributes = {
+          href: asset_path(source, push: options.delete(:push) || false, as: :image),
+          rel:  FAVICON_REL,
+          type: FAVICON_MIME_TYPE
+        }
+        attributes.merge!(options)
+
+        html.link(attributes)
       end
 
       # Generate <tt>video</tt> tag for given source

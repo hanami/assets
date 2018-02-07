@@ -1,6 +1,5 @@
 require 'uri'
 require 'set'
-require 'thread'
 require 'hanami/helpers/html_helper'
 require 'hanami/utils/escape'
 

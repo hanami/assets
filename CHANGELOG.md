@@ -1,6 +1,13 @@
 # Hanami::Assets
 Assets management for Ruby web applications
 
+## v1.1.1 - 2018-02-27
+### Added
+- [Luca Guidi] Official support for Ruby: MRI 2.5
+
+### Fixed
+- [Malina Sulca] Print `href` and `src` first in output HTML
+
 ## v1.1.0 - 2017-10-25
 ### Fixed
 - [Luca Guidi] Don't let `#javascript` and `#stylesheet` helpers to append file extension if the URL contains a query string

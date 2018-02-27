@@ -1,4 +1,3 @@
-require 'thread'
 require 'pathname'
 
 module Hanami

@@ -418,7 +418,7 @@ module Hanami
       # @see https://en.wikipedia.org/wiki/Same-origin_policy#Origin_determination_rules
       # @see https://en.wikipedia.org/wiki/Same-origin_policy#document.domain_property
       #
-      # @since x.x.x
+      # @since 1.2.0
       # @api private
       def crossorigin?(source)
         !source.start_with?(@base_url)

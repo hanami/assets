@@ -875,7 +875,7 @@ module Hanami
         ABSOLUTE_URL_MATCHER.match(source)
       end
 
-      # @since x.x.x
+      # @since 1.2.0
       # @api private
       def _crossorigin?(source)
         return false unless _absolute_url?(source)

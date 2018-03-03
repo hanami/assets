@@ -384,6 +384,15 @@ module Hanami
         pathname.absolute? ? pathname : find(file)
       end
 
+      def base_directories
+        @base_directories ||= [
+          'stylesheets',
+          'javascripts',
+          'images',
+          'fonts'
+        ]
+      end
+
       # Find a file from sources
       #
       # @since 0.1.0

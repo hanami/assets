@@ -148,7 +148,7 @@ module Hanami
       # @since 0.1.0
       # @api private
       def destination
-        @destination ||= @configuration.destination_directory.join(basename)
+        @destination ||= @configuration.destination_directory.join(destination_name)
       end
 
       def relative_destination_name(name: @name, add_prefix: true)
@@ -177,7 +177,7 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      def basename
+      def destination_name
         result = @name.relative? ? relative_destination_name : absolute_destination_name
         result = result.to_s
 

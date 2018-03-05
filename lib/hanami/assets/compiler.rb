@@ -151,12 +151,14 @@ module Hanami
         @destination ||= @configuration.destination_directory.join(basename)
       end
 
-      def relative_destination_name
+      def relative_destination_name(name: @name, add_prefix: true)
         prefix = @configuration.prefix
-        result = @name.to_s
+        result = name.to_s
         @configuration.base_directories.each do |base_dir|
           if result.start_with?(base_dir)
-            result = result.relative_path_from(Pathname.new(prefix.join(base_dir)))
+            path = add_prefix ? prefix.join(base_dir) : base_dir
+            result = name.relative_path_from(Pathname.new(path))
+            break
           end
         end
         result
@@ -170,12 +172,7 @@ module Hanami
             break
           end
         end
-        @configuration.base_directories.each do |base_dir|
-          if result.to_s.start_with?(base_dir)
-            result = result.relative_path_from(Pathname.new(base_dir))
-          end
-        end
-        result
+        relative_destination_name(name: Pathname.new(result), add_prefix: false)
       end
 
       # @since 0.1.0

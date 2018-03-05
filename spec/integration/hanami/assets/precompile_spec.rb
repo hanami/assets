@@ -78,8 +78,7 @@ describe 'Precompile' do
        'metrics/ember.min.js',
        'metrics/ember-source.js',
        'metrics/dashboard.js',
-       'style/style.css'
-      ]
+       'style/style.css']
     end
 
     let(:environment) { "#{__dir__}/../../../support/fixtures/bookshelf/config/environment.rb" }

@@ -385,11 +385,11 @@ module Hanami
       end
 
       def base_directories
-        @base_directories ||= [
-          'stylesheets',
-          'javascripts',
-          'images',
-          'fonts'
+        @base_directories ||= %w[
+          stylesheets
+          javascripts
+          images
+          fonts
         ]
       end
 

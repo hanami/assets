@@ -1,6 +1,8 @@
 # Hanami::Assets
 Assets management for Ruby web applications
 
+## v1.2.0.beta2 - 2018-03-23
+
 ## v1.2.0.beta1 - 2018-02-28
 ### Added
 - [Luca Guidi] Collect assets informations for Early Hints (103)

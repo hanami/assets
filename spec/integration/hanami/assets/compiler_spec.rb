@@ -52,6 +52,15 @@ describe 'Compiler' do
     expect(target.stat.mode.to_s(8)).to eq('100644')
   end
 
+  it 'copies asset from nested source in nested config to destination' do
+    @config.nested_assets << 'bootstrap/helper.js'
+    Hanami::Assets::Compiler.compile(@config, 'bootstrap/helper.js')
+
+    target = @config.public_directory.join('assets', 'bootstrap', 'helper.js')
+    expect(target.read).to match %(var helper = {})
+    expect(target.stat.mode.to_s(8)).to eq('100644')
+  end
+
   it 'compiles coffeescript asset' do
     Hanami::Assets::Compiler.compile(@config, 'hello.js')
 

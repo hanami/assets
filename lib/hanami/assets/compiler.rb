@@ -148,7 +148,7 @@ module Hanami
       # @since 0.1.0
       # @api private
       def destination
-        @destination ||= @configuration.destination_directory.join(basename)
+        @destination ||= @configuration.destination_directory.join(asset_name)
       end
 
       # @since 0.1.0
@@ -160,6 +160,14 @@ module Hanami
           result.scan(/\A[[[:alnum:]][\-\_]]*\.[[\w]]*/).first || result
         else
           result
+        end
+      end
+
+      def asset_name
+        if @configuration.nested?(@name)
+          @configuration.nested_path(@name)
+        else
+          basename
         end
       end
 

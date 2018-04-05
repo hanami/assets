@@ -369,6 +369,18 @@ module Hanami
         @sources ||= Hanami::Assets::Config::Sources.new(root)
       end
 
+      def nested_assets
+        @nested_assets ||= []
+      end
+
+      def nested?(name)
+        !nested_path(name).nil?
+      end
+
+      def nested_path(name)
+        nested_assets.flatten.detect { |asset| name.to_s.end_with?(asset) }
+      end
+
       # Application's assets
       #
       # @since 0.1.0

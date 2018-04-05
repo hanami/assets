@@ -11,7 +11,10 @@ module Hanami
     # @since 0.1.0
     #
     # @see http://www.rubydoc.info/gems/hanami-helpers/Hanami/Helpers/HtmlHelper
-    module Helpers # rubocop:disable Metrics/ModuleLength
+    #
+    # rubocop:disable Metrics/ModuleLength
+    # rubocop:disable Naming/UncommunicativeMethodParamName
+    module Helpers
       # @since 0.1.0
       # @api private
       NEW_LINE_SEPARATOR = "\n".freeze
@@ -927,5 +930,7 @@ module Hanami
         source !~ QUERY_STRING_MATCHER && source !~ /#{Regexp.escape(ext)}\z/
       end
     end
+    # rubocop:enable Naming/UncommunicativeMethodParamName
+    # rubocop:enable Metrics/ModuleLength
   end
 end

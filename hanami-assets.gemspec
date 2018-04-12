@@ -20,8 +20,8 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
   spec.required_ruby_version = '>= 2.3.0'
 
-  spec.add_runtime_dependency 'hanami-utils',    '~> 1.2'
-  spec.add_runtime_dependency 'hanami-helpers',  '~> 1.2'
+  spec.add_runtime_dependency 'hanami-utils',    '~> 1.3.beta'
+  spec.add_runtime_dependency 'hanami-helpers',  '~> 1.3.beta'
   spec.add_runtime_dependency 'tilt',            '~> 2.0', '>= 2.0.2'
 
   spec.add_development_dependency 'bundler'

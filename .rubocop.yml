@@ -7,3 +7,6 @@ AllCops:
     - "vendor/**/*"
     - "lib/hanami/assets/compressors/*"
     - "**/*.gemspec"
+Style/CommentedKeyword:
+  Exclude:
+    - "spec/**/*.rb"

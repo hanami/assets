@@ -1,6 +1,29 @@
 # Hanami::Assets
 Assets management for Ruby web applications
 
+## v1.3.0.beta1 (unreleased)
+
+## v1.2.0 - 2018-04-11
+
+## v1.2.0.rc2 - 2018-04-06
+
+## v1.2.0.rc1 - 2018-03-30
+
+## v1.2.0.beta2 - 2018-03-23
+
+## v1.2.0.beta1 - 2018-02-28
+### Added
+- [Luca Guidi] Collect assets informations for Early Hints (103)
+- [Luca Guidi] Send automatically javascripts and stylesheets via Push Promise / Early Hints
+- [Luca Guidi] Add the ability to send audio, video, and generic assets for Push Promise / Early Hints
+
+## v1.1.1 - 2018-02-27
+### Added
+- [Luca Guidi] Official support for Ruby: MRI 2.5
+
+### Fixed
+- [Malina Sulca] Print `href` and `src` first in output HTML
+
 ## v1.1.0 - 2017-10-25
 ### Fixed
 - [Luca Guidi] Don't let `#javascript` and `#stylesheet` helpers to append file extension if the URL contains a query string

@@ -231,7 +231,7 @@ public/
 
 ### Preprocessors engines
 
-`Hanami::Assets` uses [Tilt](https://github.com/rtomayko/tilt) to provide support for the most common preprocessors, such as [Sass](http://sass-lang.com/) (including `sassc-ruby`), [Less](http://lesscss.org/), [ES6](https://babeljs.io/), [JSX](https://jsx.github.io/), [CoffeScript](http://coffeescript.org), [Opal](http://opalrb.org), [Handlebars](http://handlebarsjs.com), [JBuilder](https://github.com/rails/jbuilder).
+`Hanami::Assets` uses [Tilt](https://github.com/rtomayko/tilt) to provide support for the most common preprocessors, such as [Sass](http://sass-lang.com/) (including `sassc-ruby`), [Less](http://lesscss.org/), [ES6](https://babeljs.io/), [JSX](https://jsx.github.io/), [CoffeScript](http://coffeescript.org), [Opal](http://opalrb.com), [Handlebars](http://handlebarsjs.com), [JBuilder](https://github.com/rails/jbuilder).
 
 In order to use one or more of them, be sure to add the corresponding gem to your `Gemfile` and require the library.
 

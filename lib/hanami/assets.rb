@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "thread"
 require "hanami/utils/class_attribute"
 
 # Hanami

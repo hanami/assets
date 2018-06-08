@@ -61,7 +61,7 @@ module Hanami
         #
         # @since 0.1.0
         # @api private
-        def method_missing(*) # rubocop:disable Style/MethodMissing
+        def method_missing(*) # rubocop:disable Style/MethodMissingSuper
           ::Kernel.raise(
             ::Hanami::Assets::MissingManifestFileError.new(@configuration.manifest_path)
           )

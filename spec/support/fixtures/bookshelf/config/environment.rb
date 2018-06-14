@@ -32,6 +32,8 @@ unless defined?(Web)
       sources << [
         "assets"
       ]
+
+      base_directories << 'js'
     end
 
     module Views

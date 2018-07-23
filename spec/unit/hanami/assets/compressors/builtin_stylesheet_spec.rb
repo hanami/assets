@@ -1,6 +1,6 @@
 require 'hanami/assets/compressors/builtin_stylesheet'
 
-describe Hanami::Assets::Compressors::BuiltinStylesheet do
+RSpec.describe Hanami::Assets::Compressors::BuiltinStylesheet do
   let(:compressor) { Hanami::Assets::Compressors::BuiltinStylesheet.new }
 
   describe '#compress' do

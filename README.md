@@ -4,11 +4,11 @@ Assets management for Ruby web projects
 
 ## Status
 
-[![Gem Version](http://img.shields.io/gem/v/hanami-assets.svg)](https://badge.fury.io/rb/hanami-assets)
-[![Build Status](http://img.shields.io/travis/hanami/assets/master.svg)](https://travis-ci.org/hanami/assets?branch=master)
-[![Coverage](http://img.shields.io/coveralls/hanami/assets/master.svg)](https://coveralls.io/r/hanami/assets)
-[![Code Climate](http://img.shields.io/codeclimate/github/hanami/assets.svg)](https://codeclimate.com/github/hanami/assets)
-[![Dependencies](http://img.shields.io/gemnasium/hanami/assets.svg)](https://gemnasium.com/hanami/assets)
+[![Gem Version](https://badge.fury.io/rb/hanami-assets.svg)](https://badge.fury.io/rb/hanami-assets)
+[![TravisCI](https://travis-ci.org/hanami/assets.svg?branch=master)](https://travis-ci.org/hanami/assets)
+[![CircleCI](https://circleci.com/gh/hanami/assets/tree/master.svg?style=svg)](https://circleci.com/gh/hanami/assets/tree/master)
+[![Test Coverage](https://codecov.io/gh/hanami/assets/branch/master/graph/badge.svg)](https://codecov.io/gh/hanami/assets)
+[![Depfu](https://badges.depfu.com/badges/4b37347bd74042ff96477495cc16531d/overview.svg)](https://depfu.com/github/hanami/assets?project=Bundler)
 [![Inline Docs](http://inch-ci.org/github/hanami/assets.svg)](http://inch-ci.org/github/hanami/assets)
 
 ## Contact

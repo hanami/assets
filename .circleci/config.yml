@@ -56,7 +56,7 @@ jobs:
             ./script/ci
   "ruby-2.5":
     docker:
-       - image: hanami/ruby-2.5
+       - image: hanami/ruby-2.5-node
     working_directory: ~/hanami-utils
     steps:
       - checkout

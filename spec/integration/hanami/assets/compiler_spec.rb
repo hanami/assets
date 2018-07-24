@@ -2,7 +2,7 @@ require 'tilt/sass'
 require 'tilt/coffee'
 require 'hanami/assets/compiler'
 
-describe 'Compiler' do
+RSpec.describe 'Compiler' do
   before do
     require 'hanami/compass'
     fixtures = __dir__ + "/../../../support/fixtures"

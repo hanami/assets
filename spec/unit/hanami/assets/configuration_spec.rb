@@ -1,7 +1,7 @@
 require 'hanami/assets/compressors/javascript'
 require 'hanami/assets/compressors/stylesheet'
 
-describe Hanami::Assets::Configuration do
+RSpec.describe Hanami::Assets::Configuration do
   before do
     @configuration = Hanami::Assets::Configuration.new
   end

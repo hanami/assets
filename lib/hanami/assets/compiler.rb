@@ -150,13 +150,36 @@ module Hanami
       # @since 0.1.0
       # @api private
       def destination
-        @destination ||= @configuration.destination_directory.join(basename)
+        @destination ||= @configuration.destination_directory.join(destination_name)
+      end
+
+      def relative_destination_name(name: @name, add_prefix: true)
+        result = name.to_s
+        base_dir = @configuration.base_directories.detect { |dir| result.start_with?(dir) }
+        if base_dir
+          prefix = @configuration.prefix
+          base_dir = prefix.join(base_dir) if add_prefix
+          result = name.relative_path_from(Pathname.new(base_dir))
+        end
+        result
+      end
+
+      def absolute_destination_name
+        result = ::File.basename(@name)
+        @configuration.sources.each do |source|
+          if @name.to_s.start_with?(source.to_s)
+            result = @name.relative_path_from(source)
+            break
+          end
+        end
+        relative_destination_name(name: Pathname.new(result), add_prefix: false)
       end
 
       # @since 0.1.0
       # @api private
-      def basename
-        result = ::File.basename(@name)
+      def destination_name
+        result = @name.relative? ? relative_destination_name : absolute_destination_name
+        result = result.to_s
 
         if compile?
           result.scan(/\A[[[:alnum:]][\-\_]]*\.[[\w]]*/).first || result

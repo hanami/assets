@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe "Rendering test" do
+RSpec.describe "Rendering test" do
   before do
     Hanami::Assets.configuration.reset!
   end

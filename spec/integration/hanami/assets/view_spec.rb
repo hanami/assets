@@ -2,7 +2,7 @@
 
 require __dir__ + "/../../../support/fixtures/bookshelf/config/environment"
 
-describe "Hanami::View integration" do
+RSpec.describe "Hanami::View integration" do
   before do
     frameworks = [Web::Assets, Admin::Assets]
     frameworks.each do |framework|

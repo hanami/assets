@@ -6,7 +6,7 @@ require "hanami/assets/compressors/stylesheet"
 require "etc"
 require "json"
 
-describe Hanami::Assets::Bundler do
+RSpec.describe Hanami::Assets::Bundler do
   before do
     dest.rmtree if dest.exist?
     dest.mkpath

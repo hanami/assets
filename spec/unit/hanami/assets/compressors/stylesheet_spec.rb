@@ -3,7 +3,7 @@
 require "hanami/assets/compressors/stylesheet"
 require "hanami/foo/compressor"
 
-describe Hanami::Assets::Compressors::Stylesheet do
+RSpec.describe Hanami::Assets::Compressors::Stylesheet do
   describe ".for" do
     let(:compressor) { Hanami::Assets::Compressors::Stylesheet.for(engine_name) }
 

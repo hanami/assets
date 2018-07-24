@@ -3,7 +3,7 @@
 require "digest"
 require "open3"
 
-describe "Precompile" do
+RSpec.describe "Precompile" do
   before do
     dest.rmtree if dest.exist?
     dest.mkpath
@@ -79,7 +79,8 @@ describe "Precompile" do
        "metrics/ember.js",
        "metrics/ember.min.js",
        "metrics/ember-source.js",
-       "metrics/dashboard.js"]
+       "metrics/dashboard.js",
+       "style/style.css"]
     end
 
     let(:environment) { "#{__dir__}/../../../support/fixtures/bookshelf/config/environment.rb" }

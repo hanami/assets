@@ -2,7 +2,7 @@
 
 require __dir__ + "/../../../support/fixtures/bookshelf/config/environment"
 
-describe "Third part gems integration" do
+RSpec.describe "Third part gems integration" do
   before do
     load __dir__ + "/../../../support/fixtures/hanami-emberjs/lib/hanami/emberjs.rb"
   end

@@ -2,6 +2,6 @@
 
 module CI
   def self.enabled?
-    ENV["TRAVIS"]
+    ENV["CI"]
   end
 end

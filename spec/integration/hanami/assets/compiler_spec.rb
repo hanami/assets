@@ -4,7 +4,7 @@ require "tilt/sass"
 require "tilt/coffee"
 require "hanami/assets/compiler"
 
-describe "Compiler" do
+RSpec.describe "Compiler" do
   before do
     require "hanami/compass"
     fixtures = __dir__ + "/../../../support/fixtures"
@@ -51,6 +51,14 @@ describe "Compiler" do
 
     target = @config.public_directory.join("assets", "bootstrap.js")
     expect(target.read).to match %(// Bootstrap)
+    expect(target.stat.mode.to_s(8)).to eq("100644")
+  end
+
+  it "copies nested asset from nested source to destination" do
+    Hanami::Assets::Compiler.compile(@config, "bootstrap/helper.js")
+
+    target = @config.public_directory.join("assets", "bootstrap", "helper.js")
+    expect(target.read).to match %(var helper = {})
     expect(target.stat.mode.to_s(8)).to eq("100644")
   end
 

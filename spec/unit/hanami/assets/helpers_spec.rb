@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Hanami::Assets::Helpers do
+RSpec.describe Hanami::Assets::Helpers do
   let(:view)    { ImageHelperView.new({}, {}) }
   let(:cdn_url) { "https://bookshelf.cdn-example.com" }
 

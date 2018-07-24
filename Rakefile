@@ -3,19 +3,8 @@
 require "rake"
 require "bundler/gem_tasks"
 require "rspec/core/rake_task"
-require "rake/testtask"
+require "hanami/devtools/rake_tasks"
 
-Rake::TestTask.new do |t|
-  t.pattern = "test/**/*_test.rb"
-  t.libs.push "test"
-
-  if ENV["TRAVIS"]
-    t.verbose = false
-    t.warning = false
-  end
-end
-
-RSpec::Core::RakeTask.new(:spec)
 namespace :spec do
   RSpec::Core::RakeTask.new(:unit) do |task|
     file_list = FileList["spec/**/*_spec.rb"]
@@ -23,10 +12,6 @@ namespace :spec do
 
     task.pattern = file_list
   end
-
-  task :coverage do
-    ENV["COVERAGE"] = "true"
-    Rake::Task["spec:unit"].invoke
-  end
 end
-task default: "spec"
+
+task default: "spec:unit"

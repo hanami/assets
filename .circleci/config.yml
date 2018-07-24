@@ -106,7 +106,7 @@ jobs:
             ./script/ci
   "jruby-9.2":
     docker:
-       - image: hanami/jruby-9.2
+       - image: hanami/jruby-9.2-node
     working_directory: ~/hanami-utils
     steps:
       - checkout

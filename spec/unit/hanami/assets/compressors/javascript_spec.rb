@@ -1,7 +1,7 @@
 require 'hanami/assets/compressors/javascript'
 require 'hanami/foo/compressor'
 
-describe Hanami::Assets::Compressors::Javascript do
+RSpec.describe Hanami::Assets::Compressors::Javascript do
   describe '.for' do
     let(:compressor) { Hanami::Assets::Compressors::Javascript.for(engine_name) }
 

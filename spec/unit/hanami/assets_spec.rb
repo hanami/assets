@@ -1,4 +1,4 @@
-describe Hanami::Assets do
+RSpec.describe Hanami::Assets do
   describe '.sources' do
     before do
       Hanami::Assets.sources.clear

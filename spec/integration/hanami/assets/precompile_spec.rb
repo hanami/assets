@@ -1,7 +1,7 @@
 require 'digest'
 require 'open3'
 
-describe 'Precompile' do
+RSpec.describe 'Precompile' do
   before do
     dest.rmtree if dest.exist?
     dest.mkpath

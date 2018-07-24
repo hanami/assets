@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 gemspec
 
-unless ENV['TRAVIS']
+unless ENV['CI']
   gem 'byebug', require: false, platforms: :mri
   gem 'yard',   require: false
 end
@@ -15,4 +15,3 @@ gem 'hanami-compass',        path: 'spec/support/fixtures/hanami-compass',      
 gem 'hanami-foo-compressor', path: 'spec/support/fixtures/hanami-foo-compressor', require: false
 
 gem 'hanami-devtools', require: false, git: 'https://github.com/hanami/devtools.git'
-gem 'coveralls',       require: false

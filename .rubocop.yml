@@ -5,6 +5,7 @@ inherit_from:
 AllCops:
   Exclude:
     - "vendor/**/*"
+    - "vendor/**/.irbrc"
     - "lib/hanami/assets/compressors/*"
     - "**/*.gemspec"
 Style/CommentedKeyword:

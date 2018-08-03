@@ -153,6 +153,8 @@ module Hanami
         @destination ||= @configuration.destination_directory.join(destination_name)
       end
 
+      # @since 1.3.0
+      # @api private
       def relative_destination_name(name: @name, add_prefix: true)
         result = name.to_s
         base_dir = @configuration.base_directories.detect { |dir| result.start_with?(dir) }
@@ -164,6 +166,8 @@ module Hanami
         result
       end
 
+      # @since 1.3.0
+      # @api private
       def absolute_destination_name
         result = ::File.basename(@name)
         @configuration.sources.each do |source|

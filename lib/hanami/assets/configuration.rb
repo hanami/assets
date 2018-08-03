@@ -386,6 +386,7 @@ module Hanami
         pathname.absolute? ? pathname : find(file)
       end
 
+      # @since 1.3.0
       def base_directories
         @base_directories ||= %w[
           stylesheets

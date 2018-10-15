@@ -882,6 +882,7 @@ module Hanami
       # @api private
       def _crossorigin?(source)
         return false unless _absolute_url?(source)
+
         self.class.assets_configuration.crossorigin?(source)
       end
 

@@ -112,6 +112,7 @@ RSpec.describe Hanami::Assets::Bundler do
   def assets(type)
     Dir.glob("#{dest}/**/*.#{type}").each_with_object({}) do |current, result|
       next unless checksum(current)
+
       result[original_for(current)] = current
     end
   end

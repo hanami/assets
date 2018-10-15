@@ -14,6 +14,7 @@ class TestFile
     write
 
     fail "Expected #{@file} to exist" unless @file.exist? # rubocop:disable Style/SignalException
+
     instance_exec(&blk) if block_given?
   end
 

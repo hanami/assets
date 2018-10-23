@@ -82,7 +82,7 @@ module Hanami
       def self.for(base)
         # TODO: this implementation is similar to Hanami::Controller::Configuration consider to extract it into Hanami::Utils
         namespace = Utils::String.namespace(base)
-        framework = Utils::Class.load_from_pattern!("(#{namespace}|Hanami)::Assets")
+        framework = Utils::Class.load("#{namespace}::Assets") || Utils::Class.load!('Hanami::Assets')
         framework.configuration
       end
 
@@ -382,6 +382,16 @@ module Hanami
       def source(file)
         pathname = Pathname.new(file)
         pathname.absolute? ? pathname : find(file)
+      end
+
+      # @since 1.3.0
+      def base_directories
+        @base_directories ||= %w[
+          stylesheets
+          javascripts
+          images
+          fonts
+        ]
       end
 
       # Find a file from sources

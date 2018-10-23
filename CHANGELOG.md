@@ -1,6 +1,11 @@
 # Hanami::Assets
 Assets management for Ruby web applications
 
+## v1.3.0.beta1 - 2018-08-08
+### Added
+- [Paweł Świątkowski] Preserve directory structure of assets at the precompile time.
+- [Luca Guidi] Official support for JRuby 9.2.0.0
+
 ## v1.2.0 - 2018-04-11
 
 ## v1.2.0.rc2 - 2018-04-06

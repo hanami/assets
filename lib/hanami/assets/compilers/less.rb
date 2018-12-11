@@ -10,7 +10,7 @@ module Hanami
       class Less < Compiler
         # @since 0.3.0
         # @api private
-        EXTENSIONS = /\.(less)\z/
+        EXTENSIONS = /\.(less)\z/.freeze
 
         # @since 0.3.0
         # @api private

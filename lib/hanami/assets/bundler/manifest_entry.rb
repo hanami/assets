@@ -38,7 +38,7 @@ module Hanami
         def values
           Hash[
             target: _convert_to_url(@asset.expanded_fingerprinted_target),
-            sri:    subresource_integrity_values
+            sri: subresource_integrity_values
           ]
         end
 

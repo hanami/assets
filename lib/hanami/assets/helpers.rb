@@ -65,7 +65,7 @@ module Hanami
 
       # @since 1.1.0
       # @api private
-      QUERY_STRING_MATCHER = /\?/
+      QUERY_STRING_MATCHER = /\?/.freeze
 
       include Hanami::Helpers::HtmlHelper
 
@@ -181,7 +181,7 @@ module Hanami
 
         _safe_tags(*sources) do |source|
           attributes = {
-            src:  _typed_asset_path(source, JAVASCRIPT_EXT, push: push, as: :script),
+            src: _typed_asset_path(source, JAVASCRIPT_EXT, push: push, as: :script),
             type: JAVASCRIPT_MIME_TYPE
           }
           attributes.merge!(options)
@@ -284,7 +284,7 @@ module Hanami
           attributes = {
             href: _typed_asset_path(source, STYLESHEET_EXT, push: push, as: :style),
             type: STYLESHEET_MIME_TYPE,
-            rel:  STYLESHEET_REL
+            rel: STYLESHEET_REL
           }
           attributes.merge!(options)
 
@@ -445,7 +445,7 @@ module Hanami
 
         attributes = {
           href: asset_path(source, push: options.delete(:push) || false, as: :image),
-          rel:  FAVICON_REL,
+          rel: FAVICON_REL,
           type: FAVICON_MIME_TYPE
         }
         attributes.merge!(options)
@@ -909,9 +909,7 @@ module Hanami
           options[:src] = asset_path(src, push: options.delete(:push) || false, as: as)
         end
 
-        if !options[:src] && !block_given?
-          raise ArgumentError.new('You should provide a source via `src` option or with a `source` HTML tag')
-        end
+        raise ArgumentError.new('You should provide a source via `src` option or with a `source` HTML tag') if !options[:src] && !block_given?
 
         options
       end

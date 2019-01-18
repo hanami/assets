@@ -177,17 +177,26 @@ module Hanami
         relative_destination_name(name: Pathname.new(result), add_prefix: false)
       end
 
-      # @since 0.1.0
+      # @since 1.3.0
       # @api private
       def destination_name
-        result = @name.relative? ? relative_destination_name : absolute_destination_name
-        result = result.to_s
+        result = destination_path
 
         if compile?
           result.scan(/\A[[[:alnum:]][\-\_]]*\.[[\w]]*/).first || result
         else
           result
         end
+      end
+
+      # @since 1.3.1
+      # @api private
+      def destination_path
+        if @configuration.nested
+          @name.relative? ? relative_destination_name : absolute_destination_name
+        else
+          ::File.basename(@name)
+        end.to_s
       end
 
       # @since 0.1.0

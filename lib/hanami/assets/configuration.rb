@@ -129,6 +129,17 @@ module Hanami
         end
       end
 
+      # Support for nested path
+      #
+      # @since 1.3.1
+      def nested(value = nil)
+        if value.nil?
+          @nested
+        else
+          @nested = !!value # rubocop:disable Style/DoubleNegation
+        end
+      end
+
       # Subresource integrity mode
       #
       # Determine if the helpers should generate the integrity attribute for an
@@ -506,6 +517,7 @@ module Hanami
           c.subresource_integrity = subresource_integrity
           c.cdn                   = cdn
           c.compile               = compile
+          c.nested                = nested
           c.public_directory      = public_directory
           c.manifest              = manifest
           c.sources               = sources.dup
@@ -526,6 +538,7 @@ module Hanami
         @cdn                   = false
         @fingerprint           = false
         @compile               = false
+        @nested                = false
         @base_url              = nil
         @destination_directory = nil
         @public_manifest       = Config::NullManifest.new(self)
@@ -568,6 +581,10 @@ module Hanami
       # @since 0.1.0
       # @api private
       attr_writer :compile
+
+      # @since 1.3.1
+      # @api private
+      attr_writer :nested
 
       # @since 0.1.0
       # @api private

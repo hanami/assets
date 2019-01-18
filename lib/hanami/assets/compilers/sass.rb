@@ -8,7 +8,7 @@ module Hanami
       class Sass < Compiler
         # @since 0.3.0
         # @api private
-        EXTENSIONS = /\.(sass|scss)\z/
+        EXTENSIONS = /\.(sass|scss)\z/.freeze
 
         # @since 0.1.0
         # @api private

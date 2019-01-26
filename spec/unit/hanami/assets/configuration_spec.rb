@@ -150,6 +150,17 @@ RSpec.describe Hanami::Assets::Configuration do
     end
   end
 
+  describe "#nested" do
+    it "is false by default" do
+      expect(@configuration.nested).to eq(false)
+    end
+
+    it "allows to set a value" do
+      @configuration.nested               true
+      expect(@configuration.nested).to eq(true)
+    end
+  end
+
   describe "#sources" do
     it "is empty by default" do
       expect(@configuration.sources).to be_empty
@@ -624,6 +635,7 @@ RSpec.describe Hanami::Assets::Configuration do
       @configuration.cdn                   true
       @configuration.subresource_integrity true
       @configuration.compile               true
+      @configuration.nested                true
       @configuration.scheme                "ftp"
       @configuration.host                  "hanamirb.org"
       @configuration.port                  "8080"
@@ -642,6 +654,7 @@ RSpec.describe Hanami::Assets::Configuration do
       expect(@config.cdn).to                   eq(true)
       expect(@config.subresource_integrity).to eq(true)
       expect(@config.compile).to               eq(true)
+      expect(@config.nested).to                eq(true)
       expect(@config.scheme).to                eq("ftp")
       expect(@config.host).to                  eq("hanamirb.org")
       expect(@config.port).to                  eq("8080")
@@ -658,6 +671,7 @@ RSpec.describe Hanami::Assets::Configuration do
       @config.cdn                   false
       @config.subresource_integrity false
       @config.compile               false
+      @config.nested                false
       @config.scheme                "mailto"
       @config.host                  "example.org"
       @config.port                  "9091"
@@ -672,6 +686,7 @@ RSpec.describe Hanami::Assets::Configuration do
       expect(@config.cdn).to                   eq(false)
       expect(@config.subresource_integrity).to eq(false)
       expect(@config.compile).to               eq(false)
+      expect(@config.nested).to                eq(false)
       expect(@config.scheme).to                eq("mailto")
       expect(@config.host).to                  eq("example.org")
       expect(@config.port).to                  eq("9091")
@@ -686,6 +701,7 @@ RSpec.describe Hanami::Assets::Configuration do
       expect(@configuration.cdn).to                   eq(true)
       expect(@configuration.subresource_integrity).to eq(true)
       expect(@configuration.compile).to               eq(true)
+      expect(@configuration.nested).to                eq(true)
       expect(@configuration.scheme).to                eq("ftp")
       expect(@configuration.host).to                  eq("hanamirb.org")
       expect(@configuration.port).to                  eq("8080")

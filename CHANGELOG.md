@@ -1,6 +1,14 @@
 # Hanami::Assets
 Assets management for Ruby web applications
 
+## v1.3.1 - 2019-01-18
+### Added
+- [Luca Guidi] Official support for Ruby: MRI 2.6
+- [Luca Guidi] Support `bundler` 2.0+
+
+### Fixed
+- [Luca Guidi] Make optional nested assets feature to maintain backward compatibility with `1.2.x`
+
 ## v1.3.0 - 2018-10-24
 
 ## v1.3.0.beta1 - 2018-08-08

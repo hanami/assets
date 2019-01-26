@@ -15,7 +15,7 @@ Assets management for Ruby web projects
 
 * Home page: http://hanamirb.org
 * Community: http://hanamirb.org/community
-* Guides: http://hanamirb.org/guides
+* Guides: https://guides.hanamirb.org
 * Mailing List: http://hanamirb.org/mailing-list
 * API Doc: http://rdoc.info/gems/hanami-assets
 * Bugs/Issues: https://github.com/hanami/assets/issues

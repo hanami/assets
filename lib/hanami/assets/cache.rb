@@ -66,7 +66,7 @@ module Hanami
       #
       # @return [Hanami::Assets::Cache] a new instance
       def initialize
-        @data  = Hash.new { |h, k| h[k] = File.new(k, mtime: 0) }
+        @data  = ::Hash.new { |h, k| h[k] = File.new(k, mtime: 0) }
         @mutex = Mutex.new
       end
 

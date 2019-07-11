@@ -31,7 +31,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'yui-compressor',   '~> 0.12'
   spec.add_development_dependency 'uglifier',         '~> 2.7'
   spec.add_development_dependency 'closure-compiler', '~> 1.1'
-  spec.add_development_dependency 'sass',             '~> 3.4'
+  spec.add_development_dependency 'sassc',            '~> 1.1'
 
   spec.add_development_dependency 'coffee-script',    '~> 2.3'
   spec.add_development_dependency 'babel-transpiler', '~> 0.7'

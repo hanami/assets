@@ -23,7 +23,7 @@ module Hanami
         # @since 0.1.0
         # @api private
         def initialize
-          @compressor = Sass::Engine
+          @compressor = SassC::Engine
         end
 
         # @since 0.1.0

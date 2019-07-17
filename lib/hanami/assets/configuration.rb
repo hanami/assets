@@ -233,7 +233,7 @@ module Hanami
       #
       #   * <tt>:builtin</tt> - Ruby based compressor. It doesn't require any external gem. It's fast, but not an efficient compressor.
       #   * <tt>:yui</tt> - YUI-Compressor, it depends on <tt>yui-compressor</tt> gem and requires Java 1.4+
-      #   * <tt>:sass</tt> - Sass, it depends on <tt>sass</tt> gem
+      #   * <tt>:sass</tt> - Sass, it depends on <tt>sassc</tt> gem
       #
       # @param value [Symbol,#compress] the compressor
       #
@@ -243,7 +243,7 @@ module Hanami
       # @see https://rubygems.org/gems/yui-compressor
       #
       # @see http://sass-lang.com
-      # @see https://rubygems.org/gems/sass
+      # @see https://rubygems.org/gems/sassc
       #
       # @example YUI Compressor
       #   require 'hanami/assets'

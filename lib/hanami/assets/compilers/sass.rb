@@ -31,14 +31,12 @@ module Hanami
 
         # @since 0.3.0
         # @api private
-        def dependencies
-          engine.dependencies.map { |d| d.options[:filename] }
+        def engine
+          ::SassC::Engine.new(to_be_compiled, load_paths: load_paths, cache_location: CACHE_LOCATION)
         end
 
-        # @since 0.3.0
-        # @api private
-        def engine
-          ::SassC::Engine.for_file(source.to_s, load_paths: load_paths, cache_location: CACHE_LOCATION)
+        def to_be_compiled
+          ::File.read(source.to_s)
         end
       end
     end

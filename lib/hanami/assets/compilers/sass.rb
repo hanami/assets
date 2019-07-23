@@ -35,6 +35,8 @@ module Hanami
           ::SassC::Engine.new(to_be_compiled, load_paths: load_paths, cache_location: CACHE_LOCATION)
         end
 
+        # @since x.x.x
+        # @api private
         def to_be_compiled
           ::File.read(source.to_s)
         end

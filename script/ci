@@ -22,7 +22,29 @@ run_unit_tests() {
 }
 
 run_integration_tests() {
-  bundle exec rake spec:integration
+  local pwd=$PWD
+  local root="$pwd/spec/integration"
+
+  if [ -d $root ]; then
+    for test in $(find $root -name '*_spec.rb')
+    do
+      run_test $test
+
+      if [ $? -ne 0 ]; then
+        local exit_code=$?
+        echo "Failing test: $test"
+        exit $exit_code
+      fi
+    done
+  fi
+}
+
+run_test() {
+  local test=$1
+  local hash="$(shasum "$test" | cut -b 1-40)"
+
+  printf "\n\n\nRunning: $test\n"
+  SIMPLECOV_COMMAND_NAME=$hash bundle exec rspec $test
 }
 
 upload_code_coverage() {

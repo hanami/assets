@@ -4,7 +4,7 @@ require "hanami/view"
 
 Hanami::Assets.configure do
   root             "spec/support/fixtures/standalone"
-  public_directory "tmp/standalone/public"
+  public_directory "spec/tmp/standalone/public"
   prefix           "/assets"
 
   sources << [

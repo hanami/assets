@@ -5,7 +5,7 @@ require "hanami/emberjs"
 require "tilt/babel"
 
 Hanami::Assets.configure do
-  public_directory "tmp/bookshelf/public"
+  public_directory "spec/tmp/bookshelf/public"
 
   javascript_compressor :yui
   stylesheet_compressor :yui
@@ -24,7 +24,7 @@ unless defined?(Web)
 
     Assets = Hanami::Assets.duplicate(self) do
       root             "spec/support/fixtures/bookshelf/apps/admin"
-      public_directory "tmp/bookshelf/public"
+      public_directory "spec/tmp/bookshelf/public"
       manifest         "assets.json"
       prefix           "/assets/admin"
       compile          true
@@ -61,7 +61,7 @@ unless defined?(Web)
 
     Assets = Hanami::Assets.duplicate(self) do
       root             "spec/support/fixtures/bookshelf/apps/metrics"
-      public_directory "tmp/bookshelf/public"
+      public_directory "spec/tmp/bookshelf/public"
       manifest         "assets.json"
       prefix           "/assets/metrics"
       compile          true
@@ -96,7 +96,7 @@ unless defined?(Web)
 
     Assets = Hanami::Assets.duplicate(self) do
       root             "spec/support/fixtures/bookshelf/apps/web"
-      public_directory "tmp/bookshelf/public"
+      public_directory "spec/tmp/bookshelf/public"
       manifest         "assets.json"
       prefix           "/assets"
       compile          true

@@ -28,6 +28,7 @@ unless defined?(Web)
       manifest         "assets.json"
       prefix           "/assets/admin"
       compile          true
+      nested           true
 
       sources << [
         "assets"
@@ -65,6 +66,7 @@ unless defined?(Web)
       manifest         "assets.json"
       prefix           "/assets/metrics"
       compile          true
+      nested           true
 
       sources << [
         "assets"
@@ -100,6 +102,7 @@ unless defined?(Web)
       manifest         "assets.json"
       prefix           "/assets"
       compile          true
+      nested           true
 
       sources << [
         "assets",

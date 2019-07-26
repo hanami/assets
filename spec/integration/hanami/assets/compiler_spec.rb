@@ -208,15 +208,6 @@ RSpec.describe 'Compiler' do
     expect(target.read).to match %(body {\n  font: 100% Helvetica, sans-serif;\n  color: #fff; }\n)
   end
 
-  it 'uses defined sass cache directory' do
-    directory = Pathname.new(Dir.pwd).join('tmp', 'sass-cache')
-    directory.rmtree if directory.exist?
-
-    Hanami::Assets::Compiler.compile(@config, 'compile-sass.css')
-
-    expect(directory.exist?).to eq(true)
-  end
-
   it 'compiles scss asset if direct dependency has changed' do
     dependency = TestFile.new(path: '_background.scss') do
       write 'body { background-color: purple; }'

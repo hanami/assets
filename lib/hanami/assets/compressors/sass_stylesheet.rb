@@ -6,7 +6,7 @@ module Hanami
     module Compressors
       # Sass compressor for stylesheet
       #
-      # It depends on <tt>sass</tt> gem.
+      # It depends on <tt>sassc</tt> gem.
       #
       # @since 0.1.0
       # @api private
@@ -14,12 +14,6 @@ module Hanami
       # @see http://sass-lang.com
       # @see https://rubygems.org/gems/sass
       class SassStylesheet < Stylesheet
-        # @since 0.1.0
-        # @api private
-        #
-        # FIXME This is the same logic that we have for Hanami::Assets::Compiler
-        SASS_CACHE_LOCATION = Pathname(Hanami.respond_to?(:root) ? # rubocop:disable Style/MultilineTernaryOperator
-                                       Hanami.root : Dir.pwd).join('tmp', 'sass-cache')
         # @since 0.1.0
         # @api private
         def initialize
@@ -30,7 +24,7 @@ module Hanami
         # @api private
         def compress(filename)
           compressor.new(read(filename), filename: filename, syntax: :scss,
-                                         style: :compressed, cache_location: SASS_CACHE_LOCATION).render
+                                         style: :compressed).render
         end
       end
     end

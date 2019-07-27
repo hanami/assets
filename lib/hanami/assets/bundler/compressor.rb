@@ -46,12 +46,12 @@ module Hanami
         # @api private
         def _compress(compressor)
           compressor.compress(@path)
-        rescue => e # rubocop:disable Style/RescueStandardError
+        rescue => exception # rubocop:disable Style/RescueStandardError
           warn(
             [
               "Skipping compression of: `#{@path}'",
-              "Reason: #{e}\n",
-              "\t#{e.backtrace.join("\n\t")}\n\n"
+              "Reason: #{exception}\n",
+              "\t#{exception.backtrace.join("\n\t")}\n\n"
             ].join("\n")
           )
         end

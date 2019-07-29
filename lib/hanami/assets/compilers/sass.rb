@@ -21,27 +21,31 @@ module Hanami
         # @since 0.3.0
         # @api private
         def renderer
-          Tilt.new(source, nil, load_paths: load_paths)
+          @renderer ||=
+            ::SassC::Engine.new(
+              to_be_compiled,
+              syntax: target_syntax,
+              load_paths: load_paths
+            )
         end
 
         # @since 0.3.0
         # @api private
         def dependencies
-          engine.render
-          engine.dependencies.map { |d| d.options[:filename] }
+          renderer.dependencies.map(&:filename)
         end
 
-        # @since 0.3.0
+        # @since 1.3.2
         # @api private
-        def engine
-          @engine ||= ::SassC::Engine.new(
-            to_be_compiled,
-            load_paths: load_paths,
-            syntax: (:sass if ::File.extname(source.to_s) == ".sass")
-          )
+        def target_syntax
+          if source.extname =~ /sass/
+            :sass
+          else
+            :scss
+          end
         end
 
-        # @since x.x.x
+        # @since 1.3.2
         # @api private
         def to_be_compiled
           ::File.read(source.to_s)

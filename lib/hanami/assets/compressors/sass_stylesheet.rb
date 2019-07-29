@@ -1,5 +1,5 @@
 require 'hanami/assets/compressors/stylesheet'
-require 'sass'
+require 'sassc'
 
 module Hanami
   module Assets
@@ -23,8 +23,24 @@ module Hanami
         # @since 0.1.0
         # @api private
         def compress(filename)
-          compressor.new(read(filename), filename: filename, syntax: :scss,
-                                         style: :compressed).render
+          compressor.new(
+            read(filename),
+            filename: filename,
+            syntax: target_syntax(filename),
+            style: :compressed,
+          ).render
+        end
+
+        private
+
+        # @since 1.3.2
+        # @api private
+        def target_syntax(filename)
+          if File.extname(filename) =~ /sass/
+            :sass
+          else
+            :scss
+          end
         end
       end
     end

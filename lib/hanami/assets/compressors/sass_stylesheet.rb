@@ -26,21 +26,9 @@ module Hanami
           compressor.new(
             read(filename),
             filename: filename,
-            syntax: target_syntax(filename),
+            syntax: :scss,
             style: :compressed,
           ).render
-        end
-
-        private
-
-        # @since 1.3.2
-        # @api private
-        def target_syntax(filename)
-          if File.extname(filename) =~ /sass/
-            :sass
-          else
-            :scss
-          end
         end
       end
     end

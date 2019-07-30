@@ -38,7 +38,7 @@ module Hanami
         # @since 1.3.2
         # @api private
         def target_syntax
-          if source.extname =~ /sass/
+          if source.extname =~ /sass\z/.freeze
             :sass
           else
             :scss

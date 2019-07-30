@@ -27,7 +27,7 @@ module Hanami
             read(filename),
             filename: filename,
             syntax: :scss,
-            style: :compressed,
+            style: :compressed
           ).render
         end
       end

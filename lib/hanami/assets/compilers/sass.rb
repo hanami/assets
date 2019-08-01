@@ -10,11 +10,6 @@ module Hanami
         # @api private
         EXTENSIONS = /\.(sass|scss)\z/.freeze
 
-        # @since 0.1.0
-        # @api private
-        CACHE_LOCATION = Pathname(Hanami.respond_to?(:root) ? # rubocop:disable Style/MultilineTernaryOperator
-                                  Hanami.root : Dir.pwd).join('tmp', 'sass-cache')
-
         # @since 0.3.0
         # @api private
         def self.eligible?(name)
@@ -26,19 +21,34 @@ module Hanami
         # @since 0.3.0
         # @api private
         def renderer
-          Tilt.new(source, nil, load_paths: load_paths, cache_location: CACHE_LOCATION)
+          @renderer ||=
+            ::SassC::Engine.new(
+              to_be_compiled,
+              syntax: target_syntax,
+              load_paths: load_paths
+            )
         end
 
         # @since 0.3.0
         # @api private
         def dependencies
-          engine.dependencies.map { |d| d.options[:filename] }
+          renderer.dependencies.map(&:filename)
         end
 
-        # @since 0.3.0
+        # @since 1.3.2
         # @api private
-        def engine
-          ::Sass::Engine.for_file(source.to_s, load_paths: load_paths, cache_location: CACHE_LOCATION)
+        def target_syntax
+          if source.extname =~ /sass\z/.freeze
+            :sass
+          else
+            :scss
+          end
+        end
+
+        # @since 1.3.2
+        # @api private
+        def to_be_compiled
+          ::File.read(source.to_s)
         end
       end
     end

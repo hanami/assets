@@ -200,7 +200,7 @@ handling: `.css` for stylesheets.
 The second one is optional and it's for a preprocessor: `.scss` for Sass.
 
 ```ruby
-require 'sass'
+require 'sassc'
 require 'hanami/assets'
 
 Hanami::Assets.configure do
@@ -353,7 +353,7 @@ Hanami can use the following compressors (aka minifiers) for stylesheets.
 
   * `:builtin` - Ruby based compressor. It doesn't require any external gem. It's fast, but not an efficient compressor.
   * `:yui` - [YUI Compressor](http://yui.github.io/yuicompressor), it depends on [`yui-compressor`](https://rubygems.org/gems/yui-compressor) gem and it requires Java 1.4+
-  * `:sass` - [Sass](http://sass-lang.com/), it depends on [`sass`](https://rubygems.org/gems/sass) gem
+  * `:sass` - [Sass](http://sass-lang.com/), it depends on [`sassc`](https://rubygems.org/gems/sassc) gem
 
 ```ruby
 Hanami::Assets.configure do

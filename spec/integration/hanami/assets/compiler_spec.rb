@@ -53,17 +53,17 @@ RSpec.describe 'Compiler' do
   end
 
   # Bug https://github.com/hanami/assets/issues/95
-  it 'does not find nested asset when nested setting is set to false (default)' do
+  it 'copies asset from nested source to non-nested destination when "nested" set to false (default)' do
     @config.nested false
-    Hanami::Assets::Compiler.compile(@config, 'helper.js')
+    Hanami::Assets::Compiler.compile(@config, 'bootstrap/helper.js')
 
-    target = @config.public_directory.join('assets', 'bootstrap', 'helper.js')
+    target = @config.public_directory.join('assets', 'helper.js')
     expect(target.read).to match %(var helper = {})
     expect(target.stat.mode.to_s(8)).to eq('100644')
   end
 
   # Bug https://github.com/hanami/assets/issues/95
-  it 'copies nested asset from nested source to destination' do
+  it 'copies asset from nested source to nested destination when "nested" set to true' do
     @config.nested true
     Hanami::Assets::Compiler.compile(@config, 'bootstrap/helper.js')
 
@@ -206,15 +206,6 @@ RSpec.describe 'Compiler' do
 
     target = @config.public_directory.join('assets', 'compile-scss.css')
     expect(target.read).to match %(body {\n  font: 100% Helvetica, sans-serif;\n  color: #fff; }\n)
-  end
-
-  it 'uses defined sass cache directory' do
-    directory = Pathname.new(Dir.pwd).join('tmp', 'sass-cache')
-    directory.rmtree if directory.exist?
-
-    Hanami::Assets::Compiler.compile(@config, 'compile-sass.css')
-
-    expect(directory.exist?).to eq(true)
   end
 
   it 'compiles scss asset if direct dependency has changed' do

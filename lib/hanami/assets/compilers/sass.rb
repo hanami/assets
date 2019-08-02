@@ -23,7 +23,7 @@ module Hanami
         def renderer
           @renderer ||=
             ::SassC::Engine.new(
-              to_be_compiled,
+              source.read,
               syntax: target_syntax,
               load_paths: load_paths
             )
@@ -43,12 +43,6 @@ module Hanami
           else
             :scss
           end
-        end
-
-        # @since 1.3.2
-        # @api private
-        def to_be_compiled
-          ::File.read(source.to_s)
         end
       end
     end

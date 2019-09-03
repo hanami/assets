@@ -21,6 +21,7 @@ module Hanami
         # @since 0.3.0
         # @api private
         def renderer
+          require 'sassc' unless defined? SassC
           @renderer ||=
             ::SassC::Engine.new(
               source.read,

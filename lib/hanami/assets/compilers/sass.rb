@@ -23,7 +23,8 @@ module Hanami
         # @since 0.3.0
         # @api private
         def renderer
-          @renderer ||= Hanami::Assets::Sass::Engine.new(
+          @renderer ||=
+            Hanami::Assets::Sass::Engine.new(
               source.read,
               syntax: target_syntax,
               load_paths: load_paths

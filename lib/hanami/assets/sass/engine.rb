@@ -1,6 +1,8 @@
 module Hanami
   module Assets
     module Sass
+      # Wrapper class for Sass[C]::Engine meant to aid in the transition between
+      # Sass (EOL) and SassC as the Sass/SCSS Compiler/stylesheet compressor
       class Engine
         def initialize(template, options = {})
           @renderer = source::Engine.new(template, options)
@@ -19,16 +21,14 @@ module Hanami
         attr_reader :renderer
 
         def source
+          require 'sassc'
+          ::SassC
+        rescue LoadError => exception
           begin
-            require 'sassc'
-            ::SassC
-          rescue LoadError => err
-            begin
-              require 'sass'
-              ::Sass
-            rescue LoadError
-              raise err
-            end
+            require 'sass'
+            ::Sass
+          rescue LoadError
+            raise exception
           end
         end
       end

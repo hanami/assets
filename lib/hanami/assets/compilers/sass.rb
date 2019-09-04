@@ -1,3 +1,5 @@
+require 'hanami/assets/sass/engine'
+
 module Hanami
   module Assets
     module Compilers
@@ -21,8 +23,7 @@ module Hanami
         # @since 0.3.0
         # @api private
         def renderer
-          @renderer ||=
-            ::SassC::Engine.new(
+          @renderer ||= Hanami::Assets::Sass::Engine.new(
               source.read,
               syntax: target_syntax,
               load_paths: load_paths
@@ -32,7 +33,7 @@ module Hanami
         # @since 0.3.0
         # @api private
         def dependencies
-          renderer.dependencies.map(&:filename)
+          renderer.dependencies
         end
 
         # @since 1.3.2

@@ -14,6 +14,8 @@ module Hanami
 
         def dependencies
           renderer.dependencies.map(&:filename)
+        rescue source::NotRenderedError
+          []
         end
 
         private

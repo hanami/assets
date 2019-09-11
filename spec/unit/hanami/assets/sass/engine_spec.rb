@@ -28,5 +28,13 @@ RSpec.describe Hanami::Assets::Sass::Engine do
       expect(source_engine).to receive(:dependencies).and_return([])
       our_engine.dependencies
     end
+
+    it 'returns an empty collection if a not rendered error is thrown' do
+      allow(source).to receive(:new).and_return(source_engine)
+      allow(source_engine).to receive(:dependencies).and_raise(::SassC::NotRenderedError)
+      our_engine = described_class.new(template)
+
+      expect(our_engine.dependencies).to be_empty
+    end
   end
 end

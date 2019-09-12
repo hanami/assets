@@ -1,5 +1,3 @@
-require 'hanami/assets/less/engine'
-
 module Hanami
   module Assets
     module Compilers
@@ -23,10 +21,7 @@ module Hanami
         # @since 0.3.0
         # @api private
         def renderer
-          Hanami::Assets::Less::Engine.new(
-            source,
-            paths: load_paths
-          )
+          Tilt.new(source, nil, paths: load_paths)
         end
       end
     end

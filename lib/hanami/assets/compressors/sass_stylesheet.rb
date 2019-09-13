@@ -1,5 +1,4 @@
 require 'hanami/assets/compressors/stylesheet'
-require 'sassc'
 
 module Hanami
   module Assets
@@ -17,7 +16,8 @@ module Hanami
         # @since 0.1.0
         # @api private
         def initialize
-          @compressor = SassC::Engine
+          require 'sassc'
+          @compressor = ::SassC::Engine
         end
 
         # @since 0.1.0

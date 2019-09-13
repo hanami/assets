@@ -437,6 +437,28 @@ From now on, helpers will return the absolute URL for the asset, hosted on the C
 <script src="https://123.cloudfront.net/assets/application-d1829dc353b734e3adc24855693b70f9.js" type="text/javascript"></script>
 ```
 
+## Standalone mode
+
+If you're using `hanami-assets` without `hanami`, you must explicitly boot the framework with:
+
+```ruby
+Hanami::Assets.configure do
+  # ...
+end.load!
+```
+
+or
+
+```ruby
+Hanami::Assets.configure do
+  # ...
+end
+
+# ...
+
+Hanami::Assets.load!
+```
+
 ## Third party gems
 
 Developers can maintain gems that distribute assets for Hanami. For instance `hanami-ember` or `hanami-jquery`.

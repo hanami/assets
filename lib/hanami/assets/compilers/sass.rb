@@ -16,6 +16,13 @@ module Hanami
           name.to_s =~ EXTENSIONS
         end
 
+        # @since 1.3.3
+        # @api private
+        def initialize(*)
+          super
+          require 'sassc'
+        end
+
         private
 
         # @since 0.3.0
@@ -33,6 +40,8 @@ module Hanami
         # @api private
         def dependencies
           renderer.dependencies.map(&:filename)
+        rescue source::NotRenderedError
+          []
         end
 
         # @since 1.3.2

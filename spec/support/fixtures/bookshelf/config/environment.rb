@@ -100,6 +100,7 @@ unless defined?(Web)
       manifest         "assets.json"
       prefix           "/assets"
       compile          true
+      nested           true
 
       sources << [
         "assets",

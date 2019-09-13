@@ -200,7 +200,7 @@ handling: `.css` for stylesheets.
 The second one is optional and it's for a preprocessor: `.scss` for Sass.
 
 ```ruby
-require 'sass'
+require 'sassc'
 require 'hanami/assets'
 
 Hanami::Assets.configure do
@@ -353,7 +353,7 @@ Hanami can use the following compressors (aka minifiers) for stylesheets.
 
   * `:builtin` - Ruby based compressor. It doesn't require any external gem. It's fast, but not an efficient compressor.
   * `:yui` - [YUI Compressor](http://yui.github.io/yuicompressor), it depends on [`yui-compressor`](https://rubygems.org/gems/yui-compressor) gem and it requires Java 1.4+
-  * `:sass` - [Sass](http://sass-lang.com/), it depends on [`sass`](https://rubygems.org/gems/sass) gem
+  * `:sass` - [Sass](http://sass-lang.com/), it depends on [`sassc`](https://rubygems.org/gems/sassc) gem
 
 ```ruby
 Hanami::Assets.configure do
@@ -435,6 +435,28 @@ From now on, helpers will return the absolute URL for the asset, hosted on the C
 
 ```html
 <script src="https://123.cloudfront.net/assets/application-d1829dc353b734e3adc24855693b70f9.js" type="text/javascript"></script>
+```
+
+## Standalone mode
+
+If you're using `hanami-assets` without `hanami`, you must explicitly boot the framework with:
+
+```ruby
+Hanami::Assets.configure do
+  # ...
+end.load!
+```
+
+or
+
+```ruby
+Hanami::Assets.configure do
+  # ...
+end
+
+# ...
+
+Hanami::Assets.load!
 ```
 
 ## Third party gems

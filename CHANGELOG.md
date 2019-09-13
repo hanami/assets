@@ -1,6 +1,15 @@
 # Hanami::Assets
 Assets management for Ruby web applications
 
+## v1.3.3 - 2019-09-13
+### Fixed
+- [Landon Grindheim] Lazily load `sassc` only when required
+- [Landon Grindheim] Ensure assets precompilation to not crash when SASS stylesheet doesn't have dependencies
+
+## v1.3.2 - 2019-08-02
+### Added
+- [Landon Grindheim & Sean Collins] Added support for `sassc` gem, because `sass` is no longer maintained
+
 ## v1.3.1 - 2019-01-18
 ### Added
 - [Luca Guidi] Official support for Ruby: MRI 2.6

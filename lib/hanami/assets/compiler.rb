@@ -231,7 +231,7 @@ module Hanami
       # @since 0.1.0
       # @api private
       def copy!
-        write { source.read }
+        write { source.binread }
       end
 
       # @since 0.1.0

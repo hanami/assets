@@ -231,7 +231,7 @@ module Hanami
       # @since 0.1.0
       # @api private
       def copy!
-        write { source.read }
+        write { source.binread }
       end
 
       # @since 0.1.0
@@ -244,7 +244,7 @@ module Hanami
       # @api private
       def write
         destination.dirname.mkpath
-        destination.open(File::WRONLY | File::TRUNC | File::CREAT, DEFAULT_PERMISSIONS) do |file|
+        destination.open(File::WRONLY | File::TRUNC | File::CREAT | File::BINARY, DEFAULT_PERMISSIONS) do |file|
           file.write(yield)
         end
       end

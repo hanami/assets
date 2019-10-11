@@ -1,6 +1,10 @@
 # Hanami::Assets
 Assets management for Ruby web applications
 
+## v1.3.4 - 2019-10-11
+### Fixed
+- [unleashy] Precompile assets using binary mode to ensure compatibility with Windows
+
 ## v1.3.3 - 2019-09-13
 ### Fixed
 - [Landon Grindheim] Lazily load `sassc` only when required

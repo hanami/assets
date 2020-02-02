@@ -5,7 +5,7 @@ Assets management for Ruby web projects
 ## Status
 
 [![Gem Version](https://badge.fury.io/rb/hanami-assets.svg)](https://badge.fury.io/rb/hanami-assets)
-[![TravisCI](https://travis-ci.org/hanami/assets.svg?branch=master)](https://travis-ci.org/hanami/assets)
+[![Build Status](https://ci.hanamirb.org/api/badges/hanami/assets/status.svg)](https://ci.hanamirb.org/hanami/assets)
 [![CircleCI](https://circleci.com/gh/hanami/assets/tree/master.svg?style=svg)](https://circleci.com/gh/hanami/assets/tree/master)
 [![Test Coverage](https://codecov.io/gh/hanami/assets/branch/master/graph/badge.svg)](https://codecov.io/gh/hanami/assets)
 [![Depfu](https://badges.depfu.com/badges/4b37347bd74042ff96477495cc16531d/overview.svg)](https://depfu.com/github/hanami/assets?project=Bundler)

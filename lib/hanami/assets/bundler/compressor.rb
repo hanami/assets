@@ -39,7 +39,7 @@ module Hanami
         # @since 0.3.0
         # @api private
         def compressor(type)
-          @configuration.__send__(:"#{ type }_compressor")
+          @configuration.__send__(:"#{type}_compressor")
         end
 
         # @since 0.3.0

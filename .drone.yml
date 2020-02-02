@@ -4,7 +4,7 @@ group: build
 
 steps:
 - name: install
-  image: ruby:2.7
+  image: hanami/ruby-2.7-node
   volumes:
   - name: bundle
     path: /usr/local/bundle
@@ -14,7 +14,7 @@ steps:
   - bundle install --jobs=3 --retry=3
 
 - name: unit
-  image: ruby:2.7
+  image: hanami/ruby-2.7-node
   volumes:
   - name: bundle
     path: /usr/local/bundle
@@ -22,7 +22,7 @@ steps:
   - COVERAGE=true bundle exec rake spec:unit
 
 - name: integration
-  image: ruby:2.7
+  image: hanami/ruby-2.7-node
   volumes:
   - name: bundle
     path: /usr/local/bundle
@@ -30,7 +30,7 @@ steps:
   - ./script/test integration
 
 - name: quality
-  image: ruby:2.7
+  image: hanami/ruby-2.7-node
   environment:
     CODECOV_TOKEN:
       from_secret: codecov
@@ -51,7 +51,7 @@ group: build
 
 steps:
 - name: install
-  image: ruby:2.6
+  image: hanami/ruby-2.6-node
   volumes:
   - name: bundle
     path: /usr/local/bundle
@@ -61,7 +61,7 @@ steps:
   - bundle install --jobs=3 --retry=3
 
 - name: unit
-  image: ruby:2.6
+  image: hanami/ruby-2.6-node
   volumes:
   - name: bundle
     path: /usr/local/bundle
@@ -69,7 +69,7 @@ steps:
   - COVERAGE=true bundle exec rake spec:unit
 
 - name: integration
-  image: ruby:2.6
+  image: hanami/ruby-2.6-node
   volumes:
   - name: bundle
     path: /usr/local/bundle
@@ -77,7 +77,7 @@ steps:
   - ./script/test integration
 
 - name: quality
-  image: ruby:2.6
+  image: hanami/ruby-2.6-node
   environment:
     CODECOV_TOKEN:
       from_secret: codecov
@@ -98,7 +98,7 @@ group: build
 
 steps:
 - name: install
-  image: ruby:2.5
+  image: hanami/ruby-2.5-node
   volumes:
   - name: bundle
     path: /usr/local/bundle
@@ -108,7 +108,7 @@ steps:
   - bundle install --jobs=3 --retry=3
 
 - name: unit
-  image: ruby:2.5
+  image: hanami/ruby-2.5-node
   volumes:
   - name: bundle
     path: /usr/local/bundle
@@ -116,7 +116,7 @@ steps:
   - COVERAGE=true bundle exec rake spec:unit
 
 - name: integration
-  image: ruby:2.5
+  image: hanami/ruby-2.5-node
   volumes:
   - name: bundle
     path: /usr/local/bundle
@@ -124,7 +124,101 @@ steps:
   - ./script/test integration
 
 - name: quality
-  image: ruby:2.5
+  image: hanami/ruby-2.5-node
+  environment:
+    CODECOV_TOKEN:
+      from_secret: codecov
+  volumes:
+  - name: bundle
+    path: /usr/local/bundle
+  commands:
+  - CI=true bundle exec rake codecov:upload
+
+volumes:
+- name: bundle
+  temp: {}
+
+---
+kind: pipeline
+name: ruby-2-4
+group: build
+
+steps:
+- name: install
+  image: hanami/ruby-2.4-node
+  volumes:
+  - name: bundle
+    path: /usr/local/bundle
+  commands:
+  - ruby -v
+  - gem install bundler
+  - bundle install --jobs=3 --retry=3
+
+- name: unit
+  image: hanami/ruby-2.4-node
+  volumes:
+  - name: bundle
+    path: /usr/local/bundle
+  commands:
+  - COVERAGE=true bundle exec rake spec:unit
+
+- name: integration
+  image: hanami/ruby-2.4-node
+  volumes:
+  - name: bundle
+    path: /usr/local/bundle
+  commands:
+  - ./script/test integration
+
+- name: quality
+  image: hanami/ruby-2.4-node
+  environment:
+    CODECOV_TOKEN:
+      from_secret: codecov
+  volumes:
+  - name: bundle
+    path: /usr/local/bundle
+  commands:
+  - CI=true bundle exec rake codecov:upload
+
+volumes:
+- name: bundle
+  temp: {}
+
+---
+kind: pipeline
+name: ruby-2-3
+group: build
+
+steps:
+- name: install
+  image: hanami/ruby-2.3-node
+  volumes:
+  - name: bundle
+    path: /usr/local/bundle
+  commands:
+  - ruby -v
+  - gem install bundler
+  - bundle install --jobs=3 --retry=3
+
+- name: unit
+  image: hanami/ruby-2.3-node
+  volumes:
+  - name: bundle
+    path: /usr/local/bundle
+  commands:
+  - COVERAGE=true bundle exec rake spec:unit
+
+- name: integration
+  image: hanami/ruby-2.3-node
+  volumes:
+  - name: bundle
+    path: /usr/local/bundle
+  commands:
+  - ./script/test integration
+
+- name: quality
+  image: hanami/ruby-2.3-node
   environment:
     CODECOV_TOKEN:
       from_secret: codecov
@@ -145,7 +239,7 @@ group: build
 
 steps:
 - name: install
-  image: hanami/jruby-9.2
+  image: hanami/jruby-9.2-node
   volumes:
   - name: bundle
     path: /usr/local/bundle
@@ -155,7 +249,7 @@ steps:
   - bundle install --jobs=3 --retry=3
 
 - name: unit
-  image: hanami/jruby-9.2
+  image: hanami/jruby-9.2-node
   volumes:
   - name: bundle
     path: /usr/local/bundle
@@ -163,7 +257,7 @@ steps:
   - COVERAGE=true bundle exec rake spec:unit
 
 - name: integration
-  image: hanami/jruby-9.2
+  image: hanami/jruby-9.2-node
   volumes:
   - name: bundle
     path: /usr/local/bundle
@@ -171,7 +265,54 @@ steps:
   - ./script/test integration
 
 - name: quality
-  image: hanami/jruby-9.2
+  image: hanami/jruby-9.2-node
+  environment:
+    CODECOV_TOKEN:
+      from_secret: codecov
+  volumes:
+  - name: bundle
+    path: /usr/local/bundle
+  commands:
+  - CI=true bundle exec rake codecov:upload
+
+volumes:
+- name: bundle
+  temp: {}
+
+---
+kind: pipeline
+name: jruby-9-1
+group: build
+
+steps:
+- name: install
+  image: hanami/jruby-9.1-node
+  volumes:
+  - name: bundle
+    path: /usr/local/bundle
+  commands:
+  - ruby -v
+  - gem install bundler
+  - bundle install --jobs=3 --retry=3
+
+- name: unit
+  image: hanami/jruby-9.1-node
+  volumes:
+  - name: bundle
+    path: /usr/local/bundle
+  commands:
+  - COVERAGE=true bundle exec rake spec:unit
+
+- name: integration
+  image: hanami/jruby-9.1-node
+  volumes:
+  - name: bundle
+    path: /usr/local/bundle
+  commands:
+  - ./script/test integration
+
+- name: quality
+  image: hanami/jruby-9.1-node
   environment:
     CODECOV_TOKEN:
       from_secret: codecov
@@ -194,7 +335,7 @@ clone:
   disable: true
 
 depends_on:
-  - jruby-9-2
+  - jruby-9-1
 
 steps:
 - name: slack

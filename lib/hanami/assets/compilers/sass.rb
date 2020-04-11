@@ -40,7 +40,7 @@ module Hanami
         # @api private
         def dependencies
           renderer.dependencies.map(&:filename)
-        rescue source::NotRenderedError
+        rescue ::SassC::NotRenderedError
           []
         end
 

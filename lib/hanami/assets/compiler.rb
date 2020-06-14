@@ -183,7 +183,7 @@ module Hanami
         result = destination_path
 
         if compile?
-          result.scan(/\A[[[:alnum:]][\-\_]]*\.[[\w]]*/).first || result
+          result.scan(/\A[[[[:alnum:]][\-\_]]*\/]*[[[:alnum:]][\-\_]]*\.[[\w]]*/).first || result
         else
           result
         end

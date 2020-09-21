@@ -82,7 +82,8 @@ module Hanami
       # @since 0.1.0
       # @api private
       def self.for(base)
-        # TODO: this implementation is similar to Hanami::Controller::Configuration consider to extract it into Hanami::Utils
+        # TODO: this implementation is similar to Hanami::Controller::Configuration
+        # consider to extract it into Hanami::Utils
         namespace = Utils::String.namespace(base)
         framework = Utils::Class.load("#{namespace}::Assets") || Utils::Class.load!("Hanami::Assets")
         framework.configuration
@@ -185,7 +186,8 @@ module Hanami
       #   * <tt>:builtin</tt> - Ruby based implementation of jsmin. It doesn't require any external gem.
       #   * <tt>:yui</tt> - YUI Compressor, it depends on <tt>yui-compressor</tt> gem and it requires Java 1.4+
       #   * <tt>:uglifier</tt> - UglifyJS, it depends on <tt>uglifier</tt> gem and it requires Node.js
-      #   * <tt>:closure</tt> - Google Closure Compiler, it depends on <tt>closure-compiler</tt> gem and it requires Java
+      #   * <tt>:closure</tt> - Google Closure Compiler, it depends on <tt>closure-compiler</tt> gem
+      #                         and it requires Java
       #
       # @param value [Symbol,#compress] the compressor
       #
@@ -233,7 +235,8 @@ module Hanami
       #
       # The following symbols are accepted:
       #
-      #   * <tt>:builtin</tt> - Ruby based compressor. It doesn't require any external gem. It's fast, but not an efficient compressor.
+      #   * <tt>:builtin</tt> - Ruby based compressor. It doesn't require any external gem.
+      #                         It's fast, but not an efficient compressor.
       #   * <tt>:yui</tt> - YUI-Compressor, it depends on <tt>yui-compressor</tt> gem and requires Java 1.4+
       #   * <tt>:sass</tt> - Sass, it depends on <tt>sassc</tt> gem
       #

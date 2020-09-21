@@ -141,13 +141,15 @@ module Hanami
       #
       #   <%= javascript 'application' %>
       #
-      #   # <script src="/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js" type="text/javascript" integrity="sha384-oqVu...Y8wC" crossorigin="anonymous"></script>
+      #   # <script src="/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js"
+      #   #         type="text/javascript" integrity="sha384-oqVu...Y8wC" crossorigin="anonymous"></script>
       #
       # @example Subresource Integrity for 3rd Party Scripts
       #
       #   <%= javascript 'https://example.com/assets/example.js', integrity: 'sha384-oqVu...Y8wC' %>
       #
-      #   # <script src="https://example.com/assets/example.js" type="text/javascript" integrity="sha384-oqVu...Y8wC" crossorigin="anonymous"></script>
+      #   # <script src="https://example.com/assets/example.js" type="text/javascript"
+      #   #         integrity="sha384-oqVu...Y8wC" crossorigin="anonymous"></script>
       #
       # @example Deferred Execution
       #
@@ -171,7 +173,8 @@ module Hanami
       #
       #   <%= javascript 'application' %>
       #
-      #   # <script src="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js" type="text/javascript"></script>
+      #   # <script src="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js"
+      #   #         type="text/javascript"></script>
       #
       # @example Disable Push Promise/Early Hints
       #
@@ -248,19 +251,22 @@ module Hanami
       #
       #   <%= stylesheet 'application' %>
       #
-      #   # <link href="/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.css" type="text/css" integrity="sha384-oqVu...Y8wC" crossorigin="anonymous"></script>
+      #   # <link href="/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.css"
+      #   #       type="text/css" integrity="sha384-oqVu...Y8wC" crossorigin="anonymous"></script>
       #
       # @example Subresource Integrity for 3rd Party Assets
       #
       #   <%= stylesheet 'https://example.com/assets/example.css', integrity: 'sha384-oqVu...Y8wC' %>
       #
-      #   # <link href="https://example.com/assets/example.css" type="text/css" rel="stylesheet" integrity="sha384-oqVu...Y8wC" crossorigin="anonymous"></script>
+      #   # <link href="https://example.com/assets/example.css"
+      #   #       type="text/css" rel="stylesheet" integrity="sha384-oqVu...Y8wC" crossorigin="anonymous"></script>
       #
       # @example Absolute URL
       #
       #   <%= stylesheet 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css' %>
       #
-      #   # <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+      #   # <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+      #   #       type="text/css" rel="stylesheet">
       #
       # @example Fingerprint Mode
       #
@@ -272,7 +278,8 @@ module Hanami
       #
       #   <%= stylesheet 'application' %>
       #
-      #   # <link href="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.css" type="text/css" rel="stylesheet">
+      #   # <link href="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.css"
+      #   #       type="text/css" rel="stylesheet">
       #
       # @example Disable Push Promise/Early Hints
       #
@@ -436,7 +443,8 @@ module Hanami
       #
       #   <%= favicon %>
       #
-      #   # <link href="https://assets.bookshelf.org/assets/favicon-28a6b886de2372ee3922fcaf3f78f2d8.ico" rel="shortcut icon" type="image/x-icon">
+      #   # <link href="https://assets.bookshelf.org/assets/favicon-28a6b886de2372ee3922fcaf3f78f2d8.ico"
+      #           rel="shortcut icon" type="image/x-icon">
       #
       # @example Enable Push Promise/Early Hints
       #
@@ -910,7 +918,9 @@ module Hanami
           options[:src] = asset_path(src, push: options.delete(:push) || false, as: as)
         end
 
-        raise ArgumentError.new("You should provide a source via `src` option or with a `source` HTML tag") if !options[:src] && !block_given?
+        if !options[:src] && !block_given?
+          raise ArgumentError.new("You should provide a source via `src` option or with a `source` HTML tag")
+        end
 
         options
       end

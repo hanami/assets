@@ -43,7 +43,7 @@ class TestFile
     @file.to_s
   end
 
-  alias to_str to_s
+  alias_method :to_str, :to_s
 
   private
 

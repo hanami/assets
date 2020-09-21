@@ -29,7 +29,7 @@ module Hanami
 
         # @since 0.1.0
         # @api private
-        alias << push
+        alias_method :<<, :push
 
         private
 

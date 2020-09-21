@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "hanami/assets/bundler"
 require "hanami/assets/compressors/javascript"
 require "hanami/assets/compressors/stylesheet"

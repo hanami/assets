@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe "Fingerprint mode" do
   before do
     dest.rmtree if dest.exist?

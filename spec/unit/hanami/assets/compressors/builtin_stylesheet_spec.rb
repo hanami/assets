@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "hanami/assets/compressors/builtin_stylesheet"
 
 RSpec.describe Hanami::Assets::Compressors::BuiltinStylesheet do

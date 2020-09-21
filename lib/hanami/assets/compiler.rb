@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "set"
 require "find"
 require "hanami/utils/class_attribute"

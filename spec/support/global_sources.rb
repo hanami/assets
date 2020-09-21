@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Hanami::Assets::Config::GlobalSources.class_eval do
   def clear
     @paths.each do |path|

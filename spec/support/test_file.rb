@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "securerandom"
 require_relative "ci"
 require_relative "tmp"

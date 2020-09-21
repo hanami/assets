@@ -22,7 +22,7 @@ module Hanami
 
         # @since 0.3.0
         # @api private
-        WILDCARD_EXT = ".*".freeze
+        WILDCARD_EXT = ".*"
 
         # Return a new instance
         #

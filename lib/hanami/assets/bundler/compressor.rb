@@ -10,11 +10,11 @@ module Hanami
       class Compressor
         # @since 0.3.0
         # @api private
-        JAVASCRIPT_EXT      = ".js".freeze
+        JAVASCRIPT_EXT      = ".js"
 
         # @since 0.3.0
         # @api private
-        STYLESHEET_EXT      = ".css".freeze
+        STYLESHEET_EXT      = ".css"
 
         # Return a new instance
         #

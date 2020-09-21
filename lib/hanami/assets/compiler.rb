@@ -37,7 +37,7 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      COMPILE_PATTERN = "*.*.*".freeze # Example hello.js.es6
+      COMPILE_PATTERN = "*.*.*" # Example hello.js.es6
 
       # @since 0.1.0
       # @api private

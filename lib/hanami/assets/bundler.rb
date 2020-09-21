@@ -20,11 +20,11 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      URL_SEPARATOR       = "/".freeze
+      URL_SEPARATOR       = "/"
 
       # @since 0.1.0
       # @api private
-      URL_REPLACEMENT     = "".freeze
+      URL_REPLACEMENT     = ""
 
       # Return a new instance
       #

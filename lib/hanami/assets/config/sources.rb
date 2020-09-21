@@ -22,7 +22,7 @@ module Hanami
       class Sources < Utils::LoadPaths
         # @since 0.3.0
         # @api private
-        SKIPPED_FILE_PREFIX = "_".freeze
+        SKIPPED_FILE_PREFIX = "_"
 
         # @since 0.1.0
         # @api private

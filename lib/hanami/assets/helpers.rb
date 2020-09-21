@@ -18,47 +18,47 @@ module Hanami
     module Helpers
       # @since 0.1.0
       # @api private
-      NEW_LINE_SEPARATOR = "\n".freeze
+      NEW_LINE_SEPARATOR = "\n"
 
       # @since 0.1.0
       # @api private
-      WILDCARD_EXT   = ".*".freeze
+      WILDCARD_EXT   = ".*"
 
       # @since 0.1.0
       # @api private
-      JAVASCRIPT_EXT = ".js".freeze
+      JAVASCRIPT_EXT = ".js"
 
       # @since 0.1.0
       # @api private
-      STYLESHEET_EXT = ".css".freeze
+      STYLESHEET_EXT = ".css"
 
       # @since 0.1.0
       # @api private
-      JAVASCRIPT_MIME_TYPE = "text/javascript".freeze
+      JAVASCRIPT_MIME_TYPE = "text/javascript"
 
       # @since 0.1.0
       # @api private
-      STYLESHEET_MIME_TYPE = "text/css".freeze
+      STYLESHEET_MIME_TYPE = "text/css"
 
       # @since 0.1.0
       # @api private
-      FAVICON_MIME_TYPE    = "image/x-icon".freeze
+      FAVICON_MIME_TYPE    = "image/x-icon"
 
       # @since 0.1.0
       # @api private
-      STYLESHEET_REL  = "stylesheet".freeze
+      STYLESHEET_REL  = "stylesheet"
 
       # @since 0.1.0
       # @api private
-      FAVICON_REL     = "shortcut icon".freeze
+      FAVICON_REL     = "shortcut icon"
 
       # @since 0.1.0
       # @api private
-      DEFAULT_FAVICON = "favicon.ico".freeze
+      DEFAULT_FAVICON = "favicon.ico"
 
       # @since 0.3.0
       # @api private
-      CROSSORIGIN_ANONYMOUS = "anonymous".freeze
+      CROSSORIGIN_ANONYMOUS = "anonymous"
 
       # @since 0.3.0
       # @api private

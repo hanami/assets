@@ -8,7 +8,7 @@ module Hanami
       class ManifestEntry
         # @since 0.3.0
         # @api private
-        SUBRESOURCE_INTEGRITY_SEPARATOR = '-'.freeze
+        SUBRESOURCE_INTEGRITY_SEPARATOR = "-".freeze
 
         # Return a new instance
         #

@@ -1,5 +1,5 @@
-require 'fileutils'
-require 'hanami/assets/compiler'
+require "fileutils"
+require "hanami/assets/compiler"
 
 module Hanami
   module Assets
@@ -48,11 +48,11 @@ module Hanami
       # @api private
       def clear_manifest(manifest)
         JSON.parse(manifest).each_value do |asset_hash|
-          asset_file_name = @configuration.public_directory.join(asset_hash['target'])
+          asset_file_name = @configuration.public_directory.join(asset_hash["target"])
           asset_file_name.unlink if asset_file_name.exist?
         end
       rescue JSON::ParserError
-        warn 'Non JSON manifest found and unlinked.'
+        warn "Non JSON manifest found and unlinked."
       ensure
         manifest.unlink
       end

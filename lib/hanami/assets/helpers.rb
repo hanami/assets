@@ -1,6 +1,6 @@
-require 'uri'
-require 'hanami/helpers/html_helper'
-require 'hanami/utils/escape'
+require "uri"
+require "hanami/helpers/html_helper"
+require "hanami/utils/escape"
 
 module Hanami
   module Assets
@@ -20,43 +20,43 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      WILDCARD_EXT   = '.*'.freeze
+      WILDCARD_EXT   = ".*".freeze
 
       # @since 0.1.0
       # @api private
-      JAVASCRIPT_EXT = '.js'.freeze
+      JAVASCRIPT_EXT = ".js".freeze
 
       # @since 0.1.0
       # @api private
-      STYLESHEET_EXT = '.css'.freeze
+      STYLESHEET_EXT = ".css".freeze
 
       # @since 0.1.0
       # @api private
-      JAVASCRIPT_MIME_TYPE = 'text/javascript'.freeze
+      JAVASCRIPT_MIME_TYPE = "text/javascript".freeze
 
       # @since 0.1.0
       # @api private
-      STYLESHEET_MIME_TYPE = 'text/css'.freeze
+      STYLESHEET_MIME_TYPE = "text/css".freeze
 
       # @since 0.1.0
       # @api private
-      FAVICON_MIME_TYPE    = 'image/x-icon'.freeze
+      FAVICON_MIME_TYPE    = "image/x-icon".freeze
 
       # @since 0.1.0
       # @api private
-      STYLESHEET_REL  = 'stylesheet'.freeze
+      STYLESHEET_REL  = "stylesheet".freeze
 
       # @since 0.1.0
       # @api private
-      FAVICON_REL     = 'shortcut icon'.freeze
+      FAVICON_REL     = "shortcut icon".freeze
 
       # @since 0.1.0
       # @api private
-      DEFAULT_FAVICON = 'favicon.ico'.freeze
+      DEFAULT_FAVICON = "favicon.ico".freeze
 
       # @since 0.3.0
       # @api private
-      CROSSORIGIN_ANONYMOUS = 'anonymous'.freeze
+      CROSSORIGIN_ANONYMOUS = "anonymous".freeze
 
       # @since 0.3.0
       # @api private
@@ -908,7 +908,7 @@ module Hanami
           options[:src] = asset_path(src, push: options.delete(:push) || false, as: as)
         end
 
-        raise ArgumentError.new('You should provide a source via `src` option or with a `source` HTML tag') if !options[:src] && !block_given?
+        raise ArgumentError.new("You should provide a source via `src` option or with a `source` HTML tag") if !options[:src] && !block_given?
 
         options
       end

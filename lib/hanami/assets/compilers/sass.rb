@@ -20,7 +20,7 @@ module Hanami
         # @api private
         def initialize(*)
           super
-          require 'sassc'
+          require "sassc"
         end
 
         private

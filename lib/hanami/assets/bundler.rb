@@ -1,9 +1,9 @@
-require 'fileutils'
-require 'json'
+require "fileutils"
+require "json"
 
-require 'hanami/assets/bundler/compressor'
-require 'hanami/assets/bundler/asset'
-require 'hanami/assets/bundler/manifest_entry'
+require "hanami/assets/bundler/compressor"
+require "hanami/assets/bundler/asset"
+require "hanami/assets/bundler/manifest_entry"
 
 module Hanami
   module Assets
@@ -18,11 +18,11 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      URL_SEPARATOR       = '/'.freeze
+      URL_SEPARATOR       = "/".freeze
 
       # @since 0.1.0
       # @api private
-      URL_REPLACEMENT     = ''.freeze
+      URL_REPLACEMENT     = "".freeze
 
       # Return a new instance
       #

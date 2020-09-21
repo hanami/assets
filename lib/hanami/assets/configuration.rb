@@ -1,11 +1,11 @@
-require 'pathname'
-require 'json'
-require 'hanami/utils/string'
-require 'hanami/utils/class'
-require 'hanami/utils/path_prefix'
-require 'hanami/utils/basic_object'
-require 'hanami/assets/config/manifest'
-require 'hanami/assets/config/sources'
+require "pathname"
+require "json"
+require "hanami/utils/string"
+require "hanami/utils/class"
+require "hanami/utils/path_prefix"
+require "hanami/utils/basic_object"
+require "hanami/assets/config/manifest"
+require "hanami/assets/config/sources"
 
 module Hanami
   module Assets
@@ -15,47 +15,47 @@ module Hanami
     class Configuration # rubocop:disable Metrics/ClassLength
       # @since 0.1.0
       # @api private
-      DEFAULT_SCHEME                          = 'http'.freeze
+      DEFAULT_SCHEME                          = "http".freeze
 
       # @since 0.1.0
       # @api private
-      DEFAULT_HOST                            = 'localhost'.freeze
+      DEFAULT_HOST                            = "localhost".freeze
 
       # @since 0.1.0
       # @api private
-      DEFAULT_PORT                            = '2300'.freeze
+      DEFAULT_PORT                            = "2300".freeze
 
       # @since 0.1.0
       # @api private
-      DEFAULT_PUBLIC_DIRECTORY                = 'public'.freeze
+      DEFAULT_PUBLIC_DIRECTORY                = "public".freeze
 
       # @since 0.1.0
       # @api private
-      DEFAULT_MANIFEST                        = 'assets.json'.freeze
+      DEFAULT_MANIFEST                        = "assets.json".freeze
 
       # @since 0.1.0
       # @api private
-      DEFAULT_PREFIX                          = '/assets'.freeze
+      DEFAULT_PREFIX                          = "/assets".freeze
 
       # @since 0.1.0
       # @api private
-      URL_SEPARATOR                           = '/'.freeze
+      URL_SEPARATOR                           = "/".freeze
 
       # @since 0.1.0
       # @api private
-      HTTP_SCHEME                             = 'http'.freeze
+      HTTP_SCHEME                             = "http".freeze
 
       # @since 0.1.0
       # @api private
-      HTTP_PORT                               = '80'.freeze
+      HTTP_PORT                               = "80".freeze
 
       # @since 0.1.0
       # @api private
-      HTTPS_SCHEME                            = 'https'.freeze
+      HTTPS_SCHEME                            = "https".freeze
 
       # @since 0.1.0
       # @api private
-      HTTPS_PORT                              = '443'.freeze
+      HTTPS_PORT                              = "443".freeze
 
       # @since 0.3.0
       # @api private
@@ -63,7 +63,7 @@ module Hanami
 
       # @since 0.3.0
       # @api private
-      SUBRESOURCE_INTEGRITY_SEPARATOR         = ' '.freeze
+      SUBRESOURCE_INTEGRITY_SEPARATOR         = " ".freeze
 
       # Return a copy of the configuration of the framework instance associated
       # with the given class.
@@ -82,7 +82,7 @@ module Hanami
       def self.for(base)
         # TODO: this implementation is similar to Hanami::Controller::Configuration consider to extract it into Hanami::Utils
         namespace = Utils::String.namespace(base)
-        framework = Utils::Class.load("#{namespace}::Assets") || Utils::Class.load!('Hanami::Assets')
+        framework = Utils::Class.load("#{namespace}::Assets") || Utils::Class.load!("Hanami::Assets")
         framework.configuration
       end
 
@@ -484,7 +484,7 @@ module Hanami
       # @see Hanami::Assets::Configuration#javascript_compressor
       # @see Hanami::Assets::Compressors::Javascript#for
       def js_compressor
-        require 'hanami/assets/compressors/javascript'
+        require "hanami/assets/compressors/javascript"
         Hanami::Assets::Compressors::Javascript.for(javascript_compressor)
       end
 
@@ -501,7 +501,7 @@ module Hanami
       # @see Hanami::Assets::Configuration#stylesheet_compressor
       # @see Hanami::Assets::Compressors::Stylesheet#for
       def css_compressor
-        require 'hanami/assets/compressors/stylesheet'
+        require "hanami/assets/compressors/stylesheet"
         Hanami::Assets::Compressors::Stylesheet.for(stylesheet_compressor)
       end
 

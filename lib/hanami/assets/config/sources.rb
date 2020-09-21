@@ -1,5 +1,5 @@
-require 'hanami/utils/load_paths'
-require 'hanami/utils/file_list'
+require "hanami/utils/load_paths"
+require "hanami/utils/file_list"
 
 module Hanami
   module Assets
@@ -20,7 +20,7 @@ module Hanami
       class Sources < Utils::LoadPaths
         # @since 0.3.0
         # @api private
-        SKIPPED_FILE_PREFIX = '_'.freeze
+        SKIPPED_FILE_PREFIX = "_".freeze
 
         # @since 0.1.0
         # @api private

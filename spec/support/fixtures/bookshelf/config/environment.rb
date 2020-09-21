@@ -33,7 +33,7 @@ unless defined?(Web)
         "assets"
       ]
 
-      base_directories << 'js'
+      base_directories << "js"
     end
 
     module Views

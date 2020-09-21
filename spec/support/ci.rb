@@ -1,5 +1,5 @@
 module CI
   def self.enabled?
-    ENV['CI']
+    ENV["CI"]
   end
 end

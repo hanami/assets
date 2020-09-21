@@ -1,4 +1,4 @@
-require 'hanami/utils/load_paths'
+require "hanami/utils/load_paths"
 
 module Hanami
   module Assets

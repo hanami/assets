@@ -1,4 +1,4 @@
-require 'hanami/assets/compressors/stylesheet'
+require "hanami/assets/compressors/stylesheet"
 
 module Hanami
   module Assets

@@ -1,4 +1,4 @@
-require 'pathname'
+require "pathname"
 
 module Hanami
   module Assets

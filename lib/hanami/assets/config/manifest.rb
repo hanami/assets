@@ -83,11 +83,11 @@ module Hanami
       class Manifest
         # @since 0.4.0
         # @api private
-        TARGET                = 'target'.freeze
+        TARGET                = "target".freeze
 
         # @since 0.3.0
         # @api private
-        SUBRESOURCE_INTEGRITY = 'sri'.freeze
+        SUBRESOURCE_INTEGRITY = "sri".freeze
 
         # Return a new instance
         #

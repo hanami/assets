@@ -1,4 +1,4 @@
-require 'openssl'
+require "openssl"
 
 module Hanami
   module Assets
@@ -20,7 +20,7 @@ module Hanami
 
         # @since 0.3.0
         # @api private
-        WILDCARD_EXT = '.*'.freeze
+        WILDCARD_EXT = ".*".freeze
 
         # Return a new instance
         #

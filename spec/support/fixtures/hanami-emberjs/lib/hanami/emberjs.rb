@@ -1,10 +1,10 @@
-require 'hanami/assets'
+require "hanami/assets"
 
 module Hanami
   module Emberjs
-    require 'hanami/emberjs/version'
+    require "hanami/emberjs/version"
   end
 end
 
-Hanami::Assets.sources << __dir__ + '/emberjs/dist'
-Hanami::Assets.sources << __dir__ + '/emberjs/source'
+Hanami::Assets.sources << __dir__ + "/emberjs/dist"
+Hanami::Assets.sources << __dir__ + "/emberjs/source"

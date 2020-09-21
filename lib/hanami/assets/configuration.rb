@@ -14,7 +14,7 @@ module Hanami
     # Framework configuration
     #
     # @since 0.1.0
-    class Configuration # rubocop:disable Metrics/ClassLength
+    class Configuration
       # @since 0.1.0
       # @api private
       DEFAULT_SCHEME                          = "http"
@@ -139,7 +139,7 @@ module Hanami
         if value.nil?
           @nested
         else
-          @nested = !!value # rubocop:disable Style/DoubleNegation
+          @nested = !!value
         end
       end
 
@@ -169,7 +169,7 @@ module Hanami
         if value.nil?
           @cdn
         else
-          @cdn = !!value # rubocop:disable Style/DoubleNegation
+          @cdn = !!value
         end
       end
 
@@ -512,7 +512,7 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      def duplicate # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def duplicate
         Configuration.new.tap do |c|
           c.root                  = root
           c.scheme                = scheme
@@ -533,7 +533,7 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      def reset! # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def reset!
         @scheme                = DEFAULT_SCHEME
         @host                  = DEFAULT_HOST
         @port                  = DEFAULT_PORT

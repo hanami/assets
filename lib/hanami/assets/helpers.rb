@@ -180,7 +180,7 @@ module Hanami
       #
       #   <%= javascript 'application', push: false %>
       #   <%= javascript 'http://cdn.example.test/jquery.js', 'dashboard', push: false %>
-      def javascript(*sources, push: true, **options) # rubocop:disable Metrics/MethodLength
+      def javascript(*sources, push: true, **options)
         options = options.reject { |k, _| k.to_sym == :src }
 
         _safe_tags(*sources) do |source|
@@ -285,7 +285,7 @@ module Hanami
       #
       #   <%= stylesheet 'application', push: false %>
       #   <%= stylesheet 'http://cdn.example.test/bootstrap.css', 'dashboard', push: false %>
-      def stylesheet(*sources, push: true, **options) # rubocop:disable Metrics/MethodLength
+      def stylesheet(*sources, push: true, **options)
         options = options.reject { |k, _| k.to_sym == :href }
 
         _safe_tags(*sources) do |source|
@@ -872,7 +872,7 @@ module Hanami
 
       # @api private
       def _subresource_integrity?
-        !!self.class.assets_configuration.subresource_integrity # rubocop:disable Style/DoubleNegation
+        !!self.class.assets_configuration.subresource_integrity
       end
 
       # @api private

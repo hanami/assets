@@ -41,7 +41,7 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      EXTENSIONS = { ".js" => true, ".css" => true, ".map" => true }.freeze
+      EXTENSIONS = {".js" => true, ".css" => true, ".map" => true}.freeze
 
       include Utils::ClassAttribute
 

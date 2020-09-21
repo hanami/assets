@@ -24,7 +24,7 @@ module Hanami
         # @since 0.3.0
         # @api private
         def entry
-          { name => values }
+          {name => values}
         end
 
         private

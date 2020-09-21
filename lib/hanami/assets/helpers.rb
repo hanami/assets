@@ -919,7 +919,7 @@ module Hanami
       # @api private
       def _push_promise(url, as: nil)
         Thread.current[:__hanami_assets] ||= {}
-        Thread.current[:__hanami_assets][url.to_s] = { as: as, crossorigin: _crossorigin?(url) }
+        Thread.current[:__hanami_assets][url.to_s] = {as: as, crossorigin: _crossorigin?(url)}
 
         url
       end

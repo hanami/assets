@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "pp"
 
 RSpec.describe Hanami::Assets::Config::NullManifest do

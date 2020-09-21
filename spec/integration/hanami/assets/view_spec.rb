@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require __dir__ + "/../../../support/fixtures/bookshelf/config/environment"
 
 RSpec.describe "Hanami::View integration" do

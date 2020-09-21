@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 Hanami::Utils::LoadPaths.class_eval do
   def empty?
     @paths.empty?

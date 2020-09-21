@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "hanami/foo/compressor/version"
 
 module Hanami

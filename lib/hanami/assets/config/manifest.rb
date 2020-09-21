@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Hanami
   module Assets
     # This error is raised when the application starts but can't be load the

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "hanami/assets/compressors/stylesheet"
 require "hanami/foo/compressor"
 

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "hanami/utils/load_paths"
 require "hanami/utils/file_list"
 

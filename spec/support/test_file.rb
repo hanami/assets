@@ -1,6 +1,8 @@
-require 'securerandom'
-require_relative 'ci'
-require_relative 'tmp'
+# frozen_string_literal: true
+
+require "securerandom"
+require_relative "ci"
+require_relative "tmp"
 
 class TestFile
   OPEN_MODE   = File::WRONLY | File::TRUNC | File::CREAT
@@ -41,7 +43,7 @@ class TestFile
     @file.to_s
   end
 
-  alias to_str to_s
+  alias_method :to_str, :to_s
 
   private
 

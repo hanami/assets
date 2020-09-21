@@ -1,5 +1,7 @@
-require 'fileutils'
-require 'hanami/assets/compiler'
+# frozen_string_literal: true
+
+require "fileutils"
+require "hanami/assets/compiler"
 
 module Hanami
   module Assets
@@ -48,18 +50,18 @@ module Hanami
       # @api private
       def clear_manifest(manifest)
         JSON.parse(manifest).each_value do |asset_hash|
-          asset_file_name = @configuration.public_directory.join(asset_hash['target'])
+          asset_file_name = @configuration.public_directory.join(asset_hash["target"])
           asset_file_name.unlink if asset_file_name.exist?
         end
       rescue JSON::ParserError
-        warn 'Non JSON manifest found and unlinked.'
+        warn "Non JSON manifest found and unlinked."
       ensure
         manifest.unlink
       end
 
       # @since 0.1.0
       # @api private
-      def precompile # rubocop:disable Metrics/MethodLength
+      def precompile
         applications.each do |duplicate|
           config = if duplicate.respond_to?(:configuration)
                      duplicate.configuration

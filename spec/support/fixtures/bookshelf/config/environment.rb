@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rubygems"
 require "bundler/setup"
 require "hanami/view"
@@ -33,7 +35,7 @@ unless defined?(Web)
         "assets"
       ]
 
-      base_directories << 'js'
+      base_directories << "js"
     end
 
     module Views

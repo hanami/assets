@@ -1,4 +1,6 @@
-require 'hanami/utils/load_paths'
+# frozen_string_literal: true
+
+require "hanami/utils/load_paths"
 
 module Hanami
   module Assets
@@ -27,7 +29,7 @@ module Hanami
 
         # @since 0.1.0
         # @api private
-        alias << push
+        alias_method :<<, :push
 
         private
 

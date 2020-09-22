@@ -8,9 +8,12 @@ AllCops:
     - "vendor/**/.irbrc"
     - "lib/hanami/assets/compressors/*"
     - "**/*.gemspec"
-Style/CommentedKeyword:
+Lint/MissingSuper:
   Exclude:
-    - "spec/**/*.rb"
+    - "lib/hanami/assets/config/manifest.rb"
 Naming/MethodParameterName:
   AllowedNames:
     - as
+Style/CommentedKeyword:
+  Exclude:
+    - "spec/**/*.rb"

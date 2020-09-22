@@ -27,7 +27,7 @@ RSpec.describe Hanami::Assets::Bundler do
       end
 
       let(:dest)   { TMP.join("deploy", "public") }
-      let(:source) { __dir__ + "/../../../support/fixtures/deploy/public/assets" }
+      let(:source) { "#{__dir__}/../../../support/fixtures/deploy/public/assets" }
 
       it "compresses javascripts" do
         run!
@@ -64,7 +64,7 @@ RSpec.describe Hanami::Assets::Bundler do
         expect_permissions(manifest)
 
         actual   = JSON.parse(manifest.read)
-        expected = JSON.parse(File.read(__dir__ + "/../../../support/fixtures/deploy/assets.json"))
+        expected = JSON.parse(File.read("#{__dir__}/../../../support/fixtures/deploy/assets.json"))
 
         expect(actual.size).to eq(expected.size)
         expected.each do |original, current|
@@ -93,7 +93,7 @@ RSpec.describe Hanami::Assets::Bundler do
       if compressor == :yui
         describe "in case of error" do
           let(:dest)   { TMP.join("broken", "public") }
-          let(:source) { __dir__ + "/../../../support/fixtures/broken/public/assets" }
+          let(:source) { "#{__dir__}/../../../support/fixtures/broken/public/assets" }
 
           it "prints the name of the asset that caused the problem" do
             expect { run! }.to output(/Skipping compression of:/).to_stderr

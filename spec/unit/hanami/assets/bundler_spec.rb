@@ -16,7 +16,7 @@ RSpec.describe Hanami::Assets::Bundler do
   end
 
   [nil, :builtin, :yui, :uglifier, :closure, :sass].each do |compressor|
-    describe (compressor || "NullCompressor").to_s do # rubocop:disable Lint/ParenthesesAsGroupedExpression
+    describe (compressor || "NullCompressor").to_s do
       let(:config) do
         Hanami::Assets::Configuration.new.tap do |c|
           c.public_directory dest
@@ -27,7 +27,7 @@ RSpec.describe Hanami::Assets::Bundler do
       end
 
       let(:dest)   { TMP.join("deploy", "public") }
-      let(:source) { __dir__ + "/../../../support/fixtures/deploy/public/assets" }
+      let(:source) { "#{__dir__}/../../../support/fixtures/deploy/public/assets" }
 
       it "compresses javascripts" do
         run!
@@ -64,15 +64,15 @@ RSpec.describe Hanami::Assets::Bundler do
         expect_permissions(manifest)
 
         actual   = JSON.parse(manifest.read)
-        expected = JSON.parse(File.read(__dir__ + "/../../../support/fixtures/deploy/assets.json"))
+        expected = JSON.parse(File.read("#{__dir__}/../../../support/fixtures/deploy/assets.json"))
 
         expect(actual.size).to eq(expected.size)
         expected.each do |original, current|
           extname  = File.extname(original)
           basename = File.join(File.dirname(original), File.basename(original, extname))
 
-          expected_target = /\A#{basename}\-[[:alnum:]]{32}#{extname}\z/
-          expected_sri    = [/\Asha256\-[[[:alnum:]][[:punct:]][[:graph:]]]{43}\=\z/]
+          expected_target = /\A#{basename}-[[:alnum:]]{32}#{extname}\z/
+          expected_sri    = [/\Asha256-[[[:alnum:]][[:punct:]][[:graph:]]]{43}=\z/]
 
           expect(current.fetch("target")).to match(expected_target)
           expected_sri.each_with_index do |value, i|
@@ -93,7 +93,7 @@ RSpec.describe Hanami::Assets::Bundler do
       if compressor == :yui
         describe "in case of error" do
           let(:dest)   { TMP.join("broken", "public") }
-          let(:source) { __dir__ + "/../../../support/fixtures/broken/public/assets" }
+          let(:source) { "#{__dir__}/../../../support/fixtures/broken/public/assets" }
 
           it "prints the name of the asset that caused the problem" do
             expect { run! }.to output(/Skipping compression of:/).to_stderr
@@ -118,7 +118,7 @@ RSpec.describe Hanami::Assets::Bundler do
   end
 
   def original_for(asset)
-    filename = ::File.basename(asset).sub(/\-[\w]{32}+(\.(.*))\z/, '\1')
+    filename = ::File.basename(asset).sub(/-\w{32}+(\.(.*))\z/, '\1')
     Dir.glob("#{source}/**/#{filename}").first
   end
 
@@ -175,7 +175,7 @@ RSpec.describe Hanami::Assets::Bundler do
   end
 
   def checksum(file)
-    file.scan(/[\w]{32}/).first
+    file.scan(/\w{32}/).first
   end
 
   def compress(compressor, file)

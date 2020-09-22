@@ -26,7 +26,7 @@ RSpec.describe Hanami::Assets do
     end
 
     it "keeps duplicated frameworks in sync" do
-      source = __dir__ + "/fixtures/bookshelf/vendor/assets" + "/fixtures/bookshelf/vendor/assets"
+      source = "#{__dir__}/fixtures/bookshelf/vendor/assets/fixtures/bookshelf/vendor/assets"
       Hanami::Assets.sources << source
 
       Hanami::Assets.duplicates.map(&:configuration).each do |config|

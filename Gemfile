@@ -12,7 +12,6 @@ gem "hanami-utils",   "~> 1.3", git: "https://github.com/hanami/utils.git",   br
 gem "hanami-helpers", "~> 1.3", git: "https://github.com/hanami/helpers.git", branch: "master"
 gem "hanami-view",    "~> 1.3", git: "https://github.com/hanami/view.git",    branch: "1.x-master"
 
-
 gem "hanami-emberjs",        path: "spec/support/fixtures/hanami-emberjs",        require: false
 gem "hanami-compass",        path: "spec/support/fixtures/hanami-compass",        require: false
 gem "hanami-foo-compressor", path: "spec/support/fixtures/hanami-foo-compressor", require: false

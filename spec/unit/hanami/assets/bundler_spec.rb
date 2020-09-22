@@ -71,8 +71,8 @@ RSpec.describe Hanami::Assets::Bundler do
           extname  = File.extname(original)
           basename = File.join(File.dirname(original), File.basename(original, extname))
 
-          expected_target = /\A#{basename}\-[[:alnum:]]{32}#{extname}\z/
-          expected_sri    = [/\Asha256\-[[[:alnum:]][[:punct:]][[:graph:]]]{43}\=\z/]
+          expected_target = /\A#{basename}-[[:alnum:]]{32}#{extname}\z/
+          expected_sri    = [/\Asha256-[[[:alnum:]][[:punct:]][[:graph:]]]{43}=\z/]
 
           expect(current.fetch("target")).to match(expected_target)
           expected_sri.each_with_index do |value, i|
@@ -118,7 +118,7 @@ RSpec.describe Hanami::Assets::Bundler do
   end
 
   def original_for(asset)
-    filename = ::File.basename(asset).sub(/\-[\w]{32}+(\.(.*))\z/, '\1')
+    filename = ::File.basename(asset).sub(/-[\w]{32}+(\.(.*))\z/, '\1')
     Dir.glob("#{source}/**/#{filename}").first
   end
 

@@ -72,7 +72,7 @@ module Hanami
           config.compile true
 
           config.files.each do |file|
-            Compiler.compile(config, file)
+            Compiler.call(config, file)
           end
         end
       end

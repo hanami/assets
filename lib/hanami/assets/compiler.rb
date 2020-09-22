@@ -64,16 +64,17 @@ module Hanami
       #
       # @param name [String] the asset path
       #
-      # @since 0.1.0
+      # @since 2.0.0
       # @api private
-      def self.compile(configuration, name)
+      def self.call(configuration, name)
         return unless configuration.compile
 
         require "tilt"
         require "hanami/assets/cache"
         require "hanami/assets/compilers/sass"
         require "hanami/assets/compilers/less"
-        fabricate(configuration, name).compile
+
+        fabricate(configuration, name).call
       end
 
       # @since 0.3.0
@@ -126,7 +127,7 @@ module Hanami
       #
       # @since 0.1.0
       # @api private
-      def compile
+      def call
         raise MissingAsset.new(@name, @configuration.sources) unless exist?
         return unless modified?
 

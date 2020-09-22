@@ -2,6 +2,7 @@
 
 require "tilt/sass"
 require "tilt/coffee"
+require "hanami/assets"
 require "hanami/assets/compiler"
 
 RSpec.describe "Compiler" do
@@ -11,10 +12,13 @@ RSpec.describe "Compiler" do
     TMP.rmtree if TMP.exist?
     TMP.mkdir
 
-    Hanami::Assets.configure do
+    @config = Hanami::Assets::Configuration.new do
       compile          true
       root             fixtures
       public_directory TMP.join("public")
+
+      stylesheet_compressor :yui
+      javascript_compressor :yui
 
       sources << [
         "javascripts",
@@ -22,12 +26,6 @@ RSpec.describe "Compiler" do
         TMP
       ]
     end
-
-    @config = Hanami::Assets.configuration
-  end
-
-  after do
-    @config.reset!
   end
 
   it "copies javascript asset from source to destination" do

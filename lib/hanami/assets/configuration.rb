@@ -99,8 +99,10 @@ module Hanami
       #
       # @since 0.1.0
       # @api private
-      def initialize(&blk)
+      def initialize(sources: Hanami::Assets.sources.paths.dup, &blk)
+        # FIXME: remove `reset!`
         reset!
+        self.sources << sources
         instance_eval(&blk) if block_given?
       end
 

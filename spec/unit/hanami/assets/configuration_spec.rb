@@ -162,17 +162,19 @@ RSpec.describe Hanami::Assets::Configuration do
   end
 
   describe "#sources" do
-    it "is empty by default" do
-      expect(@configuration.sources).to be_empty
+    it "it inherits global sourcesby default" do
+      expect(@configuration.sources).to eq(Hanami::Assets.sources.paths)
     end
 
     it "allows to add paths" do
+      @configuration = described_class.new(sources: [])
       @configuration.sources << __dir__
 
       expect(@configuration.sources).to eq([__dir__])
     end
 
     it "removes duplicates and nil sources" do
+      @configuration = described_class.new(sources: [])
       @configuration.sources << __dir__
       @configuration.sources << __dir__
       @configuration.sources << nil
@@ -664,7 +666,7 @@ RSpec.describe Hanami::Assets::Configuration do
       expect(@config.stylesheet_compressor).to eq(:yui)
       expect(@config.root).to                  eq(Pathname.new(__dir__))
       expect(@config.public_directory).to      eq(Pathname.new(__dir__))
-      expect(@config.sources).to               eq(["#{__dir__}/fixtures/javascripts"])
+      expect(@config.sources).to               include("#{__dir__}/fixtures/javascripts")
     end
 
     it "doesn't affect the original configuration" do
@@ -696,7 +698,7 @@ RSpec.describe Hanami::Assets::Configuration do
       expect(@config.stylesheet_compressor).to eq(:uglify)
       expect(@config.root).to                  eq(Pathname.new(File.expand_path("#{__dir__}/../../../support/fixtures")))
       expect(@config.public_directory).to      eq(Pathname.new("#{__dir__}/fixtures"))
-      expect(@config.sources).to eq(["#{__dir__}/fixtures/javascripts", "#{__dir__}/fixtures/stylesheets"])
+      expect(@config.sources).to include("#{__dir__}/fixtures/javascripts", "#{__dir__}/fixtures/stylesheets")
 
       expect(@configuration.cdn).to                   eq(true)
       expect(@configuration.subresource_integrity).to eq(true)
@@ -711,7 +713,7 @@ RSpec.describe Hanami::Assets::Configuration do
       expect(@configuration.stylesheet_compressor).to eq(:yui)
       expect(@configuration.root).to                  eq(Pathname.new(__dir__))
       expect(@configuration.public_directory).to      eq(Pathname.new(__dir__))
-      expect(@configuration.sources).to eq(["#{__dir__}/fixtures/javascripts"])
+      expect(@configuration.sources).to include("#{__dir__}/fixtures/javascripts")
     end
   end
 end

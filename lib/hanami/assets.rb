@@ -25,27 +25,6 @@ module Hanami
 
     include Utils::ClassAttribute
 
-    # Configuration
-    #
-    # @since 0.1.0
-    # @api private
-    class_attribute :configuration
-    self.configuration = Configuration.new
-
-    # Configure framework
-    #
-    # @param blk [Proc] configuration code block
-    #
-    # @return self
-    #
-    # @since 0.1.0
-    #
-    # @see Hanami::Assets::Configuration
-    def self.configure(&blk)
-      configuration.instance_eval(&blk)
-      self
-    end
-
     # Prepare assets for deploys
     #
     # @since 0.1.0
@@ -170,6 +149,27 @@ module Hanami
       def synchronize(&blk)
         Mutex.new.synchronize(&blk)
       end
+    end
+
+    # Configuration
+    #
+    # @since 0.1.0
+    # @api private
+    class_attribute :configuration
+    self.configuration = Configuration.new
+
+    # Configure framework
+    #
+    # @param blk [Proc] configuration code block
+    #
+    # @return self
+    #
+    # @since 0.1.0
+    #
+    # @see Hanami::Assets::Configuration
+    def self.configure(&blk)
+      configuration.instance_eval(&blk)
+      self
     end
   end
 end

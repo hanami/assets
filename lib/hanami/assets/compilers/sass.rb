@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Hanami
   module Assets
     module Compilers
@@ -20,7 +22,7 @@ module Hanami
         # @api private
         def initialize(*)
           super
-          require 'sassc'
+          require "sassc"
         end
 
         private

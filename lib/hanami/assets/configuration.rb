@@ -1,61 +1,63 @@
-require 'pathname'
-require 'json'
-require 'hanami/utils/string'
-require 'hanami/utils/class'
-require 'hanami/utils/path_prefix'
-require 'hanami/utils/basic_object'
-require 'hanami/assets/config/manifest'
-require 'hanami/assets/config/sources'
+# frozen_string_literal: true
+
+require "pathname"
+require "json"
+require "hanami/utils/string"
+require "hanami/utils/class"
+require "hanami/utils/path_prefix"
+require "hanami/utils/basic_object"
+require "hanami/assets/config/manifest"
+require "hanami/assets/config/sources"
 
 module Hanami
   module Assets
     # Framework configuration
     #
     # @since 0.1.0
-    class Configuration # rubocop:disable Metrics/ClassLength
+    class Configuration
       # @since 0.1.0
       # @api private
-      DEFAULT_SCHEME                          = 'http'.freeze
+      DEFAULT_SCHEME                          = "http"
 
       # @since 0.1.0
       # @api private
-      DEFAULT_HOST                            = 'localhost'.freeze
+      DEFAULT_HOST                            = "localhost"
 
       # @since 0.1.0
       # @api private
-      DEFAULT_PORT                            = '2300'.freeze
+      DEFAULT_PORT                            = "2300"
 
       # @since 0.1.0
       # @api private
-      DEFAULT_PUBLIC_DIRECTORY                = 'public'.freeze
+      DEFAULT_PUBLIC_DIRECTORY                = "public"
 
       # @since 0.1.0
       # @api private
-      DEFAULT_MANIFEST                        = 'assets.json'.freeze
+      DEFAULT_MANIFEST                        = "assets.json"
 
       # @since 0.1.0
       # @api private
-      DEFAULT_PREFIX                          = '/assets'.freeze
+      DEFAULT_PREFIX                          = "/assets"
 
       # @since 0.1.0
       # @api private
-      URL_SEPARATOR                           = '/'.freeze
+      URL_SEPARATOR                           = "/"
 
       # @since 0.1.0
       # @api private
-      HTTP_SCHEME                             = 'http'.freeze
+      HTTP_SCHEME                             = "http"
 
       # @since 0.1.0
       # @api private
-      HTTP_PORT                               = '80'.freeze
+      HTTP_PORT                               = "80"
 
       # @since 0.1.0
       # @api private
-      HTTPS_SCHEME                            = 'https'.freeze
+      HTTPS_SCHEME                            = "https"
 
       # @since 0.1.0
       # @api private
-      HTTPS_PORT                              = '443'.freeze
+      HTTPS_PORT                              = "443"
 
       # @since 0.3.0
       # @api private
@@ -63,7 +65,7 @@ module Hanami
 
       # @since 0.3.0
       # @api private
-      SUBRESOURCE_INTEGRITY_SEPARATOR         = ' '.freeze
+      SUBRESOURCE_INTEGRITY_SEPARATOR         = " "
 
       # Return a copy of the configuration of the framework instance associated
       # with the given class.
@@ -80,9 +82,10 @@ module Hanami
       # @since 0.1.0
       # @api private
       def self.for(base)
-        # TODO: this implementation is similar to Hanami::Controller::Configuration consider to extract it into Hanami::Utils
+        # TODO: this implementation is similar to Hanami::Controller::Configuration
+        # consider to extract it into Hanami::Utils
         namespace = Utils::String.namespace(base)
-        framework = Utils::Class.load("#{namespace}::Assets") || Utils::Class.load!('Hanami::Assets')
+        framework = Utils::Class.load("#{namespace}::Assets") || Utils::Class.load!("Hanami::Assets")
         framework.configuration
       end
 
@@ -136,7 +139,7 @@ module Hanami
         if value.nil?
           @nested
         else
-          @nested = !!value # rubocop:disable Style/DoubleNegation
+          @nested = !!value
         end
       end
 
@@ -166,7 +169,7 @@ module Hanami
         if value.nil?
           @cdn
         else
-          @cdn = !!value # rubocop:disable Style/DoubleNegation
+          @cdn = !!value
         end
       end
 
@@ -183,7 +186,8 @@ module Hanami
       #   * <tt>:builtin</tt> - Ruby based implementation of jsmin. It doesn't require any external gem.
       #   * <tt>:yui</tt> - YUI Compressor, it depends on <tt>yui-compressor</tt> gem and it requires Java 1.4+
       #   * <tt>:uglifier</tt> - UglifyJS, it depends on <tt>uglifier</tt> gem and it requires Node.js
-      #   * <tt>:closure</tt> - Google Closure Compiler, it depends on <tt>closure-compiler</tt> gem and it requires Java
+      #   * <tt>:closure</tt> - Google Closure Compiler, it depends on <tt>closure-compiler</tt> gem
+      #                         and it requires Java
       #
       # @param value [Symbol,#compress] the compressor
       #
@@ -231,7 +235,8 @@ module Hanami
       #
       # The following symbols are accepted:
       #
-      #   * <tt>:builtin</tt> - Ruby based compressor. It doesn't require any external gem. It's fast, but not an efficient compressor.
+      #   * <tt>:builtin</tt> - Ruby based compressor. It doesn't require any external gem.
+      #                         It's fast, but not an efficient compressor.
       #   * <tt>:yui</tt> - YUI-Compressor, it depends on <tt>yui-compressor</tt> gem and requires Java 1.4+
       #   * <tt>:sass</tt> - Sass, it depends on <tt>sassc</tt> gem
       #
@@ -484,7 +489,7 @@ module Hanami
       # @see Hanami::Assets::Configuration#javascript_compressor
       # @see Hanami::Assets::Compressors::Javascript#for
       def js_compressor
-        require 'hanami/assets/compressors/javascript'
+        require "hanami/assets/compressors/javascript"
         Hanami::Assets::Compressors::Javascript.for(javascript_compressor)
       end
 
@@ -501,13 +506,13 @@ module Hanami
       # @see Hanami::Assets::Configuration#stylesheet_compressor
       # @see Hanami::Assets::Compressors::Stylesheet#for
       def css_compressor
-        require 'hanami/assets/compressors/stylesheet'
+        require "hanami/assets/compressors/stylesheet"
         Hanami::Assets::Compressors::Stylesheet.for(stylesheet_compressor)
       end
 
       # @since 0.1.0
       # @api private
-      def duplicate # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def duplicate
         Configuration.new.tap do |c|
           c.root                  = root
           c.scheme                = scheme
@@ -528,7 +533,7 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      def reset! # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def reset!
         @scheme                = DEFAULT_SCHEME
         @host                  = DEFAULT_HOST
         @port                  = DEFAULT_PORT

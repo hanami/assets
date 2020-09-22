@@ -1,4 +1,6 @@
-require 'pathname'
+# frozen_string_literal: true
 
-TMP = Pathname.new(__dir__).join('..', '..', 'tmp')
+require "pathname"
+
+TMP = Pathname.new(__dir__).join("..", "..", "tmp")
 TMP.mkpath

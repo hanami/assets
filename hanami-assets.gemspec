@@ -35,4 +35,6 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'coffee-script',    '~> 2.3'
   spec.add_development_dependency 'babel-transpiler', '~> 0.7'
+
+  spec.add_development_dependency 'rubocop', '0.81'
 end

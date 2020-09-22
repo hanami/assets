@@ -1,4 +1,51 @@
 kind: pipeline
+name: ruby-2-7
+group: build
+
+steps:
+- name: install
+  image: hanami/ruby-2.7-node
+  volumes:
+  - name: bundle
+    path: /usr/local/bundle
+  commands:
+  - ruby -v
+  - gem install bundler
+  - bundle install --jobs=3 --retry=3
+
+- name: unit
+  image: hanami/ruby-2.7-node
+  volumes:
+  - name: bundle
+    path: /usr/local/bundle
+  commands:
+  - COVERAGE=true bundle exec rake spec:unit
+
+- name: integration
+  image: hanami/ruby-2.7-node
+  volumes:
+  - name: bundle
+    path: /usr/local/bundle
+  commands:
+  - ./script/test integration
+
+- name: quality
+  image: hanami/ruby-2.7-node
+  environment:
+    CODECOV_TOKEN:
+      from_secret: codecov
+  volumes:
+  - name: bundle
+    path: /usr/local/bundle
+  commands:
+  - CI=true bundle exec rake codecov:upload
+
+volumes:
+- name: bundle
+  temp: {}
+
+---
+kind: pipeline
 name: ruby-2-6
 group: build
 

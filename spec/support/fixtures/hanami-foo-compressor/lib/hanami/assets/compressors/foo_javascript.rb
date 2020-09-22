@@ -1,4 +1,6 @@
-require 'hanami/assets/compressors/javascript'
+# frozen_string_literal: true
+
+require "hanami/assets/compressors/javascript"
 
 module Hanami
   module Assets

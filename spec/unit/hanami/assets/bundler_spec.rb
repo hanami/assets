@@ -16,7 +16,7 @@ RSpec.describe Hanami::Assets::Bundler do
   end
 
   [nil, :builtin, :yui, :uglifier, :closure, :sass].each do |compressor|
-    describe (compressor || "NullCompressor").to_s do # rubocop:disable Lint/ParenthesesAsGroupedExpression
+    describe (compressor || "NullCompressor").to_s do
       let(:config) do
         Hanami::Assets::Configuration.new.tap do |c|
           c.public_directory dest

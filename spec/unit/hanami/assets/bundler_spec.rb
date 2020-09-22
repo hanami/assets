@@ -118,7 +118,7 @@ RSpec.describe Hanami::Assets::Bundler do
   end
 
   def original_for(asset)
-    filename = ::File.basename(asset).sub(/-[\w]{32}+(\.(.*))\z/, '\1')
+    filename = ::File.basename(asset).sub(/-\w{32}+(\.(.*))\z/, '\1')
     Dir.glob("#{source}/**/#{filename}").first
   end
 
@@ -175,7 +175,7 @@ RSpec.describe Hanami::Assets::Bundler do
   end
 
   def checksum(file)
-    file.scan(/[\w]{32}/).first
+    file.scan(/\w{32}/).first
   end
 
   def compress(compressor, file)

@@ -146,7 +146,7 @@ RSpec.describe "Precompile" do
     # Hanami::Assets.deploy
   end
 
-  def expect_successful_output(expected) # rubocop:disable Metrics/AbcSize
+  def expect_successful_output(expected)
     expected.each do |asset|
       result = target.join(asset)
       expect(result).to be_exist

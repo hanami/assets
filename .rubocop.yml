@@ -11,3 +11,6 @@ AllCops:
 Style/CommentedKeyword:
   Exclude:
     - "spec/**/*.rb"
+Naming/MethodParameterName:
+  AllowedNames:
+    - as

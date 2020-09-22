@@ -21,14 +21,14 @@ run_unit_tests() {
   bundle exec rake spec:unit
 }
 
-run_isolation_tests() {
+run_integration_tests() {
   local pwd=$PWD
-  local root="$pwd/spec/isolation"
+  local root="$pwd/spec/integration"
 
   if [ -d $root ]; then
     for test in $(find $root -name '*_spec.rb')
     do
-      run_isolation_test $test
+      run_test $test
 
       if [ $? -ne 0 ]; then
         local exit_code=$?
@@ -39,19 +39,12 @@ run_isolation_tests() {
   fi
 }
 
-run_isolation_test() {
+run_test() {
   local test=$1
   local hash="$(shasum "$test" | cut -b 1-40)"
 
   printf "\n\n\nRunning: $test\n"
-  SIMPLECOV_COMMAND_NAME=$hash ruby $test --options spec/isolation/.rspec
-}
-
-run_test() {
-  local test=$1
-
-  printf "\n\n\nRunning: $test\n"
-  COVERAGE=true bundle exec rspec $test
+  SIMPLECOV_COMMAND_NAME=$hash bundle exec rspec $test
 }
 
 upload_code_coverage() {
@@ -59,12 +52,12 @@ upload_code_coverage() {
 }
 
 main() {
-  prepare_build &&
-    print_ruby_version &&
-    run_code_quality_checks &&
-    run_unit_tests &&
-    run_isolation_tests &&
-    upload_code_coverage
+  prepare_build
+  print_ruby_version
+  # run_code_quality_checks
+  run_unit_tests
+  run_integration_tests
+  upload_code_coverage
 }
 
 main

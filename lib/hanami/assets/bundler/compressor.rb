@@ -41,19 +41,19 @@ module Hanami
         # @since 0.3.0
         # @api private
         def compressor(type)
-          @configuration.__send__(:"#{ type }_compressor")
+          @configuration.__send__(:"#{type}_compressor")
         end
 
         # @since 0.3.0
         # @api private
         def _compress(compressor)
           compressor.compress(@path)
-        rescue => e # rubocop:disable Style/RescueStandardError
+        rescue => exception # rubocop:disable Style/RescueStandardError
           warn(
             [
               "Skipping compression of: `#{@path}'",
-              "Reason: #{e}\n",
-              "\t#{e.backtrace.join("\n\t")}\n\n"
+              "Reason: #{exception}\n",
+              "\t#{exception.backtrace.join("\n\t")}\n\n"
             ].join("\n")
           )
         end

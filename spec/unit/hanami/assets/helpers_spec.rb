@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Hanami::Assets::Helpers do
-  let(:view)    { ImageHelperView.new({}, {}) }
+  let(:view)    { ImageHelperView.new({}, **{}) }
   let(:cdn_url) { "https://bookshelf.cdn-example.com" }
 
   before do
@@ -682,7 +682,7 @@ RSpec.describe Hanami::Assets::Helpers do
 
   private
 
-  def activate_subresource_integrity_mode! # rubocop:disable Metrics/MethodLength
+  def activate_subresource_integrity_mode!
     view.class.assets_configuration.subresource_integrity true
     view.class.assets_configuration.load!
 
@@ -701,7 +701,7 @@ RSpec.describe Hanami::Assets::Helpers do
     view.class.assets_configuration.instance_variable_set(:@public_manifest, manifest)
   end
 
-  def activate_cdn_mode! # rubocop:disable Metrics/AbcSize
+  def activate_cdn_mode!
     view.class.assets_configuration.scheme "https"
     view.class.assets_configuration.host   "bookshelf.cdn-example.com"
     view.class.assets_configuration.port   "443"

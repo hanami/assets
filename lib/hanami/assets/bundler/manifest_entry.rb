@@ -24,7 +24,7 @@ module Hanami
         # @since 0.3.0
         # @api private
         def entry
-          { name => values }
+          {name => values}
         end
 
         private
@@ -56,7 +56,7 @@ module Hanami
         # @api private
         def _convert_to_url(path)
           path.sub(@asset.configuration.public_directory.to_s, URL_REPLACEMENT)
-              .gsub(File::SEPARATOR, URL_SEPARATOR)
+            .gsub(File::SEPARATOR, URL_SEPARATOR)
         end
       end
     end

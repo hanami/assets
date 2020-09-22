@@ -455,7 +455,7 @@ RSpec.describe Hanami::Assets::Configuration do
 
       describe "with manifest" do
         before do
-          manifest = Hanami::Assets::Config::Manifest.new({ "/assets/application.js" => { "target" => "/assets/application-abc123.js" } }, [])
+          manifest = Hanami::Assets::Config::Manifest.new({"/assets/application.js" => {"target" => "/assets/application-abc123.js"}}, [])
 
           @configuration.load!
           @configuration.instance_variable_set(:@public_manifest, manifest)

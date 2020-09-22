@@ -107,7 +107,7 @@ module Hanami
       # @api private
       def _convert_to_url(path)
         path.sub(public_directory.to_s, URL_REPLACEMENT)
-            .gsub(File::SEPARATOR, URL_SEPARATOR)
+          .gsub(File::SEPARATOR, URL_SEPARATOR)
       end
 
       # @since 0.1.0

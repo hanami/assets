@@ -15,7 +15,6 @@ module Hanami
     # @see http://www.rubydoc.info/gems/hanami-helpers/Hanami/Helpers/HtmlHelper
     #
     # rubocop:disable Metrics/ModuleLength
-    # rubocop:disable Naming/UncommunicativeMethodParamName
     module Helpers
       # @since 0.1.0
       # @api private
@@ -142,13 +141,15 @@ module Hanami
       #
       #   <%= javascript 'application' %>
       #
-      #   # <script src="/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js" type="text/javascript" integrity="sha384-oqVu...Y8wC" crossorigin="anonymous"></script>
+      #   # <script src="/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js"
+      #   #         type="text/javascript" integrity="sha384-oqVu...Y8wC" crossorigin="anonymous"></script>
       #
       # @example Subresource Integrity for 3rd Party Scripts
       #
       #   <%= javascript 'https://example.com/assets/example.js', integrity: 'sha384-oqVu...Y8wC' %>
       #
-      #   # <script src="https://example.com/assets/example.js" type="text/javascript" integrity="sha384-oqVu...Y8wC" crossorigin="anonymous"></script>
+      #   # <script src="https://example.com/assets/example.js" type="text/javascript"
+      #   #         integrity="sha384-oqVu...Y8wC" crossorigin="anonymous"></script>
       #
       # @example Deferred Execution
       #
@@ -172,13 +173,14 @@ module Hanami
       #
       #   <%= javascript 'application' %>
       #
-      #   # <script src="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js" type="text/javascript"></script>
+      #   # <script src="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js"
+      #   #         type="text/javascript"></script>
       #
       # @example Disable Push Promise/Early Hints
       #
       #   <%= javascript 'application', push: false %>
       #   <%= javascript 'http://cdn.example.test/jquery.js', 'dashboard', push: false %>
-      def javascript(*sources, push: true, **options) # rubocop:disable Metrics/MethodLength
+      def javascript(*sources, push: true, **options)
         options = options.reject { |k, _| k.to_sym == :src }
 
         _safe_tags(*sources) do |source|
@@ -249,19 +251,22 @@ module Hanami
       #
       #   <%= stylesheet 'application' %>
       #
-      #   # <link href="/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.css" type="text/css" integrity="sha384-oqVu...Y8wC" crossorigin="anonymous"></script>
+      #   # <link href="/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.css"
+      #   #       type="text/css" integrity="sha384-oqVu...Y8wC" crossorigin="anonymous"></script>
       #
       # @example Subresource Integrity for 3rd Party Assets
       #
       #   <%= stylesheet 'https://example.com/assets/example.css', integrity: 'sha384-oqVu...Y8wC' %>
       #
-      #   # <link href="https://example.com/assets/example.css" type="text/css" rel="stylesheet" integrity="sha384-oqVu...Y8wC" crossorigin="anonymous"></script>
+      #   # <link href="https://example.com/assets/example.css"
+      #   #       type="text/css" rel="stylesheet" integrity="sha384-oqVu...Y8wC" crossorigin="anonymous"></script>
       #
       # @example Absolute URL
       #
       #   <%= stylesheet 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css' %>
       #
-      #   # <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+      #   # <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+      #   #       type="text/css" rel="stylesheet">
       #
       # @example Fingerprint Mode
       #
@@ -273,13 +278,14 @@ module Hanami
       #
       #   <%= stylesheet 'application' %>
       #
-      #   # <link href="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.css" type="text/css" rel="stylesheet">
+      #   # <link href="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.css"
+      #   #       type="text/css" rel="stylesheet">
       #
       # @example Disable Push Promise/Early Hints
       #
       #   <%= stylesheet 'application', push: false %>
       #   <%= stylesheet 'http://cdn.example.test/bootstrap.css', 'dashboard', push: false %>
-      def stylesheet(*sources, push: true, **options) # rubocop:disable Metrics/MethodLength
+      def stylesheet(*sources, push: true, **options)
         options = options.reject { |k, _| k.to_sym == :href }
 
         _safe_tags(*sources) do |source|
@@ -437,7 +443,8 @@ module Hanami
       #
       #   <%= favicon %>
       #
-      #   # <link href="https://assets.bookshelf.org/assets/favicon-28a6b886de2372ee3922fcaf3f78f2d8.ico" rel="shortcut icon" type="image/x-icon">
+      #   # <link href="https://assets.bookshelf.org/assets/favicon-28a6b886de2372ee3922fcaf3f78f2d8.ico"
+      #           rel="shortcut icon" type="image/x-icon">
       #
       # @example Enable Push Promise/Early Hints
       #
@@ -865,7 +872,7 @@ module Hanami
 
       # @api private
       def _subresource_integrity?
-        !!self.class.assets_configuration.subresource_integrity # rubocop:disable Style/DoubleNegation
+        !!self.class.assets_configuration.subresource_integrity
       end
 
       # @api private
@@ -911,7 +918,9 @@ module Hanami
           options[:src] = asset_path(src, push: options.delete(:push) || false, as: as)
         end
 
-        raise ArgumentError.new("You should provide a source via `src` option or with a `source` HTML tag") if !options[:src] && !block_given?
+        if !options[:src] && !block_given?
+          raise ArgumentError.new("You should provide a source via `src` option or with a `source` HTML tag")
+        end
 
         options
       end
@@ -920,7 +929,7 @@ module Hanami
       # @api private
       def _push_promise(url, as: nil)
         Thread.current[:__hanami_assets] ||= {}
-        Thread.current[:__hanami_assets][url.to_s] = { as: as, crossorigin: _crossorigin?(url) }
+        Thread.current[:__hanami_assets][url.to_s] = {as: as, crossorigin: _crossorigin?(url)}
 
         url
       end
@@ -931,7 +940,6 @@ module Hanami
         source !~ QUERY_STRING_MATCHER && source !~ /#{Regexp.escape(ext)}\z/
       end
     end
-    # rubocop:enable Naming/UncommunicativeMethodParamName
     # rubocop:enable Metrics/ModuleLength
   end
 end

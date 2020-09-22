@@ -23,24 +23,42 @@ module Hanami
           name.to_s =~ EXTENSIONS
         end
 
+        # @since 1.3.3
+        # @api private
+        def initialize(*)
+          super
+          require "sassc"
+        end
+
         private
 
         # @since 0.3.0
         # @api private
         def renderer
-          Tilt.new(source, nil, load_paths: load_paths, cache_location: CACHE_LOCATION)
+          @renderer ||=
+            ::SassC::Engine.new(
+              source.read,
+              syntax: target_syntax,
+              load_paths: load_paths
+            )
         end
 
         # @since 0.3.0
         # @api private
         def dependencies
-          engine.dependencies.map { |d| d.options[:filename] }
+          renderer.dependencies.map(&:filename)
+        rescue source::NotRenderedError
+          []
         end
 
-        # @since 0.3.0
+        # @since 1.3.2
         # @api private
-        def engine
-          ::Sass::Engine.for_file(source.to_s, load_paths: load_paths, cache_location: CACHE_LOCATION)
+        def target_syntax
+          if source.extname =~ /sass\z/.freeze
+            :sass
+          else
+            :scss
+          end
         end
       end
     end

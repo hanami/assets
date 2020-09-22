@@ -5,6 +5,20 @@ Assets management for Ruby web applications
 ### Changed
 - [Luca Guidi] Drop support for Ruby: MRI 2.3, and 2.4.
 
+## v1.3.4 - 2019-10-11
+### Fixed
+- [unleashy] Precompile assets using binary mode to ensure compatibility with Windows
+
+## v1.3.3 - 2019-09-13
+### Fixed
+- [Landon Grindheim] Lazily load `sassc` only when required
+- [Landon Grindheim] Ensure assets precompilation to not crash when SASS stylesheet doesn't have dependencies
+
+## v1.3.2 - 2019-08-02
+### Added
+- [Landon Grindheim & Sean Collins] Added support for `sassc` gem, because `sass` is no longer maintained
+>>>>>>> develop
+
 ## v1.3.1 - 2019-01-18
 ### Added
 - [Luca Guidi] Official support for Ruby: MRI 2.6

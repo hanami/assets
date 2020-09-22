@@ -5,9 +5,8 @@ Assets management for Ruby web projects
 ## Status
 
 [![Gem Version](https://badge.fury.io/rb/hanami-assets.svg)](https://badge.fury.io/rb/hanami-assets)
-[![TravisCI](https://travis-ci.org/hanami/assets.svg?branch=master)](https://travis-ci.org/hanami/assets)
-[![CircleCI](https://circleci.com/gh/hanami/assets/tree/master.svg?style=svg)](https://circleci.com/gh/hanami/assets/tree/master)
-[![Test Coverage](https://codecov.io/gh/hanami/assets/branch/master/graph/badge.svg)](https://codecov.io/gh/hanami/assets)
+[![CircleCI](https://circleci.com/gh/hanami/assets/tree/unstable.svg?style=svg)](https://circleci.com/gh/hanami/assets/tree/unstable)
+[![Test Coverage](https://codecov.io/gh/hanami/assets/branch/unstable/graph/badge.svg)](https://codecov.io/gh/hanami/assets)
 [![Depfu](https://badges.depfu.com/badges/4b37347bd74042ff96477495cc16531d/overview.svg)](https://depfu.com/github/hanami/assets?project=Bundler)
 [![Inline Docs](http://inch-ci.org/github/hanami/assets.svg)](http://inch-ci.org/github/hanami/assets)
 
@@ -25,7 +24,7 @@ Assets management for Ruby web projects
 
 ## Rubies
 
-__Hanami::Assets__ supports Ruby (MRI) 2.5+
+__Hanami::Assets__ supports Ruby (MRI) 2.6+
 
 ## Installation
 
@@ -200,7 +199,7 @@ handling: `.css` for stylesheets.
 The second one is optional and it's for a preprocessor: `.scss` for Sass.
 
 ```ruby
-require 'sass'
+require 'sassc'
 require 'hanami/assets'
 
 Hanami::Assets.configure do
@@ -353,7 +352,7 @@ Hanami can use the following compressors (aka minifiers) for stylesheets.
 
   * `:builtin` - Ruby based compressor. It doesn't require any external gem. It's fast, but not an efficient compressor.
   * `:yui` - [YUI Compressor](http://yui.github.io/yuicompressor), it depends on [`yui-compressor`](https://rubygems.org/gems/yui-compressor) gem and it requires Java 1.4+
-  * `:sass` - [Sass](http://sass-lang.com/), it depends on [`sass`](https://rubygems.org/gems/sass) gem
+  * `:sass` - [Sass](http://sass-lang.com/), it depends on [`sassc`](https://rubygems.org/gems/sassc) gem
 
 ```ruby
 Hanami::Assets.configure do
@@ -437,6 +436,28 @@ From now on, helpers will return the absolute URL for the asset, hosted on the C
 <script src="https://123.cloudfront.net/assets/application-d1829dc353b734e3adc24855693b70f9.js" type="text/javascript"></script>
 ```
 
+## Standalone mode
+
+If you're using `hanami-assets` without `hanami`, you must explicitly boot the framework with:
+
+```ruby
+Hanami::Assets.configure do
+  # ...
+end.load!
+```
+
+or
+
+```ruby
+Hanami::Assets.configure do
+  # ...
+end
+
+# ...
+
+Hanami::Assets.load!
+```
+
 ## Third party gems
 
 Developers can maintain gems that distribute assets for Hanami. For instance `hanami-ember` or `hanami-jquery`.
@@ -472,6 +493,6 @@ __Hanami::Assets__ uses [Semantic Versioning 2.0.0](http://semver.org)
 
 ## Copyright
 
-Copyright © 2014-2019 Luca Guidi – Released under MIT License
+Copyright © 2014-2020 Luca Guidi – Released under MIT License
 
 This project was formerly known as Lotus (`lotus-assets`).

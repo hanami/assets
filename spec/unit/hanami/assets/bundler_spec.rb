@@ -1,20 +1,22 @@
-require 'hanami/assets/bundler'
-require 'hanami/assets/compressors/javascript'
-require 'hanami/assets/compressors/stylesheet'
-require 'etc'
-require 'json'
+# frozen_string_literal: true
+
+require "hanami/assets/bundler"
+require "hanami/assets/compressors/javascript"
+require "hanami/assets/compressors/stylesheet"
+require "etc"
+require "json"
 
 RSpec.describe Hanami::Assets::Bundler do
   before do
     dest.rmtree if dest.exist?
     dest.mkpath
 
-    FileUtils.copy_entry(source, dest.join('assets'))
+    FileUtils.copy_entry(source, dest.join("assets"))
     expect(config.public_directory).to eq(dest) # better safe than sorry ;-)
   end
 
   [nil, :builtin, :yui, :uglifier, :closure, :sass].each do |compressor|
-    describe (compressor || 'NullCompressor').to_s do # rubocop:disable Lint/ParenthesesAsGroupedExpression
+    describe (compressor || "NullCompressor").to_s do # rubocop:disable Lint/ParenthesesAsGroupedExpression
       let(:config) do
         Hanami::Assets::Configuration.new.tap do |c|
           c.public_directory dest
@@ -24,10 +26,10 @@ RSpec.describe Hanami::Assets::Bundler do
         end
       end
 
-      let(:dest)   { TMP.join('deploy', 'public') }
+      let(:dest)   { TMP.join("deploy", "public") }
       let(:source) { __dir__ + "/../../../support/fixtures/deploy/public/assets" }
 
-      it 'compresses javascripts' do
+      it "compresses javascripts" do
         run!
 
         assets(:js).each do |original, current|
@@ -35,7 +37,7 @@ RSpec.describe Hanami::Assets::Bundler do
         end
       end
 
-      it 'compresses stylesheets' do
+      it "compresses stylesheets" do
         run!
 
         assets(:css).each do |original, current|
@@ -43,7 +45,7 @@ RSpec.describe Hanami::Assets::Bundler do
         end
       end
 
-      it 'copies other assets' do
+      it "copies other assets" do
         run!
 
         assets(:png).each do |original, current|
@@ -52,10 +54,10 @@ RSpec.describe Hanami::Assets::Bundler do
         end
       end
 
-      it 'generates manifest' do
+      it "generates manifest" do
         run!
 
-        manifest = dest.join('assets.json')
+        manifest = dest.join("assets.json")
         expect(manifest).to be_exist
 
         expect_owner(manifest)
@@ -79,21 +81,21 @@ RSpec.describe Hanami::Assets::Bundler do
         end
       end
 
-      it 'ensures intermediate directories to be created' do
+      it "ensures intermediate directories to be created" do
         dest.rmtree if dest.exist?
 
         run!
 
-        manifest = dest.join('assets.json')
+        manifest = dest.join("assets.json")
         expect(manifest).to be_exist
       end
 
       if compressor == :yui
-        describe 'in case of error' do
-          let(:dest)   { TMP.join('broken', 'public') }
-          let(:source) { __dir__ + '/../../../support/fixtures/broken/public/assets' }
+        describe "in case of error" do
+          let(:dest)   { TMP.join("broken", "public") }
+          let(:source) { __dir__ + "/../../../support/fixtures/broken/public/assets" }
 
-          it 'prints the name of the asset that caused the problem' do
+          it "prints the name of the asset that caused the problem" do
             expect { run! }.to output(/Skipping compression of:/).to_stderr
           end
         end
@@ -165,7 +167,7 @@ RSpec.describe Hanami::Assets::Bundler do
 
   def expect_permissions(file)
     stat = ::File::Stat.new(file)
-    expect(stat.mode.to_s(8)).to eq('100644')
+    expect(stat.mode.to_s(8)).to eq("100644")
   end
 
   def expect_same_asset(original, current)
@@ -178,8 +180,8 @@ RSpec.describe Hanami::Assets::Bundler do
 
   def compress(compressor, file)
     case File.extname(file)
-    when '.js'  then Hanami::Assets::Compressors::Javascript.for(compressor)
-    when '.css' then Hanami::Assets::Compressors::Stylesheet.for(compressor)
+    when ".js"  then Hanami::Assets::Compressors::Javascript.for(compressor)
+    when ".css" then Hanami::Assets::Compressors::Stylesheet.for(compressor)
       # when ".js"  then YUI::JavaScriptCompressor.new(munge: true)
       # when ".css" then YUI::CssCompressor.new
     end.compress(::File.read(file))

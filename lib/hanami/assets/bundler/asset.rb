@@ -1,4 +1,6 @@
-require 'openssl'
+# frozen_string_literal: true
+
+require "openssl"
 
 module Hanami
   module Assets
@@ -20,7 +22,7 @@ module Hanami
 
         # @since 0.3.0
         # @api private
-        WILDCARD_EXT = '.*'.freeze
+        WILDCARD_EXT = ".*"
 
         # Return a new instance
         #

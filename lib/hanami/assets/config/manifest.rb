@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Hanami
   module Assets
     # This error is raised when the application starts but can't be load the
@@ -83,11 +85,11 @@ module Hanami
       class Manifest
         # @since 0.4.0
         # @api private
-        TARGET                = 'target'.freeze
+        TARGET                = "target"
 
         # @since 0.3.0
         # @api private
-        SUBRESOURCE_INTEGRITY = 'sri'.freeze
+        SUBRESOURCE_INTEGRITY = "sri"
 
         # Return a new instance
         #

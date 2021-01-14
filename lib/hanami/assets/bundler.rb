@@ -1,9 +1,11 @@
-require 'fileutils'
-require 'json'
+# frozen_string_literal: true
 
-require 'hanami/assets/bundler/compressor'
-require 'hanami/assets/bundler/asset'
-require 'hanami/assets/bundler/manifest_entry'
+require "fileutils"
+require "json"
+
+require "hanami/assets/bundler/compressor"
+require "hanami/assets/bundler/asset"
+require "hanami/assets/bundler/manifest_entry"
 
 module Hanami
   module Assets
@@ -18,11 +20,11 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      URL_SEPARATOR       = '/'.freeze
+      URL_SEPARATOR       = "/"
 
       # @since 0.1.0
       # @api private
-      URL_REPLACEMENT     = ''.freeze
+      URL_REPLACEMENT     = ""
 
       # Return a new instance
       #
@@ -105,7 +107,7 @@ module Hanami
       # @api private
       def _convert_to_url(path)
         path.sub(public_directory.to_s, URL_REPLACEMENT)
-            .gsub(File::SEPARATOR, URL_SEPARATOR)
+          .gsub(File::SEPARATOR, URL_SEPARATOR)
       end
 
       # @since 0.1.0

@@ -3,7 +3,12 @@ Assets management for Ruby web applications
 
 ## v2.0.0.alpha1 (unreleased)
 ### Changed
-- [Luca Guidi] Drop support for Ruby: MRI 2.3, and 2.4.
+- [Luca Guidi] Drop support for Ruby: MRI 2.3, 2.4, and 2.5
+
+## v1.3.5 - 2021-01-14
+### Added
+- [Luca Guidi] Official support for Ruby: MRI 3.0
+- [Luca Guidi] Official support for Ruby: MRI 2.7
 
 ## v1.3.4 - 2019-10-11
 ### Fixed
@@ -17,7 +22,6 @@ Assets management for Ruby web applications
 ## v1.3.2 - 2019-08-02
 ### Added
 - [Landon Grindheim & Sean Collins] Added support for `sassc` gem, because `sass` is no longer maintained
->>>>>>> develop
 
 ## v1.3.1 - 2019-01-18
 ### Added

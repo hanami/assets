@@ -5,7 +5,7 @@ Assets management for Ruby web projects
 ## Status
 
 [![Gem Version](https://badge.fury.io/rb/hanami-assets.svg)](https://badge.fury.io/rb/hanami-assets)
-[![CircleCI](https://circleci.com/gh/hanami/assets/tree/master.svg?style=svg)](https://circleci.com/gh/hanami/assets/tree/master)
+[![CI](https://github.com/hanami/assets/workflows/ci/badge.svg?branch=master)](https://github.com/hanami/assets/actions?query=workflow%3Aci+branch%3Amaster)
 [![Test Coverage](https://codecov.io/gh/hanami/assets/branch/master/graph/badge.svg)](https://codecov.io/gh/hanami/assets)
 [![Depfu](https://badges.depfu.com/badges/4b37347bd74042ff96477495cc16531d/overview.svg)](https://depfu.com/github/hanami/assets?project=Bundler)
 [![Inline Docs](http://inch-ci.org/github/hanami/assets.svg)](http://inch-ci.org/github/hanami/assets)
@@ -493,6 +493,6 @@ __Hanami::Assets__ uses [Semantic Versioning 2.0.0](http://semver.org)
 
 ## Copyright
 
-Copyright © 2014-2020 Luca Guidi – Released under MIT License
+Copyright © 2014-2021 Luca Guidi – Released under MIT License
 
 This project was formerly known as Lotus (`lotus-assets`).

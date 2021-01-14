@@ -1,6 +1,11 @@
 # Hanami::Assets
 Assets management for Ruby web applications
 
+## v1.3.5 - 2021-01-14
+### Added
+- [Luca Guidi] Official support for Ruby: MRI 3.0
+- [Luca Guidi] Official support for Ruby: MRI 2.7
+
 ## v1.3.4 - 2019-10-11
 ### Fixed
 - [unleashy] Precompile assets using binary mode to ensure compatibility with Windows

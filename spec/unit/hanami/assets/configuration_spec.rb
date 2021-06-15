@@ -233,12 +233,12 @@ RSpec.describe Hanami::Assets::Configuration do
 
   describe "#public_directory" do
     it 'defaults to "public/" on current directory' do
-      expected = Pathname.new(Dir.pwd + "/public")
+      expected = Pathname.new("#{Dir.pwd}/public")
       expect(@configuration.public_directory).to eq(expected)
     end
 
     it "allows to set a custom location" do
-      dest = __dir__ + "/../tmp"
+      dest = "#{__dir__}/../tmp"
       @configuration.public_directory(dest)
       expect(@configuration.public_directory).to eq(Pathname.new(File.expand_path(dest)))
     end
@@ -262,7 +262,7 @@ RSpec.describe Hanami::Assets::Configuration do
     end
 
     it "returns absolute path, if #manifest is absolute path" do
-      @configuration.manifest expected = __dir__ + "/manifest.json"
+      @configuration.manifest expected = "#{__dir__}/manifest.json"
       expect(@configuration.manifest_path).to eq(Pathname.new(expected))
     end
   end
@@ -585,14 +585,14 @@ RSpec.describe Hanami::Assets::Configuration do
       @configuration.javascript_compressor :yui
       @configuration.stylesheet_compressor :yui
       @configuration.manifest "assets.json"
-      @configuration.public_directory(Dir.pwd + "/tmp")
+      @configuration.public_directory("#{Dir.pwd}/tmp")
       @configuration.instance_variable_set(:@public_manifest, {})
 
       @configuration.reset!
     end
 
     it "sets default value for public directory" do
-      expect(@configuration.public_directory).to eq(Pathname.new(Dir.pwd + "/public"))
+      expect(@configuration.public_directory).to eq(Pathname.new("#{Dir.pwd}/public"))
     end
 
     it "sets default value for scheme" do
@@ -645,7 +645,7 @@ RSpec.describe Hanami::Assets::Configuration do
       @configuration.stylesheet_compressor :yui
       @configuration.root                  __dir__
       @configuration.public_directory      __dir__
-      @configuration.sources << __dir__ + "/fixtures/javascripts"
+      @configuration.sources << "#{__dir__}/fixtures/javascripts"
 
       @config = @configuration.duplicate
     end
@@ -664,7 +664,7 @@ RSpec.describe Hanami::Assets::Configuration do
       expect(@config.stylesheet_compressor).to eq(:yui)
       expect(@config.root).to                  eq(Pathname.new(__dir__))
       expect(@config.public_directory).to      eq(Pathname.new(__dir__))
-      expect(@config.sources).to               eq([__dir__ + "/fixtures/javascripts"])
+      expect(@config.sources).to               eq(["#{__dir__}/fixtures/javascripts"])
     end
 
     it "doesn't affect the original configuration" do
@@ -679,9 +679,9 @@ RSpec.describe Hanami::Assets::Configuration do
       @config.manifest              "a.json"
       @config.javascript_compressor :uglify
       @config.stylesheet_compressor :uglify
-      @config.root                  __dir__ + "/../../../support/fixtures"
-      @config.public_directory      __dir__ + "/fixtures"
-      @config.sources << __dir__ + "/fixtures/stylesheets"
+      @config.root                  "#{__dir__}/../../../support/fixtures"
+      @config.public_directory      "#{__dir__}/fixtures"
+      @config.sources << "#{__dir__}/fixtures/stylesheets"
 
       expect(@config.cdn).to                   eq(false)
       expect(@config.subresource_integrity).to eq(false)
@@ -694,9 +694,9 @@ RSpec.describe Hanami::Assets::Configuration do
       expect(@config.manifest).to              eq("a.json")
       expect(@config.javascript_compressor).to eq(:uglify)
       expect(@config.stylesheet_compressor).to eq(:uglify)
-      expect(@config.root).to                  eq(Pathname.new(File.expand_path(__dir__ + "/../../../support/fixtures")))
-      expect(@config.public_directory).to      eq(Pathname.new(__dir__ + "/fixtures"))
-      expect(@config.sources).to eq([__dir__ + "/fixtures/javascripts", __dir__ + "/fixtures/stylesheets"])
+      expect(@config.root).to                  eq(Pathname.new(File.expand_path("#{__dir__}/../../../support/fixtures")))
+      expect(@config.public_directory).to      eq(Pathname.new("#{__dir__}/fixtures"))
+      expect(@config.sources).to eq(["#{__dir__}/fixtures/javascripts", "#{__dir__}/fixtures/stylesheets"])
 
       expect(@configuration.cdn).to                   eq(true)
       expect(@configuration.subresource_integrity).to eq(true)
@@ -711,7 +711,7 @@ RSpec.describe Hanami::Assets::Configuration do
       expect(@configuration.stylesheet_compressor).to eq(:yui)
       expect(@configuration.root).to                  eq(Pathname.new(__dir__))
       expect(@configuration.public_directory).to      eq(Pathname.new(__dir__))
-      expect(@configuration.sources).to eq([__dir__ + "/fixtures/javascripts"])
+      expect(@configuration.sources).to eq(["#{__dir__}/fixtures/javascripts"])
     end
   end
 end

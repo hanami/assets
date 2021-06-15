@@ -8,5 +8,5 @@ module Hanami
   end
 end
 
-Hanami::Assets.sources << __dir__ + "/emberjs/dist"
-Hanami::Assets.sources << __dir__ + "/emberjs/source"
+Hanami::Assets.sources << "#{__dir__}/emberjs/dist"
+Hanami::Assets.sources << "#{__dir__}/emberjs/source"

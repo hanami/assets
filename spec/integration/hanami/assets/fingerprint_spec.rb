@@ -5,7 +5,7 @@ RSpec.describe "Fingerprint mode" do
     dest.rmtree if dest.exist?
     dest.mkpath
 
-    load __dir__ + "/../../../support/fixtures/bookshelf/config/environment.rb"
+    load "#{__dir__}/../../../support/fixtures/bookshelf/config/environment.rb"
     Hanami::Assets.deploy
 
     frameworks = [Web::Assets, Admin::Assets]

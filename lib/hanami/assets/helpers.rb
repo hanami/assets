@@ -840,11 +840,9 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      def _safe_tags(*sources)
+      def _safe_tags(*sources, &blk)
         ::Hanami::Utils::Escape::SafeString.new(
-          sources.map do |source|
-            yield source
-          end.join(NEW_LINE_SEPARATOR)
+          sources.map(&blk).join(NEW_LINE_SEPARATOR)
         )
       end
 

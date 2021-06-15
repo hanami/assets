@@ -512,7 +512,7 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      def duplicate
+      def duplicate # rubocop:disable Metrics/AbcSize
         Configuration.new.tap do |c|
           c.root                  = root
           c.scheme                = scheme

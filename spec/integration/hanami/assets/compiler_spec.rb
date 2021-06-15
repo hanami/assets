@@ -7,7 +7,7 @@ require "hanami/assets/compiler"
 RSpec.describe "Compiler" do
   before do
     require "hanami/compass"
-    fixtures = __dir__ + "/../../../support/fixtures"
+    fixtures = "#{__dir__}/../../../support/fixtures"
     TMP.rmtree if TMP.exist?
     TMP.mkdir
 

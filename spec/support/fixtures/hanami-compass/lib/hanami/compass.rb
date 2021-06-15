@@ -8,4 +8,4 @@ module Hanami
   end
 end
 
-Hanami::Assets.sources << __dir__ + "/compass/src"
+Hanami::Assets.sources << "#{__dir__}/compass/src"

@@ -12,6 +12,11 @@ module Hanami
         # @api private
         EXTENSIONS = /\.(sass|scss)\z/.freeze
 
+        # @since 0.1.0
+        # @api private
+        CACHE_LOCATION = Pathname(Hanami.respond_to?(:root) ? # rubocop:disable Style/MultilineTernaryOperator
+                                  Hanami.root : Dir.pwd).join("tmp", "sass-cache")
+
         # @since 0.3.0
         # @api private
         def self.eligible?(name)

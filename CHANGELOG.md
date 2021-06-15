@@ -1,6 +1,10 @@
 # Hanami::Assets
 Assets management for Ruby web applications
 
+## v2.0.0.alpha1 (unreleased)
+### Changed
+- [Luca Guidi] Drop support for Ruby: MRI 2.3, 2.4, and 2.5
+
 ## v1.3.5 - 2021-01-14
 ### Added
 - [Luca Guidi] Official support for Ruby: MRI 3.0

@@ -119,7 +119,7 @@ View.new.render # => HTML markup
 ```
 
 For advanced configurations, please have a look at
-[`Hanami::Assets::Configuration`](https://github.com/hanami/assets/blob/master/lib/hanami/assets/configuration.rb).
+[`Hanami::Assets::Configuration`](https://github.com/hanami/assets/blob/main/lib/hanami/assets/configuration.rb).
 
 ### Available Helpers
 

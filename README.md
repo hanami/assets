@@ -24,7 +24,7 @@ Assets management for Ruby web projects
 
 ## Rubies
 
-__Hanami::Assets__ supports Ruby (MRI) 2.6+
+__Hanami::Assets__ supports Ruby (MRI) 3.0+
 
 ## Installation
 

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require "uri"
-require "hanami/helpers/html_helper"
-require "hanami/utils/escape"
+# require "hanami/helpers/html_helper"
+# require "hanami/utils/escape"
 
 module Hanami
   module Assets
@@ -68,7 +68,7 @@ module Hanami
       # @api private
       QUERY_STRING_MATCHER = /\?/.freeze
 
-      include Hanami::Helpers::HtmlHelper
+      # include Hanami::Helpers::HtmlHelper
 
       # Inject helpers into the given class
       #

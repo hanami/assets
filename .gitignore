@@ -20,6 +20,5 @@ tmp
 *.o
 *.a
 mkmf.log
-.greenbar
-.devnotes
 .rubocop-*
+node_modules/

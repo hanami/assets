@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require "fileutils"
-require "hanami/assets/compiler"
+require "open3"
+require "shellwords"
 
 module Hanami
   module Assets
@@ -11,86 +11,50 @@ module Hanami
     # @since 0.1.0
     # @api private
     class Precompiler
-      # Return a new instance
-      #
-      # @param configuration [Hanami::Assets::Configuration] the MAIN
-      #   configuration of Hanami::Assets
-      #
-      # @param duplicates [Array<Hanami::Assets>] the duplicated frameworks
-      #   (one for each application)
-      #
-      # @return [Hanami::Assets::Precompiler] a new instance
-      #
-      # @since 0.1.0
-      # @api private
-      def initialize(configuration, duplicates)
+      def initialize(configuration:)
         @configuration = configuration
-        @duplicates    = duplicates
       end
 
-      # Start the process
-      #
-      # @since 0.1.0
-      # @api private
-      def run
-        clear_assets_directory
-        precompile
+      def call
+        execute(cmd, *args)
       end
 
       private
 
-      # @since 0.3.0
-      # @api private
-      def clear_assets_directory
-        delete @configuration.manifest_path
-        delete @configuration.destination_directory
+      attr_reader :configuration
+
+      def execute(command, *arguments)
+        _, stderr, result = Open3.capture3(command, *arguments)
+
+        raise PrecompileError.new(stderr) unless result.success?
+
+        true
       end
 
-      # @since 0.3.0
-      # @api private
-      def clear_manifest(manifest)
-        JSON.parse(manifest).each_value do |asset_hash|
-          asset_file_name = @configuration.public_directory.join(asset_hash["target"])
-          asset_file_name.unlink if asset_file_name.exist?
-        end
-      rescue JSON::ParserError
-        warn "Non JSON manifest found and unlinked."
-      ensure
-        manifest.unlink
+      def cmd
+        configuration.esbuild
       end
 
-      # @since 0.1.0
-      # @api private
-      def precompile
-        applications.each do |duplicate|
-          config = if duplicate.respond_to?(:configuration)
-                     duplicate.configuration
-                   else
-                     duplicate
-                   end
-
-          config.compile true
-
-          config.files.each do |file|
-            Compiler.compile(config, file)
-          end
-        end
+      def args
+        entry_points + flags
       end
 
-      # @since 0.1.0
-      # @api private
-      def applications
-        if @duplicates.empty?
-          [@configuration]
-        else
-          @duplicates
-        end
+      def entry_points
+        configuration.entry_points
       end
 
-      # @since 0.3.0
-      # @api private
-      def delete(path)
-        FileUtils.rm_rf(path) if path.exist?
+      def flags
+        [
+          "--bundle",
+          "--minify",
+          "--sourcemap",
+          "--outdir=#{destination}",
+          "--entry-names=[dir]/[name]-[hash]"
+        ]
+      end
+
+      def destination
+        Shellwords.shellescape(configuration.destination)
       end
     end
   end

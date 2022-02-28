@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "hanami/assets/precompiler"
+
 RSpec.describe "Hanami Assets: Precompile" do
   subject do
     Hanami::Assets::Precompiler.new(configuration: configuration)

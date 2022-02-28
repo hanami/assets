@@ -6,17 +6,20 @@ module Hanami
     #
     # @since 0.1.0
     class Configuration
-      ESBUILD_PATH = File.join(".", "node_modules", ".bin", "esbuild").freeze
-      private_constant :ESBUILD_PATH
+      ESBUILD_SCRIPT_PATH = File.expand_path(
+        File.join(__dir__, "..", "assets.js"),
+        File.join(__dir__, "..")
+      ).freeze
+      private_constant :ESBUILD_SCRIPT_PATH
 
       ENTRY_POINTS_PATTERN = "index.{js,jsx,ts,tsx}"
       private_constant :ENTRY_POINTS_PATTERN
 
       attr_accessor :destination
-      attr_reader :sources, :esbuild
+      attr_reader :sources, :esbuild_script
 
-      def initialize(esbuild: ESBUILD_PATH, entry_points: ENTRY_POINTS_PATTERN, &blk)
-        @esbuild = esbuild
+      def initialize(esbuild_script: ESBUILD_SCRIPT_PATH, entry_points: ENTRY_POINTS_PATTERN, &blk)
+        @esbuild_script = esbuild_script
         @entry_points = entry_points
         instance_eval(&blk)
         freeze

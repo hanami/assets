@@ -66,7 +66,7 @@ module Hanami
 
       # @since 1.1.0
       # @api private
-      QUERY_STRING_MATCHER = /\?/.freeze
+      QUERY_STRING_MATCHER = /\?/
 
       # include Hanami::Helpers::HtmlHelper
 

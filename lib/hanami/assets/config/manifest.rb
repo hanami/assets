@@ -56,6 +56,7 @@ module Hanami
         # @since 0.1.0
         # @api private
         def initialize(configuration)
+          super()
           @configuration = configuration
         end
 

@@ -23,6 +23,8 @@ RSpec.describe "Hanami Assets: Precompile" do
   it "precompiles assets" do
     subject.call
 
+    assert_file("manifest.json")
+
     assert_file("index-*.js")
     assert_file("index-*.js.map")
     assert_file("index-*.css")
@@ -34,6 +36,8 @@ RSpec.describe "Hanami Assets: Precompile" do
 
     it "precompiles multiple bundles" do
       subject.call
+
+      assert_file("manifest.json")
 
       directories = ["admin", File.join("main", "dashboard"), File.join("main", "login")]
 

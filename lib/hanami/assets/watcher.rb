@@ -24,7 +24,7 @@ module Hanami
         pid = Process.spawn(environment, command, *arguments)
 
         # Avoid zombie children processes
-        # See https://ruby-doc.org/core/Process.html#method-c-spawn
+        # See https://ruby-doc.org/core/Process.html#method-c-detach
         Process.detach(pid)
 
         true

@@ -2,6 +2,9 @@
 
 require "rspec"
 require "hanami/assets"
+require "pathname"
+
+SPEC_ROOT = Pathname(__FILE__).dirname
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|

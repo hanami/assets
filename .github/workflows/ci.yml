@@ -39,6 +39,10 @@ jobs:
           gem install bundler --no-document
       - name: Bundle install
         run: bundle install --jobs 4 --retry 3
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
       - name: Run all tests
         run: script/ci
       - uses: ravsamhq/notify-slack-action@v1

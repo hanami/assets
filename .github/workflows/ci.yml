@@ -43,6 +43,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 16
+      - name: Yarn install
+        run: |
+          yarn install --pure-lockfile
       - name: Run all tests
         run: script/ci
       - uses: ravsamhq/notify-slack-action@v1

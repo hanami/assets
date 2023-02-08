@@ -37,7 +37,6 @@ RSpec.describe "Hanami Assets: Serve" do
 
     headers = last_response.headers
 
-
     # Ensure Last-Modified respects file system mtime
     # This is useful for browser caching
     last_modified = Date.today.strftime("%a, %d %b %Y") # Wed, 08 Feb 2023

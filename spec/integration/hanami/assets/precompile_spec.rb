@@ -61,7 +61,8 @@ RSpec.describe "Hanami Assets: Precompile" do
   def assert_file(*path)
     path = destination.join(*path)
     expanded_path = Dir.glob(path).first
+    actual_path = (expanded_path || path).to_s
 
-    expect(File).to exist(expanded_path || path)
+    expect(File).to exist(actual_path), "expected `#{actual_path.inspect}' to exist"
   end
 end

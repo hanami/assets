@@ -7,7 +7,7 @@ module Hanami
     # @since 0.1.0
     class Configuration
       ESBUILD_SCRIPT_PATH = File.expand_path(
-        File.join(__dir__, "..", "assets.js"),
+        File.join(__dir__, "..", "assets.mjs"),
         File.join(__dir__, "..")
       ).freeze
       private_constant :ESBUILD_SCRIPT_PATH

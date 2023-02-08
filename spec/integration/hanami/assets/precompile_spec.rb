@@ -31,6 +31,17 @@ RSpec.describe "Hanami Assets: Precompile" do
     assert_file("index-*.css.map")
   end
 
+  context "assets minification" do
+    let(:sources) { Sources.path("minification") }
+
+    it "minifies assets" do
+      content = "(()=>{var t=r=>r<=1?r:t(r-1)+t(r-2);})();"
+      subject.call
+
+      assert_file("index-*.js", content: content)
+    end
+  end
+
   context "with multiple entry points" do
     let(:sources) { Sources.path("entry_points") }
 
@@ -58,11 +69,15 @@ RSpec.describe "Hanami Assets: Precompile" do
 
   private
 
-  def assert_file(*path)
+  def assert_file(*path, content: nil)
     path = destination.join(*path)
     expanded_path = Dir.glob(path).first
     actual_path = (expanded_path || path).to_s
 
     expect(File).to exist(actual_path), "expected `#{actual_path.inspect}' to exist"
+
+    if content
+      expect(File.read(actual_path)).to include(content)
+    end
   end
 end

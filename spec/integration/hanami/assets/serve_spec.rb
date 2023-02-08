@@ -37,9 +37,11 @@ RSpec.describe "Hanami Assets: Serve" do
 
     headers = last_response.headers
 
+
     # Ensure Last-Modified respects file system mtime
     # This is useful for browser caching
-    expect(headers["Last-Modified"]).to match("Wed, 02 Mar 2022")
+    last_modified = Date.today.strftime("%a, %d %b %Y") # Wed, 08 Feb 2023
+    expect(headers["Last-Modified"]).to match(last_modified)
     expect(headers["Content-Type"]).to eq("application/javascript")
     expect(headers["Content-Length"]).to eq("22")
   end

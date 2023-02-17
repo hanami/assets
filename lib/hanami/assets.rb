@@ -11,5 +11,6 @@ module Hanami
     require "hanami/assets/version"
     require "hanami/assets/errors"
     require "hanami/assets/configuration"
+    require "hanami/assets/helpers"
   end
 end

@@ -8,14 +8,12 @@ module Hanami
   module Assets
     # HTML assets helpers
     #
-    # Include this helper in a view
+    # Inject these helpers in a view
     #
     # @since 0.1.0
     #
     # @see http://www.rubydoc.info/gems/hanami-helpers/Hanami/Helpers/HtmlHelper
-    #
-    # rubocop:disable Metrics/ModuleLength
-    module Helpers
+    class Helpers
       # @since 0.1.0
       # @api private
       NEW_LINE_SEPARATOR = "\n"
@@ -82,6 +80,15 @@ module Hanami
           class_attribute :assets_configuration
           self.assets_configuration = conf
         end
+      end
+
+      def initialize(configuration:)
+        super()
+        @configuration = configuration
+      end
+
+      def [](source)
+        configuration.asset_path(source)
       end
 
       # Generate <tt>script</tt> tag for given source(s)
@@ -838,6 +845,8 @@ module Hanami
 
       private
 
+      attr_reader :configuration
+
       # @since 0.1.0
       # @api private
       def _safe_tags(*sources, &blk)
@@ -938,6 +947,5 @@ module Hanami
         source !~ QUERY_STRING_MATCHER && source !~ /#{Regexp.escape(ext)}\z/
       end
     end
-    # rubocop:enable Metrics/ModuleLength
   end
 end

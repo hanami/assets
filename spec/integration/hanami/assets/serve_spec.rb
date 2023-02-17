@@ -4,9 +4,15 @@ require "rack"
 require "rack/builder"
 require "rack/test"
 require "pathname"
+require "fileutils"
 
 RSpec.describe "Hanami Assets: Serve" do
   include Rack::Test::Methods
+
+  before do
+    # simulate esbuild watch mode
+    FileUtils.cp(sources.join("index.js"), destination)
+  end
 
   let(:app) {
     config = configuration
@@ -20,12 +26,15 @@ RSpec.describe "Hanami Assets: Serve" do
     end
   }
 
-  let(:destination) { SPEC_ROOT.join("support", "destinations", "serve") }
+  let(:sources) { Sources.path("serve") }
+  let(:destination) { Destination.create }
 
   let(:configuration) do
+    srcs = sources
     dest = destination
 
     Hanami::Assets::Configuration.new do |config|
+      config.sources = srcs
       config.destination = dest
     end
   end
@@ -39,7 +48,7 @@ RSpec.describe "Hanami Assets: Serve" do
 
     # Ensure Last-Modified respects file system mtime
     # This is useful for browser caching
-    last_modified = Date.today.strftime("%a, %d %b %Y") # Wed, 08 Feb 2023
+    last_modified = Date.today.strftime("%a, %d %b %Y") # e.g. Wed, 08 Feb 2023
     expect(headers["Last-Modified"]).to match(last_modified)
     expect(headers["Content-Type"]).to eq("application/javascript")
     expect(headers["Content-Length"]).to eq("22")

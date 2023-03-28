@@ -1,32 +1,32 @@
 # frozen_string_literal: true
 
 require "uri"
+require "hanami/assets/precompiler"
 
 RSpec.describe Hanami::Assets::Helpers do
-  subject do
-    described_class.new(configuration: configuration)
+  subject { described_class.new(configuration: configuration) }
+
+  let(:precompiler) do
+    Hanami::Assets::Precompiler.new(configuration: configuration)
   end
 
-  let(:sources) { Sources.path("helpers") }
-  let(:destination) { Destination.create }
-  let(:base_url) { "https://hanami.test" }
-  let(:configuration) { configuration_with_base_url }
+  let(:app) { App.create(source) }
+  let(:source) { Sources.path("myapp") }
 
-  let(:configuration_without_base_url) do
+  let(:sources) { app.join("app", "assets") }
+  let(:public_dir) { app.join("public") }
+  let(:destination) { public_dir.join("assets") }
+  # let(:app) { App.create(Sources.path("helpers")) }
+
+  let(:kwargs) { {base_url: base_url, manifest: manifest}.compact }
+  let(:base_url) { nil }
+  let(:manifest) { nil }
+
+  let(:configuration) do
     srcs = sources
     dest = destination
 
-    Hanami::Assets::Configuration.new do |config|
-      config.sources = srcs
-      config.destination = dest
-    end
-  end
-
-  let(:configuration_with_base_url) do
-    srcs = sources
-    dest = destination
-
-    Hanami::Assets::Configuration.new(base_url: base_url) do |config|
+    Hanami::Assets::Configuration.new(**kwargs) do |config|
       config.sources = srcs
       config.destination = dest
     end
@@ -40,16 +40,31 @@ RSpec.describe Hanami::Assets::Helpers do
 
   describe "#[]" do
     context "when configurated relative path only" do
-      let(:configuration) { configuration_without_base_url }
-
       it "returns the relative path to the asset" do
         expect(subject["application.js"]).to eq("/assets/application.js")
       end
     end
 
     context "when configured with base url" do
-      it "returns the relative path to the asset" do
-        expect(subject["application.js"]).to eq("https://hanami.test/assets/application.js")
+      let(:base_url) { "https://hanami.test" }
+
+      context "without manifest" do
+        it "returns the relative path to the asset" do
+          expect(subject["application.js"]).to eq("https://hanami.test/assets/application.js")
+        end
+      end
+
+      context "with manifest" do
+        before do
+          Dir.chdir(app) { precompiler.call }
+          configuration.finalize!
+        end
+
+        let(:manifest) { public_dir.join("assets.json") }
+
+        it "returns the relative path to the asset" do
+          expect(subject["index.js"]).to eq("https://hanami.test/assets/index-WIMS7JIO.js")
+        end
       end
     end
   end

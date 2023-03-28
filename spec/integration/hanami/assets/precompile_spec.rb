@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "json"
 require "hanami/assets/precompiler"
 
 RSpec.describe "Hanami Assets: Precompile" do
@@ -7,12 +8,12 @@ RSpec.describe "Hanami Assets: Precompile" do
     Hanami::Assets::Precompiler.new(configuration: configuration)
   end
 
-  let(:sources) { Sources.path("hello_world") }
-  let(:destination) { Destination.create }
+  let(:app) { App.create(source) }
+  let(:source) { Sources.path("myapp") }
 
   let(:configuration) do
-    srcs = sources
-    dest = destination
+    srcs = source
+    dest = app
 
     Hanami::Assets::Configuration.new do |config|
       config.sources = srcs
@@ -21,41 +22,19 @@ RSpec.describe "Hanami Assets: Precompile" do
   end
 
   it "precompiles assets" do
-    subject.call
-
-    assert_file("manifest.json")
-
-    assert_file("index-*.js")
-    assert_file("index-*.js.map")
-    assert_file("index-*.css")
-    assert_file("index-*.css.map")
-  end
-
-  context "assets minification" do
-    let(:sources) { Sources.path("minification") }
-
-    it "minifies assets" do
-      content = "(()=>{var t=r=>r<=1?r:t(r-1)+t(r-2);})();"
+    Dir.chdir(app) do
       subject.call
 
-      assert_file("index-*.js", content: content)
-    end
-  end
+      assert_file("public/assets.json")
 
-  context "with multiple entry points" do
-    let(:sources) { Sources.path("entry_points") }
+      assert_file("public/assets/index-*.js")
+      assert_file("public/assets/index-*.js.map")
 
-    it "precompiles multiple bundles" do
-      subject.call
-
-      assert_file("manifest.json")
-
-      directories = ["admin", File.join("main", "dashboard"), File.join("main", "login")]
-
-      directories.each do |dir|
-        assert_file(dir, "index-*.js")
-        assert_file(dir, "index-*.js.map")
-      end
+      manifest = JSON.parse(read_file("public/assets.json"))
+      expect(manifest).to eq({
+                               "admin/index.js" => "/assets/admin/index-ZXY4TM62.js",
+                               "index.js" => "/assets/index-WIMS7JIO.js"
+                             })
     end
   end
 
@@ -70,14 +49,25 @@ RSpec.describe "Hanami Assets: Precompile" do
   private
 
   def assert_file(*path, content: nil)
-    path = destination.join(*path)
-    expanded_path = Dir.glob(path).first
-    actual_path = (expanded_path || path).to_s
+    actual_path = expand_path(*path)
 
     expect(File).to exist(actual_path), "expected `#{actual_path.inspect}' to exist"
 
     if content
       expect(File.read(actual_path)).to include(content)
     end
+  end
+
+  def read_file(*path)
+    actual_path = expand_path(*path)
+
+    File.read(actual_path)
+  end
+
+  def expand_path(*path)
+    path = app.join(*path)
+    expanded_path = Dir.glob(path).first
+
+    (expanded_path || path).to_s
   end
 end

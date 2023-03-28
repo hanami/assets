@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "./base_url"
+require_relative "./manifest"
 
 module Hanami
   module Assets
@@ -8,10 +9,12 @@ module Hanami
     #
     # @since 0.1.0
     class Configuration
-      ESBUILD_SCRIPT_PATH = File.expand_path(
-        File.join(__dir__, "..", "assets.mjs"),
-        File.join(__dir__, "..")
-      ).freeze
+      # ESBUILD_SCRIPT_PATH = File.expand_path(
+      #   File.join(__dir__, "..", "assets.mjs"),
+      #   File.join(__dir__, "..")
+      # ).freeze
+
+      ESBUILD_SCRIPT_PATH = File.join(Dir.pwd, "node_modules", "hanami-esbuild", "dist", "hanami-esbuild.js").freeze
       private_constant :ESBUILD_SCRIPT_PATH
 
       ENTRY_POINTS_PATTERN = "index.{js,jsx,ts,tsx}"
@@ -24,16 +27,24 @@ module Hanami
       private_constant :PATH_PREFIX
 
       attr_accessor :destination
-      attr_reader :sources, :base_url, :esbuild_script
+      attr_reader :sources, :base_url, :esbuild_script, :manifest
 
       def initialize(esbuild_script: ESBUILD_SCRIPT_PATH,
                      entry_points: ENTRY_POINTS_PATTERN,
                      base_url: BASE_URL,
-                     prefix: PATH_PREFIX, &blk)
+                     prefix: PATH_PREFIX,
+                     manifest: nil,
+                     &blk)
         @esbuild_script = esbuild_script
         @entry_points = entry_points
-        @base_url = BaseUrl.new(base_url, prefix)
+        @base_url = BaseUrl.new(base_url)
+        @manifest_path = manifest
+        @manifest = Manifest::Null.new(prefix)
         instance_eval(&blk)
+      end
+
+      def finalize!
+        @manifest = Manifest.new(@manifest_path)
         freeze
       end
 
@@ -49,7 +60,8 @@ module Hanami
       end
 
       def asset_path(value)
-        base_url.join(value)
+        path = manifest.call(value)
+        base_url.join(path)
       end
     end
   end

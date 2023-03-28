@@ -8,10 +8,10 @@
   "license": "MIT",
   "packageManager": "yarn@3.2.0",
   "devDependencies": {
-    "esbuild": "^0.17.06",
-    "esbuild-plugin-manifest": "^0.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "hanami-esbuild": "^1.0.0"
+  }
 }

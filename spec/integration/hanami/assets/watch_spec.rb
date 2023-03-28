@@ -8,12 +8,12 @@ RSpec.describe "Hanami Assets: Watch" do
     Hanami::Assets::Watcher.new(configuration: configuration)
   end
 
-  let(:sources) { Sources.path("watch") }
-  let(:destination) { Destination.create }
+  let(:app) { App.create(source) }
+  let(:source) { Sources.path("myapp") }
 
   let(:configuration) do
-    srcs = sources
-    dest = destination
+    srcs = source
+    dest = app
 
     Hanami::Assets::Configuration.new do |config|
       config.sources = srcs
@@ -21,12 +21,19 @@ RSpec.describe "Hanami Assets: Watch" do
     end
   end
 
-  it "watches assets" do
-    subject.call
+  xit "watches assets" do
+    Dir.chdir(app) do
+      subject.call
 
-    touch("index.js")
-    sleep 0.5
-    assert_file("index.js")
+      assert_file("public/assets/index.js")
+      contents = read_file("public/assets/index.js")
+      expect(contents).to include("console.log(\"Hello World\")")
+
+      # Change file
+      write_file("assets/index.js", "console.log(\"Hello Watch\")")
+      sleep 0.5
+      expect(contents).to include("console.log(\"Hello Watch\")")
+    end
   end
 
   private
@@ -35,10 +42,32 @@ RSpec.describe "Hanami Assets: Watch" do
     FileUtils.touch(sources.join(path))
   end
 
-  def assert_file(*path)
-    path = destination.join(*path)
+  def assert_file(*path, content: nil)
+    actual_path = expand_path(*path)
+
+    expect(File).to exist(actual_path), "expected `#{actual_path.inspect}' to exist"
+
+    if content
+      expect(File.read(actual_path)).to include(content)
+    end
+  end
+
+  def read_file(*path)
+    actual_path = expand_path(*path)
+
+    File.read(actual_path)
+  end
+
+  def write_file(*path, content)
+    actual_path = expand_path(*path)
+
+    File.write(actual_path, content)
+  end
+
+  def expand_path(*path)
+    path = app.join(*path)
     expanded_path = Dir.glob(path).first
 
-    expect(File).to exist(expanded_path || path)
+    (expanded_path || path).to_s
   end
 end

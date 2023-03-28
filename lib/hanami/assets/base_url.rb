@@ -15,24 +15,24 @@ module Hanami
       # Initialize a base URL
       #
       # @param url [String] the URL
-      # @param prefix [String] the prefix
+      # @param prefix [String,NilClass] the prefix
       #
       # @since 2.0.0
       # @api private
-      def initialize(url, prefix)
-        @url = URI(url + prefix).to_s
+      def initialize(url, prefix = nil)
+        @url = URI(url + prefix.to_s).to_s
         freeze
       end
 
       # Join the base URL with the given paths
       #
-      # @param other [Array<String>] the paths
+      # @param other [String] the paths
       # @return [String] the joined URL
       #
       # @since 2.0.0
       # @api private
-      def join(*other)
-        (url + SEPARATOR + other.join(SEPARATOR)).to_s
+      def join(other)
+        (url + other).to_s
       end
 
       private

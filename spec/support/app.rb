@@ -4,22 +4,27 @@ require "pathname"
 require "securerandom"
 require "fileutils"
 
-module Destination
+module App
   PATH = Pathname(__dir__).join("..", "..", "tmp").freeze
   private_constant :PATH
 
-  def self.create
-    paths = [
-      %w[app assets].join(File::SEPARATOR),
-      %w[public assets].join(File::SEPARATOR)
-    ]
-
+  def self.create(app)
     root = PATH.join(SecureRandom.uuid).tap(&:mkpath)
 
+    sources = [
+      app.join("app"),
+      app.join("slices")
+    ]
+
+    public_dir = root.join("public")
+    assets_dir = public_dir.join("assets")
+
     Dir.chdir(root) do
-      paths.each do |path|
-        FileUtils.mkdir_p(path)
+      sources.each do |source|
+        FileUtils.cp_r(source, root)
       end
+
+      FileUtils.mkdir_p(assets_dir)
     end
 
     root

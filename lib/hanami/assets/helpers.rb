@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 require "uri"
-# require "hanami/helpers/html_helper"
+require "hanami/view/html"
+require "hanami/view/helpers/tag_helper"
 # require "hanami/utils/escape"
 
 module Hanami
@@ -66,7 +67,10 @@ module Hanami
       # @api private
       QUERY_STRING_MATCHER = /\?/
 
-      # include Hanami::Helpers::HtmlHelper
+      # FIXME: this must be removed
+      # @see https://github.com/hanami/view/pull/229/files#r1168976590
+      require "dry/inflector"
+      include Hanami::View::Helpers::TagHelper
 
       # Inject helpers into the given class
       #
@@ -202,7 +206,7 @@ module Hanami
             attributes[:crossorigin] ||= CROSSORIGIN_ANONYMOUS
           end
 
-          html.script(**attributes).to_s
+          tag.script(**attributes).to_s
         end
       end
 
@@ -850,7 +854,7 @@ module Hanami
       # @since 0.1.0
       # @api private
       def _safe_tags(*sources, &blk)
-        ::Hanami::Utils::Escape::SafeString.new(
+        ::Hanami::View::HTML::SafeString.new(
           sources.map(&blk).join(NEW_LINE_SEPARATOR)
         )
       end
@@ -879,13 +883,13 @@ module Hanami
 
       # @api private
       def _subresource_integrity?
-        !!self.class.assets_configuration.subresource_integrity
+        !!configuration.subresource_integrity
       end
 
       # @api private
       def _subresource_integrity_value(source, ext)
         source = "#{source}#{ext}" unless source =~ /#{Regexp.escape(ext)}\z/
-        self.class.assets_configuration.subresource_integrity_value(source) unless _absolute_url?(source)
+        configuration.subresource_integrity_value(source) unless _absolute_url?(source)
       end
 
       # @since 0.1.0
@@ -899,19 +903,19 @@ module Hanami
       def _crossorigin?(source)
         return false unless _absolute_url?(source)
 
-        self.class.assets_configuration.crossorigin?(source)
+        configuration.crossorigin?(source)
       end
 
       # @since 0.1.0
       # @api private
       def _relative_url(source)
-        self.class.assets_configuration.asset_path(source)
+        configuration.asset_path(source)
       end
 
       # @since 0.1.0
       # @api private
       def _absolute_url(source)
-        self.class.assets_configuration.asset_url(source)
+        configuration.asset_url(source)
       end
 
       # @since 0.1.0

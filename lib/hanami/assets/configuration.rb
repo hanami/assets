@@ -26,7 +26,7 @@ module Hanami
       PATH_PREFIX = "/assets"
       private_constant :PATH_PREFIX
 
-      attr_accessor :destination
+      attr_accessor :destination, :subresource_integrity
       attr_reader :sources, :base_url, :esbuild_script, :manifest
 
       def initialize(esbuild_script: ESBUILD_SCRIPT_PATH,
@@ -40,6 +40,7 @@ module Hanami
         @base_url = BaseUrl.new(base_url)
         @manifest_path = manifest
         @manifest = Manifest::Null.new(prefix)
+        @subresource_integrity = false
         instance_eval(&blk)
       end
 
@@ -62,6 +63,18 @@ module Hanami
       def asset_path(value)
         path = manifest.call(value)
         base_url.join(path)
+      end
+
+      # Check if the given source is linked via Cross-Origin policy.
+      # In other words, the given source, doesn't satisfy the Same-Origin policy.
+      #
+      # @see https://en.wikipedia.org/wiki/Same-origin_policy#Origin_determination_rules
+      # @see https://en.wikipedia.org/wiki/Same-origin_policy#document.domain_property
+      #
+      # @since 1.2.0
+      # @api private
+      def crossorigin?(source)
+        base_url.crossorigin?(source)
       end
     end
   end

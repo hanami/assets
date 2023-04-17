@@ -35,6 +35,26 @@ module Hanami
         (url + other).to_s
       end
 
+      # @since 2.0.0
+      # @api private
+      def to_s
+        @url
+      end
+
+      # Check if the source is a cross origin
+      #
+      # @param source [String] the source
+      # @return [Boolean] true if the source is a cross origin
+      #
+      # @since 2.0.0
+      # @api private
+      def crossorigin?(source)
+        # TODO: review if this is the right way to check for cross origin
+        return true if @url.empty?
+
+        !source.start_with?(@url)
+      end
+
       private
 
       # @since 2.0.0

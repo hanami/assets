@@ -16,7 +16,6 @@ RSpec.describe Hanami::Assets::Helpers do
   let(:sources) { app.join("app", "assets") }
   let(:public_dir) { app.join("public") }
   let(:destination) { public_dir.join("assets") }
-  # let(:app) { App.create(Sources.path("helpers")) }
 
   let(:kwargs) { {base_url: base_url, manifest: manifest}.compact }
   let(:base_url) { nil }

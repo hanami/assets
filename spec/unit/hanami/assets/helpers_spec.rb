@@ -40,8 +40,23 @@ RSpec.describe Hanami::Assets::Helpers do
 
   describe "#[]" do
     context "when configurated relative path only" do
-      it "returns the relative path to the asset" do
-        expect(subject["application.js"]).to eq("/assets/application.js")
+      context "without manifest" do
+        it "returns the relative path to the asset" do
+          expect(subject["application.js"]).to eq("/assets/application.js")
+        end
+      end
+
+      context "with manifest" do
+        before do
+          Dir.chdir(app) { precompiler.call }
+          configuration.finalize!
+        end
+
+        let(:manifest) { public_dir.join("assets.json") }
+
+        it "returns the relative path to the asset" do
+          expect(subject["index.js"]).to eq("/assets/index-WIMS7JIO.js")
+        end
       end
     end
 

@@ -20,7 +20,7 @@ module Hanami
         end
 
         def call(path)
-          @prefix + SEPARATOR + path
+          {"url" => @prefix + SEPARATOR + path}
         end
       end
 
@@ -28,12 +28,13 @@ module Hanami
       # @api private
       def initialize(path)
         @path = path
+
         @manifest = case path
-                    when NilClass
-                      Null.new
-                    when String, Pathname
-                      ::JSON.parse(::File.read(path))
-                    end
+        when NilClass
+          Null.new
+        when String, Pathname
+          ::JSON.parse(::File.read(path))
+        end
 
         freeze
       end

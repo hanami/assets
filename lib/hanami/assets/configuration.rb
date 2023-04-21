@@ -29,12 +29,9 @@ module Hanami
       attr_accessor :destination, :subresource_integrity
       attr_reader :sources, :base_url, :esbuild_script, :manifest
 
-      def initialize(esbuild_script: ESBUILD_SCRIPT_PATH,
-                     entry_points: ENTRY_POINTS_PATTERN,
-                     base_url: BASE_URL,
-                     prefix: PATH_PREFIX,
-                     manifest: nil,
-                     &blk)
+      def initialize(esbuild_script: ESBUILD_SCRIPT_PATH, entry_points: ENTRY_POINTS_PATTERN,
+        base_url: BASE_URL, prefix: PATH_PREFIX, manifest: nil, &blk)
+
         @esbuild_script = esbuild_script
         @entry_points = entry_points
         @base_url = BaseUrl.new(base_url)
@@ -61,7 +58,7 @@ module Hanami
       end
 
       def asset_path(value)
-        path = manifest.call(value)
+        path = manifest.call(value).fetch("url")
         base_url.join(path)
       end
 

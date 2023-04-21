@@ -40,16 +40,22 @@ module Hanami
 
       def env
         ENV.to_h.merge({
-                         "ESBUILD_ENTRY_POINTS" => entry_points,
-                         "ESBUILD_OUTDIR" => destination
-                       })
+          "ESBUILD_ENTRY_POINTS" => entry_points,
+          "ESBUILD_OUTDIR" => destination
+        })
       end
 
       def args
-        [
+        result = [
           configuration.esbuild_script,
           "--precompile"
         ]
+
+        if configuration.subresource_integrity.any?
+          result << "--sri=#{configuration.subresource_integrity.join(",")}"
+        end
+
+        result
       end
 
       # config.assets do |c|

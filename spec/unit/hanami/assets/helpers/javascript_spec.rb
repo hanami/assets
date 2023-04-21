@@ -85,17 +85,16 @@ RSpec.describe Hanami::Assets::Helpers do
 
     describe "subresource_integrity mode" do
       before do
-        configuration.subresource_integrity = true
+        configuration.subresource_integrity = [:sha384]
         Dir.chdir(app) { precompiler.call }
         configuration.finalize!
       end
 
       let(:manifest) { public_dir.join("assets.json") }
 
-      # FIXME: implement this feature on esbuild, then enable this test again
-      xit "includes subresource_integrity and crossorigin attributes" do
+      it "includes subresource_integrity and crossorigin attributes" do
         actual = subject.javascript("index")
-        expect(actual).to eq(%(<script src="/assets/index.js" type="text/javascript" integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC" crossorigin="anonymous"></script>))
+        expect(actual).to eq(%(<script src="/assets/index-WIMS7JIO.js" type="text/javascript" integrity="sha384-X/d8bJTtNskQ5dxnb7mIt4ycyDIhYgpZwvhD//p5V6BW7tM/h2/cGPH8Vh8LLdjO" crossorigin="anonymous"></script>))
       end
     end
 

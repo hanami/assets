@@ -37,7 +37,7 @@ module Hanami
         @base_url = BaseUrl.new(base_url)
         @manifest_path = manifest
         @manifest = Manifest::Null.new(prefix)
-        @subresource_integrity = false
+        @subresource_integrity = []
         instance_eval(&blk)
       end
 
@@ -72,6 +72,10 @@ module Hanami
       # @api private
       def crossorigin?(source)
         base_url.crossorigin?(source)
+      end
+
+      def subresource_integrity_value(source)
+        manifest.call(source).fetch("sri")
       end
     end
   end

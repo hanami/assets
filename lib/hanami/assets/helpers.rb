@@ -21,7 +21,7 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      WILDCARD_EXT   = ".*"
+      WILDCARD_EXT = ".*"
 
       # @since 0.1.0
       # @api private
@@ -41,15 +41,15 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      FAVICON_MIME_TYPE    = "image/x-icon"
+      FAVICON_MIME_TYPE = "image/x-icon"
 
       # @since 0.1.0
       # @api private
-      STYLESHEET_REL  = "stylesheet"
+      STYLESHEET_REL = "stylesheet"
 
       # @since 0.1.0
       # @api private
-      FAVICON_REL     = "shortcut icon"
+      FAVICON_REL = "shortcut icon"
 
       # @since 0.1.0
       # @api private
@@ -883,12 +883,12 @@ module Hanami
 
       # @api private
       def _subresource_integrity?
-        !!configuration.subresource_integrity
+        configuration.subresource_integrity.any?
       end
 
       # @api private
       def _subresource_integrity_value(source, ext)
-        source = "#{source}#{ext}" unless source =~ /#{Regexp.escape(ext)}\z/
+        source = "#{source}#{ext}" unless /#{Regexp.escape(ext)}\z/.match?(source)
         configuration.subresource_integrity_value(source) unless _absolute_url?(source)
       end
 
@@ -929,7 +929,7 @@ module Hanami
           options[:src] = asset_path(src, push: options.delete(:push) || false, as: as)
         end
 
-        if !options[:src] && !block_given?
+        if !options[:src] && !_blk
           raise ArgumentError.new("You should provide a source via `src` option or with a `source` HTML tag")
         end
 

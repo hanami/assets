@@ -93,8 +93,8 @@ RSpec.describe Hanami::Assets::Helpers do
       let(:manifest) { public_dir.join("assets.json") }
 
       it "includes subresource_integrity and crossorigin attributes" do
-        actual = subject.javascript("index")
-        expect(actual).to eq(%(<script src="/assets/index-WIMS7JIO.js" type="text/javascript" integrity="sha384-X/d8bJTtNskQ5dxnb7mIt4ycyDIhYgpZwvhD//p5V6BW7tM/h2/cGPH8Vh8LLdjO" crossorigin="anonymous"></script>))
+        actual = subject.javascript("app")
+        expect(actual).to eq(%(<script src="/assets/app-RK4IHAM3.js" type="text/javascript" integrity="sha384-OHwNxsqZvXwlOpBI/328GLPtT1FqOUA+/6UO3V0wAv/GGMqsHUkApSQwTGAijwww" crossorigin="anonymous"></script>))
       end
     end
 

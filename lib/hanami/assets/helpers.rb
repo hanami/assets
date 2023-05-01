@@ -312,7 +312,7 @@ module Hanami
             attributes[:crossorigin] ||= CROSSORIGIN_ANONYMOUS
           end
 
-          html.link(**attributes).to_s
+          tag.link(**attributes).to_s
         end
       end
 

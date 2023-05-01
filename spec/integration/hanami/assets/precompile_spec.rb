@@ -27,13 +27,14 @@ RSpec.describe "Hanami Assets: Precompile" do
 
       assert_file("public/assets.json")
 
-      assert_file("public/assets/index-*.js")
-      assert_file("public/assets/index-*.js.map")
+      assert_file("public/assets/app-*.js")
+      assert_file("public/assets/app-*.js.map")
 
       manifest = JSON.parse(read_file("public/assets.json"))
       expect(manifest).to eq({
-        "admin/index.js" => {"url" => "/assets/admin/index-ZXY4TM62.js"},
-        "index.js" => {"url" => "/assets/index-WIMS7JIO.js"}
+        "admin/app.js" => {"url" => "/assets/admin/app-I6IWK2KA.js"},
+        "app.css" => {"url" => "/assets/app-BDJPH3XR.css"},
+        "app.js" => {"url" => "/assets/app-RK4IHAM3.js"}
       })
     end
   end

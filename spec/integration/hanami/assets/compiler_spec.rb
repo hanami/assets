@@ -111,7 +111,7 @@ RSpec.describe "Compiler" do
 
     target  = @config.public_directory.join("assets", "compile-sass.css")
     content = target.read
-    expect(content).to match %(body {\n  font: 100% Helvetica, sans-serif;\n  color: #333; }\n)
+    expect(content).to match %(body {\n  font: 100% Helvetica, sans-serif;\n  color: #333;\n})
     expect(content).to match %(p {\n  white-space: pre;)
   end
 
@@ -124,12 +124,12 @@ RSpec.describe "Compiler" do
 
     target  = @config.public_directory.join("assets", "sass-dependencies.css")
     content = target.read
-    expect(content).to match %(body {\n  background-color: green; }\n)
+    expect(content).to match %(body {\n  background-color: green;\n})
 
     dependency.touch("$background-color: blue") do
       Hanami::Assets::Compiler.compile(@config, "sass-dependencies.css")
       content = target.read
-      expect(content).to match %(body {\n  background-color: blue; }\n)
+      expect(content).to match %(body {\n  background-color: blue;\n})
     end
   end
 
@@ -145,12 +145,12 @@ RSpec.describe "Compiler" do
 
       target  = @config.public_directory.join("assets", "sass-transitive-dependencies.css")
       content = target.read
-      expect(content).to match %(body {\n  padding: 0; }\n)
+      expect(content).to match %(body {\n  padding: 0;\n})
 
       dependency.touch("$framework-padding: 1") do
         Hanami::Assets::Compiler.compile(@config, "sass-transitive-dependencies.css")
         content = target.read
-        expect(content).to match %(body {\n  padding: 1; }\n)
+        expect(content).to match %(body {\n  padding: 1;\n})
       end
     end
   end
@@ -165,7 +165,7 @@ RSpec.describe "Compiler" do
 
     target  = @config.public_directory.join("assets", asset_name)
     content = target.read
-    expect(content).to match %(body {\n  margin: 0; }\n)
+    expect(content).to match %(body {\n  margin: 0;\n})
 
     dependency_name = SecureRandom.uuid
     _               = TestFile.new(path: "_#{dependency_name}.sass") do
@@ -175,7 +175,7 @@ RSpec.describe "Compiler" do
     asset.touch("@import #{dependency_name}\n\nbody\n  margin: 0") do
       Hanami::Assets::Compiler.compile(@config, asset_name)
       content = target.read
-      expect(content).to match %(html {\n  padding: 0; }\n\nbody {\n  margin: 0; }\n)
+      expect(content).to match %(html {\n  padding: 0;\n}\n\nbody {\n  margin: 0;\n})
     end
   end
 
@@ -194,12 +194,12 @@ RSpec.describe "Compiler" do
 
     target  = @config.public_directory.join("assets", asset_name)
     content = target.read
-    expect(content).to match %(html {\n  padding: 0; }\n\nbody {\n  margin: 0; }\n)
+    expect(content).to match %(html {\n  padding: 0;\n}\n\nbody {\n  margin: 0;\n})
 
     asset.touch("body\n  margin: 0") do
       Hanami::Assets::Compiler.compile(@config, asset_name)
       content = target.read
-      expect(content).to match %(body {\n  margin: 0; }\n)
+      expect(content).to match %(body {\n  margin: 0;\n})
     end
   end
 
@@ -207,7 +207,7 @@ RSpec.describe "Compiler" do
     Hanami::Assets::Compiler.compile(@config, "compile-scss.css")
 
     target = @config.public_directory.join("assets", "compile-scss.css")
-    expect(target.read).to match %(body {\n  font: 100% Helvetica, sans-serif;\n  color: #fff; }\n)
+    expect(target.read).to match %(body {\n  font: 100% Helvetica, sans-serif;\n  color: #fff;\n})
   end
 
   it "compiles scss asset if direct dependency has changed" do
@@ -219,12 +219,12 @@ RSpec.describe "Compiler" do
 
     target  = @config.public_directory.join("assets", "scss-dependencies.css")
     content = target.read
-    expect(content).to match %(body {\n  background-color: purple; }\n)
+    expect(content).to match %(body {\n  background-color: purple;\n})
 
     dependency.touch("body { background-color: turquoise; }") do
       Hanami::Assets::Compiler.compile(@config, "scss-dependencies.css")
       content = target.read
-      expect(content).to match %(body {\n  background-color: turquoise; }\n)
+      expect(content).to match %(body {\n  background-color: turquoise;\n})
     end
   end
 
@@ -240,12 +240,12 @@ RSpec.describe "Compiler" do
 
       target  = @config.public_directory.join("assets", "scss-transitive-dependencies.css")
       content = target.read
-      expect(content).to match %(body {\n  padding: 0; }\n)
+      expect(content).to match %(body {\n  padding: 0;\n})
 
       dependency.touch("body { padding: 1; }") do
         Hanami::Assets::Compiler.compile(@config, "scss-transitive-dependencies.css")
         content = target.read
-        expect(content).to match %(body {\n  padding: 1; }\n)
+        expect(content).to match %(body {\n  padding: 1;\n})
       end
     end
   end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "erb"
-require "sassc"
+require "sass-embedded"
 require "coffee_script"
 require "hanami/view"
 require "tilt/erb"

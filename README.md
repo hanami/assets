@@ -199,7 +199,7 @@ handling: `.css` for stylesheets.
 The second one is optional and it's for a preprocessor: `.scss` for Sass.
 
 ```ruby
-require 'sassc'
+require 'sass-embedded'
 require 'hanami/assets'
 
 Hanami::Assets.configure do
@@ -230,7 +230,7 @@ public/
 
 ### Preprocessors engines
 
-`Hanami::Assets` uses [Tilt](https://github.com/rtomayko/tilt) to provide support for the most common preprocessors, such as [Sass](http://sass-lang.com/) (including `sassc-ruby`), [Less](http://lesscss.org/), [ES6](https://babeljs.io/), [JSX](https://jsx.github.io/), [CoffeScript](http://coffeescript.org), [Opal](http://opalrb.com), [Handlebars](http://handlebarsjs.com), [JBuilder](https://github.com/rails/jbuilder).
+`Hanami::Assets` uses [Tilt](https://github.com/rtomayko/tilt) to provide support for the most common preprocessors, such as [Sass](http://sass-lang.com/) (including `sass-embedded`), [Less](http://lesscss.org/), [ES6](https://babeljs.io/), [JSX](https://jsx.github.io/), [CoffeScript](http://coffeescript.org), [Opal](http://opalrb.com), [Handlebars](http://handlebarsjs.com), [JBuilder](https://github.com/rails/jbuilder).
 
 In order to use one or more of them, be sure to add the corresponding gem to your `Gemfile` and require the library.
 
@@ -352,7 +352,7 @@ Hanami can use the following compressors (aka minifiers) for stylesheets.
 
   * `:builtin` - Ruby based compressor. It doesn't require any external gem. It's fast, but not an efficient compressor.
   * `:yui` - [YUI Compressor](http://yui.github.io/yuicompressor), it depends on [`yui-compressor`](https://rubygems.org/gems/yui-compressor) gem and it requires Java 1.4+
-  * `:sass` - [Sass](http://sass-lang.com/), it depends on [`sassc`](https://rubygems.org/gems/sassc) gem
+  * `:sass` - [Sass](http://sass-lang.com/), it depends on [`sass-embedded`](https://rubygems.org/gems/sass-embedded) gem
 
 ```ruby
 Hanami::Assets.configure do

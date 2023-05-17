@@ -3,6 +3,7 @@ Assets management for Ruby web applications
 
 ## v2.0.0.alpha1 (unreleased)
 ### Changed
+- [Natsuki Natsume] Replace `sassc` with `sass-embedded` gem, because `libsass` is deprecated
 - [Luca Guidi] Drop support for Ruby: MRI 2.3, 2.4, and 2.5
 
 ## v1.3.5 - 2021-01-14

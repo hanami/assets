@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "hanami/assets/cache"
 
 RSpec.describe Hanami::Assets::Cache do

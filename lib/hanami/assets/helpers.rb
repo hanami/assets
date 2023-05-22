@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "uri"
 require "hanami/helpers/html_helper"
 require "hanami/utils/escape"

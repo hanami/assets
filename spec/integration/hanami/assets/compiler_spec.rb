@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "tilt/sass"
 require "tilt/coffee"
 require "hanami/assets/compiler"

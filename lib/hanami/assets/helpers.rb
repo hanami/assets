@@ -604,7 +604,7 @@ module Hanami
       # %>
       def video(source = nil, options = {}, &blk)
         options = _source_options(source, options, as: :video, &blk)
-        html.video(blk, options)
+        tag.video(**options, &blk)
       end
 
       # Generate <tt>audio</tt> tag for given source

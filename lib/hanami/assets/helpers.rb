@@ -6,6 +6,10 @@ require "hanami/view/helpers/tag_helper"
 # FIXME: this must be removed in favor of `dry-inflector`
 require "hanami/utils/string"
 
+# FIXME: this should be autoloaded
+require "hanami/view/helpers/tag_helper/tag_builder"
+require "hanami/view/helpers/escape_helper"
+
 module Hanami
   module Assets
     # HTML assets helpers

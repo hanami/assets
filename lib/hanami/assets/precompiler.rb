@@ -58,13 +58,6 @@ module Hanami
         result
       end
 
-      # config.assets do |c|
-      #   c.entry_points = [
-      #     "app/assets/*/*.#{extensions}",
-      #     "slices/*/assets/*/*.#{extensions}"
-      #   ]
-      # end
-
       def entry_points
         configuration.entry_points.map do |entry_point|
           escape(entry_point)

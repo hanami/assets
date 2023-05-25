@@ -50,9 +50,7 @@ jobs:
           key: node-${{ runner.OS }}-build-${{ hashFiles('package.json') }}
       - name: Install
         if: steps.cache-modules.outputs.cache-hit != 'true'
-        run: yarn install
-      - name: Build
-        run: yarn build
+        run: npm install
       - name: Setup Node ${{ matrix.node_version }}
         uses: actions/setup-node@v1
         with:

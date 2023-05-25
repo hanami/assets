@@ -1,14 +1,9 @@
 # frozen_string_literal: true
 
 require "uri"
-require "hanami/view/html"
-require "hanami/view/helpers/tag_helper"
+require "hanami/view"
 # FIXME: this must be removed in favor of `dry-inflector`
 require "hanami/utils/string"
-
-# FIXME: this should be autoloaded
-require "hanami/view/helpers/tag_helper/tag_builder"
-require "hanami/view/helpers/escape_helper"
 
 module Hanami
   module Assets
@@ -72,9 +67,6 @@ module Hanami
       # @api private
       QUERY_STRING_MATCHER = /\?/
 
-      # FIXME: this must be removed
-      # @see https://github.com/hanami/view/pull/229/files#r1168976590
-      require "dry/inflector"
       include Hanami::View::Helpers::TagHelper
 
       # Inject helpers into the given class

@@ -471,7 +471,7 @@ module Hanami
         }
         attributes.merge!(options)
 
-        html.link(attributes)
+        tag.link(**attributes)
       end
 
       # Generate <tt>video</tt> tag for given source

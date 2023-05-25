@@ -26,4 +26,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rubocop",   "~> 1.0"
   spec.add_development_dependency "rack",      "~> 2.2"
   spec.add_development_dependency "rack-test", "~> 1.1"
+  spec.add_development_dependency "dry-inflector", "~> 1.0"
 end

@@ -2,8 +2,6 @@
 
 require "uri"
 require "hanami/view"
-# FIXME: this must be removed in favor of `dry-inflector`
-require "hanami/utils/string"
 
 module Hanami
   module Assets
@@ -83,9 +81,11 @@ module Hanami
         end
       end
 
-      def initialize(configuration:)
+      def initialize(configuration:, inflector:)
         super()
+
         @configuration = configuration
+        @inflector     = inflector
       end
 
       # Generate <tt>script</tt> tag for given source(s)
@@ -384,7 +384,7 @@ module Hanami
         options = options.reject { |k, _| k.to_sym == :src }
         attributes = {
           src: self[source, push: options.delete(:push) || false, as: :image],
-          alt: Utils::String.titleize(::File.basename(source, WILDCARD_EXT))
+          alt: inflector.humanize(::File.basename(source, WILDCARD_EXT))
         }
         attributes.merge!(options)
 
@@ -790,7 +790,7 @@ module Hanami
 
       private
 
-      attr_reader :configuration
+      attr_reader :configuration, :inflector
 
       # @since 0.1.0
       # @api private

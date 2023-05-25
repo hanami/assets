@@ -2,9 +2,10 @@
 
 require "uri"
 require "hanami/assets/precompiler"
+require "dry/inflector"
 
 RSpec.describe Hanami::Assets::Helpers do
-  subject { described_class.new(configuration: configuration) }
+  subject { described_class.new(configuration: configuration, inflector: inflector) }
 
   let(:precompiler) do
     Hanami::Assets::Precompiler.new(configuration: configuration)
@@ -30,6 +31,8 @@ RSpec.describe Hanami::Assets::Helpers do
       config.destination = dest
     end
   end
+
+  let(:inflector) { Dry::Inflector.new }
 
   before do
     Thread.current[:__hanami_assets] = nil

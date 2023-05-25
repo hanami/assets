@@ -35,36 +35,66 @@ RSpec.describe Hanami::Assets::Helpers do
     Thread.current[:__hanami_assets] = nil
   end
 
-  describe "#asset_path" do
-    it "returns relative URL for given asset name" do
-      result = subject.asset_path("application.js")
-      expect(result).to eq("/assets/application.js")
+  describe "#[]" do
+    context "when configurated relative path only" do
+      context "without manifest" do
+        it "returns the relative URL to the asset" do
+          expect(subject["application.js"]).to eq("/assets/application.js")
+        end
+
+        it "returns absolute URL if the argument is an absolute URL" do
+          result = subject["http://assets.hanamirb.org/assets/application.css"]
+          expect(result).to eq("http://assets.hanamirb.org/assets/application.css")
+        end
+      end
+
+      context "with manifest" do
+        before do
+          Dir.chdir(app) { precompiler.call }
+          configuration.finalize!
+        end
+
+        let(:manifest) { public_dir.join("assets.json") }
+
+        it "returns the relative URL to the asset" do
+          expect(subject["app.js"]).to eq("/assets/app-RK4IHAM3.js")
+        end
+      end
     end
 
-    it "returns absolute URL if the argument is an absolute URL" do
-      result = subject.asset_path("http://assets.hanamirb.org/assets/application.css")
-      expect(result).to eq("http://assets.hanamirb.org/assets/application.css")
-    end
-
-    describe "cdn mode" do
+    context "when configured with base url" do
       let(:base_url) { "https://hanami.test" }
 
-      it "returns absolute url" do
-        result = subject.asset_path("application.js")
-        expect(result).to eq("#{base_url}/assets/application.js")
+      context "without manifest" do
+        it "returns the absolute URL to the asset" do
+          expect(subject["application.js"]).to eq("#{base_url}/assets/application.js")
+        end
+      end
+
+      context "with manifest" do
+        before do
+          Dir.chdir(app) { precompiler.call }
+          configuration.finalize!
+        end
+
+        let(:manifest) { public_dir.join("assets.json") }
+
+        it "returns the relative path to the asset" do
+          expect(subject["app.js"]).to eq("https://hanami.test/assets/app-RK4IHAM3.js")
+        end
       end
     end
 
     context "HTTP/2 PUSH PROMISE" do
       it "doesn't add into assets list by default" do
-        subject.asset_path("dashboard.js")
+        subject["dashboard.js"]
         assets = Thread.current[:__hanami_assets]
 
         expect(assets).to be(nil)
       end
 
       it "adds asset into assets list" do
-        subject.asset_path("dashboard.js", push: true)
+        subject["dashboard.js", push: true]
         assets = Thread.current[:__hanami_assets]
 
         expect(assets).to be_kind_of(Hash)
@@ -72,7 +102,7 @@ RSpec.describe Hanami::Assets::Helpers do
       end
 
       it "allows to specify asset type" do
-        subject.asset_path("video.mp4", push: :video)
+        subject["video.mp4", push: :video]
         assets = Thread.current[:__hanami_assets]
 
         expect(assets).to be_kind_of(Hash)
@@ -80,7 +110,7 @@ RSpec.describe Hanami::Assets::Helpers do
       end
 
       it "allows to link crossorigin asset" do
-        subject.asset_path("https://assets.hanamirb.org/assets/video.mp4", push: :video)
+        subject["https://assets.hanamirb.org/assets/video.mp4", push: :video]
         assets = Thread.current[:__hanami_assets]
 
         expect(assets).to be_kind_of(Hash)

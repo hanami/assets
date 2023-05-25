@@ -92,10 +92,6 @@ module Hanami
         @configuration = configuration
       end
 
-      def [](source)
-        configuration.asset_path(source)
-      end
-
       # Generate <tt>script</tt> tag for given source(s)
       #
       # It accepts one or more strings representing the name of the asset, if it
@@ -391,7 +387,7 @@ module Hanami
       def image(source, options = {})
         options = options.reject { |k, _| k.to_sym == :src }
         attributes = {
-          src: asset_path(source, push: options.delete(:push) || false, as: :image),
+          src: self[source, push: options.delete(:push) || false, as: :image],
           alt: Utils::String.titleize(::File.basename(source, WILDCARD_EXT))
         }
         attributes.merge!(options)
@@ -465,7 +461,7 @@ module Hanami
         options = options.reject { |k, _| k.to_sym == :href }
 
         attributes = {
-          href: asset_path(source, push: options.delete(:push) || false, as: :image),
+          href: self[source, push: options.delete(:push) || false, as: :image],
           rel: FAVICON_REL,
           type: FAVICON_MIME_TYPE
         }
@@ -791,62 +787,10 @@ module Hanami
       #
       #   <%= asset_path "application.js", push: :script %>
       def asset_path(source, push: false, as: nil)
-        _asset_url(source, push: push, as: as) { _relative_url(source) }
+        _asset_url(source, push: push, as: as) { configuration.asset_path(source) }
       end
 
-      # It generates the absolute URL for the given source.
-      #
-      # It can be the name of the asset, coming from the sources or third party
-      # gems.
-      #
-      # Absolute URLs are returned as they are.
-      #
-      # If Fingerprint mode is on, it returns the fingerprint URL of the source
-      #
-      # If CDN mode is on, it returns the absolute URL of the asset.
-      #
-      # @param source [String] the asset name
-      # @param push [TrueClass, FalseClass, Symbol] HTTP/2 Push Promise/Early Hints flag, or type
-      # @param as [Symbol] HTTP/2 Push Promise / Early Hints flag type
-      #
-      # @return [String] the asset URL
-      #
-      # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
-      # `subresource_integrity` modes are on and the asset is missing
-      # from the manifest
-      #
-      # @since 0.1.0
-      #
-      # @example Basic Usage
-      #
-      #   <%= asset_url 'application.js' %>
-      #
-      #   # "https://bookshelf.org/assets/application.js"
-      #
-      # @example Absolute URL
-      #
-      #   <%= asset_url 'https://code.jquery.com/jquery-2.1.4.min.js' %>
-      #
-      #   # "https://code.jquery.com/jquery-2.1.4.min.js"
-      #
-      # @example Fingerprint Mode
-      #
-      #   <%= asset_url 'application.js' %>
-      #
-      #   # "https://bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js"
-      #
-      # @example CDN Mode
-      #
-      #   <%= asset_url 'application.js' %>
-      #
-      #   # "https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js"
-      #
-      # @example Enable Push Promise/Early Hints
-      #
-      #   <%= asset_url "application.js", push: :script %>
-      def asset_url(source, push: false, as: nil)
-        _asset_url(source, push: push, as: as) { _absolute_url(source) }
-      end
+      alias [] asset_path
 
       private
 
@@ -879,7 +823,7 @@ module Hanami
       # @api private
       def _typed_asset_path(source, ext, push: false, as: nil)
         source = "#{source}#{ext}" if _append_extension?(source, ext)
-        asset_path(source, push: push, as: as)
+        self[source, push: push, as: as]
       end
 
       # @api private
@@ -909,25 +853,13 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      def _relative_url(source)
-        configuration.asset_path(source)
-      end
-
-      # @since 0.1.0
-      # @api private
-      def _absolute_url(source)
-        configuration.asset_url(source)
-      end
-
-      # @since 0.1.0
-      # @api private
       def _source_options(src, options, as:, &_blk)
         options ||= {}
 
         if src.respond_to?(:to_hash)
           options = src.to_hash
         elsif src
-          options[:src] = asset_path(src, push: options.delete(:push) || false, as: as)
+          options[:src] = self[src, push: options.delete(:push) || false, as: as]
         end
 
         if !options[:src] && !_blk

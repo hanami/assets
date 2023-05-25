@@ -3,7 +3,8 @@
 require "uri"
 require "hanami/view/html"
 require "hanami/view/helpers/tag_helper"
-# require "hanami/utils/escape"
+# FIXME: this must be removed in favor of `dry-inflector`
+require "hanami/utils/string"
 
 module Hanami
   module Assets
@@ -395,7 +396,7 @@ module Hanami
         }
         attributes.merge!(options)
 
-        html.img(attributes)
+        tag.img(**attributes)
       end
 
       # Generate <tt>link</tt> tag application favicon.

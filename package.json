@@ -12,6 +12,6 @@
     "react-dom": "^18.2.0"
   },
   "dependencies": {
-    "hanami-esbuild": "^1.0.0"
+    "hanami-esbuild": "github:hanami/esbuild"
   }
 }

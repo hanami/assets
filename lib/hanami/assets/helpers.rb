@@ -737,7 +737,7 @@ module Hanami
       # %>
       def audio(source = nil, options = {}, &blk)
         options = _source_options(source, options, as: :audio, &blk)
-        html.audio(blk, options)
+        tag.audio(**options, &blk)
       end
 
       # It generates the relative URL for the given source.

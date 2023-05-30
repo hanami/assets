@@ -1,6 +1,6 @@
 {
   "name": "hanami-assets",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Hanami Assets",
   "main": "index.js",
   "repository": "git@github.com:hanami/assets.git",

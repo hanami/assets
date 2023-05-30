@@ -64,7 +64,7 @@ RSpec.describe Hanami::Assets::Helpers do
 
     it "renders with tracks" do
       actual = subject.audio("song.ogg") do
-        tag.track kind: "captions", src: subject.asset_path("song.pt-BR.vtt"), srclang: "pt-BR", label: "Portuguese"
+        tag.track kind: "captions", src: subject.path("song.pt-BR.vtt"), srclang: "pt-BR", label: "Portuguese"
       end.to_s
 
       expect(actual).to eq(%(<audio src="/assets/song.ogg"><track kind="captions" src="/assets/song.pt-BR.vtt" srclang="pt-BR" label="Portuguese"></audio>))
@@ -73,8 +73,8 @@ RSpec.describe Hanami::Assets::Helpers do
     xit "renders with sources" do
       actual = subject.audio do
         tag.text "Your browser does not support the audio tag"
-        tag.source src: subject.asset_path("song.ogg"), type: "audio/ogg"
-        tag.source src: subject.asset_path("song.wav"), type: "audio/wav"
+        tag.source src: subject.path("song.ogg"), type: "audio/ogg"
+        tag.source src: subject.path("song.wav"), type: "audio/wav"
       end.to_s
 
       expect(actual).to eq(%(<audio>Your browser does not support the audio tag<source src="/assets/song.ogg" type="audio/ogg"><source src="/assets/song.wav" type="audio/wav"></audio>))
@@ -141,8 +141,8 @@ RSpec.describe Hanami::Assets::Helpers do
       xit "allows asset inclusion in push promise assets when using block syntax and source tags" do
         actual = subject.audio do
           tag.text "Your browser does not support the audio tag"
-          tag.source src: subject.asset_path("song.ogg", push: :audio), type: "audio/ogg"
-          tag.source src: subject.asset_path("song.wav"), type: "audio/wav"
+          tag.source src: subject.path("song.ogg", push: :audio), type: "audio/ogg"
+          tag.source src: subject.path("song.wav"), type: "audio/wav"
         end.to_s
 
         expect(actual).to eq(%(<audio>Your browser does not support the audio tag<source src="/assets/song.ogg" type="audio/ogg"><source src="/assets/song.wav" type="audio/wav"></audio>))

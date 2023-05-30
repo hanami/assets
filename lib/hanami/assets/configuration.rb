@@ -9,28 +9,57 @@ module Hanami
     #
     # @since 0.1.0
     class Configuration
-      # ESBUILD_SCRIPT_PATH = File.expand_path(
-      #   File.join(__dir__, "..", "assets.mjs"),
-      #   File.join(__dir__, "..")
-      # ).freeze
-
+      # @since 2.1.0
+      # @api private
       ESBUILD_SCRIPT_PATH = File.join(Dir.pwd, "node_modules", "hanami-esbuild", "dist", "hanami-esbuild.js").freeze
       private_constant :ESBUILD_SCRIPT_PATH
 
+      # @since 2.1.0
+      # @api private
       ENTRY_POINTS_PATTERN = "index.{js,jsx,ts,tsx}"
       private_constant :ENTRY_POINTS_PATTERN
 
+      # @since 2.1.0
+      # @api private
       BASE_URL = ""
       private_constant :BASE_URL
 
+      # @since 2.1.0
+      # @api private
       PATH_PREFIX = "/assets"
       private_constant :PATH_PREFIX
 
-      attr_accessor :destination, :subresource_integrity
-      attr_reader :sources, :base_url, :esbuild_script, :manifest
+      # @since 2.1.0
+      # @api private
+      attr_accessor :destination
 
-      def initialize(esbuild_script: ESBUILD_SCRIPT_PATH, entry_points: ENTRY_POINTS_PATTERN,
-        base_url: BASE_URL, prefix: PATH_PREFIX, manifest: nil, &blk)
+      # @since 2.1.0
+      # @api private
+      attr_accessor :subresource_integrity
+
+      # @since 2.1.0
+      # @api private
+      attr_reader :sources
+
+      # @since 2.1.0
+      # @api private
+      attr_reader :base_url
+
+      # @since 2.1.0
+      # @api private
+      attr_reader :esbuild_script
+
+      # @since 2.1.0
+      # @api private
+      attr_reader :manifest
+
+      # @since 2.1.0
+      # @api private
+      def initialize(esbuild_script: ESBUILD_SCRIPT_PATH,
+        entry_points: ENTRY_POINTS_PATTERN, base_url: BASE_URL,
+        prefix: PATH_PREFIX, manifest: nil, &blk)
+
+        super()
 
         @esbuild_script = esbuild_script
         @entry_points = entry_points
@@ -41,22 +70,30 @@ module Hanami
         instance_eval(&blk)
       end
 
+      # @since 2.1.0
+      # @api private
       def finalize!
         @manifest = Manifest.new(@manifest_path)
         freeze
       end
 
+      # @since 2.1.0
+      # @api public
       def sources=(*values)
         values = Array(values).flatten
         @sources = values
       end
 
+      # @since 2.1.0
+      # @api private
       def entry_points
         sources.map do |source|
           Dir.glob(File.join(source, "**", @entry_points))
         end.flatten
       end
 
+      # @since 2.1.0
+      # @api private
       def asset_path(value)
         path = manifest.call(value).fetch("url")
         base_url.join(path)
@@ -74,6 +111,8 @@ module Hanami
         base_url.crossorigin?(source)
       end
 
+      # @since 2.1.0
+      # @api private
       def subresource_integrity_value(source)
         manifest.call(source).fetch("sri")
       end

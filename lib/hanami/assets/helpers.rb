@@ -67,42 +67,40 @@ module Hanami
 
       include Hanami::View::Helpers::TagHelper
 
-      # Inject helpers into the given class
+      # Initialize a new instance
       #
-      # @since 0.1.0
+      # @param configuration [Hanami::Assets::Configuration] the assets configuration
+      # @inflector [Dry::Inflector] the inflector
+      #
+      # @return [Hanami::Assets::Helpers] a new instance
+      #
+      # @since 2.1.0
       # @api private
-      def self.included(base)
-        conf = ::Hanami::Assets::Configuration.for(base)
-        base.class_eval do
-          include Utils::ClassAttribute
-
-          class_attribute :assets_configuration
-          self.assets_configuration = conf
-        end
-      end
-
       def initialize(configuration:, inflector:)
         super()
+        # Force the lazy loading of the tag builder, so we can freeze this instance (see Hanami::View::Helpers::TagHelper)
+        tag_builder
 
         @configuration = configuration
         @inflector     = inflector
+        freeze
       end
 
-      # Generate <tt>script</tt> tag for given source(s)
+      # Generate `script` tag for given source(s)
       #
       # It accepts one or more strings representing the name of the asset, if it
       # comes from the application or third party gems. It also accepts strings
       # representing absolute URLs in case of public CDN (eg. jQuery CDN).
       #
-      # If the "fingerprint mode" is on, <tt>src</tt> is the fingerprinted
+      # If the "fingerprint mode" is on, `src` is the fingerprinted
       # version of the relative URL.
       #
-      # If the "CDN mode" is on, the <tt>src</tt> is an absolute URL of the
+      # If the "CDN mode" is on, the `src` is an absolute URL of the
       # application CDN.
       #
-      # If the "subresource integrity mode" is on, <tt>integriy</tt> is the
+      # If the "subresource integrity mode" is on, `integriy` is the
       # name of the algorithm, then a hyphen, then the hash value of the file.
-      # If more than one algorithm is used, they'll be separated by a space.
+      # If more than one algorithm is used, they"ll be separated by a space.
       #
       # It makes the script(s) eligible for HTTP/2 Push Promise/Early Hints.
       # You can opt-out with inline option: `push: false`.
@@ -110,7 +108,7 @@ module Hanami
       # @param sources [Array<String>] one or more assets by name or absolute URL
       # @param push [TrueClass, FalseClass] HTTP/2 Push Promise/Early Hints flag
       #
-      # @return [Hanami::Utils::Escape::SafeString] the markup
+      # @return [Hanami::View::HTML::SafeString] the markup
       #
       # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
       # `subresource_integrity` modes are on and the javascript file is missing
@@ -118,78 +116,76 @@ module Hanami
       #
       # @since 0.1.0
       #
-      # @see Hanami::Assets::Configuration#fingerprint
-      # @see Hanami::Assets::Configuration#cdn
-      # @see Hanami::Assets::Helpers#asset_path
+      # @see Hanami::Assets::Helpers#path
       #
       # @example Single Asset
       #
-      #   <%= javascript 'application' %>
+      #   <%= assets.js "application" %>
       #
       #   # <script src="/assets/application.js" type="text/javascript"></script>
       #
       # @example Multiple Assets
       #
-      #   <%= javascript 'application', 'dashboard' %>
+      #   <%= assets.js "application", "dashboard" %>
       #
       #   # <script src="/assets/application.js" type="text/javascript"></script>
       #   # <script src="/assets/dashboard.js" type="text/javascript"></script>
       #
       # @example Asynchronous Execution
       #
-      #   <%= javascript 'application', async: true %>
+      #   <%= assets.js "application", async: true %>
       #
       #   # <script src="/assets/application.js" type="text/javascript" async="async"></script>
       #
       # @example Subresource Integrity
       #
-      #   <%= javascript 'application' %>
+      #   <%= assets.js "application" %>
       #
       #   # <script src="/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js"
       #   #         type="text/javascript" integrity="sha384-oqVu...Y8wC" crossorigin="anonymous"></script>
       #
       # @example Subresource Integrity for 3rd Party Scripts
       #
-      #   <%= javascript 'https://example.com/assets/example.js', integrity: 'sha384-oqVu...Y8wC' %>
+      #   <%= assets.js "https://example.com/assets/example.js", integrity: "sha384-oqVu...Y8wC" %>
       #
       #   # <script src="https://example.com/assets/example.js" type="text/javascript"
       #   #         integrity="sha384-oqVu...Y8wC" crossorigin="anonymous"></script>
       #
       # @example Deferred Execution
       #
-      #   <%= javascript 'application', defer: true %>
+      #   <%= assets.js "application", defer: true %>
       #
       #   # <script src="/assets/application.js" type="text/javascript" defer="defer"></script>
       #
       # @example Absolute URL
       #
-      #   <%= javascript 'https://code.jquery.com/jquery-2.1.4.min.js' %>
+      #   <%= assets.js "https://code.jquery.com/jquery-2.1.4.min.js" %>
       #
       #   # <script src="https://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
       #
       # @example Fingerprint Mode
       #
-      #   <%= javascript 'application' %>
+      #   <%= assets.js "application" %>
       #
       #   # <script src="/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js" type="text/javascript"></script>
       #
       # @example CDN Mode
       #
-      #   <%= javascript 'application' %>
+      #   <%= assets.js "application" %>
       #
       #   # <script src="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js"
       #   #         type="text/javascript"></script>
       #
       # @example Disable Push Promise/Early Hints
       #
-      #   <%= javascript 'application', push: false %>
-      #   <%= javascript 'http://cdn.example.test/jquery.js', 'dashboard', push: false %>
+      #   <%= assets.js "application", push: false %>
+      #   <%= assets.js "http://cdn.example.test/jquery.js", "dashboard", push: false %>
       def javascript(*sources, push: true, **options)
         options = options.reject { |k, _| k.to_sym == :src }
 
         _safe_tags(*sources) do |source|
           attributes = {
-            src: _typed_asset_path(source, JAVASCRIPT_EXT, push: push, as: :script),
+            src: _typed_path(source, JAVASCRIPT_EXT, push: push, as: :script),
             type: JAVASCRIPT_MIME_TYPE
           }
           attributes.merge!(options)
@@ -203,21 +199,25 @@ module Hanami
         end
       end
 
-      # Generate <tt>link</tt> tag for given source(s)
+      # @api public
+      # @since 2.1.0
+      alias_method :js, :javascript
+
+      # Generate `link` tag for given source(s)
       #
       # It accepts one or more strings representing the name of the asset, if it
       # comes from the application or third party gems. It also accepts strings
       # representing absolute URLs in case of public CDN (eg. Bootstrap CDN).
       #
-      # If the "fingerprint mode" is on, <tt>href</tt> is the fingerprinted
+      # If the "fingerprint mode" is on, `href` is the fingerprinted
       # version of the relative URL.
       #
-      # If the "CDN mode" is on, the <tt>href</tt> is an absolute URL of the
+      # If the "CDN mode" is on, the `href` is an absolute URL of the
       # application CDN.
       #
-      # If the "subresource integrity mode" is on, <tt>integriy</tt> is the
+      # If the "subresource integrity mode" is on, `integriy` is the
       # name of the algorithm, then a hyphen, then the hashed value of the file.
-      # If more than one algorithm is used, they'll be separated by a space.
+      # If more than one algorithm is used, they"ll be separated by a space.
       #
       # It makes the script(s) eligible for HTTP/2 Push Promise/Early Hints.
       # You can opt-out with inline option: `push: false`.
@@ -225,7 +225,7 @@ module Hanami
       # @param sources [Array<String>] one or more assets by name or absolute URL
       # @param push [TrueClass, FalseClass] HTTP/2 Push Promise/Early Hints flag
       #
-      # @return [Hanami::Utils::Escape::SafeString] the markup
+      # @return [Hanami::View::HTML::SafeString] the markup
       #
       # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
       # `subresource_integrity` modes are on and the stylesheet file is missing
@@ -233,68 +233,65 @@ module Hanami
       #
       # @since 0.1.0
       #
-      # @see Hanami::Assets::Configuration#fingerprint
-      # @see Hanami::Assets::Configuration#cdn
-      # @see Hanami::Assets::Configuration#subresource_integrity
-      # @see Hanami::Assets::Helpers#asset_path
+      # @see Hanami::Assets::Helpers#path
       #
       # @example Single Asset
       #
-      #   <%= stylesheet 'application' %>
+      #   <%= assets.css "application" %>
       #
       #   # <link href="/assets/application.css" type="text/css" rel="stylesheet">
       #
       # @example Multiple Assets
       #
-      #   <%= stylesheet 'application', 'dashboard' %>
+      #   <%= assets.css "application", "dashboard" %>
       #
       #   # <link href="/assets/application.css" type="text/css" rel="stylesheet">
       #   # <link href="/assets/dashboard.css" type="text/css" rel="stylesheet">
       #
       # @example Subresource Integrity
       #
-      #   <%= stylesheet 'application' %>
+      #   <%= assets.css "application" %>
       #
       #   # <link href="/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.css"
       #   #       type="text/css" integrity="sha384-oqVu...Y8wC" crossorigin="anonymous"></script>
       #
       # @example Subresource Integrity for 3rd Party Assets
       #
-      #   <%= stylesheet 'https://example.com/assets/example.css', integrity: 'sha384-oqVu...Y8wC' %>
+      #   <%= assets.css "https://example.com/assets/example.css", integrity: "sha384-oqVu...Y8wC" %>
       #
       #   # <link href="https://example.com/assets/example.css"
       #   #       type="text/css" rel="stylesheet" integrity="sha384-oqVu...Y8wC" crossorigin="anonymous"></script>
       #
       # @example Absolute URL
       #
-      #   <%= stylesheet 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css' %>
+      #   <%= assets.css "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" %>
       #
       #   # <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
       #   #       type="text/css" rel="stylesheet">
       #
       # @example Fingerprint Mode
       #
-      #   <%= stylesheet 'application' %>
+      #   <%= assets.css "application" %>
       #
       #   # <link href="/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.css" type="text/css" rel="stylesheet">
       #
       # @example CDN Mode
       #
-      #   <%= stylesheet 'application' %>
+      #   <%= assets.css "application" %>
       #
       #   # <link href="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.css"
       #   #       type="text/css" rel="stylesheet">
       #
       # @example Disable Push Promise/Early Hints
       #
-      #   <%= stylesheet 'application', push: false %>
-      #   <%= stylesheet 'http://cdn.example.test/bootstrap.css', 'dashboard', push: false %>
+      #   <%= assets.css "application", push: false %>
+      #   <%= assets.css "http://cdn.example.test/bootstrap.css", "dashboard", push: false %>
       def stylesheet(*sources, push: true, **options)
         options = options.reject { |k, _| k.to_sym == :href }
 
         _safe_tags(*sources) do |source|
           attributes = {
-            href: _typed_asset_path(source, STYLESHEET_EXT, push: push, as: :style),
+            href: _typed_path(source, STYLESHEET_EXT, push: push, as: :style),
             type: STYLESHEET_MIME_TYPE,
             rel: STYLESHEET_REL
           }
@@ -309,26 +306,30 @@ module Hanami
         end
       end
 
-      # Generate <tt>img</tt> tag for given source
+      # @api public
+      # @since 2.1.0
+      alias_method :css, :stylesheet
+
+      # Generate `img` tag for given source
       #
       # It accepts one string representing the name of the asset, if it comes
       # from the application or third party gems. It also accepts string
       # representing absolute URLs in case of public CDN (eg. Bootstrap CDN).
       #
-      # <tt>alt</tt> Attribute is auto generated from <tt>src</tt>.
-      # You can specify a different value, by passing the <tt>:src</tt> option.
+      # `alt` Attribute is auto generated from `src`.
+      # You can specify a different value, by passing the `:src` option.
       #
-      # If the "fingerprint mode" is on, <tt>src</tt> is the fingerprinted
+      # If the "fingerprint mode" is on, `src` is the fingerprinted
       # version of the relative URL.
       #
-      # If the "CDN mode" is on, the <tt>src</tt> is an absolute URL of the
+      # If the "CDN mode" is on, the `src` is an absolute URL of the
       # application CDN.
       #
       # @param source [String] asset name or absolute URL
       # @param options [Hash] HTML 5 attributes
       # @option options [TrueClass, FalseClass] :push HTTP/2 Push Promise/Early Hints flag
       #
-      # @return [Hanami::Utils::Helpers::HtmlBuilder] the builder
+      # @return [Hanami::View::HTML::SafeString] the markup
       #
       # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
       # `subresource_integrity` modes are on and the image file is missing
@@ -336,50 +337,47 @@ module Hanami
       #
       # @since 0.1.0
       #
-      # @see Hanami::Assets::Configuration#fingerprint
-      # @see Hanami::Assets::Configuration#cdn
-      # @see Hanami::Assets::Configuration#subresource_integrity
-      # @see Hanami::Assets::Helpers#asset_path
+      # @see Hanami::Assets::Helpers#path
       #
       # @example Basic Usage
       #
-      #   <%= image 'logo.png' %>
+      #   <%= assets.img "logo.png" %>
       #
       #   # <img src="/assets/logo.png" alt="Logo">
       #
       # @example Custom alt Attribute
       #
-      #   <%= image 'logo.png', alt: 'Application Logo' %>
+      #   <%= assets.img "logo.png", alt: "Application Logo" %>
       #
       #   # <img src="/assets/logo.png" alt="Application Logo">
       #
       # @example Custom HTML Attributes
       #
-      #   <%= image 'logo.png', id: 'logo', class: 'image' %>
+      #   <%= assets.img "logo.png", id: "logo", class: "image" %>
       #
       #   # <img src="/assets/logo.png" alt="Logo" id="logo" class="image">
       #
       # @example Absolute URL
       #
-      #   <%= image 'https://example-cdn.com/images/logo.png' %>
+      #   <%= assets.img "https://example-cdn.com/images/logo.png" %>
       #
       #   # <img src="https://example-cdn.com/images/logo.png" alt="Logo">
       #
       # @example Fingerprint Mode
       #
-      #   <%= image 'logo.png' %>
+      #   <%= assets.img "logo.png" %>
       #
       #   # <img src="/assets/logo-28a6b886de2372ee3922fcaf3f78f2d8.png" alt="Logo">
       #
       # @example CDN Mode
       #
-      #   <%= image 'logo.png' %>
+      #   <%= assets.img "logo.png" %>
       #
       #   # <img src="https://assets.bookshelf.org/assets/logo-28a6b886de2372ee3922fcaf3f78f2d8.png" alt="Logo">
       #
       # @example Enable Push Promise/Early Hints
       #
-      #   <%= image 'logo.png', push: true %>
+      #   <%= assets.img "logo.png", push: true %>
       def image(source, options = {})
         options = options.reject { |k, _| k.to_sym == :src }
         attributes = {
@@ -391,23 +389,27 @@ module Hanami
         tag.img(**attributes)
       end
 
-      # Generate <tt>link</tt> tag application favicon.
+      # @api public
+      # @since 2.1.0
+      alias_method :img, :image
+
+      # Generate `link` tag application favicon.
       #
-      # If no argument is given, it assumes <tt>favico.ico</tt> from the application.
+      # If no argument is given, it assumes `favico.ico` from the application.
       #
       # It accepts one string representing the name of the asset.
       #
-      # If the "fingerprint mode" is on, <tt>href</tt> is the fingerprinted version
+      # If the "fingerprint mode" is on, `href` is the fingerprinted version
       # of the relative URL.
       #
-      # If the "CDN mode" is on, the <tt>href</tt> is an absolute URL of the
+      # If the "CDN mode" is on, the `href` is an absolute URL of the
       # application CDN.
       #
       # @param source [String] asset name
       # @param options [Hash] HTML 5 attributes
       # @option options [TrueClass, FalseClass] :push HTTP/2 Push Promise/Early Hints flag
       #
-      # @return [Hanami::Utils::Helpers::HtmlBuilder] the builder
+      # @return [Hanami::View::HTML::SafeString] the markup
       #
       # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
       # `subresource_integrity` modes are on and the favicon is file missing
@@ -415,44 +417,42 @@ module Hanami
       #
       # @since 0.1.0
       #
-      # @see Hanami::Assets::Configuration#fingerprint
-      # @see Hanami::Assets::Configuration#cdn
-      # @see Hanami::Assets::Helpers#asset_path
+      # @see Hanami::Assets::Helpers#path
       #
       # @example Basic Usage
       #
-      #   <%= favicon %>
+      #   <%= assets.favicon %>
       #
       #   # <link href="/assets/favicon.ico" rel="shortcut icon" type="image/x-icon">
       #
       # @example Custom Path
       #
-      #   <%= favicon 'fav.ico' %>
+      #   <%= assets.favicon "fav.ico" %>
       #
       #   # <link href="/assets/fav.ico" rel="shortcut icon" type="image/x-icon">
       #
       # @example Custom HTML Attributes
       #
-      #   <%= favicon "favicon.ico", id: "fav" %>
+      #   <%= assets.favicon "favicon.ico", id: "fav" %>
       #
       #   # <link id: "fav" href="/assets/favicon.ico" rel="shortcut icon" type="image/x-icon">
       #
       # @example Fingerprint Mode
       #
-      #   <%= favicon %>
+      #   <%= assets.favicon %>
       #
       #   # <link href="/assets/favicon-28a6b886de2372ee3922fcaf3f78f2d8.ico" rel="shortcut icon" type="image/x-icon">
       #
       # @example CDN Mode
       #
-      #   <%= favicon %>
+      #   <%= assets.favicon %>
       #
       #   # <link href="https://assets.bookshelf.org/assets/favicon-28a6b886de2372ee3922fcaf3f78f2d8.ico"
       #           rel="shortcut icon" type="image/x-icon">
       #
       # @example Enable Push Promise/Early Hints
       #
-      #   <%= favicon 'favicon.ico', push: true %>
+      #   <%= assets.favicon "favicon.ico", push: true %>
       def favicon(source = DEFAULT_FAVICON, options = {})
         options = options.reject { |k, _| k.to_sym == :href }
 
@@ -466,62 +466,60 @@ module Hanami
         tag.link(**attributes)
       end
 
-      # Generate <tt>video</tt> tag for given source
+      # Generate `video` tag for given source
       #
       # It accepts one string representing the name of the asset, if it comes
       # from the application or third party gems. It also accepts string
       # representing absolute URLs in case of public CDN (eg. Bootstrap CDN).
       #
       # Alternatively, it accepts a block that allows to specify one or more
-      # sources via the <tt>source</tt> tag.
+      # sources via the `source` tag.
       #
-      # If the "fingerprint mode" is on, <tt>src</tt> is the fingerprinted
+      # If the "fingerprint mode" is on, `src` is the fingerprinted
       # version of the relative URL.
       #
-      # If the "CDN mode" is on, the <tt>src</tt> is an absolute URL of the
+      # If the "CDN mode" is on, the `src` is an absolute URL of the
       # application CDN.
       #
       # @param source [String] asset name or absolute URL
       # @param options [Hash] HTML 5 attributes
       # @option options [TrueClass, FalseClass] :push HTTP/2 Push Promise/Early Hints flag
       #
-      # @return [Hanami::Utils::Helpers::HtmlBuilder] the builder
+      # @return [Hanami::View::HTML::SafeString] the markup
       #
       # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
       # `subresource_integrity` modes are on and the video file is missing
       # from the manifest
       #
-      # @raise [ArgumentError] if source isn't specified both as argument or
+      # @raise [ArgumentError] if source isn"t specified both as argument or
       #   tag inside the given block
       #
       # @since 0.1.0
       #
-      # @see Hanami::Assets::Configuration#fingerprint
-      # @see Hanami::Assets::Configuration#cdn
-      # @see Hanami::Assets::Helpers#asset_path
+      # @see Hanami::Assets::Helpers#path
       #
       # @example Basic Usage
       #
-      #   <%= video 'movie.mp4' %>
+      #   <%= assets.video "movie.mp4" %>
       #
       #   # <video src="/assets/movie.mp4"></video>
       #
       # @example Absolute URL
       #
-      #   <%= video 'https://example-cdn.com/assets/movie.mp4' %>
+      #   <%= assets.video "https://example-cdn.com/assets/movie.mp4" %>
       #
       #   # <video src="https://example-cdn.com/assets/movie.mp4"></video>
       #
       # @example Custom HTML Attributes
       #
-      #   <%= video('movie.mp4', autoplay: true, controls: true) %>
+      #   <%= assets.video("movie.mp4", autoplay: true, controls: true) %>
       #
       #   # <video src="/assets/movie.mp4" autoplay="autoplay" controls="controls"></video>
       #
       # @example Fallback Content
       #
       #   <%=
-      #     video('movie.mp4') do
+      #     assets.video("movie.mp4") do
       #       "Your browser does not support the video tag"
       #     end
       #   %>
@@ -533,9 +531,9 @@ module Hanami
       # @example Tracks
       #
       #   <%=
-      #     video('movie.mp4') do
-      #       track(kind: 'captions', src:  asset_path('movie.en.vtt'),
-      #             srclang: 'en', label: 'English')
+      #     assets.video("movie.mp4") do
+      #       tag.track(kind: "captions", src: assets.path("movie.en.vtt"),
+      #             srclang: "en", label: "English")
       #     end
       #   %>
       #
@@ -543,118 +541,88 @@ module Hanami
       #   #   <track kind="captions" src="/assets/movie.en.vtt" srclang="en" label="English">
       #   # </video>
       #
-      # @example Sources
-      #
-      #   <%=
-      #     video do
-      #       text "Your browser does not support the video tag"
-      #       source(src: asset_path('movie.mp4'), type: 'video/mp4')
-      #       source(src: asset_path('movie.ogg'), type: 'video/ogg')
-      #     end
-      #   %>
-      #
-      #   # <video>
-      #   #   Your browser does not support the video tag
-      #   #   <source src="/assets/movie.mp4" type="video/mp4">
-      #   #   <source src="/assets/movie.ogg" type="video/ogg">
-      #   # </video>
-      #
       # @example Without Any Argument
       #
-      #   <%= video %>
+      #   <%= assets.video %>
       #
       #   # ArgumentError
       #
       # @example Without src And Without Block
       #
-      #   <%= video(content: true) %>
+      #   <%= assets.video(content: true) %>
       #
       #   # ArgumentError
       #
       # @example Fingerprint Mode
       #
-      #   <%= video 'movie.mp4' %>
+      #   <%= assets.video "movie.mp4" %>
       #
       #   # <video src="/assets/movie-28a6b886de2372ee3922fcaf3f78f2d8.mp4"></video>
       #
       # @example CDN Mode
       #
-      #   <%= video 'movie.mp4' %>
+      #   <%= assets.video "movie.mp4" %>
       #
       #   # <video src="https://assets.bookshelf.org/assets/movie-28a6b886de2372ee3922fcaf3f78f2d8.mp4"></video>
-      #
-      # @example Enable Push Promise/Early Hints
-      #
-      #   <%= video 'movie.mp4', push: true %>
-      #
-      # <%=
-      #   video do
-      #     text "Your browser does not support the video tag"
-      #     source src: asset_path("movie.mp4", push: :video), type: "video/mp4"
-      #     source src: asset_path("movie.ogg"), type: "video/ogg"
-      #   end
-      # %>
       def video(source = nil, options = {}, &blk)
         options = _source_options(source, options, as: :video, &blk)
         tag.video(**options, &blk)
       end
 
-      # Generate <tt>audio</tt> tag for given source
+      # Generate `audio` tag for given source
       #
       # It accepts one string representing the name of the asset, if it comes
       # from the application or third party gems. It also accepts string
       # representing absolute URLs in case of public CDN (eg. Bootstrap CDN).
       #
       # Alternatively, it accepts a block that allows to specify one or more
-      # sources via the <tt>source</tt> tag.
+      # sources via the `source` tag.
       #
-      # If the "fingerprint mode" is on, <tt>src</tt> is the fingerprinted
+      # If the "fingerprint mode" is on, `src` is the fingerprinted
       # version of the relative URL.
       #
-      # If the "CDN mode" is on, the <tt>src</tt> is an absolute URL of the
+      # If the "CDN mode" is on, the `src` is an absolute URL of the
       # application CDN.
       #
       # @param source [String] asset name or absolute URL
       # @param options [Hash] HTML 5 attributes
       # @option options [TrueClass, FalseClass] :push HTTP/2 Push Promise/Early Hints flag
       #
-      # @return [Hanami::Utils::Helpers::HtmlBuilder] the builder
+      # @return [Hanami::View::HTML::SafeString] the markup
       #
       # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
       # `subresource_integrity` modes are on and the audio file is missing
       # from the manifest
       #
-      # @raise [ArgumentError] if source isn't specified both as argument or
+      # @raise [ArgumentError] if source isn"t specified both as argument or
       #   tag inside the given block
       #
       # @since 0.1.0
       #
-      # @see Hanami::Assets::Configuration#fingerprint
-      # @see Hanami::Assets::Configuration#cdn
-      # @see Hanami::Assets::Helpers#asset_path
+      # @see Hanami::Assets::Helpers#path
       #
       # @example Basic Usage
       #
-      #   <%= audio 'song.ogg' %>
+      #   <%= assets.audio "song.ogg" %>
       #
       #   # <audio src="/assets/song.ogg"></audio>
       #
       # @example Absolute URL
       #
-      #   <%= audio 'https://example-cdn.com/assets/song.ogg' %>
+      #   <%= assets.audio "https://example-cdn.com/assets/song.ogg" %>
       #
       #   # <audio src="https://example-cdn.com/assets/song.ogg"></audio>
       #
       # @example Custom HTML Attributes
       #
-      #   <%= audio('song.ogg', autoplay: true, controls: true) %>
+      #   <%= assets.audio("song.ogg", autoplay: true, controls: true) %>
       #
       #   # <audio src="/assets/song.ogg" autoplay="autoplay" controls="controls"></audio>
       #
       # @example Fallback Content
       #
       #   <%=
-      #     audio('song.ogg') do
+      #     assets.audio("song.ogg") do
       #       "Your browser does not support the audio tag"
       #     end
       #   %>
@@ -666,9 +634,9 @@ module Hanami
       # @example Tracks
       #
       #   <%=
-      #     audio('song.ogg') do
-      #       track(kind: 'captions', src:  asset_path('song.pt-BR.vtt'),
-      #             srclang: 'pt-BR', label: 'Portuguese')
+      #     assets.audio("song.ogg") do
+      #       tag.track(kind: "captions", src: assets.path("song.pt-BR.vtt"),
+      #             srclang: "pt-BR", label: "Portuguese")
       #     end
       #   %>
       #
@@ -676,68 +644,42 @@ module Hanami
       #   #   <track kind="captions" src="/assets/song.pt-BR.vtt" srclang="pt-BR" label="Portuguese">
       #   # </audio>
       #
-      # @example Sources
-      #
-      #   <%=
-      #     audio do
-      #       text "Your browser does not support the audio tag"
-      #       source(src: asset_path('song.ogg'), type: 'audio/ogg')
-      #       source(src: asset_path('song.wav'), type: 'auido/wav')
-      #     end
-      #   %>
-      #
-      #   # <audio>
-      #   #   Your browser does not support the audio tag
-      #   #   <source src="/assets/song.ogg" type="audio/ogg">
-      #   #   <source src="/assets/song.wav" type="auido/wav">
-      #   # </audio>
-      #
       # @example Without Any Argument
       #
-      #   <%= audio %>
+      #   <%= assets.audio %>
       #
       #   # ArgumentError
       #
       # @example Without src And Without Block
       #
-      #   <%= audio(controls: true) %>
+      #   <%= assets.audio(controls: true) %>
       #
       #   # ArgumentError
       #
       # @example Fingerprint Mode
       #
-      #   <%= audio 'song.ogg' %>
+      #   <%= assets.audio "song.ogg" %>
       #
       #   # <audio src="/assets/song-28a6b886de2372ee3922fcaf3f78f2d8.ogg"></audio>
       #
       # @example CDN Mode
       #
-      #   <%= audio 'song.ogg' %>
+      #   <%= assets.audio "song.ogg" %>
       #
       #   # <audio src="https://assets.bookshelf.org/assets/song-28a6b886de2372ee3922fcaf3f78f2d8.ogg"></audio>
-      #
-      # @example Enable Push Promise/Early Hints
-      #
-      #   <%= audio 'movie.mp4', push: true %>
-      #
-      # <%=
-      #   audio do
-      #     text "Your browser does not support the audio tag"
-      #     source src: asset_path("song.ogg", push: :audio), type: "audio/ogg"
-      #     source src: asset_path("song.wav"), type: "audio/wav"
-      #   end
-      # %>
       def audio(source = nil, options = {}, &blk)
         options = _source_options(source, options, as: :audio, &blk)
         tag.audio(**options, &blk)
       end
 
-      # It generates the relative URL for the given source.
+      # It generates the relative or absolute URL for the given asset.
+      # It automatically decides if it has to use the relative or absolute
+      # depending on the configuration and current environment.
+      #
+      # Absolute URLs are returned as they are.
       #
       # It can be the name of the asset, coming from the sources or third party
       # gems.
-      #
-      # Absolute URLs are returned as they are.
       #
       # If Fingerprint mode is on, it returns the fingerprinted path of the source
       #
@@ -757,36 +699,44 @@ module Hanami
       #
       # @example Basic Usage
       #
-      #   <%= asset_path 'application.js' %>
+      #   <%= assets.path "application.js" %>
+      #
+      #   # "/assets/application.js"
+      #
+      # @example Alias
+      #
+      #   <%= assets["application.js"] %>
       #
       #   # "/assets/application.js"
       #
       # @example Absolute URL
       #
-      #   <%= asset_path 'https://code.jquery.com/jquery-2.1.4.min.js' %>
+      #   <%= assets.path "https://code.jquery.com/jquery-2.1.4.min.js" %>
       #
       #   # "https://code.jquery.com/jquery-2.1.4.min.js"
       #
       # @example Fingerprint Mode
       #
-      #   <%= asset_path 'application.js' %>
+      #   <%= assets.path "application.js" %>
       #
       #   # "/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js"
       #
       # @example CDN Mode
       #
-      #   <%= asset_path 'application.js' %>
+      #   <%= assets.path "application.js" %>
       #
       #   # "https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js"
       #
       # @example Enable Push Promise/Early Hints
       #
-      #   <%= asset_path "application.js", push: :script %>
-      def asset_path(source, push: false, as: nil)
-        _asset_url(source, push: push, as: as) { configuration.asset_path(source) }
+      #   <%= assets.path "application.js", push: :script %>
+      def path(source, push: false, as: nil)
+        _path(source, push: push, as: as) { configuration.asset_path(source) }
       end
 
-      alias [] asset_path
+      # @api public
+      # @since 2.1.0
+      alias [] path
 
       private
 
@@ -800,9 +750,9 @@ module Hanami
         )
       end
 
-      # @since 0.1.0
+      # @since 2.1.0
       # @api private
-      def _asset_url(source, push:, as:)
+      def _path(source, push:, as:)
         url = _absolute_url?(source) ? source : yield
 
         case push
@@ -815,9 +765,9 @@ module Hanami
         url
       end
 
-      # @since 0.1.0
+      # @since 2.1.0
       # @api private
-      def _typed_asset_path(source, ext, push: false, as: nil)
+      def _typed_path(source, ext, push: false, as: nil)
         source = "#{source}#{ext}" if _append_extension?(source, ext)
         self[source, push: push, as: as]
       end

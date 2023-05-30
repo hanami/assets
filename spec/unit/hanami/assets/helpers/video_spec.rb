@@ -64,7 +64,7 @@ RSpec.describe Hanami::Assets::Helpers do
 
     it "renders with tracks" do
       actual = subject.video("movie.mp4") do
-        tag.track kind: "captions", src: subject.asset_path("movie.en.vtt"), srclang: "en", label: "English"
+        tag.track kind: "captions", src: subject.path("movie.en.vtt"), srclang: "en", label: "English"
       end.to_s
 
       expect(actual).to eq(%(<video src="/assets/movie.mp4"><track kind="captions" src="/assets/movie.en.vtt" srclang="en" label="English"></video>))
@@ -73,8 +73,8 @@ RSpec.describe Hanami::Assets::Helpers do
     xit "renders with sources" do
       actual = subject.video do
         tag.text "Your browser does not support the video tag"
-        tag.source src: subject.asset_path("movie.mp4"), type: "video/mp4"
-        tag.source src: subject.asset_path("movie.ogg"), type: "video/ogg"
+        tag.source src: subject.path("movie.mp4"), type: "video/mp4"
+        tag.source src: subject.path("movie.ogg"), type: "video/ogg"
       end.to_s
 
       expect(actual).to eq(%(<video>Your browser does not support the video tag<source src="/assets/movie.mp4" type="video/mp4"><source src="/assets/movie.ogg" type="video/ogg"></video>))
@@ -141,8 +141,8 @@ RSpec.describe Hanami::Assets::Helpers do
       xit "allows asset inclusion in push promise assets when using block syntax and source tags" do
         actual = subject.video do
           tag.text "Your browser does not support the video tag"
-          tag.source src: subject.asset_path("movie.mp4", push: :video), type: "video/mp4"
-          tag.source src: subject.asset_path("movie.ogg"), type: "video/ogg"
+          tag.source src: subject.path("movie.mp4", push: :video), type: "video/mp4"
+          tag.source src: subject.path("movie.ogg"), type: "video/ogg"
         end.to_s
 
         expect(actual).to eq(%(<video>Your browser does not support the video tag<source src="/assets/movie.mp4" type="video/mp4"><source src="/assets/movie.ogg" type="video/ogg"></video>))

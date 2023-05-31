@@ -84,6 +84,7 @@ It will output this markup:
 <html>
   <head>
     <title>Assets example</title>
+    <link href="/assets/reset.css" type="text/css" rel="stylesheet">
     <link href="/assets/app.css" type="text/css" rel="stylesheet">
   </head>
 
@@ -189,7 +190,7 @@ The simple usage of the `js` helper, will be automatically mapped for you:
 <script src="/assets/app-QECGTTYG.js" type="text/javascript"></script>
 ```
 
-### Subresource Integrity (SRI) Mode
+#### Subresource Integrity (SRI) Mode
 
 Subresource Integrity (SRI) is a security mechanism that allows browsers to verify the integrity of external resources by comparing their content against a cryptographic hash. It helps protect against unauthorized modifications to external scripts and enhances the security and trustworthiness of web applications.
 
@@ -211,7 +212,7 @@ Once turned on, it will look at `/public/assets.json`, and helpers such as `java
 <script src="/assets/app-QECGTTYG.js" type="text/javascript" integrity="sha384-d9ndh67iVrvaACuWjEDJDJlThKvAOdILG011RxYJt1dQynvf4JXNORcUiZ9nO7lP" crossorigin="anonymous"></script>
 ```
 
-### Content Delivery Network (CDN) Mode
+#### Content Delivery Network (CDN) Mode
 
 A Content Delivery Network (CDN) is a globally distributed network of servers strategically located in multiple geographical locations.
 CDNs are designed to improve the performance, availability, and scalability of websites and web applications by reducing latency and efficiently delivering content to end users.
@@ -246,15 +247,16 @@ From now on, helpers will return the absolute URL for the asset, hosted on the C
 
 NOTE: We suggest to use SRI mode when using CDN.
 
-## Running tests
+## Development
 
 Install:
 
   * Node
   * NPM
 
-```sh
-bundle exec rake test
+```bash
+$ npm install
+$ bundle exec rake test
 ```
 
 ## Versioning

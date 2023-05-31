@@ -11,8 +11,9 @@ module Hanami
     class Configuration
       # @since 2.1.0
       # @api private
-      ESBUILD_SCRIPT_PATH = File.join(Dir.pwd, "node_modules", "hanami-esbuild", "dist", "hanami-esbuild.js").freeze
-      private_constant :ESBUILD_SCRIPT_PATH
+      HANAMI_ASSETS_JAVASCRIPT_EXECUTABLE =
+        File.join(Dir.pwd, "node_modules", "hanami-assets", "dist", "hanami-assets.js").freeze
+      private_constant :HANAMI_ASSETS_JAVASCRIPT_EXECUTABLE
 
       # @since 2.1.0
       # @api private
@@ -47,7 +48,7 @@ module Hanami
 
       # @since 2.1.0
       # @api private
-      attr_reader :esbuild_script
+      attr_reader :javascript_exe
 
       # @since 2.1.0
       # @api private
@@ -55,13 +56,13 @@ module Hanami
 
       # @since 2.1.0
       # @api private
-      def initialize(esbuild_script: ESBUILD_SCRIPT_PATH,
+      def initialize(javascript_exe: HANAMI_ASSETS_JAVASCRIPT_EXECUTABLE,
                      entry_points: ENTRY_POINTS_PATTERN, base_url: BASE_URL,
                      prefix: PATH_PREFIX, manifest: nil, &blk)
 
         super()
 
-        @esbuild_script = esbuild_script
+        @javascript_exe = javascript_exe
         @entry_points = entry_points
         @base_url = BaseUrl.new(base_url)
         @manifest_path = manifest

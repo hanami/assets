@@ -56,8 +56,8 @@ module Hanami
       # @since 2.1.0
       # @api private
       def initialize(esbuild_script: ESBUILD_SCRIPT_PATH,
-        entry_points: ENTRY_POINTS_PATTERN, base_url: BASE_URL,
-        prefix: PATH_PREFIX, manifest: nil, &blk)
+                     entry_points: ENTRY_POINTS_PATTERN, base_url: BASE_URL,
+                     prefix: PATH_PREFIX, manifest: nil, &blk)
 
         super()
 

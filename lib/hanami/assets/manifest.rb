@@ -36,11 +36,11 @@ module Hanami
         @path = path
 
         @manifest = case path
-        when NilClass
-          Null.new
-        when String, Pathname
-          ::JSON.parse(::File.read(path))
-        end
+                    when NilClass
+                      Null.new
+                    when String, Pathname
+                      ::JSON.parse(::File.read(path))
+                    end
 
         freeze
       end

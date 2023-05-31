@@ -78,7 +78,8 @@ module Hanami
       # @api private
       def initialize(configuration:, inflector:)
         super()
-        # Force the lazy loading of the tag builder, so we can freeze this instance (see Hanami::View::Helpers::TagHelper)
+        # Force the lazy loading of the tag builder, so we can freeze this instance
+        # (see Hanami::View::Helpers::TagHelper)
         tag_builder
 
         @configuration = configuration
@@ -736,7 +737,7 @@ module Hanami
 
       # @api public
       # @since 2.1.0
-      alias [] path
+      alias_method :[], :path
 
       private
 
@@ -799,7 +800,7 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      def _source_options(src, options, as:, &_blk)
+      def _source_options(src, options, as:, &blk)
         options ||= {}
 
         if src.respond_to?(:to_hash)
@@ -808,7 +809,7 @@ module Hanami
           options[:src] = self[src, push: options.delete(:push) || false, as: as]
         end
 
-        if !options[:src] && !_blk
+        if !options[:src] && !blk
           raise ArgumentError.new("You should provide a source via `src` option or with a `source` HTML tag")
         end
 

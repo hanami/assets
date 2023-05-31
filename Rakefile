@@ -5,10 +5,10 @@ require "bundler/gem_tasks"
 require "rspec/core/rake_task"
 require "hanami/devtools/rake_tasks"
 
-namespace :spec do
-  RSpec::Core::RakeTask.new(:unit) do |task|
-    task.pattern = FileList["spec/**/*_spec.rb"]
-  end
-end
+RSpec::Core::RakeTask.new(:spec)
 
-task default: "spec:unit"
+require "rubocop/rake_task"
+
+RuboCop::RakeTask.new
+
+task default: %i[spec rubocop]

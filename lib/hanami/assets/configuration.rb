@@ -12,7 +12,7 @@ module Hanami
       # @since 2.1.0
       # @api private
       HANAMI_ASSETS_JAVASCRIPT_EXECUTABLE =
-        File.join(Dir.pwd, "node_modules", "hanami-assets", "dist", "hanami-assets.js").freeze
+        File.join("node_modules", "hanami-assets", "dist", "hanami-assets.js").freeze
       private_constant :HANAMI_ASSETS_JAVASCRIPT_EXECUTABLE
 
       # @since 2.1.0
@@ -62,13 +62,13 @@ module Hanami
 
         super()
 
-        @javascript_exe = javascript_exe
+        @javascript_exe = File.join(Dir.pwd, javascript_exe)
         @entry_points = entry_points
         @base_url = BaseUrl.new(base_url)
         @manifest_path = manifest
         @manifest = Manifest::Null.new(prefix)
         @subresource_integrity = []
-        instance_eval(&blk)
+        instance_eval(&blk) if blk
       end
 
       # @since 2.1.0

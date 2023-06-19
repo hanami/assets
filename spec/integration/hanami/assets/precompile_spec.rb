@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "json"
+require "fileutils"
 require "hanami/assets/precompiler"
 
 RSpec.describe "Hanami Assets: Precompile" do
@@ -22,6 +23,8 @@ RSpec.describe "Hanami Assets: Precompile" do
   end
 
   it "precompiles assets" do
+    FileUtils.ln_sf(File.join(Dir.pwd, "node_modules"), app.join("node_modules"))
+
     Dir.chdir(app) do
       subject.call
 

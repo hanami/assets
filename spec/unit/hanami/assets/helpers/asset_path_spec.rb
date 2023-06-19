@@ -53,6 +53,7 @@ RSpec.describe Hanami::Assets::Helpers do
 
       context "with manifest" do
         before do
+          FileUtils.ln_sf(File.join(Dir.pwd, "node_modules"), app.join("node_modules"))
           Dir.chdir(app) { precompiler.call }
           configuration.finalize!
         end
@@ -76,6 +77,7 @@ RSpec.describe Hanami::Assets::Helpers do
 
       context "with manifest" do
         before do
+          FileUtils.ln_sf(File.join(Dir.pwd, "node_modules"), app.join("node_modules"))
           Dir.chdir(app) { precompiler.call }
           configuration.finalize!
         end

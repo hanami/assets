@@ -34,13 +34,7 @@ module Hanami
       # @api private
       def initialize(path)
         @path = path
-
-        @manifest = case path
-                    when NilClass
-                      Null.new
-                    when String, Pathname
-                      ::JSON.parse(::File.read(path))
-                    end
+        @manifest = ::JSON.parse(::File.read(path))
 
         freeze
       end

@@ -18,19 +18,11 @@ RSpec.describe Hanami::Assets::Helpers do
   let(:public_dir) { app.join("public") }
   let(:destination) { public_dir.join("assets") }
 
-  let(:kwargs) { {base_url: base_url, manifest: manifest}.compact }
+  let(:kwargs) { {sources: sources, destination: destination, base_url: base_url, manifest: manifest}.compact }
   let(:base_url) { nil }
   let(:manifest) { nil }
 
-  let(:configuration) do
-    srcs = sources
-    dest = destination
-
-    Hanami::Assets::Configuration.new(**kwargs) do |config|
-      config.sources = srcs
-      config.destination = dest
-    end
-  end
+  let(:configuration) { Hanami::Assets::Configuration.new(**kwargs) }
 
   let(:inflector) { Dry::Inflector.new }
 

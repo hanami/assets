@@ -11,16 +11,9 @@ RSpec.describe "Hanami Assets: Precompile" do
 
   let(:app) { App.create(source) }
   let(:source) { Sources.path("myapp") }
+  let(:kwargs) { {sources: source, destination: app}.compact }
 
-  let(:configuration) do
-    srcs = source
-    dest = app
-
-    Hanami::Assets::Configuration.new do |config|
-      config.sources = srcs
-      config.destination = dest
-    end
-  end
+  let(:configuration) { Hanami::Assets::Configuration.new(**kwargs) }
 
   it "precompiles assets" do
     FileUtils.ln_sf(File.join(Dir.pwd, "node_modules"), app.join("node_modules"))

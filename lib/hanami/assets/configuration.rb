@@ -56,12 +56,17 @@ module Hanami
 
       # @since 2.1.0
       # @api private
-      def initialize(javascript_exe: HANAMI_ASSETS_JAVASCRIPT_EXECUTABLE,
+      #
+      # rubocop:disable Metrics/ParameterLists
+      def initialize(sources:, destination:,
+                     javascript_exe: HANAMI_ASSETS_JAVASCRIPT_EXECUTABLE,
                      entry_points: ENTRY_POINTS_PATTERN, base_url: BASE_URL,
                      prefix: PATH_PREFIX, manifest: nil, &blk)
 
         super()
 
+        @sources = Array(*sources).flatten
+        @destination = destination
         @javascript_exe = File.join(Dir.pwd, javascript_exe)
         @entry_points = entry_points
         @base_url = BaseUrl.new(base_url)
@@ -70,6 +75,7 @@ module Hanami
         @subresource_integrity = []
         instance_eval(&blk) if blk
       end
+      # rubocop:enable Metrics/ParameterLists
 
       # @since 2.1.0
       # @api private

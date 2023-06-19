@@ -28,16 +28,9 @@ RSpec.describe "Hanami Assets: Serve" do
 
   let(:sources) { Sources.path("serve") }
   let(:destination) { Destination.create }
+  let(:kwargs) { {sources: sources, destination: destination}.compact }
 
-  let(:configuration) do
-    srcs = sources
-    dest = destination
-
-    Hanami::Assets::Configuration.new do |config|
-      config.sources = srcs
-      config.destination = dest
-    end
-  end
+  let(:configuration) { Hanami::Assets::Configuration.new(**kwargs) }
 
   it "serves assets" do
     get "/assets/index.js"

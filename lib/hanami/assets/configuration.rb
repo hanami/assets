@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative "./base_url"
-require_relative "./manifest"
+require_relative "base_url"
+require_relative "manifest"
 
 module Hanami
   module Assets

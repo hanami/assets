@@ -29,8 +29,8 @@ RSpec.describe "Hanami Assets: Precompile" do
       manifest = JSON.parse(read_file("public/assets.json"))
       expect(manifest).to eq({
                                "admin/app.js" => {"url" => "/assets/admin/app-I6IWK2KA.js"},
-                               "app.css" => {"url" => "/assets/app-BDJPH3XR.css"},
-                               "app.js" => {"url" => "/assets/app-RK4IHAM3.js"}
+                               "app.css" => {"url" => "/assets/app-N47SR66M.css"},
+                               "app.js" => {"url" => "/assets/app-A5GJ52WC.js"}
                              })
     end
   end

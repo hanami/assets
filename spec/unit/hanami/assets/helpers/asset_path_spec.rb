@@ -53,7 +53,7 @@ RSpec.describe Hanami::Assets::Helpers do
         let(:manifest) { public_dir.join("assets.json") }
 
         it "returns the relative URL to the asset" do
-          expect(subject["app.js"]).to eq("/assets/app-RK4IHAM3.js")
+          expect(subject["app.js"]).to eq("/assets/app-A5GJ52WC.js")
         end
       end
     end
@@ -77,7 +77,7 @@ RSpec.describe Hanami::Assets::Helpers do
         let(:manifest) { public_dir.join("assets.json") }
 
         it "returns the relative path to the asset" do
-          expect(subject["app.js"]).to eq("https://hanami.test/assets/app-RK4IHAM3.js")
+          expect(subject["app.js"]).to eq("https://hanami.test/assets/app-A5GJ52WC.js")
         end
       end
     end

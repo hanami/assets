@@ -72,7 +72,7 @@ RSpec.describe Hanami::Assets::Helpers do
 
       it "includes subresource_integrity and crossorigin attributes" do
         actual = subject.stylesheet("app")
-        expect(actual).to eq(%(<link href="/assets/app-BDJPH3XR.css" type="text/css" rel="stylesheet" integrity="sha384-AT14m59DGIJJp8AsoZmdt25b0+KdyQYMC7ARf9DgmNtmtGddGr/2TaGUgBCR5x+v" crossorigin="anonymous">))
+        expect(actual).to eq(%(<link href="/assets/app-N47SR66M.css" type="text/css" rel="stylesheet" integrity="sha384-e6Xvf6L9/vqEmC9y0ZTQ6yVW+a8PrkPNWU+qeNoJZdRrc15yY9AuWqywRWx5EjLk" crossorigin="anonymous">))
       end
     end
 

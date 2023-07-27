@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "dry/configurable"
 require_relative "base_url"
 require_relative "manifest"
 
@@ -9,16 +10,7 @@ module Hanami
     #
     # @since 0.1.0
     class Configuration
-      # @since 2.1.0
-      # @api private
-      HANAMI_ASSETS_JAVASCRIPT_EXECUTABLE =
-        File.join("node_modules", "hanami-assets", "dist", "hanami-assets.js").freeze
-      private_constant :HANAMI_ASSETS_JAVASCRIPT_EXECUTABLE
-
-      # @since 2.1.0
-      # @api private
-      ENTRY_POINTS_PATTERN = "index.{js,jsx,ts,tsx}"
-      private_constant :ENTRY_POINTS_PATTERN
+      include Dry::Configurable
 
       # @since 2.1.0
       # @api private
@@ -27,28 +19,35 @@ module Hanami
 
       # @since 2.1.0
       # @api private
-      PATH_PREFIX = "/assets"
-      private_constant :PATH_PREFIX
+      setting :exe_path, default: File.join("node_modules", "hanami-assets", "dist", "hanami-assets.js").freeze
 
       # @since 2.1.0
       # @api private
-      attr_accessor :destination
+      setting :path_prefix, default: "/assets"
 
       # @since 2.1.0
       # @api private
-      attr_accessor :subresource_integrity
+      setting :destination
 
       # @since 2.1.0
       # @api private
-      attr_reader :sources
+      setting :subresource_integrity, default: []
 
       # @since 2.1.0
       # @api private
-      attr_reader :base_url
+      setting :sources, default: [], constructor: -> v { Array(v).flatten }
 
       # @since 2.1.0
       # @api private
-      attr_reader :javascript_exe
+      setting :base_url, constructor: -> url { BaseUrl.new(url.to_s) }
+
+      # @since 2.1.0
+      # @api private
+      setting :entry_points_pattern, default: "index.{js,jsx,ts,tsx}"
+
+      # @since 2.1.0
+      # @api private
+      setting :manifest_path
 
       # @since 2.1.0
       # @api private
@@ -56,46 +55,35 @@ module Hanami
 
       # @since 2.1.0
       # @api private
-      #
-      # rubocop:disable Metrics/ParameterLists
-      def initialize(sources:, destination:,
-                     javascript_exe: HANAMI_ASSETS_JAVASCRIPT_EXECUTABLE,
-                     entry_points: ENTRY_POINTS_PATTERN, base_url: BASE_URL,
-                     prefix: PATH_PREFIX, manifest: nil, &blk)
-
+      def initialize(**values)
         super()
 
-        @sources = Array(*sources).flatten
-        @destination = destination
-        @javascript_exe = File.join(Dir.pwd, javascript_exe)
-        @entry_points = entry_points
-        @base_url = BaseUrl.new(base_url)
-        @manifest_path = manifest
-        @manifest = Manifest::Null.new(prefix)
-        @subresource_integrity = []
-        instance_eval(&blk) if blk
+        config.update(values.select { |k| _settings.key?(k) })
+
+        # Capture pwd at initialize-time to make sure it's the app's pwd (see `#full_exe_path`)
+        @pwd = Dir.pwd
+
+        @manifest = Manifest::Null.new(config.path_prefix)
+
+        yield(config) if block_given?
       end
-      # rubocop:enable Metrics/ParameterLists
 
       # @since 2.1.0
       # @api private
       def finalize!
-        @manifest = Manifest.new(@manifest_path)
+        @manifest = Manifest.new(config.manifest_path)
         freeze
       end
 
-      # @since 2.1.0
-      # @api public
-      def sources=(*values)
-        values = Array(values).flatten
-        @sources = values
+      def full_exe_path
+        File.join(@pwd, config.exe_path)
       end
 
       # @since 2.1.0
       # @api private
       def entry_points
         sources.map do |source|
-          Dir.glob(File.join(source, "**", @entry_points))
+          Dir.glob(File.join(source, "**", config.entry_points_pattern))
         end.flatten
       end
 
@@ -122,6 +110,22 @@ module Hanami
       # @api private
       def subresource_integrity_value(source)
         manifest.call(source).fetch("sri")
+      end
+
+      private
+
+      # @api private
+      def method_missing(name, ...)
+        if config.respond_to?(name)
+          config.public_send(name, ...)
+        else
+          super
+        end
+      end
+
+      # @api private
+      def respond_to_missing?(name, _incude_all = false)
+        config.respond_to?(name) || super
       end
     end
   end

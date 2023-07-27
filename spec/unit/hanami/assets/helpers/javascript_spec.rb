@@ -18,9 +18,9 @@ RSpec.describe Hanami::Assets::Helpers do
   let(:public_dir) { app.join("public") }
   let(:destination) { public_dir.join("assets") }
 
-  let(:kwargs) { {sources: sources, destination: destination, base_url: base_url, manifest: manifest}.compact }
+  let(:kwargs) { {sources: sources, destination: destination, base_url: base_url, manifest_path: manifest_path}.compact }
   let(:base_url) { nil }
-  let(:manifest) { nil }
+  let(:manifest_path) { nil }
 
   let(:configuration) { Hanami::Assets::Configuration.new(**kwargs) }
 
@@ -85,7 +85,7 @@ RSpec.describe Hanami::Assets::Helpers do
         configuration.finalize!
       end
 
-      let(:manifest) { public_dir.join("assets.json") }
+      let(:manifest_path) { public_dir.join("assets.json") }
 
       it "includes subresource_integrity and crossorigin attributes" do
         actual = subject.javascript("app")

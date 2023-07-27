@@ -61,7 +61,7 @@ module Hanami
       # @api private
       def args
         result = [
-          configuration.javascript_exe,
+          configuration.full_exe_path,
           "--precompile"
         ]
 

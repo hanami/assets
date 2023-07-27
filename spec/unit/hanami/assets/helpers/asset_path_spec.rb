@@ -18,9 +18,9 @@ RSpec.describe Hanami::Assets::Helpers do
   let(:public_dir) { app.join("public") }
   let(:destination) { public_dir.join("assets") }
 
-  let(:kwargs) { {sources: sources, destination: destination, base_url: base_url, manifest: manifest}.compact }
+  let(:kwargs) { {sources: sources, destination: destination, base_url: base_url, manifest_path: manifest_path}.compact }
   let(:base_url) { nil }
-  let(:manifest) { nil }
+  let(:manifest_path) { nil }
 
   let(:configuration) { Hanami::Assets::Configuration.new(**kwargs) }
 
@@ -50,7 +50,7 @@ RSpec.describe Hanami::Assets::Helpers do
           configuration.finalize!
         end
 
-        let(:manifest) { public_dir.join("assets.json") }
+        let(:manifest_path) { public_dir.join("assets.json") }
 
         it "returns the relative URL to the asset" do
           expect(subject["app.js"]).to eq("/assets/app-A5GJ52WC.js")
@@ -74,7 +74,7 @@ RSpec.describe Hanami::Assets::Helpers do
           configuration.finalize!
         end
 
-        let(:manifest) { public_dir.join("assets.json") }
+        let(:manifest_path) { public_dir.join("assets.json") }
 
         it "returns the relative path to the asset" do
           expect(subject["app.js"]).to eq("https://hanami.test/assets/app-A5GJ52WC.js")

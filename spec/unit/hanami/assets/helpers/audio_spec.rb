@@ -5,25 +5,30 @@ require "hanami/assets/precompiler"
 require "dry/inflector"
 
 RSpec.describe Hanami::Assets::Helpers do
-  subject { described_class.new(configuration: configuration, inflector: inflector) }
+  subject {
+    described_class.new(
+      configuration: configuration,
+      source: source,
+      inflector: inflector
+    )
+  }
 
   let(:precompiler) do
     Hanami::Assets::Precompiler.new(configuration: configuration)
   end
 
-  let(:app) { App.create(source) }
-  let(:source) { Sources.path("myapp") }
+  let(:app) { App.create(Test::Sources.path("myapp")) }
 
-  let(:sources) { app.join("app", "assets") }
+  let(:sources_path) { app.join("app", "assets") }
   let(:public_dir) { app.join("public") }
   let(:destination) { public_dir.join("assets") }
 
-  let(:kwargs) { {sources: sources, destination: destination, base_url: base_url, manifest: manifest}.compact }
+  let(:kwargs) { {sources: sources_path, destination: destination, base_url: base_url, manifest: manifest}.compact }
   let(:base_url) { nil }
   let(:manifest) { nil }
 
   let(:configuration) { Hanami::Assets::Configuration.new(**kwargs) }
-
+  let(:source) { Hanami::Assets::Source.new(configuration: configuration) }
   let(:inflector) { Dry::Inflector.new }
 
   before do

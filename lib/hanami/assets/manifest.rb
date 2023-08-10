@@ -25,7 +25,7 @@ module Hanami
 
         # @since 2.1.0
         # @api private
-        def call(path)
+        def [](path)
           {"url" => @prefix + SEPARATOR + path}
         end
       end

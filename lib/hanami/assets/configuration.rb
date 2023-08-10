@@ -68,13 +68,6 @@ module Hanami
         yield(config) if block_given?
       end
 
-      # @since 2.1.0
-      # @api private
-      def finalize!
-        @manifest = Manifest.new(config.manifest_path)
-        freeze
-      end
-
       def full_exe_path
         File.join(@pwd, config.exe_path)
       end
@@ -87,13 +80,6 @@ module Hanami
         end.flatten
       end
 
-      # @since 2.1.0
-      # @api private
-      def asset_path(value)
-        path = manifest.call(value).fetch("url")
-        base_url.join(path)
-      end
-
       # Check if the given source is linked via Cross-Origin policy.
       # In other words, the given source, doesn't satisfy the Same-Origin policy.
       #
@@ -104,12 +90,6 @@ module Hanami
       # @api private
       def crossorigin?(source)
         base_url.crossorigin?(source)
-      end
-
-      # @since 2.1.0
-      # @api private
-      def subresource_integrity_value(source)
-        manifest.call(source).fetch("sri")
       end
 
       private

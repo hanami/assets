@@ -11,7 +11,7 @@ RSpec.describe "Hanami Assets: Serve" do
 
   before do
     # simulate esbuild watch mode
-    FileUtils.cp(sources.join("index.js"), destination)
+    FileUtils.cp(sources_path.join("index.js"), destination)
   end
 
   let(:app) {
@@ -26,11 +26,11 @@ RSpec.describe "Hanami Assets: Serve" do
     end
   }
 
-  let(:sources) { Sources.path("serve") }
+  let(:sources_path) { Test::Sources.path("serve") }
   let(:destination) { Destination.create }
-  let(:kwargs) { {sources: sources, destination: destination}.compact }
+  let(:configuration_kwargs) { {sources: sources_path, destination: destination}.compact }
 
-  let(:configuration) { Hanami::Assets::Configuration.new(**kwargs) }
+  let(:configuration) { Hanami::Assets::Configuration.new(**configuration_kwargs) }
 
   it "serves assets" do
     get "/assets/index.js"

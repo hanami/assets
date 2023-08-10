@@ -67,6 +67,15 @@ module Hanami
 
       include Hanami::View::Helpers::TagHelper
 
+      attr_reader :source
+      private :source
+
+      attr_reader :configuration
+      private :configuration
+
+      attr_reader :inflector
+      private :inflector
+
       # Initialize a new instance
       #
       # @param configuration [Hanami::Assets::Configuration] the assets configuration
@@ -76,14 +85,16 @@ module Hanami
       #
       # @since 2.1.0
       # @api private
-      def initialize(configuration:, inflector:)
+      def initialize(source:, configuration:, inflector:)
         super()
         # Force the lazy loading of the tag builder, so we can freeze this instance
         # (see Hanami::View::Helpers::TagHelper)
         tag_builder
 
+        @source = source
         @configuration = configuration
-        @inflector     = inflector
+        @inflector = inflector
+
         freeze
       end
 
@@ -181,10 +192,10 @@ module Hanami
       #
       #   <%= assets.js "application", push: false %>
       #   <%= assets.js "http://cdn.example.test/jquery.js", "dashboard", push: false %>
-      def javascript(*sources, push: true, **options)
+      def javascript(*source_paths, push: true, **options)
         options = options.reject { |k, _| k.to_sym == :src }
 
-        _safe_tags(*sources) do |source|
+        _safe_tags(*source_paths) do |source|
           attributes = {
             src: _typed_path(source, JAVASCRIPT_EXT, push: push, as: :script),
             type: JAVASCRIPT_MIME_TYPE
@@ -287,19 +298,19 @@ module Hanami
       #
       #   <%= assets.css "application", push: false %>
       #   <%= assets.css "http://cdn.example.test/bootstrap.css", "dashboard", push: false %>
-      def stylesheet(*sources, push: true, **options)
+      def stylesheet(*source_paths, push: true, **options)
         options = options.reject { |k, _| k.to_sym == :href }
 
-        _safe_tags(*sources) do |source|
+        _safe_tags(*source_paths) do |source_path|
           attributes = {
-            href: _typed_path(source, STYLESHEET_EXT, push: push, as: :style),
+            href: _typed_path(source_path, STYLESHEET_EXT, push: push, as: :style),
             type: STYLESHEET_MIME_TYPE,
             rel: STYLESHEET_REL
           }
           attributes.merge!(options)
 
           if _subresource_integrity? || attributes.include?(:integrity)
-            attributes[:integrity] ||= _subresource_integrity_value(source, STYLESHEET_EXT)
+            attributes[:integrity] ||= _subresource_integrity_value(source_path, STYLESHEET_EXT)
             attributes[:crossorigin] ||= CROSSORIGIN_ANONYMOUS
           end
 
@@ -731,8 +742,8 @@ module Hanami
       # @example Enable Push Promise/Early Hints
       #
       #   <%= assets.path "application.js", push: :script %>
-      def path(source, push: false, as: nil)
-        _path(source, push: push, as: as) { configuration.asset_path(source) }
+      def path(source_path, push: false, as: nil)
+        _path(source_path, push: push, as: as) { source.asset_path(source_path) }
       end
 
       # @api public
@@ -741,13 +752,11 @@ module Hanami
 
       private
 
-      attr_reader :configuration, :inflector
-
       # @since 0.1.0
       # @api private
-      def _safe_tags(*sources, &blk)
+      def _safe_tags(*source_paths, &blk)
         ::Hanami::View::HTML::SafeString.new(
-          sources.map(&blk).join(NEW_LINE_SEPARATOR)
+          source_paths.map(&blk).join(NEW_LINE_SEPARATOR)
         )
       end
 
@@ -779,9 +788,9 @@ module Hanami
       end
 
       # @api private
-      def _subresource_integrity_value(source, ext)
-        source = "#{source}#{ext}" unless /#{Regexp.escape(ext)}\z/.match?(source)
-        configuration.subresource_integrity_value(source) unless _absolute_url?(source)
+      def _subresource_integrity_value(source_path, ext)
+        source_path = "#{source_path}#{ext}" unless /#{Regexp.escape(ext)}\z/.match?(source_path)
+        source.subresource_integrity_value(source_path) unless _absolute_url?(source_path)
       end
 
       # @since 0.1.0

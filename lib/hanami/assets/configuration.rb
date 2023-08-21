@@ -2,7 +2,6 @@
 
 require "dry/configurable"
 require_relative "base_url"
-require_relative "manifest"
 
 module Hanami
   module Assets
@@ -51,10 +50,6 @@ module Hanami
 
       # @since 2.1.0
       # @api private
-      attr_reader :manifest
-
-      # @since 2.1.0
-      # @api private
       def initialize(**values)
         super()
 
@@ -62,8 +57,6 @@ module Hanami
 
         # Capture pwd at initialize-time to make sure it's the app's pwd (see `#full_exe_path`)
         @pwd = Dir.pwd
-
-        @manifest = Manifest::Null.new(config.path_prefix)
 
         yield(config) if block_given?
       end

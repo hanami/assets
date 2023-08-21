@@ -25,23 +25,18 @@ module Hanami
       # @since 2.1.0
       # @api public
       def [](path)
-        if manifest?
-          manifest.fetch(path)
-        else
-          {"url" => configuration.path_prefix + SEPARATOR + path}
-        end
-      end
+        asset_attrs =
+          if manifest?
+            manifest.fetch(path).transform_keys(&:to_sym).tap { |attrs|
+              # The `url` attribute we receive from the manifest is actually a path; rename it as
+              # such so our `Asset` attributes make more sense on their own.
+              attrs[:path] = attrs.delete(:url)
+            }
+          else
+            {path: configuration.path_prefix + SEPARATOR + path}
+          end
 
-      # @since 2.1.0
-      # @api public
-      def asset_path(path)
-        configuration.base_url.join(self[path].fetch("url"))
-      end
-
-      # @since 2.1.0
-      # @api public
-      def subresource_integrity_value(path)
-        self[path].fetch("sri")
+        Asset.new(configuration: configuration, **asset_attrs)
       end
 
       private

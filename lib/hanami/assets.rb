@@ -9,6 +9,7 @@ module Hanami
   # @since 0.1.0
   module Assets
     require "hanami/assets/version"
+    require "hanami/assets/asset"
     require "hanami/assets/errors"
     require "hanami/assets/configuration"
     require "hanami/assets/source"

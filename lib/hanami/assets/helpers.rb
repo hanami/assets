@@ -743,7 +743,8 @@ module Hanami
       #
       #   <%= assets.path "application.js", push: :script %>
       def path(source_path, push: false, as: nil)
-        _path(source_path, push: push, as: as) { source.asset_path(source_path) }
+        # TODO: Create consistency between this method name and the method we call on the asset
+        _path(source_path, push: push, as: as) { source[source_path].url }
       end
 
       # @api public
@@ -790,7 +791,7 @@ module Hanami
       # @api private
       def _subresource_integrity_value(source_path, ext)
         source_path = "#{source_path}#{ext}" unless /#{Regexp.escape(ext)}\z/.match?(source_path)
-        source.subresource_integrity_value(source_path) unless _absolute_url?(source_path)
+        source[source_path].sri unless _absolute_url?(source_path)
       end
 
       # @since 0.1.0

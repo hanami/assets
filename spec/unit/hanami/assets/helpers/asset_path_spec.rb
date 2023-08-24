@@ -5,12 +5,26 @@ require "hanami/assets/precompiler"
 require "dry/inflector"
 
 RSpec.describe Hanami::Assets::Helpers do
-  subject {
-    described_class.new(
-      assets: assets,
-      inflector: inflector
-    )
+  subject(:obj) {
+    helpers = described_class
+    Class.new {
+      include helpers
+
+      attr_reader :_context
+
+      def initialize(context)
+        @_context = context
+      end
+    }.new(context)
   }
+
+  let(:context) {
+    double(:context, assets: assets, inflector: inflector)
+  }
+
+  def h(&block)
+    obj.instance_eval(&block)
+  end
 
   let(:precompiler) do
     Hanami::Assets::Precompiler.new(configuration: configuration)
@@ -30,15 +44,20 @@ RSpec.describe Hanami::Assets::Helpers do
   let(:assets) { Hanami::Assets.new(configuration: configuration) }
   let(:inflector) { Dry::Inflector.new }
 
-  describe "#[]" do
+  # TODO: remove this method
+  describe "#path" do
+    def path(...)
+      h { path(...) }
+    end
+
     context "when configurated relative path only" do
       context "without manifest" do
         it "returns the relative URL to the asset" do
-          expect(subject.path("application.js")).to eq("/assets/application.js")
+          expect(path("application.js")).to eq("/assets/application.js")
         end
 
         it "returns absolute URL if the argument is an absolute URL" do
-          result = subject.path("http://assets.hanamirb.org/assets/application.css")
+          result = path("http://assets.hanamirb.org/assets/application.css")
           expect(result).to eq("http://assets.hanamirb.org/assets/application.css")
         end
       end
@@ -53,7 +72,7 @@ RSpec.describe Hanami::Assets::Helpers do
         let(:manifest_path) { public_dir.join("assets.json") }
 
         it "returns the relative URL to the asset" do
-          expect(subject.path("app.js")).to eq("/assets/app-A5GJ52WC.js")
+          expect(path("app.js")).to eq("/assets/app-A5GJ52WC.js")
         end
       end
     end
@@ -63,7 +82,7 @@ RSpec.describe Hanami::Assets::Helpers do
 
       context "without manifest" do
         it "returns the absolute URL to the asset" do
-          expect(subject.path("application.js")).to eq("#{base_url}/assets/application.js")
+          expect(path("application.js")).to eq("#{base_url}/assets/application.js")
         end
       end
 
@@ -77,7 +96,7 @@ RSpec.describe Hanami::Assets::Helpers do
         let(:manifest_path) { public_dir.join("assets.json") }
 
         it "returns the relative path to the asset" do
-          expect(subject.path("app.js")).to eq("https://hanami.test/assets/app-A5GJ52WC.js")
+          expect(path("app.js")).to eq("https://hanami.test/assets/app-A5GJ52WC.js")
         end
       end
     end

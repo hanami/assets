@@ -3,6 +3,8 @@
 require "uri"
 require "hanami/view"
 
+# rubocop:disable Metrics/ModuleLength
+
 module Hanami
   class Assets
     # HTML assets helpers
@@ -12,7 +14,7 @@ module Hanami
     # @since 0.1.0
     #
     # @see http://www.rubydoc.info/gems/hanami-helpers/Hanami/Helpers/HtmlHelper
-    class Helpers
+    module Helpers
       # @since 0.1.0
       # @api private
       NEW_LINE_SEPARATOR = "\n"
@@ -66,32 +68,6 @@ module Hanami
       QUERY_STRING_MATCHER = /\?/
 
       include Hanami::View::Helpers::TagHelper
-
-      attr_reader :assets
-      private :assets
-
-      attr_reader :inflector
-      private :inflector
-
-      # Initialize a new instance
-      #
-      # @inflector [Dry::Inflector] the inflector
-      #
-      # @return [Hanami::Assets::Helpers] a new instance
-      #
-      # @since 2.1.0
-      # @api private
-      def initialize(assets:, inflector:)
-        super()
-        # Force the lazy loading of the tag builder, so we can freeze this instance
-        # (see Hanami::View::Helpers::TagHelper)
-        tag_builder
-
-        @assets = assets
-        @inflector = inflector
-
-        freeze
-      end
 
       # Generate `script` tag for given source(s)
       #
@@ -188,7 +164,7 @@ module Hanami
           }
           attributes.merge!(options)
 
-          if assets.subresource_integrity? || attributes.include?(:integrity)
+          if _context.assets.subresource_integrity? || attributes.include?(:integrity)
             attributes[:integrity] ||= _subresource_integrity_value(source, JAVASCRIPT_EXT)
             attributes[:crossorigin] ||= CROSSORIGIN_ANONYMOUS
           end
@@ -282,7 +258,7 @@ module Hanami
           }
           attributes.merge!(options)
 
-          if assets.subresource_integrity? || attributes.include?(:integrity)
+          if _context.assets.subresource_integrity? || attributes.include?(:integrity)
             attributes[:integrity] ||= _subresource_integrity_value(source_path, STYLESHEET_EXT)
             attributes[:crossorigin] ||= CROSSORIGIN_ANONYMOUS
           end
@@ -358,7 +334,7 @@ module Hanami
         options = options.reject { |k, _| k.to_sym == :src }
         attributes = {
           src: path(source),
-          alt: inflector.humanize(::File.basename(source, WILDCARD_EXT))
+          alt: _context.inflector.humanize(::File.basename(source, WILDCARD_EXT))
         }
         attributes.merge!(options)
 
@@ -692,7 +668,7 @@ module Hanami
       def path(source_path)
         # TODO: Create consistency between this method name and the method we call on the asset
         # (path vs url)
-        _absolute_url?(source_path) ? source_path : assets[source_path].url
+        _absolute_url?(source_path) ? source_path : _context.assets[source_path].url
       end
 
       private
@@ -717,7 +693,7 @@ module Hanami
         return if _absolute_url?(source_path)
 
         source_path = "#{source_path}#{ext}" unless /#{Regexp.escape(ext)}\z/.match?(source_path)
-        assets[source_path].sri
+        _context.assets[source_path].sri
       end
 
       # @since 0.1.0
@@ -731,7 +707,7 @@ module Hanami
       def _crossorigin?(source)
         return false unless _absolute_url?(source)
 
-        assets.crossorigin?(source)
+        _context.assets.crossorigin?(source)
       end
 
       # @since 0.1.0
@@ -760,3 +736,5 @@ module Hanami
     end
   end
 end
+
+# rubocop:enable Metrics/ModuleLength

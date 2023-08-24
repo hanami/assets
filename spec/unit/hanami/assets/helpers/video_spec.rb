@@ -4,12 +4,26 @@ require "uri"
 require "dry/inflector"
 
 RSpec.describe Hanami::Assets::Helpers do
-  subject {
-    described_class.new(
-      assets: assets,
-      inflector: inflector
-    )
+  subject(:obj) {
+    helpers = described_class
+    Class.new {
+      include helpers
+
+      attr_reader :_context
+
+      def initialize(context)
+        @_context = context
+      end
+    }.new(context)
   }
+
+  let(:context) {
+    double(:context, assets: assets, inflector: inflector)
+  }
+
+  def h(&block)
+    obj.instance_eval(&block)
+  end
 
   let(:app) { App.create(Test::Sources.path("myapp")) }
 
@@ -25,24 +39,28 @@ RSpec.describe Hanami::Assets::Helpers do
   let(:assets) { Hanami::Assets.new(configuration: configuration) }
   let(:inflector) { Dry::Inflector.new }
 
-  describe "#video" do
+  describe "#video_tag" do
+    def video_tag(...)
+      h { video_tag(...) }
+    end
+
     it "returns an instance of HtmlBuilder" do
-      actual = subject.video_tag("movie.mp4")
+      actual = video_tag("movie.mp4")
       expect(actual).to be_instance_of(::Hanami::View::HTML::SafeString)
     end
 
     it "renders <video> tag" do
-      actual = subject.video_tag("movie.mp4").to_s
+      actual = video_tag("movie.mp4").to_s
       expect(actual).to eq(%(<video src="/assets/movie.mp4"></video>))
     end
 
     it "renders with html attributes" do
-      actual = subject.video_tag("movie.mp4", autoplay: true, controls: true).to_s
+      actual = video_tag("movie.mp4", autoplay: true, controls: true).to_s
       expect(actual).to eq(%(<video autoplay="autoplay" controls="controls" src="/assets/movie.mp4"></video>))
     end
 
     it "renders with fallback content" do
-      actual = subject.video_tag("movie.mp4") do
+      actual = video_tag("movie.mp4") do
         "Your browser does not support the video tag"
       end.to_s
 
@@ -50,7 +68,7 @@ RSpec.describe Hanami::Assets::Helpers do
     end
 
     it "renders with tracks" do
-      actual = subject.video_tag("movie.mp4") do
+      actual = video_tag("movie.mp4") do
         tag.track kind: "captions", src: subject.path("movie.en.vtt"), srclang: "en", label: "English"
       end.to_s
 
@@ -69,14 +87,14 @@ RSpec.describe Hanami::Assets::Helpers do
 
     it "raises an exception when no arguments" do
       expect do
-        subject.video_tag
+        video_tag
       end.to raise_error(ArgumentError,
                          "You should provide a source via `src` option or with a `source` HTML tag")
     end
 
     it "raises an exception when no src and no block" do
       expect do
-        subject.video_tag(content: true)
+        video_tag(content: true)
       end.to raise_error(ArgumentError,
                          "You should provide a source via `src` option or with a `source` HTML tag")
     end
@@ -85,7 +103,7 @@ RSpec.describe Hanami::Assets::Helpers do
       let(:base_url) { "https://hanami.test" }
 
       it "returns absolute url for src attribute" do
-        actual = subject.video_tag("movie.mp4").to_s
+        actual = video_tag("movie.mp4").to_s
         expect(actual).to eq(%(<video src="#{base_url}/assets/movie.mp4"></video>))
       end
     end

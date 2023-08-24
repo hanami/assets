@@ -178,7 +178,7 @@ module Hanami
       #
       #   # <script src="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js"
       #   #         type="text/javascript"></script>
-      def javascript(*source_paths, **options)
+      def javascript_tag(*source_paths, **options)
         options = options.reject { |k, _| k.to_sym == :src }
 
         _safe_tags(*source_paths) do |source|
@@ -196,10 +196,6 @@ module Hanami
           tag.script(**attributes).to_s
         end
       end
-
-      # @api public
-      # @since 2.1.0
-      alias_method :js, :javascript
 
       # Generate `link` tag for given source(s)
       #
@@ -275,7 +271,7 @@ module Hanami
       #
       #   # <link href="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.css"
       #   #       type="text/css" rel="stylesheet">
-      def stylesheet(*source_paths, **options)
+      def stylesheet_link_tag(*source_paths, **options)
         options = options.reject { |k, _| k.to_sym == :href }
 
         _safe_tags(*source_paths) do |source_path|
@@ -294,10 +290,6 @@ module Hanami
           tag.link(**attributes).to_s
         end
       end
-
-      # @api public
-      # @since 2.1.0
-      alias_method :css, :stylesheet
 
       # Generate `img` tag for given source
       #
@@ -362,7 +354,7 @@ module Hanami
       #   <%= assets.img "logo.png" %>
       #
       #   # <img src="https://assets.bookshelf.org/assets/logo-28a6b886de2372ee3922fcaf3f78f2d8.png" alt="Logo">
-      def image(source, options = {})
+      def image_tag(source, options = {})
         options = options.reject { |k, _| k.to_sym == :src }
         attributes = {
           src: path(source),
@@ -372,10 +364,6 @@ module Hanami
 
         tag.img(**attributes)
       end
-
-      # @api public
-      # @since 2.1.0
-      alias_method :img, :image
 
       # Generate `link` tag application favicon.
       #
@@ -432,7 +420,7 @@ module Hanami
       #
       #   # <link href="https://assets.bookshelf.org/assets/favicon-28a6b886de2372ee3922fcaf3f78f2d8.ico"
       #           rel="shortcut icon" type="image/x-icon">
-      def favicon(source = DEFAULT_FAVICON, options = {})
+      def favicon_link_tag(source = DEFAULT_FAVICON, options = {})
         options = options.reject { |k, _| k.to_sym == :href }
 
         attributes = {
@@ -542,7 +530,7 @@ module Hanami
       #   <%= assets.video "movie.mp4" %>
       #
       #   # <video src="https://assets.bookshelf.org/assets/movie-28a6b886de2372ee3922fcaf3f78f2d8.mp4"></video>
-      def video(source = nil, options = {}, &blk)
+      def video_tag(source = nil, options = {}, &blk)
         options = _source_options(source, options, &blk)
         tag.video(**options, &blk)
       end
@@ -644,7 +632,7 @@ module Hanami
       #   <%= assets.audio "song.ogg" %>
       #
       #   # <audio src="https://assets.bookshelf.org/assets/song-28a6b886de2372ee3922fcaf3f78f2d8.ogg"></audio>
-      def audio(source = nil, options = {}, &blk)
+      def audio_tag(source = nil, options = {}, &blk)
         options = _source_options(source, options, &blk)
         tag.audio(**options, &blk)
       end

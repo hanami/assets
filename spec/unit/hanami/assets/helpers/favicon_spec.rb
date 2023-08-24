@@ -32,22 +32,22 @@ RSpec.describe Hanami::Assets::Helpers do
 
   describe "#favicon" do
     it "returns an instance of HtmlBuilder" do
-      actual = subject.favicon
+      actual = subject.favicon_link_tag
       expect(actual).to be_instance_of(::Hanami::View::HTML::SafeString)
     end
 
     it "renders <link> tag" do
-      actual = subject.favicon.to_s
+      actual = subject.favicon_link_tag.to_s
       expect(actual).to eq(%(<link href="/assets/favicon.ico" rel="shortcut icon" type="image/x-icon">))
     end
 
     it "renders with HTML attributes" do
-      actual = subject.favicon("favicon.png", rel: "icon", type: "image/png").to_s
+      actual = subject.favicon_link_tag("favicon.png", rel: "icon", type: "image/png").to_s
       expect(actual).to eq(%(<link href="/assets/favicon.png" rel="icon" type="image/png">))
     end
 
     it "ignores href passed as an option" do
-      actual = subject.favicon("favicon.png", href: "wrong").to_s
+      actual = subject.favicon_link_tag("favicon.png", href: "wrong").to_s
       expect(actual).to eq(%(<link href="/assets/favicon.png" rel="shortcut icon" type="image/x-icon">))
     end
 
@@ -55,7 +55,7 @@ RSpec.describe Hanami::Assets::Helpers do
       let(:base_url) { "https://hanami.test" }
 
       it "returns absolute url for href attribute" do
-        actual = subject.favicon.to_s
+        actual = subject.favicon_link_tag.to_s
         expect(actual).to eq(%(<link href="#{base_url}/assets/favicon.ico" rel="shortcut icon" type="image/x-icon">))
       end
     end

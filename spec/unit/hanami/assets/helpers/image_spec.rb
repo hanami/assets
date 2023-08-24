@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "uri"
-require "hanami/assets/precompiler"
 require "dry/inflector"
 
 RSpec.describe Hanami::Assets::Helpers do
@@ -11,10 +10,6 @@ RSpec.describe Hanami::Assets::Helpers do
       inflector: inflector
     )
   }
-
-  let(:precompiler) do
-    Hanami::Assets::Precompiler.new(configuration: configuration)
-  end
 
   let(:app) { App.create(Test::Sources.path("myapp")) }
 

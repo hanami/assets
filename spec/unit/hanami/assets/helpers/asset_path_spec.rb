@@ -34,11 +34,11 @@ RSpec.describe Hanami::Assets::Helpers do
     context "when configurated relative path only" do
       context "without manifest" do
         it "returns the relative URL to the asset" do
-          expect(subject["application.js"]).to eq("/assets/application.js")
+          expect(subject.path("application.js")).to eq("/assets/application.js")
         end
 
         it "returns absolute URL if the argument is an absolute URL" do
-          result = subject["http://assets.hanamirb.org/assets/application.css"]
+          result = subject.path("http://assets.hanamirb.org/assets/application.css")
           expect(result).to eq("http://assets.hanamirb.org/assets/application.css")
         end
       end
@@ -53,7 +53,7 @@ RSpec.describe Hanami::Assets::Helpers do
         let(:manifest_path) { public_dir.join("assets.json") }
 
         it "returns the relative URL to the asset" do
-          expect(subject["app.js"]).to eq("/assets/app-A5GJ52WC.js")
+          expect(subject.path("app.js")).to eq("/assets/app-A5GJ52WC.js")
         end
       end
     end
@@ -63,7 +63,7 @@ RSpec.describe Hanami::Assets::Helpers do
 
       context "without manifest" do
         it "returns the absolute URL to the asset" do
-          expect(subject["application.js"]).to eq("#{base_url}/assets/application.js")
+          expect(subject.path("application.js")).to eq("#{base_url}/assets/application.js")
         end
       end
 
@@ -77,7 +77,7 @@ RSpec.describe Hanami::Assets::Helpers do
         let(:manifest_path) { public_dir.join("assets.json") }
 
         it "returns the relative path to the asset" do
-          expect(subject["app.js"]).to eq("https://hanami.test/assets/app-A5GJ52WC.js")
+          expect(subject.path("app.js")).to eq("https://hanami.test/assets/app-A5GJ52WC.js")
         end
       end
     end

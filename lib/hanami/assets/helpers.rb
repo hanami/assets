@@ -695,10 +695,6 @@ module Hanami
         _absolute_url?(source_path) ? source_path : assets[source_path].url
       end
 
-      # @api public
-      # @since 2.1.0
-      alias_method :[], :path
-
       private
 
       # @since 0.1.0

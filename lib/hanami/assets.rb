@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "json"
+
 # Hanami
 #
 # @since 0.1.0

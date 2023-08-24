@@ -31,10 +31,6 @@ RSpec.describe Hanami::Assets::Helpers do
   let(:assets) { Hanami::Assets.new(configuration: configuration) }
   let(:inflector) { Dry::Inflector.new }
 
-  before do
-    Thread.current[:__hanami_assets] = nil
-  end
-
   describe "#audio" do
     it "returns an instance of HtmlBuilder" do
       actual = subject.audio("song.ogg")
@@ -97,55 +93,6 @@ RSpec.describe Hanami::Assets::Helpers do
       it "returns absolute url for src attribute" do
         actual = subject.audio("song.ogg").to_s
         expect(actual).to eq(%(<audio src="#{base_url}/assets/song.ogg"></audio>))
-      end
-    end
-
-    context "HTTP/2 PUSH PROMISE" do
-      it "doesn't include asset in push promise assets" do
-        subject.audio("song.ogg")
-        assets = Thread.current[:__hanami_assets]
-
-        expect(assets).to be(nil)
-      end
-
-      it "allows asset inclusion in push promise assets" do
-        actual = subject.audio("song.ogg", push: true).to_s
-        expect(actual).to eq(%(<audio src="/assets/song.ogg"></audio>))
-
-        assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("/assets/song.ogg")).to eq(as: :audio, crossorigin: false)
-      end
-
-      it "allows crossorigin asset inclusion in push promise assets" do
-        actual = subject.audio("https://assets.hanamirbg.org/assets/song.ogg", push: true).to_s
-        expect(actual).to eq(%(<audio src="https://assets.hanamirbg.org/assets/song.ogg"></audio>))
-
-        assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("https://assets.hanamirbg.org/assets/song.ogg")).to eq(as: :audio, crossorigin: true)
-      end
-
-      it "allows asset inclusion in push promise assets when using block syntax" do
-        actual = subject.audio("song.ogg", push: true) do
-          "Your browser does not support the audio tag"
-        end.to_s
-
-        expect(actual).to eq(%(<audio src="/assets/song.ogg">Your browser does not support the audio tag</audio>))
-
-        assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("/assets/song.ogg")).to eq(as: :audio, crossorigin: false)
-      end
-
-      xit "allows asset inclusion in push promise assets when using block syntax and source tags" do
-        actual = subject.audio do
-          tag.text "Your browser does not support the audio tag"
-          tag.source src: subject.path("song.ogg", push: :audio), type: "audio/ogg"
-          tag.source src: subject.path("song.wav"), type: "audio/wav"
-        end.to_s
-
-        expect(actual).to eq(%(<audio>Your browser does not support the audio tag<source src="/assets/song.ogg" type="audio/ogg"><source src="/assets/song.wav" type="audio/wav"></audio>))
-
-        assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("/assets/song.ogg")).to eq(as: :audio, crossorigin: false)
       end
     end
 

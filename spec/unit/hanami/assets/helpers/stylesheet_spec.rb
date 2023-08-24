@@ -31,10 +31,6 @@ RSpec.describe Hanami::Assets::Helpers do
   let(:assets) { Hanami::Assets.new(configuration: configuration) }
   let(:inflector) { Dry::Inflector.new }
 
-  before do
-    Thread.current[:__hanami_assets] = nil
-  end
-
   describe "#stylesheet" do
     it "returns an instance of SafeString" do
       actual = subject.stylesheet("main")
@@ -87,38 +83,6 @@ RSpec.describe Hanami::Assets::Helpers do
       it "returns absolute url for href attribute" do
         actual = subject.stylesheet("app")
         expect(actual).to eq(%(<link href="#{base_url}/assets/app.css" type="text/css" rel="stylesheet">))
-      end
-    end
-
-    context "HTTP/2 PUSH PROMISE" do
-      it "includes asset in push promise assets" do
-        subject.stylesheet("main")
-        assets = Thread.current[:__hanami_assets]
-
-        expect(assets.fetch("/assets/main.css")).to eq(as: :style, crossorigin: false)
-      end
-
-      it "allows asset exclusion from push promise assets" do
-        actual = subject.stylesheet("fonts", push: false)
-        expect(actual).to eq(%(<link href="/assets/fonts.css" type="text/css" rel="stylesheet">))
-        assets = Thread.current[:__hanami_assets]
-
-        expect(assets).to be(nil)
-      end
-
-      it "includes multiple assets in push promise assets" do
-        subject.stylesheet("framework", "styles")
-        assets = Thread.current[:__hanami_assets]
-
-        expect(assets.fetch("/assets/framework.css")).to eq(as: :style, crossorigin: false)
-        expect(assets.fetch("/assets/styles.css")).to eq(as: :style, crossorigin: false)
-      end
-
-      it "allows the exclusion of multiple assets from push promise assets" do
-        subject.stylesheet("framework", "styles", push: false)
-        assets = Thread.current[:__hanami_assets]
-
-        expect(assets).to be(nil)
       end
     end
   end

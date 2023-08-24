@@ -31,10 +31,6 @@ RSpec.describe Hanami::Assets::Helpers do
   let(:assets) { Hanami::Assets.new(configuration: configuration) }
   let(:inflector) { Dry::Inflector.new }
 
-  before do
-    Thread.current[:__hanami_assets] = nil
-  end
-
   describe "#javascript" do
     it "returns an instance of SafeString" do
       actual = subject.javascript("feature-a")
@@ -104,47 +100,6 @@ RSpec.describe Hanami::Assets::Helpers do
       it "returns absolute url for src attribute" do
         actual = subject.javascript("feature-a")
         expect(actual).to eq(%(<script src="#{base_url}/assets/feature-a.js" type="text/javascript"></script>))
-      end
-    end
-
-    context "HTTP/2 PUSH PROMISE" do
-      it "includes asset in push promise assets" do
-        subject.javascript("feature-a")
-        assets = Thread.current[:__hanami_assets]
-
-        expect(assets.fetch("/assets/feature-a.js")).to eq(as: :script, crossorigin: false)
-      end
-
-      it "includes crossorigin asset in push promise assets" do
-        url = "https://assets.hanamirb.org/assets/framework.js"
-
-        subject.javascript(url)
-        assets = Thread.current[:__hanami_assets]
-
-        expect(assets.fetch(url)).to eq(as: :script, crossorigin: true)
-      end
-
-      it "allows asset exclusion from push promise assets" do
-        actual = subject.javascript("feature-b", push: false)
-        expect(actual).to eq(%(<script src="/assets/feature-b.js" type="text/javascript"></script>))
-        assets = Thread.current[:__hanami_assets]
-
-        expect(assets).to be(nil)
-      end
-
-      it "includes multiple assets in push promise assets" do
-        subject.javascript("feature-c", "feature-d")
-        assets = Thread.current[:__hanami_assets]
-
-        expect(assets.fetch("/assets/feature-c.js")).to eq(as: :script, crossorigin: false)
-        expect(assets.fetch("/assets/feature-d.js")).to eq(as: :script, crossorigin: false)
-      end
-
-      it "allows the exclusion of multiple assets from push promise assets" do
-        subject.javascript("feature-e", "feature-f", push: false)
-        assets = Thread.current[:__hanami_assets]
-
-        expect(assets).to be(nil)
       end
     end
   end

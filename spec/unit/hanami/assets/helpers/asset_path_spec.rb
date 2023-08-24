@@ -31,10 +31,6 @@ RSpec.describe Hanami::Assets::Helpers do
   let(:assets) { Hanami::Assets.new(configuration: configuration) }
   let(:inflector) { Dry::Inflector.new }
 
-  before do
-    Thread.current[:__hanami_assets] = nil
-  end
-
   describe "#[]" do
     context "when configurated relative path only" do
       context "without manifest" do
@@ -84,39 +80,6 @@ RSpec.describe Hanami::Assets::Helpers do
         it "returns the relative path to the asset" do
           expect(subject["app.js"]).to eq("https://hanami.test/assets/app-A5GJ52WC.js")
         end
-      end
-    end
-
-    context "HTTP/2 PUSH PROMISE" do
-      it "doesn't add into assets list by default" do
-        subject["dashboard.js"]
-        assets = Thread.current[:__hanami_assets]
-
-        expect(assets).to be(nil)
-      end
-
-      it "adds asset into assets list" do
-        subject["dashboard.js", push: true]
-        assets = Thread.current[:__hanami_assets]
-
-        expect(assets).to be_kind_of(Hash)
-        expect(assets.fetch("/assets/dashboard.js")).to eq(as: nil, crossorigin: false)
-      end
-
-      it "allows to specify asset type" do
-        subject["video.mp4", push: :video]
-        assets = Thread.current[:__hanami_assets]
-
-        expect(assets).to be_kind_of(Hash)
-        expect(assets.fetch("/assets/video.mp4")).to eq(as: :video, crossorigin: false)
-      end
-
-      it "allows to link crossorigin asset" do
-        subject["https://assets.hanamirb.org/assets/video.mp4", push: :video]
-        assets = Thread.current[:__hanami_assets]
-
-        expect(assets).to be_kind_of(Hash)
-        expect(assets.fetch("https://assets.hanamirb.org/assets/video.mp4")).to eq(as: :video, crossorigin: true)
       end
     end
   end

@@ -114,11 +114,7 @@ module Hanami
       # name of the algorithm, then a hyphen, then the hash value of the file.
       # If more than one algorithm is used, they"ll be separated by a space.
       #
-      # It makes the script(s) eligible for HTTP/2 Push Promise/Early Hints.
-      # You can opt-out with inline option: `push: false`.
-      #
       # @param sources [Array<String>] one or more assets by name or absolute URL
-      # @param push [TrueClass, FalseClass] HTTP/2 Push Promise/Early Hints flag
       #
       # @return [Hanami::View::HTML::SafeString] the markup
       #
@@ -187,17 +183,12 @@ module Hanami
       #
       #   # <script src="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js"
       #   #         type="text/javascript"></script>
-      #
-      # @example Disable Push Promise/Early Hints
-      #
-      #   <%= assets.js "application", push: false %>
-      #   <%= assets.js "http://cdn.example.test/jquery.js", "dashboard", push: false %>
-      def javascript(*source_paths, push: true, **options)
+      def javascript(*source_paths, **options)
         options = options.reject { |k, _| k.to_sym == :src }
 
         _safe_tags(*source_paths) do |source|
           attributes = {
-            src: _typed_path(source, JAVASCRIPT_EXT, push: push, as: :script),
+            src: _typed_path(source, JAVASCRIPT_EXT),
             type: JAVASCRIPT_MIME_TYPE
           }
           attributes.merge!(options)
@@ -231,11 +222,7 @@ module Hanami
       # name of the algorithm, then a hyphen, then the hashed value of the file.
       # If more than one algorithm is used, they"ll be separated by a space.
       #
-      # It makes the script(s) eligible for HTTP/2 Push Promise/Early Hints.
-      # You can opt-out with inline option: `push: false`.
-      #
       # @param sources [Array<String>] one or more assets by name or absolute URL
-      # @param push [TrueClass, FalseClass] HTTP/2 Push Promise/Early Hints flag
       #
       # @return [Hanami::View::HTML::SafeString] the markup
       #
@@ -293,17 +280,12 @@ module Hanami
       #
       #   # <link href="https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.css"
       #   #       type="text/css" rel="stylesheet">
-      #
-      # @example Disable Push Promise/Early Hints
-      #
-      #   <%= assets.css "application", push: false %>
-      #   <%= assets.css "http://cdn.example.test/bootstrap.css", "dashboard", push: false %>
-      def stylesheet(*source_paths, push: true, **options)
+      def stylesheet(*source_paths, **options)
         options = options.reject { |k, _| k.to_sym == :href }
 
         _safe_tags(*source_paths) do |source_path|
           attributes = {
-            href: _typed_path(source_path, STYLESHEET_EXT, push: push, as: :style),
+            href: _typed_path(source_path, STYLESHEET_EXT),
             type: STYLESHEET_MIME_TYPE,
             rel: STYLESHEET_REL
           }
@@ -339,7 +321,6 @@ module Hanami
       #
       # @param source [String] asset name or absolute URL
       # @param options [Hash] HTML 5 attributes
-      # @option options [TrueClass, FalseClass] :push HTTP/2 Push Promise/Early Hints flag
       #
       # @return [Hanami::View::HTML::SafeString] the markup
       #
@@ -386,14 +367,10 @@ module Hanami
       #   <%= assets.img "logo.png" %>
       #
       #   # <img src="https://assets.bookshelf.org/assets/logo-28a6b886de2372ee3922fcaf3f78f2d8.png" alt="Logo">
-      #
-      # @example Enable Push Promise/Early Hints
-      #
-      #   <%= assets.img "logo.png", push: true %>
       def image(source, options = {})
         options = options.reject { |k, _| k.to_sym == :src }
         attributes = {
-          src: self[source, push: options.delete(:push) || false, as: :image],
+          src: path(source),
           alt: inflector.humanize(::File.basename(source, WILDCARD_EXT))
         }
         attributes.merge!(options)
@@ -419,7 +396,6 @@ module Hanami
       #
       # @param source [String] asset name
       # @param options [Hash] HTML 5 attributes
-      # @option options [TrueClass, FalseClass] :push HTTP/2 Push Promise/Early Hints flag
       #
       # @return [Hanami::View::HTML::SafeString] the markup
       #
@@ -461,15 +437,11 @@ module Hanami
       #
       #   # <link href="https://assets.bookshelf.org/assets/favicon-28a6b886de2372ee3922fcaf3f78f2d8.ico"
       #           rel="shortcut icon" type="image/x-icon">
-      #
-      # @example Enable Push Promise/Early Hints
-      #
-      #   <%= assets.favicon "favicon.ico", push: true %>
       def favicon(source = DEFAULT_FAVICON, options = {})
         options = options.reject { |k, _| k.to_sym == :href }
 
         attributes = {
-          href: self[source, push: options.delete(:push) || false, as: :image],
+          href: path(source),
           rel: FAVICON_REL,
           type: FAVICON_MIME_TYPE
         }
@@ -495,7 +467,6 @@ module Hanami
       #
       # @param source [String] asset name or absolute URL
       # @param options [Hash] HTML 5 attributes
-      # @option options [TrueClass, FalseClass] :push HTTP/2 Push Promise/Early Hints flag
       #
       # @return [Hanami::View::HTML::SafeString] the markup
       #
@@ -577,7 +548,7 @@ module Hanami
       #
       #   # <video src="https://assets.bookshelf.org/assets/movie-28a6b886de2372ee3922fcaf3f78f2d8.mp4"></video>
       def video(source = nil, options = {}, &blk)
-        options = _source_options(source, options, as: :video, &blk)
+        options = _source_options(source, options, &blk)
         tag.video(**options, &blk)
       end
 
@@ -598,7 +569,6 @@ module Hanami
       #
       # @param source [String] asset name or absolute URL
       # @param options [Hash] HTML 5 attributes
-      # @option options [TrueClass, FalseClass] :push HTTP/2 Push Promise/Early Hints flag
       #
       # @return [Hanami::View::HTML::SafeString] the markup
       #
@@ -680,7 +650,7 @@ module Hanami
       #
       #   # <audio src="https://assets.bookshelf.org/assets/song-28a6b886de2372ee3922fcaf3f78f2d8.ogg"></audio>
       def audio(source = nil, options = {}, &blk)
-        options = _source_options(source, options, as: :audio, &blk)
+        options = _source_options(source, options, &blk)
         tag.audio(**options, &blk)
       end
 
@@ -698,8 +668,6 @@ module Hanami
       # If CDN mode is on, it returns the absolute URL of the asset.
       #
       # @param source [String] the asset name
-      # @param push [TrueClass, FalseClass, Symbol] HTTP/2 Push Promise/Early Hints flag, or type
-      # @param as [Symbol] HTTP/2 Push Promise / Early Hints flag type
       #
       # @return [String] the asset path
       #
@@ -738,13 +706,10 @@ module Hanami
       #   <%= assets.path "application.js" %>
       #
       #   # "https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js"
-      #
-      # @example Enable Push Promise/Early Hints
-      #
-      #   <%= assets.path "application.js", push: :script %>
-      def path(source_path, push: false, as: nil)
+      def path(source_path)
         # TODO: Create consistency between this method name and the method we call on the asset
-        _path(source_path, push: push, as: as) { assets[source_path].url }
+        # (path vs url)
+        _absolute_url?(source_path) ? source_path : assets[source_path].url
       end
 
       # @api public
@@ -763,24 +728,9 @@ module Hanami
 
       # @since 2.1.0
       # @api private
-      def _path(source, push:, as:)
-        url = _absolute_url?(source) ? source : yield
-
-        case push
-        when Symbol
-          _push_promise(url, as: push)
-        when TrueClass
-          _push_promise(url, as: as)
-        end
-
-        url
-      end
-
-      # @since 2.1.0
-      # @api private
-      def _typed_path(source, ext, push: false, as: nil)
+      def _typed_path(source, ext)
         source = "#{source}#{ext}" if _append_extension?(source, ext)
-        self[source, push: push, as: as]
+        path(source)
       end
 
       # @api private
@@ -810,13 +760,13 @@ module Hanami
 
       # @since 0.1.0
       # @api private
-      def _source_options(src, options, as:, &blk)
+      def _source_options(src, options, &blk)
         options ||= {}
 
         if src.respond_to?(:to_hash)
           options = src.to_hash
         elsif src
-          options[:src] = self[src, push: options.delete(:push) || false, as: as]
+          options[:src] = path(src)
         end
 
         if !options[:src] && !blk
@@ -824,15 +774,6 @@ module Hanami
         end
 
         options
-      end
-
-      # @since 0.1.0
-      # @api private
-      def _push_promise(url, as: nil)
-        Thread.current[:__hanami_assets] ||= {}
-        Thread.current[:__hanami_assets][url.to_s] = {as: as, crossorigin: _crossorigin?(url)}
-
-        url
       end
 
       # @since 1.1.0

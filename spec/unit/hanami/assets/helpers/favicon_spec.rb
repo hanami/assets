@@ -31,10 +31,6 @@ RSpec.describe Hanami::Assets::Helpers do
   let(:assets) { Hanami::Assets.new(configuration: configuration) }
   let(:inflector) { Dry::Inflector.new }
 
-  before do
-    Thread.current[:__hanami_assets] = nil
-  end
-
   describe "#favicon" do
     it "returns an instance of HtmlBuilder" do
       actual = subject.favicon
@@ -62,31 +58,6 @@ RSpec.describe Hanami::Assets::Helpers do
       it "returns absolute url for href attribute" do
         actual = subject.favicon.to_s
         expect(actual).to eq(%(<link href="#{base_url}/assets/favicon.ico" rel="shortcut icon" type="image/x-icon">))
-      end
-    end
-
-    context "HTTP/2 PUSH PROMISE" do
-      it "doesn't include asset in push promise assets" do
-        subject.favicon
-        assets = Thread.current[:__hanami_assets]
-
-        expect(assets).to be(nil)
-      end
-
-      it "allows assets inclusion in push promise assets" do
-        actual = subject.favicon("favicon.ico", push: true).to_s
-        expect(actual).to eq(%(<link href="/assets/favicon.ico" rel="shortcut icon" type="image/x-icon">))
-
-        assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("/assets/favicon.ico")).to eq(as: :image, crossorigin: false)
-      end
-
-      it "allows crossorigin assets inclusion in push promise assets" do
-        actual = subject.favicon("https://assets.hanamirb.org/assets/favicon.ico", push: true).to_s
-        expect(actual).to eq(%(<link href="https://assets.hanamirb.org/assets/favicon.ico" rel="shortcut icon" type="image/x-icon">))
-
-        assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("https://assets.hanamirb.org/assets/favicon.ico")).to eq(as: :image, crossorigin: true)
       end
     end
   end

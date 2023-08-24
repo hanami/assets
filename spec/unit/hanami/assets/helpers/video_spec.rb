@@ -31,10 +31,6 @@ RSpec.describe Hanami::Assets::Helpers do
   let(:assets) { Hanami::Assets.new(configuration: configuration) }
   let(:inflector) { Dry::Inflector.new }
 
-  before do
-    Thread.current[:__hanami_assets] = nil
-  end
-
   describe "#video" do
     it "returns an instance of HtmlBuilder" do
       actual = subject.video("movie.mp4")
@@ -97,55 +93,6 @@ RSpec.describe Hanami::Assets::Helpers do
       it "returns absolute url for src attribute" do
         actual = subject.video("movie.mp4").to_s
         expect(actual).to eq(%(<video src="#{base_url}/assets/movie.mp4"></video>))
-      end
-    end
-
-    context "HTTP/2 PUSH PROMISE" do
-      it "doesn't include asset in push promise assets" do
-        subject.video("movie.mp4")
-        assets = Thread.current[:__hanami_assets]
-
-        expect(assets).to be(nil)
-      end
-
-      it "allows asset inclusion in push promise assets" do
-        actual = subject.video("movie.mp4", push: true).to_s
-        expect(actual).to eq(%(<video src="/assets/movie.mp4"></video>))
-
-        assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("/assets/movie.mp4")).to eq(as: :video, crossorigin: false)
-      end
-
-      it "allows crossorigin asset inclusion in push promise assets" do
-        actual = subject.video("https://assets.hanamirb.org/assets/movie.mp4", push: true).to_s
-        expect(actual).to eq(%(<video src="https://assets.hanamirb.org/assets/movie.mp4"></video>))
-
-        assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("https://assets.hanamirb.org/assets/movie.mp4")).to eq(as: :video, crossorigin: true)
-      end
-
-      it "allows asset inclusion in push promise assets when using block syntax" do
-        actual = subject.video("movie.mp4", push: true) do
-          "Your browser does not support the video tag"
-        end.to_s
-
-        expect(actual).to eq(%(<video src="/assets/movie.mp4">Your browser does not support the video tag</video>))
-
-        assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("/assets/movie.mp4")).to eq(as: :video, crossorigin: false)
-      end
-
-      xit "allows asset inclusion in push promise assets when using block syntax and source tags" do
-        actual = subject.video do
-          tag.text "Your browser does not support the video tag"
-          tag.source src: subject.path("movie.mp4", push: :video), type: "video/mp4"
-          tag.source src: subject.path("movie.ogg"), type: "video/ogg"
-        end.to_s
-
-        expect(actual).to eq(%(<video>Your browser does not support the video tag<source src="/assets/movie.mp4" type="video/mp4"><source src="/assets/movie.ogg" type="video/ogg"></video>))
-
-        assets = Thread.current[:__hanami_assets]
-        expect(assets.fetch("/assets/movie.mp4")).to eq(as: :video, crossorigin: false)
       end
     end
 

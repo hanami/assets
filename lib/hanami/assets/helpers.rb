@@ -70,29 +70,24 @@ module Hanami
       attr_reader :assets
       private :assets
 
-      attr_reader :configuration
-      private :configuration
-
       attr_reader :inflector
       private :inflector
 
       # Initialize a new instance
       #
-      # @param configuration [Hanami::Assets::Configuration] the assets configuration
       # @inflector [Dry::Inflector] the inflector
       #
       # @return [Hanami::Assets::Helpers] a new instance
       #
       # @since 2.1.0
       # @api private
-      def initialize(assets:, configuration:, inflector:)
+      def initialize(assets:, inflector:)
         super()
         # Force the lazy loading of the tag builder, so we can freeze this instance
         # (see Hanami::View::Helpers::TagHelper)
         tag_builder
 
         @assets = assets
-        @configuration = configuration
         @inflector = inflector
 
         freeze
@@ -193,7 +188,7 @@ module Hanami
           }
           attributes.merge!(options)
 
-          if _subresource_integrity? || attributes.include?(:integrity)
+          if assets.subresource_integrity? || attributes.include?(:integrity)
             attributes[:integrity] ||= _subresource_integrity_value(source, JAVASCRIPT_EXT)
             attributes[:crossorigin] ||= CROSSORIGIN_ANONYMOUS
           end
@@ -291,7 +286,7 @@ module Hanami
           }
           attributes.merge!(options)
 
-          if _subresource_integrity? || attributes.include?(:integrity)
+          if assets.subresource_integrity? || attributes.include?(:integrity)
             attributes[:integrity] ||= _subresource_integrity_value(source_path, STYLESHEET_EXT)
             attributes[:crossorigin] ||= CROSSORIGIN_ANONYMOUS
           end
@@ -734,14 +729,11 @@ module Hanami
       end
 
       # @api private
-      def _subresource_integrity?
-        configuration.subresource_integrity.any?
-      end
-
-      # @api private
       def _subresource_integrity_value(source_path, ext)
+        return if _absolute_url?(source_path)
+
         source_path = "#{source_path}#{ext}" unless /#{Regexp.escape(ext)}\z/.match?(source_path)
-        assets[source_path].sri unless _absolute_url?(source_path)
+        assets[source_path].sri
       end
 
       # @since 0.1.0
@@ -755,7 +747,7 @@ module Hanami
       def _crossorigin?(source)
         return false unless _absolute_url?(source)
 
-        configuration.crossorigin?(source)
+        assets.crossorigin?(source)
       end
 
       # @since 0.1.0

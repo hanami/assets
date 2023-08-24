@@ -44,6 +44,18 @@ module Hanami
       Asset.new(configuration: configuration, **asset_attrs)
     end
 
+    # @since 2.1.0
+    # @api public
+    def subresource_integrity?
+      configuration.subresource_integrity.any?
+    end
+
+    # @since 2.1.0
+    # @api public
+    def crossorigin?(source_path)
+      configuration.crossorigin?(source_path)
+    end
+
     private
 
     def manifest

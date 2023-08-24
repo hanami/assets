@@ -7,7 +7,6 @@ require "dry/inflector"
 RSpec.describe Hanami::Assets::Helpers do
   subject {
     described_class.new(
-      configuration: configuration,
       assets: assets,
       inflector: inflector
     )

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Hanami
-  module Assets
+  class Assets
     # Base URL
     #
     # @since 2.1.0

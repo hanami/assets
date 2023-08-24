@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Hanami
-  module Assets
+  class Assets
     # Defines the version
     #
     # @since 0.1.0

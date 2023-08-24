@@ -8,7 +8,7 @@ RSpec.describe Hanami::Assets::Helpers do
   subject {
     described_class.new(
       configuration: configuration,
-      source: source,
+      assets: assets,
       inflector: inflector
     )
   }
@@ -28,7 +28,7 @@ RSpec.describe Hanami::Assets::Helpers do
   let(:manifest) { nil }
 
   let(:configuration) { Hanami::Assets::Configuration.new(**configuration_kwargs) }
-  let(:source) { Hanami::Assets::Source.new(configuration: configuration) }
+  let(:assets) { Hanami::Assets.new(configuration: configuration) }
   let(:inflector) { Dry::Inflector.new }
 
   before do

@@ -4,7 +4,7 @@ require "uri"
 require "hanami/view"
 
 module Hanami
-  module Assets
+  class Assets
     # HTML assets helpers
     #
     # Inject these helpers in a view
@@ -67,8 +67,8 @@ module Hanami
 
       include Hanami::View::Helpers::TagHelper
 
-      attr_reader :source
-      private :source
+      attr_reader :assets
+      private :assets
 
       attr_reader :configuration
       private :configuration
@@ -85,13 +85,13 @@ module Hanami
       #
       # @since 2.1.0
       # @api private
-      def initialize(source:, configuration:, inflector:)
+      def initialize(assets:, configuration:, inflector:)
         super()
         # Force the lazy loading of the tag builder, so we can freeze this instance
         # (see Hanami::View::Helpers::TagHelper)
         tag_builder
 
-        @source = source
+        @assets = assets
         @configuration = configuration
         @inflector = inflector
 
@@ -744,7 +744,7 @@ module Hanami
       #   <%= assets.path "application.js", push: :script %>
       def path(source_path, push: false, as: nil)
         # TODO: Create consistency between this method name and the method we call on the asset
-        _path(source_path, push: push, as: as) { source[source_path].url }
+        _path(source_path, push: push, as: as) { assets[source_path].url }
       end
 
       # @api public
@@ -791,7 +791,7 @@ module Hanami
       # @api private
       def _subresource_integrity_value(source_path, ext)
         source_path = "#{source_path}#{ext}" unless /#{Regexp.escape(ext)}\z/.match?(source_path)
-        source[source_path].sri unless _absolute_url?(source_path)
+        assets[source_path].sri unless _absolute_url?(source_path)
       end
 
       # @since 0.1.0

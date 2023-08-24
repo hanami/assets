@@ -3,7 +3,7 @@
 require "shellwords"
 
 module Hanami
-  module Assets
+  class Assets
     # @since 2.1.0
     # @api private
     class Watcher

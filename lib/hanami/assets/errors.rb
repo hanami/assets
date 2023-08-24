@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Hanami
-  module Assets
+  class Assets
     # Base error for Hanami::Assets
     #
     # All the errors defined in this framework MUST inherit from it.

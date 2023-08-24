@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Hanami
-  module Assets
+  class Assets
     # Represents a single front end asset.
     #
     # @api public

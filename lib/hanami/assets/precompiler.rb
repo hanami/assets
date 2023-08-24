@@ -4,7 +4,7 @@ require "open3"
 require "shellwords"
 
 module Hanami
-  module Assets
+  class Assets
     # Precompile all the assets, coming from all the applications and third
     # party gems into the public directory of the project.
     #

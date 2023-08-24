@@ -3,7 +3,7 @@
 require "json"
 
 module Hanami
-  module Assets
+  class Assets
     # Assets manifest
     #
     # @since 2.1.0

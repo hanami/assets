@@ -4,7 +4,7 @@ require "dry/configurable"
 require_relative "base_url"
 
 module Hanami
-  module Assets
+  class Assets
     # Framework configuration
     #
     # @since 0.1.0

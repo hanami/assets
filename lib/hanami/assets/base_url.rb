@@ -12,6 +12,11 @@ module Hanami
       SEPARATOR = "/"
       private_constant :SEPARATOR
 
+      # @since 2.1.0
+      # @api private
+      attr_reader :url
+      private :url
+
       # Initialize a base URL
       #
       # @param url [String] the URL
@@ -54,12 +59,6 @@ module Hanami
 
         !source.start_with?(@url)
       end
-
-      private
-
-      # @since 2.1.0
-      # @api private
-      attr_reader :url
     end
   end
 end

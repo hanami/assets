@@ -9,8 +9,8 @@ module Hanami
     class Asset
       # @api private
       # @since 2.1.0
-      attr_reader :configuration
-      private :configuration
+      attr_reader :config
+      private :config
 
       # Returns the asset's absolute URL path.
       #
@@ -36,8 +36,8 @@ module Hanami
 
       # @api private
       # @since 2.1.0
-      def initialize(configuration:, path:, sri: nil)
-        @configuration = configuration
+      def initialize(config:, path:, sri: nil)
+        @config = config
         @path = path
         @sri = sri
       end
@@ -59,7 +59,7 @@ module Hanami
       # @api public
       # @since 2.1.0
       def url
-        configuration.base_url.join(path)
+        config.base_url.join(path)
       end
 
       # Returns the asset's full URL

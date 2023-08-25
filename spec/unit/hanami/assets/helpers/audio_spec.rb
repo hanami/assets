@@ -35,8 +35,8 @@ RSpec.describe Hanami::Assets::Helpers do
   let(:base_url) { nil }
   let(:manifest) { nil }
 
-  let(:configuration) { Hanami::Assets::Configuration.new(**kwargs) }
-  let(:assets) { Hanami::Assets.new(configuration: configuration) }
+  let(:config) { Hanami::Assets::Config.new(**kwargs) }
+  let(:assets) { Hanami::Assets.new(config: config) }
   let(:inflector) { Dry::Inflector.new }
 
   describe "#audio_tag" do

@@ -5,17 +5,17 @@ require "fileutils"
 
 RSpec.describe "Hanami Assets: Watch" do
   subject do
-    Hanami::Assets::Watcher.new(configuration: configuration)
+    Hanami::Assets::Watcher.new(config: config)
   end
 
   let(:app) { App.create(source) }
   let(:source) { Sources.path("myapp") }
 
-  let(:configuration) do
+  let(:config) do
     srcs = source
     dest = app
 
-    Hanami::Assets::Configuration.new do |config|
+    Hanami::Assets::Config.new do |config|
       config.sources = srcs
       config.destination = dest
     end

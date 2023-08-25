@@ -15,11 +15,11 @@ RSpec.describe "Hanami Assets: Serve" do
   end
 
   let(:app) {
-    config = configuration
+    cfg = config
 
     Rack::Builder.new do
       map "/assets" do
-        run Rack::Files.new(config.destination)
+        run Rack::Files.new(cfg.destination)
       end
 
       run ->(_) { [200, {}, ["OK"]] }
@@ -28,9 +28,9 @@ RSpec.describe "Hanami Assets: Serve" do
 
   let(:sources_path) { Test::Sources.path("serve") }
   let(:destination) { Destination.create }
-  let(:configuration_kwargs) { {sources: sources_path, destination: destination}.compact }
+  let(:config_kwargs) { {sources: sources_path, destination: destination}.compact }
 
-  let(:configuration) { Hanami::Assets::Configuration.new(**configuration_kwargs) }
+  let(:config) { Hanami::Assets::Config.new(**config_kwargs) }
 
   it "serves assets" do
     get "/assets/index.js"

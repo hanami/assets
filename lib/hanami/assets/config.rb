@@ -8,7 +8,7 @@ module Hanami
     # Framework configuration
     #
     # @since 0.1.0
-    class Configuration
+    class Config
       include Dry::Configurable
 
       # @since 2.1.0

@@ -13,7 +13,7 @@ module Hanami
     require "hanami/assets/version"
     require "hanami/assets/asset"
     require "hanami/assets/errors"
-    require "hanami/assets/configuration"
+    require "hanami/assets/config"
     require "hanami/assets/helpers"
 
     # @since 2.1.0
@@ -21,12 +21,12 @@ module Hanami
     SEPARATOR = "/"
     private_constant :SEPARATOR
 
-    attr_reader :configuration
+    attr_reader :config
 
     # @since 2.1.0
     # @api public
-    def initialize(configuration:)
-      @configuration = configuration
+    def initialize(config:)
+      @config = config
     end
 
     # @since 2.1.0
@@ -40,22 +40,22 @@ module Hanami
             attrs[:path] = attrs.delete(:url)
           }
         else
-          {path: configuration.path_prefix + SEPARATOR + path}
+          {path: config.path_prefix + SEPARATOR + path}
         end
 
-      Asset.new(configuration: configuration, **asset_attrs)
+      Asset.new(config: config, **asset_attrs)
     end
 
     # @since 2.1.0
     # @api public
     def subresource_integrity?
-      configuration.subresource_integrity.any?
+      config.subresource_integrity.any?
     end
 
     # @since 2.1.0
     # @api public
     def crossorigin?(source_path)
-      configuration.crossorigin?(source_path)
+      config.crossorigin?(source_path)
     end
 
     private
@@ -64,8 +64,8 @@ module Hanami
       return @manifest if instance_variable_defined?(:@manifest)
 
       @manifest =
-        if configuration.manifest_path
-          JSON.parse(File.read(configuration.manifest_path))
+        if config.manifest_path
+          JSON.parse(File.read(config.manifest_path))
         end
     end
 

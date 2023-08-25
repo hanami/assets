@@ -9,9 +9,14 @@ module Hanami
     class Watcher
       # @since 2.1.0
       # @api private
-      def initialize(configuration:)
+      attr_reader :config
+      private :config
+
+      # @since 2.1.0
+      # @api private
+      def initialize(config:)
         super()
-        @configuration = configuration
+        @config = config
 
         freeze
       end
@@ -23,10 +28,6 @@ module Hanami
       end
 
       private
-
-      # @since 2.1.0
-      # @api private
-      attr_reader :configuration
 
       # @since 2.1.0
       # @api private
@@ -59,7 +60,7 @@ module Hanami
       # @api private
       def args
         [
-          configuration.esbuild_script,
+          config.esbuild_script,
           "--watch"
         ]
       end
@@ -67,7 +68,7 @@ module Hanami
       # @since 2.1.0
       # @api private
       def entry_points
-        configuration.entry_points.map do |entry_point|
+        config.entry_points.map do |entry_point|
           escape(entry_point)
         end.join(" ")
       end
@@ -75,7 +76,7 @@ module Hanami
       # @since 2.1.0
       # @api private
       def destination
-        escape(configuration.destination)
+        escape(config.destination)
       end
 
       # @since 2.1.0

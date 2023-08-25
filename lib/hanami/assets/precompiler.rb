@@ -13,9 +13,14 @@ module Hanami
     class Precompiler
       # @since 2.1.0
       # @api private
-      def initialize(configuration:)
+      attr_reader :config
+      private :config
+
+      # @since 2.1.0
+      # @api private
+      def initialize(config:)
         super()
-        @configuration = configuration
+        @config = config
 
         freeze
       end
@@ -27,10 +32,6 @@ module Hanami
       end
 
       private
-
-      # @since 2.1.0
-      # @api private
-      attr_reader :configuration
 
       # @since 2.1.0
       # @api private
@@ -61,12 +62,12 @@ module Hanami
       # @api private
       def args
         result = [
-          configuration.full_exe_path,
+          config.full_exe_path,
           "--precompile"
         ]
 
-        if configuration.subresource_integrity.any?
-          result << "--sri=#{configuration.subresource_integrity.join(',')}"
+        if config.subresource_integrity.any?
+          result << "--sri=#{config.subresource_integrity.join(',')}"
         end
 
         result
@@ -75,7 +76,7 @@ module Hanami
       # @since 2.1.0
       # @api private
       def entry_points
-        configuration.entry_points.map do |entry_point|
+        config.entry_points.map do |entry_point|
           escape(entry_point)
         end.join(" ")
       end
@@ -83,7 +84,7 @@ module Hanami
       # @since 2.1.0
       # @api private
       def destination
-        escape(configuration.destination)
+        escape(config.destination)
       end
 
       # @since 2.1.0

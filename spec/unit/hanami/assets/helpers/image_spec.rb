@@ -31,12 +31,12 @@ RSpec.describe Hanami::Assets::Helpers do
   let(:public_dir) { app.join("public") }
   let(:destination) { public_dir.join("assets") }
 
-  let(:configuration_kwargs) { {sources: sources_path, destination: destination, base_url: base_url, manifest: manifest}.compact }
+  let(:config_kwargs) { {sources: sources_path, destination: destination, base_url: base_url, manifest: manifest}.compact }
   let(:base_url) { nil }
   let(:manifest) { nil }
 
-  let(:configuration) { Hanami::Assets::Configuration.new(**configuration_kwargs) }
-  let(:assets) { Hanami::Assets.new(configuration: configuration) }
+  let(:config) { Hanami::Assets::Config.new(**config_kwargs) }
+  let(:assets) { Hanami::Assets.new(config: config) }
   let(:inflector) { Dry::Inflector.new }
 
   describe "#image_tag" do

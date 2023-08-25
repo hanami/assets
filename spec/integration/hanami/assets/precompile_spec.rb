@@ -6,14 +6,14 @@ require "hanami/assets/precompiler"
 
 RSpec.describe "Hanami Assets: Precompile" do
   subject do
-    Hanami::Assets::Precompiler.new(configuration: configuration)
+    Hanami::Assets::Precompiler.new(config: config)
   end
 
   let(:app) { App.create(sources_path) }
   let(:sources_path) { Test::Sources.path("myapp") }
-  let(:configuration_kwargs) { {sources: sources_path, destination: app}.compact }
+  let(:config_kwargs) { {sources: sources_path, destination: app}.compact }
 
-  let(:configuration) { Hanami::Assets::Configuration.new(**configuration_kwargs) }
+  let(:config) { Hanami::Assets::Config.new(**config_kwargs) }
 
   it "precompiles assets" do
     FileUtils.ln_sf(File.join(Dir.pwd, "node_modules"), app.join("node_modules"))

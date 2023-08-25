@@ -27,7 +27,7 @@ RSpec.describe Hanami::Assets::Helpers do
   end
 
   let(:precompiler) do
-    Hanami::Assets::Precompiler.new(configuration: configuration)
+    Hanami::Assets::Precompiler.new(config: config)
   end
 
   let(:app) { App.create(Test::Sources.path("myapp")) }
@@ -36,12 +36,12 @@ RSpec.describe Hanami::Assets::Helpers do
   let(:public_dir) { app.join("public") }
   let(:destination) { public_dir.join("assets") }
 
-  let(:configuration_kwargs) { {sources: sources_path, destination: destination, base_url: base_url, manifest_path: manifest_path}.compact }
+  let(:config_kwargs) { {sources: sources_path, destination: destination, base_url: base_url, manifest_path: manifest_path}.compact }
   let(:base_url) { nil }
   let(:manifest_path) { nil }
 
-  let(:configuration) { Hanami::Assets::Configuration.new(**configuration_kwargs) }
-  let(:assets) { Hanami::Assets.new(configuration: configuration) }
+  let(:config) { Hanami::Assets::Config.new(**config_kwargs) }
+  let(:assets) { Hanami::Assets.new(config: config) }
   let(:inflector) { Dry::Inflector.new }
 
   describe "#javascript_tag" do
@@ -98,9 +98,9 @@ RSpec.describe Hanami::Assets::Helpers do
 
     describe "subresource_integrity mode" do
       before do
-        configuration.subresource_integrity = [:sha384]
+        config.subresource_integrity = [:sha384]
         Dir.chdir(app) { precompiler.call }
-        configuration.finalize!
+        config.finalize!
       end
 
       let(:manifest_path) { public_dir.join("assets.json") }

@@ -333,7 +333,7 @@ module Hanami
       def image_tag(source, options = {})
         options = options.reject { |k, _| k.to_sym == :src }
         attributes = {
-          src: path(source),
+          src: asset_url(source),
           alt: _context.inflector.humanize(::File.basename(source, WILDCARD_EXT))
         }
         attributes.merge!(options)
@@ -400,7 +400,7 @@ module Hanami
         options = options.reject { |k, _| k.to_sym == :href }
 
         attributes = {
-          href: path(source),
+          href: asset_url(source),
           rel: FAVICON_REL,
           type: FAVICON_MIME_TYPE
         }
@@ -638,37 +638,37 @@ module Hanami
       #
       # @example Basic Usage
       #
-      #   <%= assets.path "application.js" %>
+      #   <%= asset_url "application.js" %>
       #
       #   # "/assets/application.js"
       #
       # @example Alias
       #
-      #   <%= assets["application.js"] %>
+      #   <%= asset_url "application.js" %>
       #
       #   # "/assets/application.js"
       #
       # @example Absolute URL
       #
-      #   <%= assets.path "https://code.jquery.com/jquery-2.1.4.min.js" %>
+      #   <%= asset_url "https://code.jquery.com/jquery-2.1.4.min.js" %>
       #
       #   # "https://code.jquery.com/jquery-2.1.4.min.js"
       #
       # @example Fingerprint Mode
       #
-      #   <%= assets.path "application.js" %>
+      #   <%= asset_url "application.js" %>
       #
       #   # "/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js"
       #
       # @example CDN Mode
       #
-      #   <%= assets.path "application.js" %>
+      #   <%= asset_url "application.js" %>
       #
       #   # "https://assets.bookshelf.org/assets/application-28a6b886de2372ee3922fcaf3f78f2d8.js"
-      def path(source_path)
-        # TODO: Create consistency between this method name and the method we call on the asset
-        # (path vs url)
-        _absolute_url?(source_path) ? source_path : _context.assets[source_path].url
+      def asset_url(source_path)
+        return source_path if _absolute_url?(source_path)
+
+        _context.assets[source_path].url
       end
 
       private
@@ -685,7 +685,7 @@ module Hanami
       # @api private
       def _typed_path(source, ext)
         source = "#{source}#{ext}" if _append_extension?(source, ext)
-        path(source)
+        asset_url(source)
       end
 
       # @api private
@@ -718,7 +718,7 @@ module Hanami
         if src.respond_to?(:to_hash)
           options = src.to_hash
         elsif src
-          options[:src] = path(src)
+          options[:src] = asset_url(src)
         end
 
         if !options[:src] && !blk

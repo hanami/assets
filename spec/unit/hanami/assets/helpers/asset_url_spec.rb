@@ -44,20 +44,19 @@ RSpec.describe Hanami::Assets::Helpers do
   let(:assets) { Hanami::Assets.new(configuration: configuration) }
   let(:inflector) { Dry::Inflector.new }
 
-  # TODO: remove this method
-  describe "#path" do
-    def path(...)
-      h { path(...) }
+  describe "#asset_url" do
+    def asset_url(...)
+      h { asset_url(...) }
     end
 
     context "when configurated relative path only" do
       context "without manifest" do
         it "returns the relative URL to the asset" do
-          expect(path("application.js")).to eq("/assets/application.js")
+          expect(asset_url("application.js")).to eq("/assets/application.js")
         end
 
         it "returns absolute URL if the argument is an absolute URL" do
-          result = path("http://assets.hanamirb.org/assets/application.css")
+          result = asset_url("http://assets.hanamirb.org/assets/application.css")
           expect(result).to eq("http://assets.hanamirb.org/assets/application.css")
         end
       end
@@ -72,7 +71,7 @@ RSpec.describe Hanami::Assets::Helpers do
         let(:manifest_path) { public_dir.join("assets.json") }
 
         it "returns the relative URL to the asset" do
-          expect(path("app.js")).to eq("/assets/app-A5GJ52WC.js")
+          expect(asset_url("app.js")).to eq("/assets/app-A5GJ52WC.js")
         end
       end
     end
@@ -82,7 +81,7 @@ RSpec.describe Hanami::Assets::Helpers do
 
       context "without manifest" do
         it "returns the absolute URL to the asset" do
-          expect(path("application.js")).to eq("#{base_url}/assets/application.js")
+          expect(asset_url("application.js")).to eq("#{base_url}/assets/application.js")
         end
       end
 
@@ -96,7 +95,7 @@ RSpec.describe Hanami::Assets::Helpers do
         let(:manifest_path) { public_dir.join("assets.json") }
 
         it "returns the relative path to the asset" do
-          expect(path("app.js")).to eq("https://hanami.test/assets/app-A5GJ52WC.js")
+          expect(asset_url("app.js")).to eq("https://hanami.test/assets/app-A5GJ52WC.js")
         end
       end
     end

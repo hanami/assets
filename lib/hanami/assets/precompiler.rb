@@ -19,7 +19,6 @@ module Hanami
       # @since 2.1.0
       # @api private
       def initialize(config:)
-        super()
         @config = config
 
         freeze

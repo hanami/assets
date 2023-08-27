@@ -51,10 +51,10 @@ module Hanami
       # @since 2.1.0
       # @api private
       def env
-        ENV.to_h.merge({
-                         "ESBUILD_ENTRY_POINTS" => entry_points,
-                         "ESBUILD_OUTDIR" => destination
-                       })
+        ENV.to_h.merge(
+          "ESBUILD_ENTRY_POINTS" => entry_points,
+          "ESBUILD_OUTDIR" => destination
+        )
       end
 
       # @since 2.1.0

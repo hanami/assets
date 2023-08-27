@@ -64,7 +64,8 @@ module Hanami
       return @manifest if instance_variable_defined?(:@manifest)
 
       @manifest =
-        if config.manifest_path
+        # TODO: Add tests for the File.exist? check
+        if config.manifest_path && File.exist?(config.manifest_path)
           JSON.parse(File.read(config.manifest_path))
         end
     end

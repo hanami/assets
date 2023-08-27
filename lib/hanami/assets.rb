@@ -14,7 +14,6 @@ module Hanami
     require "hanami/assets/asset"
     require "hanami/assets/errors"
     require "hanami/assets/config"
-    require "hanami/assets/helpers"
 
     # @since 2.1.0
     # @api private

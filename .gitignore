@@ -20,6 +20,8 @@ tmp
 *.o
 *.a
 mkmf.log
-.greenbar
-.devnotes
 .rubocop-*
+node_modules/
+.byebug_history
+yarn.lock
+package-lock.json

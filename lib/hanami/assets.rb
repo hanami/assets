@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "hanami/utils/class_attribute"
+require "json"
 
 # Hanami
 #
@@ -9,167 +9,71 @@ module Hanami
   # Assets management for Ruby web applications
   #
   # @since 0.1.0
-  module Assets
-    # Base error for Hanami::Assets
-    #
-    # All the errors defined in this framework MUST inherit from it.
-    #
-    # @since 0.1.0
-    class Error < ::StandardError
-    end
-
+  class Assets
     require "hanami/assets/version"
-    require "hanami/assets/configuration"
-    require "hanami/assets/config/global_sources"
-    require "hanami/assets/helpers"
+    require "hanami/assets/asset"
+    require "hanami/assets/errors"
+    require "hanami/assets/config"
 
-    include Utils::ClassAttribute
-
-    # Configuration
-    #
-    # @since 0.1.0
+    # @since 2.1.0
     # @api private
-    class_attribute :configuration
-    self.configuration = Configuration.new
+    SEPARATOR = "/"
+    private_constant :SEPARATOR
 
-    # Configure framework
-    #
-    # @param blk [Proc] configuration code block
-    #
-    # @return self
-    #
-    # @since 0.1.0
-    #
-    # @see Hanami::Assets::Configuration
-    def self.configure(&blk)
-      configuration.instance_eval(&blk)
-      self
+    attr_reader :config
+
+    # @since 2.1.0
+    # @api public
+    def initialize(config:)
+      @config = config
     end
 
-    # Prepare assets for deploys
-    #
-    # @since 0.1.0
-    def self.deploy
-      require "hanami/assets/precompiler"
-      require "hanami/assets/bundler"
+    # @since 2.1.0
+    # @api public
+    def [](path)
+      asset_attrs =
+        if manifest?
+          manifest.fetch(path).transform_keys(&:to_sym).tap { |attrs|
+            # The `url` attribute we receive from the manifest is actually a path; rename it as
+            # such so our `Asset` attributes make more sense on their own.
+            attrs[:path] = attrs.delete(:url)
+          }
+        else
+          {path: config.path_prefix + SEPARATOR + path}
+        end
 
-      Precompiler.new(configuration, duplicates).run
-      Bundler.new(configuration,     duplicates).run
+      Asset.new(
+        **asset_attrs,
+        base_url: config.base_url
+      )
     end
 
-    # Precompile assets
-    #
-    # @since 0.4.0
-    def self.precompile(configurations)
-      require "hanami/assets/precompiler"
-      require "hanami/assets/bundler"
-
-      Precompiler.new(configuration, configurations).run
-      Bundler.new(configuration,     configurations).run
+    # @since 2.1.0
+    # @api public
+    def subresource_integrity?
+      config.subresource_integrity.any?
     end
 
-    # Preload the framework
-    #
-    # This MUST be used in production mode
-    #
-    # @since 0.1.0
-    #
-    # @example Direct Invocation
-    #   require 'hanami/assets'
-    #
-    #   Hanami::Assets.load!
-    #
-    # @example Load Via Configuration Block
-    #   require 'hanami/assets'
-    #
-    #   Hanami::Assets.configure do
-    #     # ...
-    #   end.load!
-    def self.load!
-      configuration.load!
+    # @since 2.1.0
+    # @api public
+    def crossorigin?(source_path)
+      config.crossorigin?(source_path)
     end
 
-    # Global assets sources
-    #
-    # This is designed for third party integration gems with frontend frameworks
-    # like Bootstrap, Ember.js or React.
-    #
-    # Developers can maintain gems that ship static assets for these frameworks
-    # and make them available to Hanami::Assets.
-    #
-    # @return [Hanami::Assets::Config::GlobalSources]
-    #
-    # @since 0.1.0
-    #
-    # @example Ember.js Integration
-    #   # lib/hanami/emberjs.rb (third party gem)
-    #   require 'hanami/assets'
-    #
-    #   Hanami::Assets.sources << '/path/to/emberjs/assets'
-    def self.sources
-      synchronize do
-        @@sources ||= Config::GlobalSources.new # rubocop:disable Style/ClassVars
-      end
+    private
+
+    def manifest
+      return @manifest if instance_variable_defined?(:@manifest)
+
+      @manifest =
+        # TODO: Add tests for the File.exist? check
+        if config.manifest_path && File.exist?(config.manifest_path)
+          JSON.parse(File.read(config.manifest_path))
+        end
     end
 
-    # Duplicate the framework and generate modules for the target application
-    #
-    # @param _mod [Module] the Ruby namespace of the application
-    # @param blk [Proc] an optional block to configure the framework
-    #
-    # @return [Module] a copy of Hanami::Assets
-    #
-    # @since 0.1.0
-    #
-    # @see Hanami::Assets#dupe
-    # @see Hanami::Assets::Configuration
-    def self.duplicate(_mod, &blk)
-      dupe.tap do |duplicated|
-        duplicated.configure(&blk) if block_given?
-        duplicates << duplicated
-      end
-    end
-
-    # Duplicate Hanami::Assets in order to create a new separated instance
-    # of the framework.
-    #
-    # The new instance of the framework will be completely decoupled from the
-    # original. It will inherit the configuration, but all the changes that
-    # happen after the duplication, won't be reflected on the other copies.
-    #
-    # @return [Module] a copy of Hanami::Assets
-    #
-    # @since 0.1.0
-    # @api private
-    def self.dupe
-      dup.tap do |duplicated|
-        duplicated.configuration = configuration.duplicate
-      end
-    end
-
-    # Keep track of duplicated frameworks
-    #
-    # @return [Array] a collection of duplicated frameworks
-    #
-    # @since 0.1.0
-    # @api private
-    #
-    # @see Hanami::Assets#duplicate
-    # @see Hanami::Assets#dupe
-    def self.duplicates
-      synchronize do
-        @@duplicates ||= [] # rubocop:disable Style/ClassVars
-      end
-    end
-
-    class << self
-      private
-
-      # @since 0.1.0
-      # @api private
-      def synchronize(&blk)
-        Mutex.new.synchronize(&blk)
-      end
+    def manifest?
+      !!manifest
     end
   end
 end

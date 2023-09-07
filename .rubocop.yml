@@ -2,18 +2,3 @@
 # alphabetically
 inherit_from:
   - https://raw.githubusercontent.com/hanami/devtools/main/.rubocop.yml
-AllCops:
-  Exclude:
-    - "vendor/**/*"
-    - "vendor/**/.irbrc"
-    - "lib/hanami/assets/compressors/*"
-    - "**/*.gemspec"
-Lint/MissingSuper:
-  Exclude:
-    - "lib/hanami/assets/config/manifest.rb"
-Naming/MethodParameterName:
-  AllowedNames:
-    - as
-Style/CommentedKeyword:
-  Exclude:
-    - "spec/**/*.rb"

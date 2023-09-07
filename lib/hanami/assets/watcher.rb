@@ -1,16 +1,12 @@
 # frozen_string_literal: true
 
-require "open3"
 require "shellwords"
 
 module Hanami
   class Assets
-    # Precompile all the assets, coming from all the applications and third
-    # party gems into the public directory of the project.
-    #
-    # @since 0.1.0
+    # @since 2.1.0
     # @api private
-    class Precompiler
+    class Watcher
       # @since 2.1.0
       # @api private
       attr_reader :config
@@ -19,6 +15,7 @@ module Hanami
       # @since 2.1.0
       # @api private
       def initialize(config:)
+        super()
         @config = config
 
         freeze
@@ -35,9 +32,11 @@ module Hanami
       # @since 2.1.0
       # @api private
       def execute(command, environment, *arguments)
-        _, stderr, result = Open3.capture3(environment, command, *arguments)
+        pid = Process.spawn(environment, command, *arguments)
 
-        raise PrecompileError.new(stderr) unless result.success?
+        # Avoid zombie children processes
+        # See https://ruby-doc.org/core/Process.html#method-c-detach
+        Process.detach(pid)
 
         true
       end
@@ -51,25 +50,19 @@ module Hanami
       # @since 2.1.0
       # @api private
       def env
-        ENV.to_h.merge(
-          "ESBUILD_ENTRY_POINTS" => entry_points,
-          "ESBUILD_OUTDIR" => destination
-        )
+        ENV.to_h.merge({
+                         "ESBUILD_ENTRY_POINTS" => entry_points,
+                         "ESBUILD_OUTDIR" => destination
+                       })
       end
 
       # @since 2.1.0
       # @api private
       def args
-        result = [
-          config.full_exe_path,
-          "--precompile"
+        [
+          config.esbuild_script,
+          "--watch"
         ]
-
-        if config.subresource_integrity.any?
-          result << "--sri=#{config.subresource_integrity.join(',')}"
-        end
-
-        result
       end
 
       # @since 2.1.0

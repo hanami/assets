@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 module Hanami
-  module Assets
+  class Assets
     # Defines the version
     #
     # @since 0.1.0
-    VERSION = "2.0.0.alpha1"
+    VERSION = "2.1.0.alpha1"
   end
 end

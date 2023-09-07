@@ -1,9 +1,30 @@
 # Hanami::Assets
 Assets management for Ruby web applications
 
-## v2.0.0.alpha1 (unreleased)
+## v2.1.0.alpha1 (unreleased)
+### Added
+- [Luca Guidi] Official support for Ruby: Ruby 3.0, 3.1, and 3.2
+- [Luca Guidi] Introduced `Hanami::Assets::PrecompileError` to signal precompilation errors
+- [Luca Guidi] Aliased `Hanami::Assets::Helpers#javascript` as `#js`
+- [Luca Guidi] Aliased `Hanami::Assets::Helpers#stylesheet` as `#css`
+- [Luca Guidi] Aliased `Hanami::Assets::Helpers#image` as `#img`
+
 ### Changed
-- [Luca Guidi] Drop support for Ruby: MRI 2.3, 2.4, and 2.5
+- [Luca Guidi] Drop support for Ruby: MRI 2 and JRuby
+- [Luca Guidi] This gem now requires a working Node and Yarn installation
+- [Luca Guidi] `Hanami::Assets::Helpers` is now a class, not a module anymore
+- [Luca Guidi] Renamed `Hanami::Assets::Helpers#asset_path` to `#path`
+- [Luca Guidi] Changed the behavior of `Hanami::Assets::Helpers#path`: it now returns relative or absolute URL, based on current configuration and environment.
+- [Luca Guidi] Removed `Hanami::Assets::Helpers#asset_url`
+- [Luca Guidi] Removed `Hanami::Assets.configure`, use `Hanami::Assets::Configuration.new`
+- [Luca Guidi] Removed `Hanami::Assets.deploy`, `.precompile`, `.load!` as precompile process is now handled via JavaScript
+- [Luca Guidi] Removed `Hanami::Assets.sources`, as third-parthy libraries should be handled via Yarn
+- [Luca Guidi] Removed `Hanami::Assets::Configuration#fingerprint`, as fingerprinting will be always activated
+- [Luca Guidi] Changed `Hanami::Assets::Configuration#subresource_integrity`. To activate the feature, pass an array of algorithms to use (e.g. `config.subresource_integrity = ["sha-384"]`)
+- [Luca Guidi] Removed `Hanami::Assets::Configuration#cdn`. To activate the feature, pass the CDN base URL to the initializer of the configuration (`base_url` keyword argument).
+- [Luca Guidi] Removed `Hanami::Assets::Configuration#javascript_compressor` and `stylesheet_compressor`, as the compression is now handled via JavaScript
+- [Luca Guidi] Removed `Hanami::Assets::Configuration#scheme`, `#host`, `#port`, and `#prefix`. Use `base_url` keyword argument to pass to configuration initializer
+- [Luca Guidi] Removed `Hanami::Assets::Configuration#root`, `#public_directory`, `#destination_directory`, and `#manifest` as they will now looked up via conventions
 
 ## v1.3.5 - 2021-01-14
 ### Added

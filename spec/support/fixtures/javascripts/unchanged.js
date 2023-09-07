@@ -1,1 +1,0 @@
-alert("Still the same");

@@ -26,6 +26,11 @@ module Hanami
       # @since 2.1.0
       attr_reader :path
 
+      # @api private
+      # @since 2.1.0
+      attr_reader :base_url
+      private :base_url
+
       # Returns the asset's subresource integrity value, or nil if none is available.
       #
       # @return [String, nil]
@@ -36,9 +41,9 @@ module Hanami
 
       # @api private
       # @since 2.1.0
-      def initialize(config:, path:, sri: nil)
-        @config = config
+      def initialize(path:, base_url:, sri: nil)
         @path = path
+        @base_url = base_url
         @sri = sri
       end
 
@@ -59,7 +64,7 @@ module Hanami
       # @api public
       # @since 2.1.0
       def url
-        config.base_url.join(path)
+        base_url.join(path)
       end
 
       # Returns the asset's full URL

@@ -42,7 +42,10 @@ module Hanami
           {path: config.path_prefix + SEPARATOR + path}
         end
 
-      Asset.new(config: config, **asset_attrs)
+      Asset.new(
+        **asset_attrs,
+        base_url: config.base_url
+      )
     end
 
     # @since 2.1.0

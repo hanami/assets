@@ -24,7 +24,7 @@ RSpec.describe "Hanami Assets: Precompile" do
       assert_file("public/assets.json")
       manifest = JSON.parse(read_file("public/assets.json"))
       puts manifest.inspect
-      assets = Dir.glob("public/assets/**/*")
+      assets = Dir.glob("public/assets/**/*").find_all { |path| File.file?(path) }
       puts assets.inspect
 
       assets.each do |asset|

@@ -4,10 +4,6 @@ Assets management for Ruby web applications
 ## v2.1.0.alpha1 (unreleased)
 ### Added
 - [Luca Guidi] Official support for Ruby: Ruby 3.0, 3.1, and 3.2
-- [Luca Guidi] Introduced `Hanami::Assets::PrecompileError` to signal precompilation errors
-- [Luca Guidi] Aliased `Hanami::Assets::Helpers#javascript` as `#js`
-- [Luca Guidi] Aliased `Hanami::Assets::Helpers#stylesheet` as `#css`
-- [Luca Guidi] Aliased `Hanami::Assets::Helpers#image` as `#img`
 
 ### Changed
 - [Luca Guidi] Drop support for Ruby: MRI 2 and JRuby
@@ -25,6 +21,7 @@ Assets management for Ruby web applications
 - [Luca Guidi] Removed `Hanami::Assets::Configuration#javascript_compressor` and `stylesheet_compressor`, as the compression is now handled via JavaScript
 - [Luca Guidi] Removed `Hanami::Assets::Configuration#scheme`, `#host`, `#port`, and `#prefix`. Use `base_url` keyword argument to pass to configuration initializer
 - [Luca Guidi] Removed `Hanami::Assets::Configuration#root`, `#public_directory`, `#destination_directory`, and `#manifest` as they will now looked up via conventions
+- [Luca Guidi] Moved `Hanami::Assets::Precompiler` and `Watcher` to `hanami-cli`
 
 ## v1.3.5 - 2021-01-14
 ### Added

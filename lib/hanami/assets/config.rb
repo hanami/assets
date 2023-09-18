@@ -18,7 +18,15 @@ module Hanami
 
       # @since 2.1.0
       # @api private
-      setting :exe_path, default: File.join("node_modules", "hanami-assets", "dist", "hanami-assets.js").freeze
+      setting :package_manager_executable, default: "npm"
+
+      # @since 2.1.0
+      # @api private
+      setting :package_manager_command, default: "exec"
+
+      # @since 2.1.0
+      # @api private
+      setting :executable, default: "hanami-assets"
 
       # @since 2.1.0
       # @api private
@@ -55,14 +63,7 @@ module Hanami
 
         config.update(values.select { |k| _settings.key?(k) })
 
-        # Capture pwd at initialize-time to make sure it's the app's pwd (see `#full_exe_path`)
-        @pwd = Dir.pwd
-
         yield(config) if block_given?
-      end
-
-      def full_exe_path
-        File.join(@pwd, config.exe_path)
       end
 
       # @since 2.1.0

@@ -9,9 +9,5 @@ module Hanami
     # @since 0.1.0
     class Error < ::StandardError
     end
-
-    # @since 2.1.0
-    class PrecompileError < Error
-    end
   end
 end

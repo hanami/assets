@@ -9,11 +9,6 @@ module Hanami
     class CLICommand
       # @since 2.1.0
       # @api private
-      attr_reader :config
-      private :config
-
-      # @since 2.1.0
-      # @api private
       def initialize(config:)
         super()
         @config = config
@@ -29,6 +24,10 @@ module Hanami
       end
 
       private
+
+      # @since 2.1.0
+      # @api private
+      attr_reader :config
 
       # @since 2.1.0
       # @api private

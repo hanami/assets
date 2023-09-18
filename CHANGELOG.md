@@ -4,7 +4,7 @@ Assets management for Ruby web applications
 ## v2.1.0.alpha1 (unreleased)
 ### Added
 - [Luca Guidi] Official support for Ruby: Ruby 3.0, 3.1, and 3.2
-- [Luca Guidi] Introduced `Hanami::Assets::PrecompileError` to signal precompilation errors
+- [Luca Guidi] Introduced `Hanami::Assets::CompileError` to signal assets compiler errors
 - [Luca Guidi] Aliased `Hanami::Assets::Helpers#javascript` as `#js`
 - [Luca Guidi] Aliased `Hanami::Assets::Helpers#stylesheet` as `#css`
 - [Luca Guidi] Aliased `Hanami::Assets::Helpers#image` as `#img`

@@ -165,7 +165,7 @@ Hanami Assets is able to preprocess any kind of JavaScript and CSS flavor.
 
 ### Deployment
 
-To process the assets during deployment run `bundle exec hanami assets precompile`.
+To process the assets during deployment run `bundle exec hanami assets compile`.
 
 The destination directory will contain the processed assets with an hashed name.
 

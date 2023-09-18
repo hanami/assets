@@ -2,11 +2,11 @@
 
 require "json"
 require "fileutils"
-require "hanami/assets/precompiler"
+require "hanami/assets/compiler"
 
-RSpec.describe "Hanami Assets: Precompile" do
+RSpec.describe "Hanami Assets: Compile" do
   subject do
-    Hanami::Assets::Precompiler.new(config: config)
+    Hanami::Assets::Compiler.new(config: config)
   end
 
   let(:app) { App.create(sources_path) }
@@ -15,7 +15,7 @@ RSpec.describe "Hanami Assets: Precompile" do
 
   let(:config) { Hanami::Assets::Config.new(**config_kwargs) }
 
-  it "precompiles assets" do
+  it "compiles assets" do
     FileUtils.ln_sf(File.join(Dir.pwd, "node_modules"), app.join("node_modules"))
 
     Dir.chdir(app) do
@@ -35,13 +35,13 @@ RSpec.describe "Hanami Assets: Precompile" do
     end
   end
 
-  context "with precompilation error" do
+  context "with compilation error" do
     let(:sources_path) { Test::Sources.path("syntax_error") }
 
     it "expects to raise error" do
       pending "awaiting the syntax_errors/ test fixtures to be properly added"
 
-      expect { subject.call }.to raise_error(Hanami::Assets::PrecompileError)
+      expect { subject.call }.to raise_error(Hanami::Assets::CompileError)
     end
   end
 

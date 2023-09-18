@@ -5,12 +5,12 @@ require_relative "cli_command"
 
 module Hanami
   class Assets
-    # Precompile all the assets, coming from all the applications and third
+    # Compile all the assets, coming from all the applications and third
     # party gems into the public directory of the project.
     #
-    # @since 0.1.0
+    # @since 2.1.0
     # @api private
-    class Precompiler < CLICommand
+    class Compiler < CLICommand
       private
 
       # @since 2.1.0
@@ -18,7 +18,7 @@ module Hanami
       def execute(command, environment, *arguments)
         _, stderr, result = Open3.capture3(environment, command, *arguments)
 
-        raise PrecompileError.new(stderr) unless result.success?
+        raise CompileError.new(stderr) unless result.success?
 
         true
       end

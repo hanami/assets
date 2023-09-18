@@ -27,6 +27,7 @@ module Hanami
       # @since 2.1.0
       # @api private
       def call
+        cmd, *args = cmd_with_args
         execute(cmd, env, *args)
       end
 
@@ -44,8 +45,19 @@ module Hanami
 
       # @since 2.1.0
       # @api private
-      def cmd
-        "node"
+      def cmd_with_args
+        result = [
+          config.package_manager_executable,
+          config.package_manager_command,
+          config.executable
+        ]
+
+        if config.subresource_integrity.any?
+          result << "--"
+          result << "--sri=#{config.subresource_integrity.join(',')}"
+        end
+
+        result
       end
 
       # @since 2.1.0
@@ -55,21 +67,6 @@ module Hanami
           "ESBUILD_ENTRY_POINTS" => entry_points,
           "ESBUILD_OUTDIR" => destination
         )
-      end
-
-      # @since 2.1.0
-      # @api private
-      def args
-        result = [
-          config.full_exe_path,
-          "--precompile"
-        ]
-
-        if config.subresource_integrity.any?
-          result << "--sri=#{config.subresource_integrity.join(',')}"
-        end
-
-        result
       end
 
       # @since 2.1.0

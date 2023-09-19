@@ -31,8 +31,10 @@ module Hanami
     # @since 2.1.0
     # @api public
     def [](path)
-      asset_attrs =
-        manifest.fetch(path).transform_keys(&:to_sym).tap { |attrs|
+      asset_attrs = manifest
+        .fetch(path) { raise AssetMissingError.new(path) }
+        .transform_keys(&:to_sym)
+        .tap { |attrs|
           # The `url` attribute we receive from the manifest is actually a path; rename it as such
           # so our `Asset` attributes make more sense on their own.
           attrs[:path] = attrs.delete(:url)

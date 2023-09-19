@@ -26,6 +26,10 @@ RSpec.describe "manifest handling" do
     it "returns asset paths from the manifest" do
       expect(assets["app.js"].to_s).to eq "/path/to/app.js"
     end
+
+    it "raises an AssetMissingError if an asset can not be found" do
+      expect { assets["missing.js"] }.to raise_error(Hanami::Assets::AssetMissingError)
+    end
   end
 
   context "manifest_path not configured" do

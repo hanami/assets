@@ -24,7 +24,7 @@ module Hanami
     class ManifestMissingError < Error
       def initialize(manifest_path)
         super(<<~TEXT)
-          Missing manifest file at #{manifest_path}
+          Missing manifest file at #{manifest_path.inspect}
 
           Have you run `hanami assets compile` or `hanami assets watch`?
         TEXT
@@ -38,7 +38,7 @@ module Hanami
     class AssetMissingError < Error
       def initialize(source_path)
         super(<<~TEXT)
-          No asset found for #{source_path}
+          No asset found for #{source_path.inspect}
         TEXT
       end
     end

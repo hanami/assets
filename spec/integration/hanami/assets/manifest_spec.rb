@@ -28,7 +28,8 @@ RSpec.describe "manifest handling" do
     end
 
     it "raises an AssetMissingError if an asset can not be found" do
-      expect { assets["missing.js"] }.to raise_error(Hanami::Assets::AssetMissingError)
+      expect { assets["missing.js"] }
+        .to raise_error Hanami::Assets::AssetMissingError, /missing.js/
     end
   end
 

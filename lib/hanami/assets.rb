@@ -31,16 +31,14 @@ module Hanami
     # @since 2.1.0
     # @api public
     def [](path)
-      asset_attrs =
-        if manifest?
-          manifest.fetch(path).transform_keys(&:to_sym).tap { |attrs|
-            # The `url` attribute we receive from the manifest is actually a path; rename it as
-            # such so our `Asset` attributes make more sense on their own.
-            attrs[:path] = attrs.delete(:url)
-          }
-        else
-          {path: config.path_prefix + SEPARATOR + path}
-        end
+      asset_attrs = manifest
+        .fetch(path) { raise AssetMissingError.new(path) }
+        .transform_keys(&:to_sym)
+        .tap { |attrs|
+          # The `url` attribute we receive from the manifest is actually a path; rename it as such
+          # so our `Asset` attributes make more sense on their own.
+          attrs[:path] = attrs.delete(:url)
+        }
 
       Asset.new(
         **asset_attrs,
@@ -65,15 +63,15 @@ module Hanami
     def manifest
       return @manifest if instance_variable_defined?(:@manifest)
 
-      @manifest =
-        # TODO: Add tests for the File.exist? check
-        if config.manifest_path && File.exist?(config.manifest_path)
-          JSON.parse(File.read(config.manifest_path))
-        end
-    end
+      unless config.manifest_path
+        raise ConfigError, "no manifest_path configured"
+      end
 
-    def manifest?
-      !!manifest
+      unless File.exist?(config.manifest_path)
+        raise ManifestMissingError.new(config.manifest_path)
+      end
+
+      @manifest = JSON.parse(File.read(config.manifest_path))
     end
   end
 end

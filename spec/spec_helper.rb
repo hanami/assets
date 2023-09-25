@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "rspec"
-require "hanami/assets"
+require "hanami-assets"
 require "pathname"
 
 SPEC_ROOT = Pathname(__FILE__).dirname

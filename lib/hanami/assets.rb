@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "json"
+require "zeitwerk"
 
 # Hanami
 #
@@ -10,10 +11,25 @@ module Hanami
   #
   # @since 0.1.0
   class Assets
-    require "hanami/assets/version"
-    require "hanami/assets/asset"
-    require "hanami/assets/errors"
-    require "hanami/assets/config"
+    # @since 2.1.0
+    # @api private
+    def self.gem_loader
+      @gem_loader ||= Zeitwerk::Loader.new.tap do |loader|
+        root = File.expand_path("..", __dir__)
+        loader.tag = "hanami-assets"
+        loader.push_dir(root)
+        loader.ignore(
+          "#{root}/hanami-assets.rb",
+          "#{root}/hanami/assets/version.rb",
+          "#{root}/hanami/assets/errors.rb"
+        )
+        loader.inflector = Zeitwerk::GemInflector.new("#{root}/hanami-assets.rb")
+      end
+    end
+
+    gem_loader.setup
+    require_relative "assets/version"
+    require_relative "assets/errors"
 
     # @since 2.1.0
     # @api private

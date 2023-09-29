@@ -1,15 +1,16 @@
 # Hanami::Assets
 Assets management for Ruby web applications
 
-## v2.1.0.alpha1 (unreleased)
+## v2.1.0.beta2 - 2023-10-04
 ### Added
-- [Luca Guidi] Official support for Ruby: Ruby 3.0, 3.1, and 3.2
+- [Luca Guidi] Official support for Ruby: Ruby 3.1, and 3.2
 
 ### Changed
 - [Luca Guidi] Drop support for Ruby: MRI 2 and JRuby
 - [Luca Guidi] This gem now requires a working Node and Yarn installation
 - [Luca Guidi] `Hanami::Assets::Helpers` is now a class, not a module anymore
 - [Luca Guidi] Renamed `Hanami::Assets::Helpers#asset_path` to `#path`
+- [Luca Guidi] Renamed `Hanami::Assets::Configuration` to `Config`
 - [Luca Guidi] Changed the behavior of `Hanami::Assets::Helpers#path`: it now returns relative or absolute URL, based on current configuration and environment.
 - [Luca Guidi] Removed `Hanami::Assets::Helpers#asset_url`
 - [Luca Guidi] Removed `Hanami::Assets.configure`, use `Hanami::Assets::Configuration.new`

@@ -8,20 +8,19 @@ Assets management for Ruby web applications
 ### Changed
 - [Luca Guidi] Drop support for Ruby: MRI 2 and JRuby
 - [Luca Guidi] This gem now requires a working Node and Yarn installation
-- [Luca Guidi] `Hanami::Assets::Helpers` is now a class, not a module anymore
-- [Luca Guidi] Renamed `Hanami::Assets::Helpers#asset_path` to `#path`
+- [Tim Riley] Changed the gem to load using Zeitwerk, via `require "hanami/assets"`
+- [Tim Riley] Changed `Hanami::Assets` to a class, initialized with a `Hanami::Assets::Config` (see below) and providing a `#[]` method returning a `Hanami::Assets::Asset` instance per asset.
+- [Tim Riley] Moved `Hanami::Assets::Helpers` to `Hanami::Helpers::AssetsHelper` in the hanami gem (along with various helper methods renamed; see the hanami CHANGELOG for details)
 - [Luca Guidi] Renamed `Hanami::Assets::Configuration` to `Config`
-- [Luca Guidi] Changed the behavior of `Hanami::Assets::Helpers#path`: it now returns relative or absolute URL, based on current configuration and environment.
-- [Luca Guidi] Removed `Hanami::Assets::Helpers#asset_url`
-- [Luca Guidi] Removed `Hanami::Assets.configure`, use `Hanami::Assets::Configuration.new`
+- [Luca Guidi] Removed `Hanami::Assets.configure`, use `Hanami::Assets::Config.new`
 - [Luca Guidi] Removed `Hanami::Assets.deploy`, `.precompile`, `.load!` as precompile process is now handled via JavaScript
-- [Luca Guidi] Removed `Hanami::Assets.sources`, as third-parthy libraries should be handled via Yarn
-- [Luca Guidi] Removed `Hanami::Assets::Configuration#fingerprint`, as fingerprinting will be always activated
-- [Luca Guidi] Changed `Hanami::Assets::Configuration#subresource_integrity`. To activate the feature, pass an array of algorithms to use (e.g. `config.subresource_integrity = ["sha-384"]`)
-- [Luca Guidi] Removed `Hanami::Assets::Configuration#cdn`. To activate the feature, pass the CDN base URL to the initializer of the configuration (`base_url` keyword argument).
-- [Luca Guidi] Removed `Hanami::Assets::Configuration#javascript_compressor` and `stylesheet_compressor`, as the compression is now handled via JavaScript
-- [Luca Guidi] Removed `Hanami::Assets::Configuration#scheme`, `#host`, `#port`, and `#prefix`. Use `base_url` keyword argument to pass to configuration initializer
-- [Luca Guidi] Removed `Hanami::Assets::Configuration#root`, `#public_directory`, `#destination_directory`, and `#manifest` as they will now looked up via conventions
+- [Luca Guidi] Removed `Hanami::Assets.sources`, as third-party libraries should be handled via Yarn
+- [Luca Guidi] Removed `Hanami::Assets::Config#fingerprint`, as fingerprinting will be always activated
+- [Luca Guidi] Changed `Hanami::Assets::Config#subresource_integrity`. To activate the feature, pass an array of algorithms to use (e.g. `config.subresource_integrity = ["sha-384"]`)
+- [Luca Guidi] Removed `Hanami::Assets::Config#cdn`. To activate the feature, pass the CDN base URL to the initializer of the configuration (`base_url` keyword argument).
+- [Luca Guidi] Removed `Hanami::Assets::Config#javascript_compressor` and `stylesheet_compressor`, as the compression is now handled via JavaScript
+- [Luca Guidi] Removed `Hanami::Assets::Config#scheme`, `#host`, `#port`, and `#prefix`. Use `base_url` keyword argument to pass to configuration initializer
+- [Luca Guidi] Removed `Hanami::Assets::Config#root`, `#public_directory`, `#destination_directory`, and `#manifest` as they will now looked up via conventions
 - [Luca Guidi] Moved `Hanami::Assets::Precompiler` and `Watcher` to `hanami-cli`
 
 ## v1.3.5 - 2021-01-14

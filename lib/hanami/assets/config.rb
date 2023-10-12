@@ -18,15 +18,7 @@ module Hanami
 
       # @since 2.1.0
       # @api private
-      setting :package_manager_executable, default: "npm"
-
-      # @since 2.1.0
-      # @api private
-      setting :package_manager_command, default: "exec"
-
-      # @since 2.1.0
-      # @api private
-      setting :executable, default: "hanami-assets"
+      setting :package_manager_run_command, default: "npm run --silent"
 
       # @since 2.1.0
       # @api private

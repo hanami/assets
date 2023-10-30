@@ -118,9 +118,9 @@ Among other directories, it generates a specific structure for assets:
 $ tree app/assets
 ├── images
 │   └── favicon.ico
-├── javascripts
+├── js
 │   └── app.ts
-└── stylesheets
+└── css
     └── app.css
 ```
 
@@ -135,16 +135,16 @@ This process includes any kind of asset: other JavaScript files, stylesheets, im
 
 The default entry points are:
 
-  * `app/assets/javascripts/app.ts`
-  * `slices/[slice-name]/assets/javascripts/app.ts`
+  * `app/assets/js/app.ts`
+  * `slices/[slice-name]/assets/js/app.ts`
 
 You can specify custom Entry Points, by adding an `app.{js,ts,mjs,mts,tsx,jsx}` file into the assets directory of the app or a slice.
 
-An example is: `app/assets/javascripts/login/app.ts` to define a new Entry Point for a Login page where you want to have a more lightweight bundle.
+An example is: `app/assets/js/login/app.ts` to define a new Entry Point for a Login page where you want to have a more lightweight bundle.
 
 #### Static Assets
 
-Except for `javascripts` and `stylesheets` directories, all the other directories are considered **static**.
+Except for `js` and `css` directories, all the other directories are considered **static**.
 Their files will be copied as they are to the destination directory.
 
 If you have a custom directory `app/assets/fonts`, all the fonts are copied to the destination direcotry.
@@ -176,7 +176,7 @@ By doing so, you can safely cache and deliver updated versions of assets to clie
 
 During the deployment process, Hanami Assets appends to the file name a unique hash.
 
-Example: `app/assets/javascripts/app.ts` -> `public/assets/app-QECGTTYG.js`
+Example: `app/assets/js/app.ts` -> `public/assets/app-QECGTTYG.js`
 
 It creates a `/public/assets.json` to map the original asset name to the fingerprint name.
 

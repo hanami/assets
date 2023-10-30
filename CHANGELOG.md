@@ -1,6 +1,8 @@
 # Hanami::Assets
 Assets management for Ruby web applications
 
+## v2.1.0.rc1 - 2023-11-01
+
 ## v2.1.0.beta2 - 2023-10-04
 ### Added
 - [Luca Guidi] Official support for Ruby: Ruby 3.1, and 3.2

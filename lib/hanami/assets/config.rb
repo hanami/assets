@@ -26,10 +26,6 @@ module Hanami
 
       # @since 2.1.0
       # @api private
-      setting :destination
-
-      # @since 2.1.0
-      # @api private
       setting :subresource_integrity, default: []
 
       # @since 2.1.0

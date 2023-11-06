@@ -26,23 +26,11 @@ module Hanami
 
       # @since 2.1.0
       # @api private
-      setting :destination
-
-      # @since 2.1.0
-      # @api private
       setting :subresource_integrity, default: []
 
       # @since 2.1.0
       # @api private
-      setting :sources, default: [], constructor: -> v { Array(v).flatten }
-
-      # @since 2.1.0
-      # @api private
       setting :base_url, constructor: -> url { BaseUrl.new(url.to_s) }
-
-      # @since 2.1.0
-      # @api private
-      setting :entry_points_pattern, default: "index.{js,jsx,ts,tsx}"
 
       # @since 2.1.0
       # @api private
@@ -56,14 +44,6 @@ module Hanami
         config.update(values.select { |k| _settings.key?(k) })
 
         yield(config) if block_given?
-      end
-
-      # @since 2.1.0
-      # @api private
-      def entry_points
-        sources.map do |source|
-          Dir.glob(File.join(source, "**", config.entry_points_pattern))
-        end.flatten
       end
 
       # Check if the given source is linked via Cross-Origin policy.

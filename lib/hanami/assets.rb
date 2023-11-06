@@ -3,9 +3,6 @@
 require "json"
 require "zeitwerk"
 
-# Hanami
-#
-# @since 0.1.0
 module Hanami
   # Assets management for Ruby web applications
   #
@@ -31,21 +28,29 @@ module Hanami
     require_relative "assets/version"
     require_relative "assets/errors"
 
-    # @since 2.1.0
     # @api private
+    # @since 2.1.0
     SEPARATOR = "/"
     private_constant :SEPARATOR
 
+    # @api private
+    # @since 2.1.0
     attr_reader :config
 
-    # @since 2.1.0
     # @api public
+    # @since 2.1.0
     def initialize(config:)
       @config = config
     end
 
-    # @since 2.1.0
+    # Returns the asset at the given path.
+    #
+    # @return [Hanami::Assets::Asset] the asset
+    #
+    # @raise AssetMissingError if no asset can be found at the path
+    #
     # @api public
+    # @since 2.1.0
     def [](path)
       asset_attrs = manifest
         .fetch(path) { raise AssetMissingError.new(path) }
@@ -62,14 +67,22 @@ module Hanami
       )
     end
 
-    # @since 2.1.0
+    # Returns true if subresource integrity is configured.
+    #
+    # @return [Boolean]
+    #
     # @api public
+    # @since 2.1.0
     def subresource_integrity?
       config.subresource_integrity.any?
     end
 
-    # @since 2.1.0
+    # Returns true if the given source path is a cross-origin request.
+    #
+    # @return [Boolean]
+    #
     # @api public
+    # @since 2.1.0
     def crossorigin?(source_path)
       config.crossorigin?(source_path)
     end

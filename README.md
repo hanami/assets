@@ -66,13 +66,13 @@ Given the following template:
 <html>
   <head>
     <title>Assets example</title>
-    <%= assets.css "reset", "app" %>
+    <%= stylesheet_tag "reset", "app" %>
   </head>
 
   <body>
   <!-- ... -->
-  <%= assets.js "app" %>
-  <%= assets.js "https://cdn.somethirdparty.script/foo.js", async: true %>
+  <%= javascript_tag "app" %>
+  <%= javascript_tag "https://cdn.somethirdparty.script/foo.js", async: true %>
   </body>
 </html>
 ```
@@ -98,15 +98,16 @@ It will output this markup:
 
 ### Available Helpers
 
-This gem ships with the following helpers:
+The `hanami` gem ships with the following helpers for assets:
 
-  * `javascript` (aliased as `js`)
-  * `stylesheet` (aliased as `css`)
-  * `favicon`
-  * `image` (aliased as `img`)
-  * `video`
-  * `audio`
-  * `path`
+  * `asset_url`
+  * `javascript_tag`
+  * `stylesheet_tag`
+  * `favicon_tag`
+  * `image_tag`
+  * `video_tag`
+  * `audio_tag`
+  * `path_tag`
 
 ## App Structure
 
@@ -152,16 +153,6 @@ If you have a custom directory `app/assets/fonts`, all the fonts are copied to t
 #### Destination Directory
 
 The destination directory is `public/assets`.
-
-### Sources
-
-Hanami Assets works with [Yarn](https://yarnpkg.com/).
-
-In order to add/remove a source to your application, you should follow Yarn's dependencies management.
-
-### Preprocessors
-
-Hanami Assets is able to preprocess any kind of JavaScript and CSS flavor.
 
 ### Deployment
 
@@ -265,7 +256,7 @@ __Hanami::Assets__ uses [Semantic Versioning 2.0.0](http://semver.org)
 
 ## Contributing
 
-1. Fork it ( https://github.com/hanami/assets/fork )
+1. Fork it (https://github.com/hanami/assets/fork)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)

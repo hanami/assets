@@ -1,6 +1,8 @@
 # Hanami::Assets
 Assets management for Ruby web applications
 
+## v2.1.0.rc2 - 2023-11-08
+
 ## v2.1.0.rc1 - 2023-11-01
 
 ## v2.1.0.beta2 - 2023-10-04

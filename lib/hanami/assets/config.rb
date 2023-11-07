@@ -5,51 +5,61 @@ require_relative "base_url"
 
 module Hanami
   class Assets
-    # Framework configuration
+    # Hanami assets configuration.
     #
+    # @api public
     # @since 0.1.0
     class Config
       include Dry::Configurable
 
+      # @api public
       # @since 2.1.0
-      # @api private
       BASE_URL = ""
       private_constant :BASE_URL
 
-      # @since 2.1.0
-      # @api private
+      # @!attribute [rw] package_manager_run_command
+      #   @return [String]
+      #
+      #   @api public
+      #   @since 2.1.0
       setting :package_manager_run_command, default: "npm run --silent"
 
-      # @since 2.1.0
-      # @api private
+      # @!attribute [rw] path_prefix
+      #   @return [String]
+      #
+      #   @api public
+      #   @since 2.1.0
       setting :path_prefix, default: "/assets"
 
-      # @since 2.1.0
-      # @api private
-      setting :destination
-
-      # @since 2.1.0
-      # @api private
+      # @!attribute [rw] subresource_integrity
+      #   @return [Array<Symbol>]
+      #
+      #   @example
+      #     config.subresource_integrity # => [:sha256, :sha512]
+      #
+      #   @api public
+      #   @since 2.1.0
       setting :subresource_integrity, default: []
 
-      # @since 2.1.0
-      # @api private
-      setting :sources, default: [], constructor: -> v { Array(v).flatten }
-
-      # @since 2.1.0
-      # @api private
+      # @!attribute [rw] base_url
+      #   @return [BaseUrl]
+      #
+      #   @example
+      #     config.base_url = "http://some-cdn.com/assets"
+      #
+      #   @api public
+      #   @since 2.1.0
       setting :base_url, constructor: -> url { BaseUrl.new(url.to_s) }
 
-      # @since 2.1.0
-      # @api private
-      setting :entry_points_pattern, default: "index.{js,jsx,ts,tsx}"
-
-      # @since 2.1.0
-      # @api private
+      # @!attribute [rw] manifest_path
+      #   @return [String, nil]
+      #
+      #   @api public
+      #   @since 2.1.0
       setting :manifest_path
 
+      # @api public
       # @since 2.1.0
-      # @api private
       def initialize(**values)
         super()
 
@@ -58,29 +68,24 @@ module Hanami
         yield(config) if block_given?
       end
 
-      # @since 2.1.0
-      # @api private
-      def entry_points
-        sources.map do |source|
-          Dir.glob(File.join(source, "**", config.entry_points_pattern))
-        end.flatten
-      end
-
-      # Check if the given source is linked via Cross-Origin policy.
-      # In other words, the given source, doesn't satisfy the Same-Origin policy.
+      # Returns true if the given source is linked via Cross-Origin policy (or in other words, if
+      # the given source does not satisfy the Same-Origin policy).
+      #
+      # @param source [String]
+      #
+      # @return [Boolean]
       #
       # @see https://en.wikipedia.org/wiki/Same-origin_policy#Origin_determination_rules
       # @see https://en.wikipedia.org/wiki/Same-origin_policy#document.domain_property
       #
-      # @since 1.2.0
       # @api private
+      # @since 1.2.0
       def crossorigin?(source)
         base_url.crossorigin?(source)
       end
 
       private
 
-      # @api private
       def method_missing(name, ...)
         if config.respond_to?(name)
           config.public_send(name, ...)
@@ -89,7 +94,6 @@ module Hanami
         end
       end
 
-      # @api private
       def respond_to_missing?(name, _incude_all = false)
         config.respond_to?(name) || super
       end

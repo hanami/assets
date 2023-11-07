@@ -2,25 +2,24 @@
 
 module Hanami
   class Assets
-    # Base error for Hanami::Assets
+    # Base error for Hanami::Assets.
     #
-    # All the errors defined in this framework MUST inherit from it.
-    #
+    # @api public
     # @since 0.1.0
     class Error < ::StandardError
     end
 
     # Error raised when assets config is not valid.
     #
-    # @since 2.1.0
     # @api public
+    # @since 2.1.0
     class ConfigError < Error
     end
 
     # Error returned when the assets manifest file is missing.
     #
-    # @since 2.1.0
     # @api public
+    # @since 2.1.0
     class ManifestMissingError < Error
       def initialize(manifest_path)
         super(<<~TEXT)
@@ -33,8 +32,8 @@ module Hanami
 
     # Error raised when no asset can be found for a source path.
     #
-    # @since 2.1.0
     # @api public
+    # @since 2.1.0
     class AssetMissingError < Error
       def initialize(source_path)
         super(<<~TEXT)

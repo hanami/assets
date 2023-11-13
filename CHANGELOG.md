@@ -1,6 +1,10 @@
 # Hanami::Assets
 Assets management for Ruby web applications
 
+## v2.1.0 - 2023-11-14
+### Changed
+- [Tim Riley] Removed `bin/hanami-assets` executable
+
 ## v2.1.0.rc2 - 2023-11-08
 
 ## v2.1.0.rc1 - 2023-11-01

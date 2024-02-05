@@ -6,7 +6,7 @@ RSpec.describe "manifest handling" do
   subject(:assets) {
     Hanami::Assets.new(
       config: Hanami::Assets::Config.new(**config_kwargs),
-      root: root,
+      root: root
     )
   }
 

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "json"
+require "pathname"
 require "zeitwerk"
 
 module Hanami
@@ -37,10 +38,15 @@ module Hanami
     # @since 2.1.0
     attr_reader :config
 
+    # @api private
+    # @since 2.1.0
+    attr_reader :root
+
     # @api public
     # @since 2.1.0
-    def initialize(config:)
+    def initialize(config:, root:)
       @config = config
+      @root = Pathname(root)
     end
 
     # Returns the asset at the given path.
@@ -92,15 +98,13 @@ module Hanami
     def manifest
       return @manifest if instance_variable_defined?(:@manifest)
 
-      unless config.manifest_path
-        raise ConfigError, "no manifest_path configured"
+      full_manifest_path = root.join(config.manifest_path)
+
+      unless full_manifest_path.exist?
+        raise ManifestMissingError.new(full_manifest_path.to_s)
       end
 
-      unless File.exist?(config.manifest_path)
-        raise ManifestMissingError.new(config.manifest_path)
-      end
-
-      @manifest = JSON.parse(File.read(config.manifest_path))
+      @manifest = JSON.parse(File.read(full_manifest_path))
     end
   end
 end

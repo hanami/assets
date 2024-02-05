@@ -9,13 +9,6 @@ module Hanami
     class Error < ::StandardError
     end
 
-    # Error raised when assets config is not valid.
-    #
-    # @api public
-    # @since 2.1.0
-    class ConfigError < Error
-    end
-
     # Error returned when the assets manifest file is missing.
     #
     # @api public

@@ -17,6 +17,13 @@ module Hanami
       BASE_URL = ""
       private_constant :BASE_URL
 
+      # @!attribute [rw] manifest_path
+      #   @return [String, nil]
+      #
+      #   @api public
+      #   @since 2.1.0
+      setting :manifest_path, default: "assets.json"
+
       # @!attribute [rw] package_manager_run_command
       #   @return [String]
       #
@@ -50,13 +57,6 @@ module Hanami
       #   @api public
       #   @since 2.1.0
       setting :base_url, constructor: -> url { BaseUrl.new(url.to_s) }
-
-      # @!attribute [rw] manifest_path
-      #   @return [String, nil]
-      #
-      #   @api public
-      #   @since 2.1.0
-      setting :manifest_path
 
       # @api public
       # @since 2.1.0

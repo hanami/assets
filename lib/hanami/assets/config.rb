@@ -24,12 +24,12 @@ module Hanami
       #   @since 2.1.0
       setting :manifest_path, default: "assets.json"
 
-      # @!attribute [rw] package_manager_run_command
+      # @!attribute [rw] node_command
       #   @return [String]
       #
       #   @api public
       #   @since 2.1.0
-      setting :package_manager_run_command, default: "npm run --silent"
+      setting :node_command, default: "node"
 
       # @!attribute [rw] path_prefix
       #   @return [String]

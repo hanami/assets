@@ -31,8 +31,8 @@ module Hanami
 
     # @api private
     # @since 2.1.0
-    SEPARATOR = "/"
-    private_constant :SEPARATOR
+    MANIFEST_PATH = "assets.json"
+    private_constant :MANIFEST_PATH
 
     # @api private
     # @since 2.1.0
@@ -98,7 +98,7 @@ module Hanami
     def manifest
       return @manifest if instance_variable_defined?(:@manifest)
 
-      full_manifest_path = root.join(config.manifest_path)
+      full_manifest_path = root.join(MANIFEST_PATH)
 
       unless full_manifest_path.exist?
         raise ManifestMissingError.new(full_manifest_path.to_s)

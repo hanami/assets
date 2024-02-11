@@ -9,11 +9,6 @@ module Hanami
     class BaseUrl
       # @since 2.1.0
       # @api private
-      SEPARATOR = "/"
-      private_constant :SEPARATOR
-
-      # @since 2.1.0
-      # @api private
       attr_reader :url
       private :url
 

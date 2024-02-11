@@ -31,11 +31,6 @@ module Hanami
 
     # @api private
     # @since 2.1.0
-    SEPARATOR = "/"
-    private_constant :SEPARATOR
-
-    # @api private
-    # @since 2.1.0
     attr_reader :config
 
     # @api private

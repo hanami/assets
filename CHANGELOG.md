@@ -1,9 +1,13 @@
 # Hanami::Assets
 Assets management for Ruby web applications
 
-## v2.1.0 - 2023-11-14
+## v2.1.0.rc3 - 2024-02-16
 ### Changed
-- [Tim Riley] Removed `bin/hanami-assets` executable
+- [Tim Riley] Require a `root:` argument when initializing `Hanami::Assets`. This should be the directory containing the compiled assets and their `assets.json` manifest file.
+- [Tim Riley] Removed `manifest_path` setting; the manifest path is no longer user-configurable.
+- [Tim Riley] Replaced `package_manager_run_command` setting with `node_command` setting.
+- [Tim Riley] Removed unused `sources`, `entry_point_patterns` and `destination` settings.
+- [Tim Riley] Removed `bin/hanami-assets` executable.
 
 ## v2.1.0.rc2 - 2023-11-08
 

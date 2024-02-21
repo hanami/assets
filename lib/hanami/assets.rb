@@ -29,6 +29,20 @@ module Hanami
     require_relative "assets/version"
     require_relative "assets/errors"
 
+    # Returns the directory (under `public/assets/`) to be used for storing a slice's compiled
+    # assets.
+    #
+    # This is shared logic used by both Hanami (for the assets provider) and Hanami::CLI (for the
+    # assets commands).
+    #
+    # @since 2.1.0
+    # @api private
+    def self.public_assets_dir(slice)
+      return nil if slice.app.eql?(slice)
+
+      slice.slice_name.to_s.split("/").map { |name| "_#{name}" }.join("/")
+    end
+
     # @api private
     # @since 2.1.0
     MANIFEST_PATH = "assets.json"

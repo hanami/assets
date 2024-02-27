@@ -1,6 +1,8 @@
 # Hanami::Assets
 Assets management for Ruby web applications
 
+## v2.1.0 - 2024-02-27
+
 ## v2.1.0.rc3 - 2024-02-16
 ### Changed
 - [Tim Riley] Require a `root:` argument when initializing `Hanami::Assets`. This should be the directory containing the compiled assets and their `assets.json` manifest file.

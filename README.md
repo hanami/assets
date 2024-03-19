@@ -247,7 +247,8 @@ Install:
 
 ```bash
 $ npm install
-$ bundle exec rake test
+$ bundle install
+$ bundle exec rake spec
 ```
 
 ## Versioning

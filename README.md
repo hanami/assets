@@ -8,7 +8,6 @@ Assets management for Ruby web projects
 [![CI](https://github.com/hanami/assets/workflows/ci/badge.svg?branch=main)](https://github.com/hanami/assets/actions?query=workflow%3Aci+branch%3Amain)
 [![Test Coverage](https://codecov.io/gh/hanami/assets/branch/main/graph/badge.svg)](https://codecov.io/gh/hanami/assets)
 [![Depfu](https://badges.depfu.com/badges/4b37347bd74042ff96477495cc16531d/overview.svg)](https://depfu.com/github/hanami/assets?project=Bundler)
-[![Inline Docs](http://inch-ci.org/github/hanami/assets.svg)](http://inch-ci.org/github/hanami/assets)
 
 ## Contact
 
@@ -16,17 +15,14 @@ Assets management for Ruby web projects
 * Community: http://hanamirb.org/community
 * Guides: https://guides.hanamirb.org
 * Mailing List: http://hanamirb.org/mailing-list
-* API Doc: http://rdoc.info/gems/hanami-assets
-* Bugs/Issues: https://github.com/hanami/assets/issues
-* Support: http://stackoverflow.com/questions/tagged/hanami
-* Forum: https://discuss.hanamirb.org
+* API Doc: http://rubydoc.info/gems/hanami-assets
+* Forum: https://discourse.hanamirb.org
 * Chat: http://chat.hanamirb.org
 
-## Rubies
-
-__Hanami::Assets__ supports Ruby (MRI) 3.0+
 
 ## Installation
+
+__Hanami::Assets__ supports Ruby (MRI) 3.1+
 
 Add this line to your application's Gemfile:
 
@@ -264,4 +260,4 @@ __Hanami::Assets__ uses [Semantic Versioning 2.0.0](http://semver.org)
 
 ## Copyright
 
-Copyright © 2014-2023 Hanami Team – Released under MIT License
+Copyright © 2014–2024 Hanami Team – Released under MIT License

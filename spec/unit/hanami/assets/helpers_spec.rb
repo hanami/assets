@@ -16,7 +16,7 @@ RSpec.describe Hanami::Assets::Helpers do
   describe "#javascript" do
     it "returns an instance of SafeString" do
       actual = DefaultView.new.javascript("feature-a")
-      expect(actual).to be_instance_of(::Hanami::Utils::Escape::SafeString)
+      expect(actual).to be_instance_of(::Hanami::CygUtils::Escape::SafeString)
     end
 
     it "renders <script> tag" do
@@ -126,7 +126,7 @@ RSpec.describe Hanami::Assets::Helpers do
   describe "#stylesheet" do
     it "returns an instance of SafeString" do
       actual = DefaultView.new.stylesheet("main")
-      expect(actual).to be_instance_of(::Hanami::Utils::Escape::SafeString)
+      expect(actual).to be_instance_of(::Hanami::CygUtils::Escape::SafeString)
     end
 
     it "renders <link> tag" do

@@ -2,7 +2,7 @@
 
 require "set"
 require "find"
-require "hanami/utils/class_attribute"
+require "hanami/cyg_utils/class_attribute"
 
 module Hanami
   module Assets
@@ -43,7 +43,7 @@ module Hanami
       # @api private
       EXTENSIONS = {".js" => true, ".css" => true, ".map" => true}.freeze
 
-      include Utils::ClassAttribute
+      include CygUtils::ClassAttribute
 
       # @since 0.3.0
       # @api private

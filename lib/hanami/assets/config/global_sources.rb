@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "hanami/utils/load_paths"
+require "hanami/cyg_utils/load_paths"
 
 module Hanami
   module Assets
@@ -17,7 +17,7 @@ module Hanami
       #
       # @see Hanami::Assets.duplicate
       # @see http://www.rubydoc.info/gems/hanami-utils/Hanami/Utils/LoadPaths
-      class GlobalSources < Utils::LoadPaths
+      class GlobalSources < CygUtils::LoadPaths
         # @since 0.1.0
         # @api private
         def push(*paths)

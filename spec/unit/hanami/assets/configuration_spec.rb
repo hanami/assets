@@ -221,7 +221,7 @@ RSpec.describe Hanami::Assets::Configuration do
 
   describe "#prefix" do
     it 'returns "/assets" value default' do
-      expect(@configuration.prefix).to be_kind_of(Hanami::Utils::PathPrefix)
+      expect(@configuration.prefix).to be_kind_of(Hanami::CygUtils::PathPrefix)
       expect(@configuration.prefix).to eq("/assets")
     end
 
@@ -608,7 +608,7 @@ RSpec.describe Hanami::Assets::Configuration do
     end
 
     it "sets default value for prefix" do
-      expect(@configuration.prefix).to be_kind_of(Hanami::Utils::PathPrefix)
+      expect(@configuration.prefix).to be_kind_of(Hanami::CygUtils::PathPrefix)
       expect(@configuration.prefix).to eq("/assets")
     end
 

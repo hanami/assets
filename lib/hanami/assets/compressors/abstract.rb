@@ -1,5 +1,5 @@
-require 'hanami/utils/string'
-require 'hanami/utils/class'
+require 'hanami/cyg_utils/string'
+require 'hanami/cyg_utils/class'
 
 module Hanami
   module Assets
@@ -102,10 +102,10 @@ module Hanami
         # @since 0.1.0
         # @api private
         def self.load_engine(type, engine_name)
-          type = Utils::String.demodulize(type)
+          type = CygUtils::String.demodulize(type)
 
-          require "hanami/assets/compressors/#{ engine_name }_#{ Utils::String.underscore(type) }"
-          Utils::Class.load!("#{ Utils::String.classify(engine_name) }#{ type }", Hanami::Assets::Compressors).new
+          require "hanami/assets/compressors/#{ engine_name }_#{ CygUtils::String.underscore(type) }"
+          CygUtils::Class.load!("#{ CygUtils::String.classify(engine_name) }#{ type }", Hanami::Assets::Compressors).new
         rescue LoadError
           raise UnknownCompressorError.new(type, engine_name)
         end

@@ -2,10 +2,10 @@
 
 require "pathname"
 require "json"
-require "hanami/utils/string"
-require "hanami/utils/class"
-require "hanami/utils/path_prefix"
-require "hanami/utils/basic_object"
+require "hanami/cyg_utils/string"
+require "hanami/cyg_utils/class"
+require "hanami/cyg_utils/path_prefix"
+require "hanami/cyg_utils/basic_object"
 require "hanami/assets/config/manifest"
 require "hanami/assets/config/sources"
 
@@ -84,8 +84,8 @@ module Hanami
       def self.for(base)
         # TODO: this implementation is similar to Hanami::Controller::Configuration
         # consider to extract it into Hanami::Utils
-        namespace = Utils::String.namespace(base)
-        framework = Utils::Class.load("#{namespace}::Assets") || Utils::Class.load!("Hanami::Assets")
+        namespace = CygUtils::String.namespace(base)
+        framework = CygUtils::Class.load("#{namespace}::Assets") || CygUtils::Class.load!("Hanami::Assets")
         framework.configuration
       end
 
@@ -321,7 +321,7 @@ module Hanami
         if value.nil?
           @prefix
         else
-          @prefix = Utils::PathPrefix.new(value)
+          @prefix = CygUtils::PathPrefix.new(value)
         end
       end
 
@@ -538,7 +538,7 @@ module Hanami
         @host                  = DEFAULT_HOST
         @port                  = DEFAULT_PORT
 
-        @prefix                = Utils::PathPrefix.new(DEFAULT_PREFIX)
+        @prefix                = CygUtils::PathPrefix.new(DEFAULT_PREFIX)
         @subresource_integrity = false
         @cdn                   = false
         @fingerprint           = false

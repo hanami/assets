@@ -2,7 +2,7 @@
 
 require "uri"
 require "hanami/helpers/html_helper"
-require "hanami/utils/escape"
+require "hanami/cyg_utils/escape"
 
 module Hanami
   module Assets
@@ -77,7 +77,7 @@ module Hanami
       def self.included(base)
         conf = ::Hanami::Assets::Configuration.for(base)
         base.class_eval do
-          include Utils::ClassAttribute
+          include CygUtils::ClassAttribute
 
           class_attribute :assets_configuration
           self.assets_configuration = conf
@@ -106,7 +106,7 @@ module Hanami
       # @param sources [Array<String>] one or more assets by name or absolute URL
       # @param push [TrueClass, FalseClass] HTTP/2 Push Promise/Early Hints flag
       #
-      # @return [Hanami::Utils::Escape::SafeString] the markup
+      # @return [Hanami::CygUtils::Escape::SafeString] the markup
       #
       # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
       # `subresource_integrity` modes are on and the javascript file is missing
@@ -221,7 +221,7 @@ module Hanami
       # @param sources [Array<String>] one or more assets by name or absolute URL
       # @param push [TrueClass, FalseClass] HTTP/2 Push Promise/Early Hints flag
       #
-      # @return [Hanami::Utils::Escape::SafeString] the markup
+      # @return [Hanami::CygUtils::Escape::SafeString] the markup
       #
       # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
       # `subresource_integrity` modes are on and the stylesheet file is missing
@@ -324,7 +324,7 @@ module Hanami
       # @param options [Hash] HTML 5 attributes
       # @option options [TrueClass, FalseClass] :push HTTP/2 Push Promise/Early Hints flag
       #
-      # @return [Hanami::Utils::Helpers::HtmlBuilder] the builder
+      # @return [Hanami::CygUtils::Helpers::HtmlBuilder] the builder
       #
       # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
       # `subresource_integrity` modes are on and the image file is missing
@@ -380,7 +380,7 @@ module Hanami
         options = options.reject { |k, _| k.to_sym == :src }
         attributes = {
           src: asset_path(source, push: options.delete(:push) || false, as: :image),
-          alt: Utils::String.titleize(::File.basename(source, WILDCARD_EXT))
+          alt: CygUtils::String.titleize(::File.basename(source, WILDCARD_EXT))
         }
         attributes.merge!(options)
 
@@ -403,7 +403,7 @@ module Hanami
       # @param options [Hash] HTML 5 attributes
       # @option options [TrueClass, FalseClass] :push HTTP/2 Push Promise/Early Hints flag
       #
-      # @return [Hanami::Utils::Helpers::HtmlBuilder] the builder
+      # @return [Hanami::CygUtils::Helpers::HtmlBuilder] the builder
       #
       # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
       # `subresource_integrity` modes are on and the favicon is file missing
@@ -481,7 +481,7 @@ module Hanami
       # @param options [Hash] HTML 5 attributes
       # @option options [TrueClass, FalseClass] :push HTTP/2 Push Promise/Early Hints flag
       #
-      # @return [Hanami::Utils::Helpers::HtmlBuilder] the builder
+      # @return [Hanami::CygUtils::Helpers::HtmlBuilder] the builder
       #
       # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
       # `subresource_integrity` modes are on and the video file is missing
@@ -614,7 +614,7 @@ module Hanami
       # @param options [Hash] HTML 5 attributes
       # @option options [TrueClass, FalseClass] :push HTTP/2 Push Promise/Early Hints flag
       #
-      # @return [Hanami::Utils::Helpers::HtmlBuilder] the builder
+      # @return [Hanami::CygUtils::Helpers::HtmlBuilder] the builder
       #
       # @raise [Hanami::Assets::MissingManifestAssetError] if `fingerprint` or
       # `subresource_integrity` modes are on and the audio file is missing
@@ -841,7 +841,7 @@ module Hanami
       # @since 0.1.0
       # @api private
       def _safe_tags(*sources)
-        ::Hanami::Utils::Escape::SafeString.new(
+        ::Hanami::CygUtils::Escape::SafeString.new(
           sources.map do |source|
             yield source
           end.join(NEW_LINE_SEPARATOR)

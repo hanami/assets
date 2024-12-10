@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "hanami/utils/class_attribute"
+require "hanami/cyg_utils/class_attribute"
 
 # Hanami
 #
@@ -23,7 +23,7 @@ module Hanami
     require "hanami/assets/config/global_sources"
     require "hanami/assets/helpers"
 
-    include Utils::ClassAttribute
+    include CygUtils::ClassAttribute
 
     # Configuration
     #

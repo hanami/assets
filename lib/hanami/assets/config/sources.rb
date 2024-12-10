@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require "hanami/utils/load_paths"
-require "hanami/utils/file_list"
+require "hanami/cyg_utils/load_paths"
+require "hanami/cyg_utils/file_list"
 
 module Hanami
   module Assets
@@ -19,7 +19,7 @@ module Hanami
       # @see http://www.rubydoc.info/gems/hanami-utils/Hanami/Utils/LoadPaths
       #
       # TODO The perf of this class is poor, consider to improve it.
-      class Sources < Utils::LoadPaths
+      class Sources < CygUtils::LoadPaths
         # @since 0.3.0
         # @api private
         SKIPPED_FILE_PREFIX = "_"
@@ -58,7 +58,7 @@ module Hanami
         def files(name = nil)
           result = []
 
-          Utils::FileList[map { |source| "#{source}#{::File::SEPARATOR}**#{::File::SEPARATOR}#{name}*" }].each do |file|
+          CygUtils::FileList[map { |source| "#{source}#{::File::SEPARATOR}**#{::File::SEPARATOR}#{name}*" }].each do |file|
             next if ::File.directory?(file) || ::File.basename(file).start_with?(SKIPPED_FILE_PREFIX)
 
             result << file

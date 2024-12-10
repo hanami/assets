@@ -46,7 +46,7 @@ module Hanami
       # @see Hanami::Assets::Configuration#manifest
       # @see Hanami::Assets::Configuration#manifest_path
       # @see Hanami::Assets::Configuration#fingerprint
-      class NullManifest < Utils::BasicObject
+      class NullManifest < CygUtils::BasicObject
         # Return a new instance
         #
         # @param configuration [Hanami::Assets::Configuration]

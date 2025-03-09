@@ -25,14 +25,14 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
-      - name: Cache node_modules
-        id: cache-modules
+      - name: Cache Node modules
+        id: cache-node-modules
         uses: actions/cache@v4
         with:
           path: node_modules
-          key: node-${{ runner.OS }}-build-${{ hashFiles('package.json') }}
+          key: node-modules-${{ runner.OS }}-${{ hashFiles('package.json') }}
       - name: Install
-        if: steps.cache-modules.outputs.cache-hit != 'true'
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: npm install
       - name: Set up Node
         uses: actions/setup-node@v4
